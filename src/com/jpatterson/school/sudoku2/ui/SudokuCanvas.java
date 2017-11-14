@@ -13,6 +13,7 @@ import java.awt.image.BufferedImage;
 public class SudokuCanvas extends Canvas
 {
 	private static final long serialVersionUID = 1136949818910622554L;
+	
 	private final SudokuBoard board;
 	private final int cellLength;
 	private final Font font;

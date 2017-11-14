@@ -9,7 +9,10 @@ import java.util.stream.IntStream;
 
 public class MutableSudokuCell implements SudokuCell
 {
-	private final Collection<Integer> ALL_POSSIBLE_VALUES = IntStream.rangeClosed(1, 9).boxed().collect(Collectors.toList());
+	private static final Collection<Integer> ALL_POSSIBLE_VALUES = IntStream.rangeClosed(1, 9)
+		.boxed()
+		.collect(Collectors.toList());
+	
 	private Integer value;
 	private final Set<Integer> possibleValues;
 
