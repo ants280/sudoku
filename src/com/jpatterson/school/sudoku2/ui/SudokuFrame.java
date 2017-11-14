@@ -7,7 +7,6 @@ import javax.swing.JFrame;
 
 public class SudokuFrame extends JFrame
 {
-
 	private static final long serialVersionUID = -7514585713156161889L;
 
 	private final SudokuBoard board;
