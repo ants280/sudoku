@@ -5,7 +5,8 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import javax.swing.JFrame;
 
-public class SudokuFrame extends JFrame {
+public class SudokuFrame extends JFrame
+{
 
 	private static final long serialVersionUID = -7514585713156161889L;
 
@@ -14,7 +15,8 @@ public class SudokuFrame extends JFrame {
 	private final KeyListener keyListener;
 	private final SudokuCanvas canvas;
 
-	public SudokuFrame() {
+	public SudokuFrame()
+	{
 		super("Sudoku2");
 
 		this.board = new SudokuBoard();
@@ -24,7 +26,8 @@ public class SudokuFrame extends JFrame {
 		init();
 	}
 
-	private void init() {
+	private void init()
+	{
 		this.add(canvas);
 		this.pack();
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

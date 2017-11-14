@@ -10,8 +10,8 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 
-public class SudokuCanvas extends Canvas {
-
+public class SudokuCanvas extends Canvas
+{
 	private static final long serialVersionUID = 1136949818910622554L;
 	private final SudokuBoard board;
 	private final int cellLength;
@@ -19,7 +19,8 @@ public class SudokuCanvas extends Canvas {
 	private Integer selectedRow;
 	private Integer selectedCol;
 
-	public SudokuCanvas(SudokuBoard board) {
+	public SudokuCanvas(SudokuBoard board)
+	{
 		this.board = board;
 		this.cellLength = 50;
 		this.font = new Font("times", Font.PLAIN, cellLength);
@@ -30,9 +31,10 @@ public class SudokuCanvas extends Canvas {
 		this.selectedRow = null;
 		this.selectedCol = null;
 	}
-	
+
 	@Override
-	public void update(Graphics graphics) {
+	public void update(Graphics graphics)
+	{
 		BufferedImage lastDrawnImage
 			= (BufferedImage) this.createImage(getWidth(), getHeight());
 
@@ -44,7 +46,8 @@ public class SudokuCanvas extends Canvas {
 	}
 
 	@Override
-	public void paint(Graphics graphics) {
+	public void paint(Graphics graphics)
+	{
 		((Graphics2D) graphics).setRenderingHint(
 			RenderingHints.KEY_TEXT_ANTIALIASING,
 			RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
@@ -54,8 +57,10 @@ public class SudokuCanvas extends Canvas {
 		paintLines(graphics);
 	}
 
-	private void paintSelectedCellBackground(Graphics graphics) {
-		if (selectedRow != null && selectedCol != null) {
+	private void paintSelectedCellBackground(Graphics graphics)
+	{
+		if (selectedRow != null && selectedCol != null)
+		{
 			graphics.setColor(Color.LIGHT_GRAY);
 			graphics.fillRect(
 				selectedCol * (cellLength + 1),
@@ -65,21 +70,26 @@ public class SudokuCanvas extends Canvas {
 		}
 	}
 
-	private void paintCells(Graphics graphics) {
+	private void paintCells(Graphics graphics)
+	{
 		int fontHeightPx = (int) (font.getSize() * 0.75d);
 		FontMetrics fontMetrics = graphics.getFontMetrics();
-		for (int row = 0; row < 9; row++) {
+		for (int row = 0; row < 9; row++)
+		{
 			int rowOffset = getOffset(row + 0.5d) + fontHeightPx / 2;
-			for (int col = 0; col < 9; col++) {
+			for (int col = 0; col < 9; col++)
+			{
 				paintCell(row, col, graphics, fontMetrics, rowOffset);
 			}
 		}
 	}
 
-	private void paintCell(int row, int col, Graphics graphics, FontMetrics fontMetrics, int rowOffset) {
+	private void paintCell(int row, int col, Graphics graphics, FontMetrics fontMetrics, int rowOffset)
+	{
 
 		int cellValue = board.getValue(row, col);
-		if (cellValue != 0) {
+		if (cellValue != 0)
+		{
 			Color cellColor = Color.BLACK;
 			graphics.setColor(cellColor);
 
@@ -89,24 +99,30 @@ public class SudokuCanvas extends Canvas {
 		}
 	}
 
-	private int getFontWidth(FontMetrics fontMetrics, Integer cellValue) {
+	private int getFontWidth(FontMetrics fontMetrics, Integer cellValue)
+	{
 		return fontMetrics.charsWidth(cellValue.toString().toCharArray(), 0, 1);
 	}
 
-	private void paintLines(Graphics graphics) {
+	private void paintLines(Graphics graphics)
+	{
 		graphics.setColor(Color.BLACK);
-		for (int i = 0; i <= 9; i++) {
+		for (int i = 0; i <= 9; i++)
+		{
 			int offset = i * (cellLength + 1);
 			graphics.drawLine(0, offset, getBoardLength(), offset); // row
 			graphics.drawLine(offset, 0, offset, getBoardLength()); // col
 
 			// Paint thicker lines every three cells (except edges).
-			if (i % 3 == 0) {
-				if (i != 0) {
+			if (i % 3 == 0)
+			{
+				if (i != 0)
+				{
 					graphics.drawLine(0, offset - 1, getBoardLength(), offset - 1); // row
 					graphics.drawLine(offset - 1, 0, offset - 1, getBoardLength()); // col
 				}
-				if (i != 9) {
+				if (i != 9)
+				{
 					graphics.drawLine(0, offset + 1, getBoardLength(), offset + 1); // row
 					graphics.drawLine(offset + 1, 0, offset + 1, getBoardLength()); // col
 				}
@@ -114,20 +130,24 @@ public class SudokuCanvas extends Canvas {
 		}
 	}
 
-	private int getBoardLength() {
+	private int getBoardLength()
+	{
 		return getOffset(9);
 	}
 
-	private int getOffset(double cellNumber) {
+	private int getOffset(double cellNumber)
+	{
 		return (int) (cellNumber * (cellLength + 1)) + 1;
 	}
 
-	public void selectCellFromCoordinates(int x, int y) {
+	public void selectCellFromCoordinates(int x, int y)
+	{
 		this.setSelectedRow(y / cellLength);
 		this.setSelectedCol(selectedCol = x / cellLength);
 		this.repaint();
 
-		if (Sudoku.DEBUG) {
+		if (Sudoku.DEBUG)
+		{
 			System.out.printf("selected cell: x,y=[%d,%d] => col,row=[%d,%d]\n",
 				x,
 				y,
@@ -136,16 +156,20 @@ public class SudokuCanvas extends Canvas {
 		}
 	}
 
-	public Integer getSelectedRow() {
+	public Integer getSelectedRow()
+	{
 		return selectedRow;
 	}
 
-	public Integer getSelectedCol() {
+	public Integer getSelectedCol()
+	{
 		return selectedCol;
 	}
 
-	public void incrementSelectedRow(int i) {
-		if (Sudoku.DEBUG) {
+	public void incrementSelectedRow(int i)
+	{
+		if (Sudoku.DEBUG)
+		{
 			System.out.printf("Incrementing selected row (%d) by %d.\n", selectedRow, i);
 		}
 
@@ -153,8 +177,10 @@ public class SudokuCanvas extends Canvas {
 		this.repaint();
 	}
 
-	public void incrementSelectedCol(int i) {
-		if (Sudoku.DEBUG) {
+	public void incrementSelectedCol(int i)
+	{
+		if (Sudoku.DEBUG)
+		{
 			System.out.printf("Incrementing selected col (%d) by %d.\n", selectedCol, i);
 		}
 
@@ -162,20 +188,26 @@ public class SudokuCanvas extends Canvas {
 		this.repaint();
 	}
 
-	private void setSelectedRow(int i) {
-		if (i >= 0 && i < 9) {
+	private void setSelectedRow(int i)
+	{
+		if (i >= 0 && i < 9)
+		{
 			selectedRow = i;
 		}
 	}
 
-	private void setSelectedCol(int i) {
-		if (i >= 0 && i < 9) {
+	private void setSelectedCol(int i)
+	{
+		if (i >= 0 && i < 9)
+		{
 			selectedCol = i;
 		}
 	}
 
-	public void setSelectedCellValue(int cellValue) {
-		if (selectedRow != null && selectedCol != null) {
+	public void setSelectedCellValue(int cellValue)
+	{
+		if (selectedRow != null && selectedCol != null)
+		{
 			board.setValue(selectedRow, selectedCol, cellValue);
 			this.repaint();
 		}

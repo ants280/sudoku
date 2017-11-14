@@ -6,16 +6,18 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-public class SudokuBoard {
-
+public class SudokuBoard
+{
 	private final int[][] board;
 
 	private static final Set<Integer> VALUES = IntStream.rangeClosed(1, 9)
 		.boxed()
 		.collect(Collectors.toSet());
 
-	public SudokuBoard(String boardString) {
-		if (!boardString.matches("^\\d{81}$")) {
+	public SudokuBoard(String boardString)
+	{
+		if (!boardString.matches("^\\d{81}$"))
+		{
 			throw new IllegalArgumentException("Illegal board: " + boardString);
 		}
 
@@ -32,23 +34,23 @@ public class SudokuBoard {
 			.toArray(int[][]::new);
 	}
 
-	public SudokuBoard() {
+	public SudokuBoard()
+	{
 		this(
-			  "000" + "000" + "000"
-			+ "000" + "000" + "000"
-			+ "000" + "000" + "000"
-				  
+			"000" + "000" + "000"
 			+ "000" + "000" + "000"
 			+ "000" + "000" + "000"
 			+ "000" + "000" + "000"
-				  
+			+ "000" + "000" + "000"
+			+ "000" + "000" + "000"
 			+ "000" + "000" + "000"
 			+ "000" + "000" + "000"
 			+ "000" + "000" + "000");
 	}
 
 	@Override
-	public String toString() {
+	public String toString()
+	{
 		String boardValues = Stream.of(board)
 			.flatMapToInt(IntStream::of)
 			.mapToObj(Integer::toString)
@@ -57,40 +59,47 @@ public class SudokuBoard {
 		return "{" + boardValues + "}";
 	}
 
-	public int getValue(int r, int c) {
+	public int getValue(int r, int c)
+	{
 		validate(r, c);
 
 		return board[r][c];
 	}
 
-	public void setValue(int r, int c, int value) {
+	public void setValue(int r, int c, int value)
+	{
 		validate(r, c);
-		if (value < 0 || value > 9) {
+		if (value < 0 || value > 9)
+		{
 			throw new IllegalArgumentException("Invalid value: " + value);
 		}
 
 		board[r][c] = value;
 	}
 
-	public int getGroupNumber(int r, int c) {
+	public int getGroupNumber(int r, int c)
+	{
 		validate(r, c);
 
 		return (r / 3) * 3 + c / 3;
 	}
 
-	public int getRowNumber(int r, int c) {
+	public int getRowNumber(int r, int c)
+	{
 		validate(r, c);
 
 		return r;
 	}
 
-	public int getColNumber(int r, int c) {
+	public int getColNumber(int r, int c)
+	{
 		validate(r, c);
 
 		return c;
 	}
 
-	public Set<Integer> getUnusedValuesForGroup(int groupNumber) {
+	public Set<Integer> getUnusedValuesForGroup(int groupNumber)
+	{
 		validate(groupNumber);
 
 		int startingRow = 3 * (groupNumber / 3);
@@ -105,7 +114,8 @@ public class SudokuBoard {
 		return getRemainingValues(groupValues);
 	}
 
-	public Set<Integer> getUnusedValuesForRow(int rowNumber) {
+	public Set<Integer> getUnusedValuesForRow(int rowNumber)
+	{
 		validate(rowNumber);
 
 		Set<Integer> rowValues = IntStream.of(board[rowNumber])
@@ -115,7 +125,8 @@ public class SudokuBoard {
 		return getRemainingValues(rowValues);
 	}
 
-	public Set<Integer> getUnusedValuesForCol(int colNumber) {
+	public Set<Integer> getUnusedValuesForCol(int colNumber)
+	{
 		validate(colNumber);
 
 		Set<Integer> colValues = Stream.of(board)
@@ -126,26 +137,31 @@ public class SudokuBoard {
 		return getRemainingValues(colValues);
 	}
 
-	public boolean isSolved() {
+	public boolean isSolved()
+	{
 		return IntStream.range(0, 9)
 			.allMatch(i -> getUnusedValuesForGroup(i).isEmpty()
 				&& getUnusedValuesForRow(i).isEmpty()
 				&& getUnusedValuesForCol(i).isEmpty());
 	}
 
-	private static Set<Integer> getRemainingValues(Set<Integer> sectionValues) {
+	private static Set<Integer> getRemainingValues(Set<Integer> sectionValues)
+	{
 		return VALUES.stream()
 			.filter(i -> !sectionValues.contains(i))
 			.collect(Collectors.toSet());
 	}
 
-	private void validate(int... coordinates) throws IllegalArgumentException {
+	private void validate(int... coordinates) throws IllegalArgumentException
+	{
 		IntStream.of(coordinates)
 			.forEach(this::validate);
 	}
 
-	private void validate(int coordinate) throws IllegalArgumentException {
-		if (coordinate < 0 || coordinate >= 9) {
+	private void validate(int coordinate) throws IllegalArgumentException
+	{
+		if (coordinate < 0 || coordinate >= 9)
+		{
 			throw new IllegalArgumentException(
 				"Invalid coordinate: " + coordinate);
 		}

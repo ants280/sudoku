@@ -4,17 +4,19 @@ import java.util.Set;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
-public class SudokuBoardTest {
-
+public class SudokuBoardTest
+{
 	@Test(expected = IllegalArgumentException.class)
-	public void testConstructor_invalidBoardSize() {
+	public void testConstructor_invalidBoardSize()
+	{
 		SudokuBoard board = new SudokuBoard("123456789");
 
 		fail("The following sudkuBoard should be invalid because it is too small: " + board);
 	}
 
 	@Test
-	public void testToString() {
+	public void testToString()
+	{
 		String boardValue
 			= "123456789"
 			+ "456789123"
@@ -34,7 +36,8 @@ public class SudokuBoardTest {
 	}
 
 	@Test
-	public void testGetValue() {
+	public void testGetValue()
+	{
 		SudokuBoard board = new SudokuBoard(
 			"000000000"
 			+ "000000400"
@@ -55,7 +58,8 @@ public class SudokuBoardTest {
 	}
 
 	@Test
-	public void testSetValue() {
+	public void testSetValue()
+	{
 		SudokuBoard board = new SudokuBoard();
 		int r = 1;
 		int c = 6;
@@ -68,11 +72,14 @@ public class SudokuBoardTest {
 	}
 
 	@Test
-	public void testGetGroupNumber() {
+	public void testGetGroupNumber()
+	{
 		SudokuBoard board = new SudokuBoard();
 
-		for (int r = 0; r < 9; r++) {
-			for (int c = 0; c < 9; c++) {
+		for (int r = 0; r < 9; r++)
+		{
+			for (int c = 0; c < 9; c++)
+			{
 				int expectedGroupNumber = (r / 3) * 3 + c / 3;
 				//System.out.printf("making sure [%d,%d] is in group %d\n", r, c, expectedGroupNumber);
 
@@ -85,29 +92,36 @@ public class SudokuBoardTest {
 	}
 
 	@Test
-	public void testGetRowNumber() {
+	public void testGetRowNumber()
+	{
 		SudokuBoard board = new SudokuBoard();
 
-		for (int r = 0; r < 9; r++) {
-			for (int c = 0; c < 9; c++) {
+		for (int r = 0; r < 9; r++)
+		{
+			for (int c = 0; c < 9; c++)
+			{
 				assertSame(r, board.getRowNumber(r, c));
 			}
 		}
 	}
 
 	@Test
-	public void testGetColNumber() {
+	public void testGetColNumber()
+	{
 		SudokuBoard board = new SudokuBoard();
 
-		for (int r = 0; r < 9; r++) {
-			for (int c = 0; c < 9; c++) {
+		for (int r = 0; r < 9; r++)
+		{
+			for (int c = 0; c < 9; c++)
+			{
 				assertSame(c, board.getColNumber(r, c));
 			}
 		}
 	}
 
 	@Test
-	public void testGetUnusedValuesForGroup() {
+	public void testGetUnusedValuesForGroup()
+	{
 		SudokuBoard board = new SudokuBoard(
 			"000000000"
 			+ "000000000"
@@ -126,8 +140,10 @@ public class SudokuBoardTest {
 	}
 
 	@Test
-	public void testGetUnusedValuesForGroup_extreme() {
-		String[] boardStrings = new String[]{
+	public void testGetUnusedValuesForGroup_extreme()
+	{
+		String[] boardStrings = new String[]
+		{
 			"123000000456000000789000000000000000000000000000000000000000000000000000000000000",
 			"000123000000456000000789000000000000000000000000000000000000000000000000000000000",
 			"000000123000000456000000789000000000000000000000000000000000000000000000000000000",
@@ -136,9 +152,11 @@ public class SudokuBoardTest {
 			"000000000000000000000000000000000123000000456000000789000000000000000000000000000",
 			"000000000000000000000000000000000000000000000000000000123000000456000000789000000",
 			"000000000000000000000000000000000000000000000000000000000123000000456000000789000",
-			"000000000000000000000000000000000000000000000000000000000000123000000456000000789"};
+			"000000000000000000000000000000000000000000000000000000000000123000000456000000789"
+		};
 
-		for (int i = 0; i < 9; i++) {
+		for (int i = 0; i < 9; i++)
+		{
 			SudokuBoard board = new SudokuBoard(boardStrings[i]);
 
 			Set<Integer> unusedValuesForGroup = board.getUnusedValuesForGroup(i);
@@ -149,7 +167,8 @@ public class SudokuBoardTest {
 	}
 
 	@Test
-	public void testGenUnusedValuesForRow() {
+	public void testGenUnusedValuesForRow()
+	{
 		SudokuBoard board = new SudokuBoard(
 			"000000000"
 			+ "000000000"
@@ -168,7 +187,8 @@ public class SudokuBoardTest {
 	}
 
 	@Test
-	public void testGenUnusedValuesForCol() {
+	public void testGenUnusedValuesForCol()
+	{
 		SudokuBoard board = new SudokuBoard(
 			"000001000"
 			+ "000002000"
@@ -187,14 +207,16 @@ public class SudokuBoardTest {
 	}
 
 	@Test
-	public void testIsSolved_empty() {
+	public void testIsSolved_empty()
+	{
 		SudokuBoard board = new SudokuBoard();
 
 		assertFalse(board.isSolved());
 	}
 
 	@Test
-	public void testIsSolved_solved() {
+	public void testIsSolved_solved()
+	{
 		SudokuBoard board = new SudokuBoard(
 			"123456789"
 			+ "456789123"
@@ -210,7 +232,8 @@ public class SudokuBoardTest {
 	}
 
 	@Test
-	public void testIsSolved_missingLast() {
+	public void testIsSolved_missingLast()
+	{
 		SudokuBoard board = new SudokuBoard(
 			"123456789"
 			+ "456789123"
