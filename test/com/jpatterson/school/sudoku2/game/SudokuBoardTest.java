@@ -38,8 +38,8 @@ public class SudokuBoardTest
 	@Test
 	public void testGetValue()
 	{
-		SudokuBoard board = new SudokuBoard(
-			"000000000"
+		String boardString
+			= "000000000"
 			+ "000000400"
 			+ "000000000"
 			+ "000000000"
@@ -47,7 +47,8 @@ public class SudokuBoardTest
 			+ "000000000"
 			+ "000000000"
 			+ "000000000"
-			+ "000000000");
+			+ "000000000";
+		SudokuBoard board = new SudokuBoard(boardString);
 		int r = 1;
 		int c = 6;
 		int value = 4;
@@ -122,8 +123,8 @@ public class SudokuBoardTest
 	@Test
 	public void testGetUnusedValuesForGroup()
 	{
-		SudokuBoard board = new SudokuBoard(
-			"000000000"
+		String boardString
+			= "000000000"
 			+ "000000000"
 			+ "000000000"
 			+ "382000000"
@@ -131,7 +132,8 @@ public class SudokuBoardTest
 			+ "569000000"
 			+ "000000000"
 			+ "000000000"
-			+ "000000000");
+			+ "000000000";
+		SudokuBoard board = new SudokuBoard(boardString);
 
 		Set<Integer> unusedValuesForRow = board.getUnusedValuesForGroup(3);
 
@@ -169,8 +171,8 @@ public class SudokuBoardTest
 	@Test
 	public void testGenUnusedValuesForRow()
 	{
-		SudokuBoard board = new SudokuBoard(
-			"000000000"
+		String boardString
+			= "000000000"
 			+ "000000000"
 			+ "000000000"
 			+ "000000000"
@@ -178,7 +180,8 @@ public class SudokuBoardTest
 			+ "000000000"
 			+ "000000000"
 			+ "123406789"
-			+ "000000000");
+			+ "000000000";
+		SudokuBoard board = new SudokuBoard(boardString);
 
 		Set<Integer> unusedValuesForRow = board.getUnusedValuesForRow(7);
 
@@ -189,8 +192,8 @@ public class SudokuBoardTest
 	@Test
 	public void testGenUnusedValuesForCol()
 	{
-		SudokuBoard board = new SudokuBoard(
-			"000001000"
+		String boardString
+			= "000001000"
 			+ "000002000"
 			+ "000002000"
 			+ "000004000"
@@ -198,7 +201,8 @@ public class SudokuBoardTest
 			+ "000006000"
 			+ "000007000"
 			+ "000008000"
-			+ "000009000");
+			+ "000009000";
+		SudokuBoard board = new SudokuBoard(boardString);
 
 		Set<Integer> unusedValuesForRow = board.getUnusedValuesForCol(5);
 
@@ -217,8 +221,8 @@ public class SudokuBoardTest
 	@Test
 	public void testIsSolved_solved()
 	{
-		SudokuBoard board = new SudokuBoard(
-			"123456789"
+		String boardString
+			= "123456789"
 			+ "456789123"
 			+ "789123456"
 			+ "234567891"
@@ -226,7 +230,8 @@ public class SudokuBoardTest
 			+ "891234567"
 			+ "345678912"
 			+ "678912345"
-			+ "912345678");
+			+ "912345678";
+		SudokuBoard board = new SudokuBoard(boardString);
 
 		assertTrue(board.isSolved());
 	}
@@ -234,8 +239,8 @@ public class SudokuBoardTest
 	@Test
 	public void testIsSolved_missingLast()
 	{
-		SudokuBoard board = new SudokuBoard(
-			"123456789"
+		String boardString
+			= "123456789"
 			+ "456789123"
 			+ "789123456"
 			+ "234567891"
@@ -243,8 +248,9 @@ public class SudokuBoardTest
 			+ "891234567"
 			+ "345678912"
 			+ "678912345"
-			+ "912345670");
+			+ "912345670";
+		SudokuBoard board = new SudokuBoard(boardString);
 
-		assertFalse(board.isSolved());
+		assertFalse("8 is missing from the last cell", board.isSolved());
 	}
 }
