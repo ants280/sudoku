@@ -86,7 +86,6 @@ public class SudokuCanvas extends Canvas
 
 	private void paintCell(int row, int col, Graphics graphics, FontMetrics fontMetrics, int rowOffset)
 	{
-
 		int cellValue = board.getValue(row, col);
 		if (cellValue != 0)
 		{
