@@ -12,7 +12,7 @@ public class ImmutableSudokuCell extends SudokuCell
 		SudokuCell.validateValue(value);
 		this.value = value;
 	}
-	
+
 	@Override
 	public Integer getValue()
 	{

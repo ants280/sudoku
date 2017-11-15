@@ -7,13 +7,13 @@ public abstract class SudokuCell
 	public abstract Integer getValue();
 
 	public abstract Set<Integer> getPossibleValues();
-	
+
 	public abstract void setValue(Integer value);
-	
+
 	public abstract void resetPossibleValues();
-	
+
 	public abstract void removePossibleValue(int value);
-	
+
 	public final boolean isEmpty()
 	{
 		return getValue() == null;
