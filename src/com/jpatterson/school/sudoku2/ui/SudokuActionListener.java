@@ -107,7 +107,7 @@ public class SudokuActionListener
 	}
 
 	// TODO: combine code with setPossibleValue(ActionEvent), but distinguish possible values from normal ones
-	public void setValue()
+	public void setValue(ActionEvent event)
 	{
 		Integer r = canvas.getSelectedRow();
 		Integer c = canvas.getSelectedCol();
