@@ -61,46 +61,42 @@ public class SudokuBoard
 
 	public Integer getValue(int r, int c)
 	{
-		validate(r, c);
+		validateCoords(r, c);
 
 		return board[r][c].getValue();
 	}
 
 	public void setValue(int r, int c, Integer value)
 	{
-		validate(r, c);
-		if (value != null && (value < 0 || value > 9))
-		{
-			throw new IllegalArgumentException("Invalid value: " + value);
-		}
+		validateCoords(r, c);
 
 		board[r][c].setValue(value);
 	}
 
 	public int getGroupNumber(int r, int c)
 	{
-		validate(r, c);
+		validateCoords(r, c);
 
 		return (r / 3) * 3 + c / 3;
 	}
 
 	public int getRowNumber(int r, int c)
 	{
-		validate(r, c);
+		validateCoords(r, c);
 
 		return r;
 	}
 
 	public int getColNumber(int r, int c)
 	{
-		validate(r, c);
+		validateCoords(r, c);
 
 		return c;
 	}
 
 	public Set<Integer> getUnusedValuesForGroup(int groupNumber)
 	{
-		validate(groupNumber);
+		validateCoord(groupNumber);
 
 		int startingRow = 3 * (groupNumber / 3);
 		int startingCol = 3 * (groupNumber % 3);
@@ -117,7 +113,7 @@ public class SudokuBoard
 
 	public Set<Integer> getUnusedValuesForRow(int rowNumber)
 	{
-		validate(rowNumber);
+		validateCoord(rowNumber);
 
 		Set<Integer> rowValues = Arrays.stream(board[rowNumber])
 			.filter(sudokuCell -> sudokuCell.getValue() != null) // TOOD: make SudokuCell abstract
@@ -129,7 +125,7 @@ public class SudokuBoard
 
 	public Set<Integer> getUnusedValuesForCol(int colNumber)
 	{
-		validate(colNumber);
+		validateCoord(colNumber);
 
 		Set<Integer> colValues = Arrays.stream(board)
 			.map(row -> row[colNumber])
@@ -155,13 +151,13 @@ public class SudokuBoard
 			.collect(Collectors.toSet());
 	}
 
-	private void validate(int... coordinates) throws IllegalArgumentException
+	private void validateCoords(int... coordinates) throws IllegalArgumentException
 	{
 		IntStream.of(coordinates)
-			.forEach(this::validate);
+			.forEach(this::validateCoord);
 	}
 
-	private void validate(int coordinate) throws IllegalArgumentException
+	private void validateCoord(int coordinate) throws IllegalArgumentException
 	{
 		if (coordinate < 0 || coordinate >= 9)
 		{
