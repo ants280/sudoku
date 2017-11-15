@@ -78,6 +78,7 @@ public class SudokuActionListener
 						board.addPossibleValue(selectedRow, selectedCol, j);
 
 						dialog.setVisible(false);
+						canvas.repaint();
 				});
 
 				possibleValueButtonsPanel.add(possibleValueButton);

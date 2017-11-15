@@ -75,11 +75,11 @@ public class SudokuBoard
 		return "{" + boardValues + "}";
 	}
 
-	public Integer getValue(int r, int c)
+	public SudokuCell getSudokuCell(int r, int c)
 	{
 		validateCoords(r, c);
 
-		return board[r][c].getValue();
+		return board[r][c];
 	}
 
 	public void setValue(int r, int c, Integer value)

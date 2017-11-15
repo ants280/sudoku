@@ -19,7 +19,7 @@ public class MutableSudokuCell extends SudokuCell
 	public MutableSudokuCell()
 	{
 		this.value = null;
-		this.possibleValues = new HashSet<>(ALL_POSSIBLE_VALUES);
+		this.possibleValues = new HashSet<>();
 	}
 
 	@Override

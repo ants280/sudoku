@@ -1,6 +1,7 @@
 package com.jpatterson.school.sudoku2.ui;
 
 import com.jpatterson.school.sudoku2.game.SudokuBoard;
+import com.jpatterson.school.sudoku2.game.SudokuCell;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Font;
@@ -16,7 +17,8 @@ public class SudokuCanvas extends Canvas
 
 	private final SudokuBoard board;
 	private final int cellLength;
-	private final Font font;
+	private final Font valueFont;
+	private final Font possibleValueFont;
 	private Integer selectedRow;
 	private Integer selectedCol;
 
@@ -24,8 +26,8 @@ public class SudokuCanvas extends Canvas
 	{
 		this.board = board;
 		this.cellLength = 50;
-		this.font = new Font("times", Font.PLAIN, cellLength);
-		this.setFont(font);
+		this.valueFont = new Font("times", Font.PLAIN, cellLength);
+		this.possibleValueFont = new Font("times", Font.PLAIN, cellLength / 3);
 		this.setSize(getBoardLength(), getBoardLength());
 
 		// TODO: reset these on new game creation
@@ -73,29 +75,54 @@ public class SudokuCanvas extends Canvas
 
 	private void paintCells(Graphics graphics)
 	{
-		int fontHeightPx = (int) (font.getSize() * 0.75d);
-		FontMetrics fontMetrics = graphics.getFontMetrics();
+
+		graphics.setColor(Color.BLACK);
 		for (int row = 0; row < 9; row++)
 		{
-			int rowOffset = getOffset(row + 0.5d) + fontHeightPx / 2;
 			for (int col = 0; col < 9; col++)
 			{
-				paintCell(row, col, graphics, fontMetrics, rowOffset);
+				paintCell(row, col, graphics);
 			}
 		}
 	}
 
-	private void paintCell(int row, int col, Graphics graphics, FontMetrics fontMetrics, int rowOffset)
+	private void paintCell(int row, int col, Graphics graphics)
 	{
-		Integer cellValue = board.getValue(row, col);
-		if (cellValue != null)
+		SudokuCell sudokuCell = board.getSudokuCell(row, col);
+		if (sudokuCell.getValue() != null)
 		{
-			Color cellColor = Color.BLACK;
-			graphics.setColor(cellColor);
+			graphics.setFont(valueFont);
+			int fontHeightPx = (int) (valueFont.getSize() * 0.75d);
+			FontMetrics fontMetrics = graphics.getFontMetrics();
+			int charWidth = getFontWidth(fontMetrics, sudokuCell.getValue());
+			int colOffset = getOffset(col + 0.5d) - (charWidth / 2);
+			int rowOffset = getOffset(row + 0.5d) + (fontHeightPx / 2);
 
-			int charWidth = getFontWidth(fontMetrics, cellValue);
-			int colOffset = getOffset(col + 0.5d) - charWidth / 2;
-			graphics.drawString(String.valueOf(cellValue), colOffset, rowOffset);
+			graphics.drawString(
+				sudokuCell.getValue().toString(), colOffset, rowOffset);
+		}
+		else
+		{
+			if (!sudokuCell.getPossibleValues().isEmpty())
+			{
+				graphics.setFont(possibleValueFont);
+				int fontHeightPx = (int) (possibleValueFont.getSize() * 0.75d);
+				FontMetrics fontMetrics = graphics.getFontMetrics();
+
+				for (Integer possibleValue : sudokuCell.getPossibleValues())
+				{
+					int charWidth = getFontWidth(fontMetrics, possibleValue);
+					int colOffset = getOffset(
+						col + ((1 + (2 * ((possibleValue-1) % 3))) / 6d))
+						- (charWidth / 2);
+					int rowOffset = getOffset(
+						row + ((1 + (2 * ((possibleValue-1) / 3))) / 6d))
+						+ (fontHeightPx / 2);
+
+					graphics.drawString(
+						possibleValue.toString(), colOffset, rowOffset);
+				}
+			}
 		}
 	}
 

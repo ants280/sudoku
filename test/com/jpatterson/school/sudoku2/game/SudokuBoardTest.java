@@ -52,11 +52,11 @@ public class SudokuBoardTest
 		SudokuBoard board = new SudokuBoard(boardString);
 		int r = 1;
 		int c = 6;
-		int value = 4;
+		Integer value = 4;
 
-		int actualValue = board.getValue(r, c);
+		Integer actualValue = board.getSudokuCell(r, c).getValue();
 
-		assertSame(value, actualValue);
+		assertEquals(value, actualValue);
 	}
 
 	@Test
@@ -65,12 +65,12 @@ public class SudokuBoardTest
 		SudokuBoard board = new SudokuBoard();
 		int r = 1;
 		int c = 6;
-		int value = 4;
+		Integer value = 4;
 
 		board.setValue(r, c, value);
-		int actualValue = board.getValue(r, c);
+		Integer actualValue = board.getSudokuCell(r, c).getValue();
 
-		assertSame(value, actualValue);
+		assertEquals(value, actualValue);
 	}
 
 	@Test
