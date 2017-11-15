@@ -65,11 +65,12 @@ public class SudokuActionListener
 		{
 			JDialog dialog = new JDialog(frame, "Select possible cell value", true);
 
-			JPanel possibleValueButtonsPanel = new JPanel(new GridLayout(1, 9));
-			for (int i = 1; i < 9; i++)
+			JPanel possibleValueButtonsPanel = new JPanel(new GridLayout(3, 3));
+			for (int i = 1; i <= 9; i++)
 			{
 				int j = i;
 				JButton possibleValueButton = new JButton(String.valueOf(i));
+				// TODO: It would be cool if seleted possible values could be checked and uncheckd.
 				possibleValueButton.addActionListener(actionEvent
 					-> 
 					{
