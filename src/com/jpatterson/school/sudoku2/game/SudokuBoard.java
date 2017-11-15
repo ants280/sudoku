@@ -106,6 +106,18 @@ public class SudokuBoard
 		}
 	}
 
+	public void removePossibleValue(int r, int c, Integer value)
+	{
+		validateCoords(r, c);
+
+		// TODO: It would be nice to return whether or not the value was removed.
+		SudokuCell sudokuCell = board[r][c];
+		if (sudokuCell instanceof MutableSudokuCell)
+		{
+			sudokuCell.removePossibleValue(value);
+		}
+	}
+
 	public int getGroupNumber(int r, int c)
 	{
 		validateCoords(r, c);

@@ -1,13 +1,16 @@
 package com.jpatterson.school.sudoku2.ui;
 
 import com.jpatterson.school.sudoku2.game.SudokuBoard;
+import com.jpatterson.school.sudoku2.game.SudokuCell;
+import java.awt.BorderLayout;
 import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
-import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JToggleButton;
 
 public class SudokuActionListener
 {
@@ -63,29 +66,40 @@ public class SudokuActionListener
 		// TODO: It would be nice to also have this popup on right click (after selection the cell)
 		if (selectedRow != null && selectedCol != null)
 		{
-			JDialog dialog = new JDialog(frame, "Select possible cell value", true);
+			JDialog dialog = new JDialog(frame, "Select", true);
 
 			JPanel possibleValueButtonsPanel = new JPanel(new GridLayout(3, 3));
+			SudokuCell selectedSudokuCell = board.getSudokuCell(selectedRow, selectedCol);
 			for (int i = 1; i <= 9; i++)
 			{
 				int j = i;
-				JButton possibleValueButton = new JButton(String.valueOf(i));
-				// TODO: It would be cool if seleted possible values could be checked and uncheckd.
+				JToggleButton possibleValueButton = new JToggleButton(
+					String.valueOf(i),
+					selectedSudokuCell.getPossibleValues().contains(i));
+
 				possibleValueButton.addActionListener(actionEvent
 					-> 
 					{
-						// TODO: Make method?
-						board.addPossibleValue(selectedRow, selectedCol, j);
+						if (selectedSudokuCell.getPossibleValues().contains(j))
+						{
+							board.removePossibleValue(selectedRow, selectedCol, j);
+						}
+						else
+						{
+							board.addPossibleValue(selectedRow, selectedCol, j);
+						}
 
-						dialog.setVisible(false);
+//						dialog.setVisible(false);
 						canvas.repaint();
 				});
 
 				possibleValueButtonsPanel.add(possibleValueButton);
 			}
 
-			dialog.add(possibleValueButtonsPanel);
+			dialog.add(new JLabel("Select possible cell values"), BorderLayout.NORTH);
+			dialog.add(possibleValueButtonsPanel, BorderLayout.CENTER);
 			dialog.pack();
+			dialog.setResizable(false);
 			dialog.setLocationRelativeTo(frame);
 			dialog.setVisible(true);
 		}
