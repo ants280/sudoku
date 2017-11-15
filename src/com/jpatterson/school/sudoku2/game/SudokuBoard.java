@@ -1,14 +1,14 @@
 package com.jpatterson.school.sudoku2.game;
 
+import java.util.Arrays;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public class SudokuBoard
 {
-	private final int[][] board;
+	private final SudokuCell[][] board;
 
 	private static final Set<Integer> VALUES = IntStream.rangeClosed(1, 9)
 		.boxed()
@@ -29,9 +29,9 @@ public class SudokuBoard
 				.map(Character::valueOf)
 				.map(character -> character.toString())
 				.map(Integer::valueOf)
-				.mapToInt(Integer::intValue)
-				.toArray())
-			.toArray(int[][]::new);
+				.map(cellValue -> cellValue == 0 ? new MutableSudokuCell() : new ImmutableSudokuCell(cellValue))
+				.toArray(SudokuCell[]::new))
+			.toArray(SudokuCell[][]::new);
 	}
 
 	public SudokuBoard()
@@ -50,30 +50,31 @@ public class SudokuBoard
 	@Override
 	public String toString()
 	{
-		String boardValues = Stream.of(board)
-			.flatMapToInt(IntStream::of)
-			.mapToObj(Integer::toString)
+		String boardValues = Arrays.stream(board)
+			.flatMap(Arrays::stream)
+			.map(sudokuCell -> sudokuCell.getValue() == null ? 0 : sudokuCell.getValue())
+			.map(String::valueOf)
 			.collect(Collectors.joining());
 
 		return "{" + boardValues + "}";
 	}
 
-	public int getValue(int r, int c)
+	public Integer getValue(int r, int c)
 	{
 		validate(r, c);
 
-		return board[r][c];
+		return board[r][c].getValue();
 	}
 
-	public void setValue(int r, int c, int value)
+	public void setValue(int r, int c, Integer value)
 	{
 		validate(r, c);
-		if (value < 0 || value > 9)
+		if (value != null && (value < 0 || value > 9))
 		{
 			throw new IllegalArgumentException("Invalid value: " + value);
 		}
 
-		board[r][c] = value;
+		board[r][c].setValue(value);
 	}
 
 	public int getGroupNumber(int r, int c)
@@ -105,9 +106,10 @@ public class SudokuBoard
 		int startingCol = 3 * (groupNumber % 3);
 		Set<Integer> groupValues = IntStream.range(startingRow, startingRow + 3)
 			.mapToObj(r -> IntStream.range(startingCol, startingCol + 3)
-				.map(c -> board[r][c])
-				.boxed())
+				.mapToObj(c -> board[r][c]))
 			.flatMap(Function.identity())
+			.filter(sudokuCell -> sudokuCell.getValue() != null) // TOOD: make SudokuCell abstract
+			.map(SudokuCell::getValue)
 			.collect(Collectors.toSet());
 
 		return getRemainingValues(groupValues);
@@ -117,8 +119,9 @@ public class SudokuBoard
 	{
 		validate(rowNumber);
 
-		Set<Integer> rowValues = IntStream.of(board[rowNumber])
-			.boxed()
+		Set<Integer> rowValues = Arrays.stream(board[rowNumber])
+			.filter(sudokuCell -> sudokuCell.getValue() != null) // TOOD: make SudokuCell abstract
+			.map(SudokuCell::getValue)
 			.collect(Collectors.toSet());
 
 		return getRemainingValues(rowValues);
@@ -128,9 +131,10 @@ public class SudokuBoard
 	{
 		validate(colNumber);
 
-		Set<Integer> colValues = Stream.of(board)
-			.mapToInt(row -> row[colNumber])
-			.boxed()
+		Set<Integer> colValues = Arrays.stream(board)
+			.map(row -> row[colNumber])
+			.filter(sudokuCell -> sudokuCell.getValue() != null) // TOOD: make SudokuCell abstract
+			.map(SudokuCell::getValue)
 			.collect(Collectors.toSet());
 
 		return getRemainingValues(colValues);

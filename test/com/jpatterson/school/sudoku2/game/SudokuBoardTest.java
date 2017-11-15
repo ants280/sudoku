@@ -27,6 +27,7 @@ public class SudokuBoardTest
 			+ "345678912"
 			+ "678912345"
 			+ "912345670";
+
 		SudokuBoard board = new SudokuBoard(boardValue);
 
 		String actualBoardString = board.toString();

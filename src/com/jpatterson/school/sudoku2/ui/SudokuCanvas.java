@@ -87,8 +87,8 @@ public class SudokuCanvas extends Canvas
 
 	private void paintCell(int row, int col, Graphics graphics, FontMetrics fontMetrics, int rowOffset)
 	{
-		int cellValue = board.getValue(row, col);
-		if (cellValue != 0)
+		Integer cellValue = board.getValue(row, col);
+		if (cellValue != null)
 		{
 			Color cellColor = Color.BLACK;
 			graphics.setColor(cellColor);
@@ -208,7 +208,7 @@ public class SudokuCanvas extends Canvas
 	{
 		if (selectedRow != null && selectedCol != null)
 		{
-			board.setValue(selectedRow, selectedCol, cellValue);
+			board.setValue(selectedRow, selectedCol, cellValue == 0 ? null : cellValue);
 			this.repaint();
 		}
 	}
