@@ -61,15 +61,15 @@ public class SudokuActionListener
 
 	public void setPossibleValue(ActionEvent event)
 	{
-		Integer selectedRow = canvas.getSelectedRow();
-		Integer selectedCol = canvas.getSelectedCol();
+		Integer r = canvas.getSelectedRow();
+		Integer c = canvas.getSelectedCol();
 		// TODO: It would be nice to also have this popup on right click (after selection the cell)
-		if (selectedRow != null && selectedCol != null)
+		if (r != null && c != null)
 		{
 			JDialog dialog = new JDialog(frame, "Select", true);
 
 			JPanel possibleValueButtonsPanel = new JPanel(new GridLayout(3, 3));
-			SudokuCell selectedSudokuCell = board.getSudokuCell(selectedRow, selectedCol);
+			SudokuCell selectedSudokuCell = board.getSudokuCell(r, c);
 			for (int i = 1; i <= 9; i++)
 			{
 				int j = i;
@@ -80,17 +80,15 @@ public class SudokuActionListener
 				possibleValueButton.addActionListener(actionEvent
 					-> 
 					{
-						if (selectedSudokuCell.getPossibleValues().contains(j))
-						{
-							board.removePossibleValue(selectedRow, selectedCol, j);
-						}
-						else
-						{
-							board.addPossibleValue(selectedRow, selectedCol, j);
-						}
+						boolean possibleValueChanged
+							= selectedSudokuCell.getPossibleValues().contains(j)
+							? board.removePossibleValue(r, c, j)
+							: board.addPossibleValue(r, c, j);
 
-//						dialog.setVisible(false);
-						canvas.repaint();
+						if (possibleValueChanged)
+						{
+							canvas.repaint();
+						}
 				});
 
 				possibleValueButtonsPanel.add(possibleValueButton);

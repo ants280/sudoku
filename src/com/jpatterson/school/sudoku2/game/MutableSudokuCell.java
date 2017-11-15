@@ -58,18 +58,18 @@ public class MutableSudokuCell extends SudokuCell
 	}
 
 	@Override
-	public void removePossibleValue(int value)
+	public boolean removePossibleValue(int value)
 	{
 		SudokuCell.validateValue(value);
 
-		possibleValues.remove(value);
+		return possibleValues.remove(value);
 	}
 
 	@Override
-	public void addPossibleValue(int value)
+	public boolean addPossibleValue(int value)
 	{
 		SudokuCell.validateValue(value);
 		
-		possibleValues.add(value);
+		return possibleValues.add(value);
 	}
 }

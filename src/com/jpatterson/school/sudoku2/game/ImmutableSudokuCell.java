@@ -38,14 +38,14 @@ public class ImmutableSudokuCell extends SudokuCell
 	}
 
 	@Override
-	public void removePossibleValue(int value)
+	public boolean removePossibleValue(int value)
 	{
-		// NOOP
+		return false;
 	}
 
 	@Override
-	public void addPossibleValue(int value)
+	public boolean addPossibleValue(int value)
 	{
-		// NOOP
+		return false;
 	}
 }

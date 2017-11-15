@@ -2,6 +2,7 @@ package com.jpatterson.school.sudoku2.game;
 
 import java.util.Arrays;
 import java.util.Set;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -94,28 +95,38 @@ public class SudokuBoard
 		}
 	}
 
-	public void addPossibleValue(int r, int c, Integer value)
+	/**
+	 * @param r The row of the SudokuCell
+	 * @param c The column of the SudokuCell
+	 * @param value The value to remove the the possible values of the SudokuCell
+	 * @return Whether or not the vaulue was successfully removed from the possible values.
+	 */
+	public boolean addPossibleValue(int r, int c, Integer value)
 	{
-		validateCoords(r, c);
-
-		// TODO: It would be nice to return whether or not the value was set.
-		SudokuCell sudokuCell = board[r][c];
-		if (sudokuCell instanceof MutableSudokuCell)
-		{
-			sudokuCell.addPossibleValue(value);
-		}
+		return changePossibleValue(r, c, value, SudokuCell::addPossibleValue);
 	}
 
-	public void removePossibleValue(int r, int c, Integer value)
+	/**
+	 * @param r The row of the SudokuCell
+	 * @param c The column of the SudokuCell
+	 * @param value The value to remove the the possible values of the SudokuCell
+	 * @return Whether or not the vaulue was successfully removed from the possible values.
+	 */
+	public boolean removePossibleValue(int r, int c, Integer value)
+	{
+		return changePossibleValue(r, c, value, SudokuCell::removePossibleValue);
+	}
+	
+	private boolean changePossibleValue(int r, int c, Integer value, BiFunction<SudokuCell, Integer, Boolean> changePossibleValueFunction)
 	{
 		validateCoords(r, c);
 
-		// TODO: It would be nice to return whether or not the value was removed.
 		SudokuCell sudokuCell = board[r][c];
 		if (sudokuCell instanceof MutableSudokuCell)
 		{
-			sudokuCell.removePossibleValue(value);
+			return changePossibleValueFunction.apply(sudokuCell, value);
 		}
+		return false;
 	}
 
 	public int getGroupNumber(int r, int c)
