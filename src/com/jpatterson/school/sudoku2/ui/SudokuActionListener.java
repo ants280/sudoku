@@ -45,4 +45,14 @@ public class SudokuActionListener
 			"About " + frame.getTitle(),
 			JOptionPane.INFORMATION_MESSAGE);
 	}
+	
+	public void solve(ActionEvent event)
+	{
+		// TODO
+	}
+	
+	public void load(ActionEvent event)
+	{
+		// TODO
+	}
 }

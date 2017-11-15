@@ -47,8 +47,8 @@ public class SudokuFrame extends JFrame
 
 		JMenu fileMenu = new JMenu("File");
 			fileMenu.add(createMenuItem("Restart", actionListener::restart));
-			fileMenu.add(createMenuItem("Solve", null)); // TODO
-			fileMenu.add(createMenuItem("Load Game", null)); // TODO
+			fileMenu.add(createMenuItem("Solve", actionListener::solve));
+			fileMenu.add(createMenuItem("Load Game", actionListener::load));
 			fileMenu.add(createMenuItem("Exit", actionListener::exit));
 		JMenu helpMenu = new JMenu("Help");
 			helpMenu.add(createMenuItem("Help", actionListener::help));
