@@ -13,7 +13,9 @@ public abstract class SudokuCell
 	public abstract void resetPossibleValues();
 
 	public abstract void removePossibleValue(int value);
-
+	
+	public abstract void addPossibleValue(int value); // TODO: The possibleValue methods are only aplicable to MutableSudokuCell maybe put these methods theer?
+	
 	public final boolean isEmpty()
 	{
 		return getValue() == null;

@@ -5,7 +5,12 @@
         <group>
             <file>file:/home/ants280/Documents/Java/Sudoku2/src/com/jpatterson/school/sudoku2/ui/SudokuFrame.java</file>
             <file>file:/home/ants280/Documents/Java/Sudoku2/src/com/jpatterson/school/sudoku2/ui/SudokuActionListener.java</file>
+            <file>file:/home/ants280/Documents/Java/Sudoku2/src/com/jpatterson/school/sudoku2/game/ImmutableSudokuCell.java</file>
+            <file>file:/home/ants280/Documents/Java/Sudoku2/src/com/jpatterson/school/sudoku2/game/MutableSudokuCell.java</file>
+            <file>file:/home/ants280/Documents/Java/Sudoku2/src/com/jpatterson/school/sudoku2/game/SudokuCell.java</file>
+            <file>file:/home/ants280/Documents/Java/Sudoku2/test/com/jpatterson/school/sudoku2/game/SudokuBoardTest.java</file>
             <file>file:/home/ants280/Documents/Java/Sudoku2/src/com/jpatterson/school/sudoku2/ui/SudokuCanvas.java</file>
+            <file>file:/home/ants280/Documents/Java/Sudoku2/src/com/jpatterson/school/sudoku2/game/SudokuBoard.java</file>
         </group>
     </open-files>
 </project-private>

@@ -42,4 +42,10 @@ public class ImmutableSudokuCell extends SudokuCell
 	{
 		// NOOP
 	}
+
+	@Override
+	public void addPossibleValue(int value)
+	{
+		// NOOP
+	}
 }

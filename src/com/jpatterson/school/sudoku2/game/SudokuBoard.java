@@ -94,6 +94,18 @@ public class SudokuBoard
 		}
 	}
 
+	public void addPossibleValue(int r, int c, Integer value)
+	{
+		validateCoords(r, c);
+
+		// TODO: It would be nice to return whether or not the value was set.
+		SudokuCell sudokuCell = board[r][c];
+		if (sudokuCell instanceof MutableSudokuCell)
+		{
+			sudokuCell.addPossibleValue(value);
+		}
+	}
+
 	public int getGroupNumber(int r, int c)
 	{
 		validateCoords(r, c);

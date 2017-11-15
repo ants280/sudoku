@@ -43,19 +43,22 @@ public class SudokuFrame extends JFrame
 	private JMenuBar createJMenuBar()
 	{
 		SudokuActionListener actionListener
-			= new SudokuActionListener(this);
+			= new SudokuActionListener(this, canvas, board);
 
 		JMenu fileMenu = new JMenu("File");
 			fileMenu.add(createMenuItem("Restart", actionListener::restart));
-			fileMenu.add(createMenuItem("Solve", actionListener::solve));
 			fileMenu.add(createMenuItem("Load Game", actionListener::load));
 			fileMenu.add(createMenuItem("Exit", actionListener::exit));
+		JMenu actionMenu = new JMenu("Action");
+			actionMenu.add(createMenuItem("Set possible value", actionListener::setPossibleValue));
+			actionMenu.add(createMenuItem("Solve", actionListener::solve));
 		JMenu helpMenu = new JMenu("Help");
 			helpMenu.add(createMenuItem("Help", actionListener::help));
 			helpMenu.add(createMenuItem("About", actionListener::about));
 
 		JMenuBar menuBar = new JMenuBar();
 			menuBar.add(fileMenu);
+			menuBar.add(actionMenu);
 			menuBar.add(helpMenu);
 
 		return menuBar;
