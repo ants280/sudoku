@@ -3,17 +3,21 @@ package com.jpatterson.school.sudoku2.ui;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-public class SudokuKeyListener extends KeyAdapter {
+public class SudokuKeyListener extends KeyAdapter
+{
 
 	private final SudokuCanvas canvas;
 
-	public SudokuKeyListener(SudokuCanvas canvas) {
+	public SudokuKeyListener(SudokuCanvas canvas)
+	{
 		this.canvas = canvas;
 	}
 
 	@Override
-	public void keyReleased(KeyEvent event) {
-		switch (event.getKeyCode()) {
+	public void keyReleased(KeyEvent event)
+	{
+		switch (event.getKeyCode())
+		{
 			case KeyEvent.VK_0:
 			case KeyEvent.VK_1:
 			case KeyEvent.VK_2:
@@ -55,8 +59,10 @@ public class SudokuKeyListener extends KeyAdapter {
 		}
 	}
 
-	private void setSelectedCellValue(int cellValue) {
-		if (Sudoku.DEBUG) {
+	private void setSelectedCellValue(int cellValue)
+	{
+		if (Sudoku.DEBUG)
+		{
 			System.out.printf("\tSetting value '%d' at [%s,%s]\n",
 				cellValue,
 				canvas.getSelectedRow(),
