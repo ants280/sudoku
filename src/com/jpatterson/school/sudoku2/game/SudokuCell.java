@@ -2,19 +2,24 @@ package com.jpatterson.school.sudoku2.game;
 
 import java.util.Set;
 
-public interface SudokuCell
+public abstract class SudokuCell
 {
-	Integer getValue();
+	public abstract Integer getValue();
 
-	Set<Integer> getPossibleValues();
+	public abstract Set<Integer> getPossibleValues();
 	
-	void setValue(Integer value);
+	public abstract void setValue(Integer value);
 	
-	void resetPossibleValues();
+	public abstract void resetPossibleValues();
 	
-	void removePossibleValue(int value);
+	public abstract void removePossibleValue(int value);
+	
+	public final boolean isEmpty()
+	{
+		return getValue() == null;
+	}
 
-	static void validateValue(Integer value) throws IllegalArgumentException
+	protected static void validateValue(Integer value) throws IllegalArgumentException
 	{
 		if (value != null && (value < 1 || value > 9))
 		{

@@ -52,7 +52,7 @@ public class SudokuBoard
 	{
 		String boardValues = Arrays.stream(board)
 			.flatMap(Arrays::stream)
-			.map(sudokuCell -> sudokuCell.getValue() == null ? 0 : sudokuCell.getValue())
+			.map(sudokuCell -> sudokuCell.isEmpty() ? 0 : sudokuCell.getValue())
 			.map(String::valueOf)
 			.collect(Collectors.joining());
 
@@ -104,7 +104,7 @@ public class SudokuBoard
 			.mapToObj(r -> IntStream.range(startingCol, startingCol + 3)
 				.mapToObj(c -> board[r][c]))
 			.flatMap(Function.identity())
-			.filter(sudokuCell -> sudokuCell.getValue() != null) // TOOD: make SudokuCell abstract
+			.filter(sudokuCell -> !sudokuCell.isEmpty())
 			.map(SudokuCell::getValue)
 			.collect(Collectors.toSet());
 
@@ -116,7 +116,7 @@ public class SudokuBoard
 		validateCoord(rowNumber);
 
 		Set<Integer> rowValues = Arrays.stream(board[rowNumber])
-			.filter(sudokuCell -> sudokuCell.getValue() != null) // TOOD: make SudokuCell abstract
+			.filter(sudokuCell -> !sudokuCell.isEmpty())
 			.map(SudokuCell::getValue)
 			.collect(Collectors.toSet());
 
@@ -129,7 +129,7 @@ public class SudokuBoard
 
 		Set<Integer> colValues = Arrays.stream(board)
 			.map(row -> row[colNumber])
-			.filter(sudokuCell -> sudokuCell.getValue() != null) // TOOD: make SudokuCell abstract
+			.filter(sudokuCell -> !sudokuCell.isEmpty())
 			.map(SudokuCell::getValue)
 			.collect(Collectors.toSet());
 

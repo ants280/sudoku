@@ -3,7 +3,7 @@ package com.jpatterson.school.sudoku2.game;
 import java.util.Collections;
 import java.util.Set;
 
-public class ImmutableSudokuCell implements SudokuCell
+public class ImmutableSudokuCell extends SudokuCell
 {
 	private final int value;
 

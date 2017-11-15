@@ -7,7 +7,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class MutableSudokuCell implements SudokuCell
+public class MutableSudokuCell extends SudokuCell
 {
 	private static final Collection<Integer> ALL_POSSIBLE_VALUES = IntStream.rangeClosed(1, 9)
 		.boxed()
