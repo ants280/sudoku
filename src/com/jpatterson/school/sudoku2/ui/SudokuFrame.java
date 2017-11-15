@@ -39,33 +39,34 @@ public class SudokuFrame extends JFrame
 		canvas.addMouseListener(mouseListener);
 		canvas.addKeyListener(keyListener);
 	}
-	
+
 	private JMenuBar createJMenuBar()
 	{
-		SudokuActionListener SudokuActionListener = new SudokuActionListener(this);
-			
+		SudokuActionListener actionListener
+			= new SudokuActionListener(this);
+
 		JMenu fileMenu = new JMenu("File");
-		fileMenu.add(createMenuItem("Restart", SudokuActionListener::restart));
-		fileMenu.add(createMenuItem("Solve", null)); // TODO
-		fileMenu.add(createMenuItem("Lead Game", null)); // TODO
-		fileMenu.add(createMenuItem("Exit", SudokuActionListener::exit));
+			fileMenu.add(createMenuItem("Restart", actionListener::restart));
+			fileMenu.add(createMenuItem("Solve", null)); // TODO
+			fileMenu.add(createMenuItem("Load Game", null)); // TODO
+			fileMenu.add(createMenuItem("Exit", actionListener::exit));
 		JMenu helpMenu = new JMenu("Help");
-		helpMenu.add(createMenuItem("Help", null)); // TODO
-		helpMenu.add(createMenuItem("About", null)); // TODO
-		
-		
+			helpMenu.add(createMenuItem("Help", actionListener::help));
+			helpMenu.add(createMenuItem("About", actionListener::about));
+
 		JMenuBar menuBar = new JMenuBar();
-		menuBar.add(fileMenu);
-		menuBar.add(helpMenu);
-		
+			menuBar.add(fileMenu);
+			menuBar.add(helpMenu);
+
 		return menuBar;
 	}
-	
-	private JMenuItem createMenuItem(String title, ActionListener actionListener)
+
+	private JMenuItem createMenuItem(
+		String title, ActionListener actionListener)
 	{
 		JMenuItem menuItem = new JMenuItem(title);
 		menuItem.addActionListener(actionListener);
-		
+
 		return menuItem;
 	}
 }
