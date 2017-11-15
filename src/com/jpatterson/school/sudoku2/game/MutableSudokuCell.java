@@ -35,10 +35,11 @@ public class MutableSudokuCell extends SudokuCell
 	}
 
 	@Override
-	public void setValue(Integer value)
+	public boolean setValue(Integer value)
 	{
 		SudokuCell.validateValue(value);
 
+		Integer oldValue = this.value;
 		this.value = value;
 
 		if (value == null)
@@ -49,6 +50,10 @@ public class MutableSudokuCell extends SudokuCell
 		{
 			possibleValues.clear();
 		}
+		
+		return this.value == null
+			? oldValue != null
+			: !this.value.equals(oldValue);
 	}
 
 	@Override

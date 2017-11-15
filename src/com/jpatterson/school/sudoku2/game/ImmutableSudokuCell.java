@@ -26,9 +26,9 @@ public class ImmutableSudokuCell extends SudokuCell
 	}
 
 	@Override
-	public void setValue(Integer value)
+	public boolean setValue(Integer value)
 	{
-		throw new UnsupportedOperationException("Value cannot be set");
+		return false;
 	}
 
 	@Override

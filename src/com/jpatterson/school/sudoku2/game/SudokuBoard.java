@@ -83,23 +83,27 @@ public class SudokuBoard
 		return board[r][c];
 	}
 
-	public void setValue(int r, int c, Integer value)
+	
+	/**
+	 * @param r The row of the SudokuCell
+	 * @param c The column of the SudokuCell
+	 * @param value The value to remove the the possible values of the SudokuCell
+	 * @return Whether or not the value was successfully set.
+	 */
+	public boolean setValue(int r, int c, Integer value)
 	{
 		validateCoords(r, c);
 
 		// TODO: It would be nice to return whether or not the value was set.
 		SudokuCell sudokuCell = board[r][c];
-		if (sudokuCell instanceof MutableSudokuCell)
-		{
-			sudokuCell.setValue(value);
-		}
+		return sudokuCell.setValue(value);
 	}
 
 	/**
 	 * @param r The row of the SudokuCell
 	 * @param c The column of the SudokuCell
-	 * @param value The value to remove the the possible values of the SudokuCell
-	 * @return Whether or not the vaulue was successfully removed from the possible values.
+	 * @param value The value to add to the the possible values of the SudokuCell
+	 * @return Whether or not the value was successfully removed from the possible values.
 	 */
 	public boolean addPossibleValue(int r, int c, Integer value)
 	{
@@ -110,7 +114,7 @@ public class SudokuBoard
 	 * @param r The row of the SudokuCell
 	 * @param c The column of the SudokuCell
 	 * @param value The value to remove the the possible values of the SudokuCell
-	 * @return Whether or not the vaulue was successfully removed from the possible values.
+	 * @return Whether or not the value was successfully removed from the possible values.
 	 */
 	public boolean removePossibleValue(int r, int c, Integer value)
 	{

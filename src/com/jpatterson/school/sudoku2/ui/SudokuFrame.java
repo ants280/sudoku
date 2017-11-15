@@ -24,14 +24,16 @@ public class SudokuFrame extends JFrame
 
 		this.board = new SudokuBoard();
 		this.canvas = new SudokuCanvas(board);
-		this.mouseListener = new SudokuMouseListener(canvas);
+		SudokuActionListener actionListener
+			= new SudokuActionListener(this, canvas, board);
+		this.mouseListener = new SudokuMouseListener(canvas, actionListener);
 		this.keyListener = new SudokuKeyListener(canvas);
-		init();
+		init(actionListener);
 	}
 
-	private void init()
+	private void init(SudokuActionListener actionListener)
 	{
-		this.setJMenuBar(createJMenuBar());
+		this.setJMenuBar(createJMenuBar(actionListener));
 		this.add(canvas);
 		this.pack();
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -40,17 +42,15 @@ public class SudokuFrame extends JFrame
 		canvas.addKeyListener(keyListener);
 	}
 
-	private JMenuBar createJMenuBar()
+	private JMenuBar createJMenuBar(SudokuActionListener actionListener)
 	{
-		SudokuActionListener actionListener
-			= new SudokuActionListener(this, canvas, board);
-
 		JMenu fileMenu = new JMenu("File");
 			fileMenu.add(createMenuItem("Restart", actionListener::restart));
 			fileMenu.add(createMenuItem("Load Game", actionListener::load));
 			fileMenu.add(createMenuItem("Exit", actionListener::exit));
 		JMenu actionMenu = new JMenu("Action");
-			actionMenu.add(createMenuItem("Set possible value", actionListener::setPossibleValue));
+			actionMenu.add(createMenuItem("Set value", actionListener::setValue)); // TODO disable if no SudokuCell is selecetd.
+			actionMenu.add(createMenuItem("Set possible value", actionListener::setPossibleValue));  // TODO disable if no SudokuCell is selecetd.
 			actionMenu.add(createMenuItem("Solve", actionListener::solve));
 		JMenu helpMenu = new JMenu("Help");
 			helpMenu.add(createMenuItem("Help", actionListener::help));

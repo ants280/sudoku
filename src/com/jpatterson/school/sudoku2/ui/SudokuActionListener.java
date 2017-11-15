@@ -6,6 +6,8 @@ import java.awt.BorderLayout;
 import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
+import javax.swing.AbstractButton;
+import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -67,14 +69,14 @@ public class SudokuActionListener
 		if (r != null && c != null
 			&& board.getSudokuCell(r, c).getValue() == null)
 		{
-			JDialog dialog = new JDialog(frame, "Select", true);
+			JDialog dialog = new JDialog(frame, "[possible values]", true);
 
 			JPanel possibleValueButtonsPanel = new JPanel(new GridLayout(3, 3));
 			SudokuCell selectedSudokuCell = board.getSudokuCell(r, c);
 			for (int i = 1; i <= 9; i++)
 			{
 				int j = i;
-				JToggleButton possibleValueButton = new JToggleButton(
+				AbstractButton possibleValueButton = new JToggleButton(
 					String.valueOf(i),
 					selectedSudokuCell.getPossibleValues().contains(i));
 
@@ -96,6 +98,50 @@ public class SudokuActionListener
 			}
 
 			dialog.add(new JLabel("Select possible cell values"), BorderLayout.NORTH);
+			dialog.add(possibleValueButtonsPanel, BorderLayout.CENTER);
+			dialog.pack();
+			dialog.setResizable(false);
+			dialog.setLocationRelativeTo(frame);
+			dialog.setVisible(true);
+		}
+	}
+
+	// TODO: combine code with setPossibleValue(ActionEvent), but distinguish possible values from normal ones
+	public void setValue()
+	{
+		Integer r = canvas.getSelectedRow();
+		Integer c = canvas.getSelectedCol();
+		// TODO: It would be nice to also have this popup on right click (after selection the cell)
+		if (r != null && c != null)
+		{
+			JDialog dialog = new JDialog(frame, "[value]", true);
+
+			JPanel possibleValueButtonsPanel = new JPanel(new GridLayout(3, 3));
+			SudokuCell selectedSudokuCell = board.getSudokuCell(r, c);
+			for (int i = 1; i <= 9; i++)
+			{
+				Integer j = i;
+				AbstractButton valueButton = new JButton(
+					String.valueOf(i));
+				valueButton.setEnabled(
+					!j.equals(selectedSudokuCell.getValue()));
+
+				valueButton.addActionListener(actionEvent
+					-> 
+					{
+						boolean valueChanged = board.setValue(r, c, j);
+
+						dialog.setVisible(false);
+						if (valueChanged)
+						{
+							canvas.repaint();
+						}
+				});
+
+				possibleValueButtonsPanel.add(valueButton);
+			}
+
+			dialog.add(new JLabel("Select cell value"), BorderLayout.NORTH);
 			dialog.add(possibleValueButtonsPanel, BorderLayout.CENTER);
 			dialog.pack();
 			dialog.setResizable(false);
