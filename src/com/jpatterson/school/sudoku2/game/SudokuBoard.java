@@ -122,11 +122,7 @@ public class SudokuBoard
 		validateCoords(r, c);
 
 		SudokuCell sudokuCell = board[r][c];
-		if (sudokuCell instanceof MutableSudokuCell)
-		{
-			return changePossibleValueFunction.apply(sudokuCell, value);
-		}
-		return false;
+		return changePossibleValueFunction.apply(sudokuCell, value);
 	}
 
 	public int getGroupNumber(int r, int c)

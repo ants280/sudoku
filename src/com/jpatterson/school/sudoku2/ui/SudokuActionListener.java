@@ -64,7 +64,8 @@ public class SudokuActionListener
 		Integer r = canvas.getSelectedRow();
 		Integer c = canvas.getSelectedCol();
 		// TODO: It would be nice to also have this popup on right click (after selection the cell)
-		if (r != null && c != null)
+		if (r != null && c != null
+			&& board.getSudokuCell(r, c).getValue() == null)
 		{
 			JDialog dialog = new JDialog(frame, "Select", true);
 
