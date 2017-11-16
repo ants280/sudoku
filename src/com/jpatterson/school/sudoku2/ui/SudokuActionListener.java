@@ -129,7 +129,7 @@ public class SudokuActionListener
 				valueButton.addActionListener(actionEvent
 					-> 
 					{
-						boolean valueChanged = board.setValue(r, c, j);
+						boolean valueChanged = board.getSudokuCell(r, c).setValue(j);
 
 						dialog.setVisible(false);
 						if (valueChanged)

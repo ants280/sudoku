@@ -67,7 +67,7 @@ public class SudokuBoardTest
 		int c = 6;
 		Integer value = 4;
 
-		board.setValue(r, c, value);
+		board.getSudokuCell(r, c).setValue(value);
 		Integer actualValue = board.getSudokuCell(r, c).getValue();
 
 		assertEquals(value, actualValue);

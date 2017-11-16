@@ -83,22 +83,6 @@ public class SudokuBoard
 		return board[r][c];
 	}
 
-	
-	/**
-	 * @param r The row of the SudokuCell
-	 * @param c The column of the SudokuCell
-	 * @param value The value to remove the the possible values of the SudokuCell
-	 * @return Whether or not the value was successfully set.
-	 */
-	public boolean setValue(int r, int c, Integer value)
-	{
-		validateCoords(r, c);
-
-		// TODO: It would be nice to return whether or not the value was set.
-		SudokuCell sudokuCell = board[r][c];
-		return sudokuCell.setValue(value);
-	}
-
 	/**
 	 * @param r The row of the SudokuCell
 	 * @param c The column of the SudokuCell
@@ -123,10 +107,7 @@ public class SudokuBoard
 	
 	private boolean changePossibleValue(int r, int c, Integer value, BiFunction<SudokuCell, Integer, Boolean> changePossibleValueFunction)
 	{
-		validateCoords(r, c);
-
-		SudokuCell sudokuCell = board[r][c];
-		return changePossibleValueFunction.apply(sudokuCell, value);
+		return changePossibleValueFunction.apply(getSudokuCell(r, c), value);
 	}
 
 	public int getGroupNumber(int r, int c)

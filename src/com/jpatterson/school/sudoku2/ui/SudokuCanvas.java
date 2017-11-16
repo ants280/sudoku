@@ -241,7 +241,7 @@ public class SudokuCanvas extends Canvas
 	{
 		if (selectedRow != null && selectedCol != null)
 		{
-			board.setValue(selectedRow, selectedCol, cellValue == 0 ? null : cellValue);
+			board.getSudokuCell(selectedRow, selectedCol).setValue(cellValue == 0 ? null : cellValue);
 			this.repaint();
 		}
 	}
