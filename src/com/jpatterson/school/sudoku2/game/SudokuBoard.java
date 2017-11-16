@@ -135,21 +135,23 @@ public class SudokuBoard
 		return c;
 	}
 
-	public Set<Integer> getValuesForGroup(int groupNumber)
+	public Collection<SudokuCell> getSudokuCellsForGroup(int groupNumber)
 	{
 		validateCoord(groupNumber);
 
 		int startingRow = 3 * (groupNumber / 3);
 		int startingCol = 3 * (groupNumber % 3);
-		Set<Integer> groupValues = IntStream.range(startingRow, startingRow + 3)
+
+		return IntStream.range(startingRow, startingRow + 3)
 			.mapToObj(r -> IntStream.range(startingCol, startingCol + 3)
 				.mapToObj(c -> board[r][c]))
 			.flatMap(Function.identity())
-			.filter(sudokuCell -> !sudokuCell.isEmpty())
-			.map(SudokuCell::getValue)
-			.collect(Collectors.toSet());
+			.collect(Collectors.toList());
+	}
 
-		return groupValues;
+	public Set<Integer> getValuesForGroup(int groupNumber)
+	{
+		return getSectionValues(getSudokuCellsForGroup(groupNumber));
 	}
 
 	public Set<Integer> getUnusedValuesForGroup(int groupNumber)
@@ -157,16 +159,18 @@ public class SudokuBoard
 		return getRemainingValues(getValuesForGroup(groupNumber));
 	}
 
-	public Set<Integer> getValuesForRow(int rowNumber)
+	public Collection<SudokuCell> getSudokuCellsForRow(int rowNumber)
 	{
 		validateCoord(rowNumber);
 
-		Set<Integer> rowValues = Arrays.stream(board[rowNumber])
-			.filter(sudokuCell -> !sudokuCell.isEmpty())
-			.map(SudokuCell::getValue)
-			.collect(Collectors.toSet());
+		return Arrays.stream(board[rowNumber])
+			.collect(Collectors.toList());
 
-		return rowValues;
+	}
+
+	public Set<Integer> getValuesForRow(int rowNumber)
+	{
+		return getSectionValues(getSudokuCellsForRow(rowNumber));
 	}
 
 	public Set<Integer> getUnusedValuesForRow(int rowNumber)
@@ -174,17 +178,18 @@ public class SudokuBoard
 		return getRemainingValues(getValuesForRow(rowNumber));
 	}
 
-	public Set<Integer> getValuesForCol(int colNumber)
+	public Collection<SudokuCell> getSudokuCellsForCol(int colNumber)
 	{
 		validateCoord(colNumber);
 
-		Set<Integer> colValues = Arrays.stream(board)
+		return Arrays.stream(board)
 			.map(row -> row[colNumber])
-			.filter(sudokuCell -> !sudokuCell.isEmpty())
-			.map(SudokuCell::getValue)
-			.collect(Collectors.toSet());
+			.collect(Collectors.toList());
+	}
 
-		return colValues;
+	public Set<Integer> getValuesForCol(int colNumber)
+	{
+		return getSectionValues(getSudokuCellsForCol(colNumber));
 	}
 
 	public Set<Integer> getUnusedValuesForCol(int colNumber)
@@ -198,6 +203,16 @@ public class SudokuBoard
 			.allMatch(i -> getUnusedValuesForGroup(i).isEmpty()
 				&& getUnusedValuesForRow(i).isEmpty()
 				&& getUnusedValuesForCol(i).isEmpty());
+	}
+
+	private static Set<Integer> getSectionValues(
+		Collection<SudokuCell> sectionSudokuCells)
+	{
+		return sectionSudokuCells
+			.stream()
+			.filter(sudokuCell -> !sudokuCell.isEmpty())
+			.map(SudokuCell::getValue)
+			.collect(Collectors.toSet());
 	}
 
 	private static Set<Integer> getRemainingValues(Set<Integer> sectionValues)
@@ -225,9 +240,9 @@ public class SudokuBoard
 	public Collection<SudokuCell> getOtherSudokuCellsInRowColumnGroup(int r, int c)
 	{
 		validateCoords(r, c);
-		
+
 		Collection<SudokuCell> otherSudokuCells = new ArrayList<>();
-		
+
 		for (int i = 0; i < 9; i++)
 		{
 			if (i != r)
@@ -239,7 +254,7 @@ public class SudokuBoard
 				otherSudokuCells.add(board[r][i]);
 			}
 		}
-		
+
 		int groupNumber = getGroupNumber(r, c);
 		int startingRow = 3 * (groupNumber / 3);
 		int startingCol = 3 * (groupNumber % 3);
@@ -250,7 +265,7 @@ public class SudokuBoard
 			.flatMap(Function.identity())
 			.collect(Collectors.toList());
 		otherSudokuCells.addAll(otherSudokuCellsForGroup);
-		
+
 		return otherSudokuCells;
 	}
 }

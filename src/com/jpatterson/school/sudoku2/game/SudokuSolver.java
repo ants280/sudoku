@@ -1,5 +1,6 @@
 package com.jpatterson.school.sudoku2.game;
 
+import com.jpatterson.school.sudoku2.ui.Sudoku;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -29,6 +30,11 @@ public class SudokuSolver
 			updatePossibleValues();
 
 			valueFound = setBoardValues();
+
+			if (!valueFound) // level 3
+			{
+				valueFound = cullPossibleValues();
+			}
 		}
 		while (valueFound);
 	}
@@ -77,16 +83,26 @@ public class SudokuSolver
 				final SudokuCell sudokuCell = board.getSudokuCell(r, c);
 				if (sudokuCell.getValue() == null)
 				{
-					if (sudokuCell.getPossibleValues().size() == 1)
+					if (sudokuCell.getPossibleValues().size() == 1) // level 1
 					{
 						Integer value = sudokuCell
 							.getPossibleValues()
 							.iterator()
 							.next();
+
+						if (Sudoku.DEBUG)
+						{
+							System.out.printf("SOLVER: "
+								+ "Setting value of %d at [%d,%d] "
+								+ "because it is the only possible "
+								+ "value in the cell",
+								value, r + 1, c + 1);
+						}
+
 						sudokuCell.setValue(value);
 						valueSet = true;
 					}
-					else
+					else // level 2
 					{
 						for (Integer possibleValue : sudokuCell.getPossibleValues())
 						{
@@ -94,6 +110,16 @@ public class SudokuSolver
 								|| noPossibleValuesInCollectionContain(getOtherSudokuCellsForRow(r, c), possibleValue)
 								|| noPossibleValuesInCollectionContain(getOtherSudokuCellsForCol(r, c), possibleValue))
 							{
+								if (Sudoku.DEBUG)
+								{
+									System.out.printf("SOLVER: "
+										+ "Setting value of %d at [%d,%d] "
+										+ "because it is the only possible "
+										+ "spot for the value in the "
+										+ "group, row, or column.\n",
+										possibleValue, r + 1, c + 1);
+								}
+
 								sudokuCell.setValue(possibleValue);
 								valueSet = true;
 								break;
@@ -103,8 +129,33 @@ public class SudokuSolver
 				}
 			}
 		}
-		
+
 		return valueSet;
+	}
+
+	/**
+	 * If two cells in a row, col, or group (the "collection") have possible
+	 * values a&b, no other cells in that collection can have those possible
+	 * values. If this situation exists, the 'n' possible values that can only
+	 * be in the 'n' cells are removed from other cells in the collection. In
+	 * this situation, let 'n' = 2 (a&b). The same applies for situations with n
+	 * > 2.
+	 *
+	 * @return whether or not any possible values were culled.
+	 */
+	private boolean cullPossibleValues()
+	{
+		boolean valuesCulled = false;
+		for (int i = 0; i < 9; i++)
+		{
+			// row
+//			List<SudokuCell> rowSudokuCells = board.getSudokuCellsForRow(i);
+			
+			// col
+			
+			// group
+		}
+		return valuesCulled;
 	}
 
 	private void sleep()
