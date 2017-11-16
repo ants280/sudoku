@@ -42,15 +42,8 @@ public class MutableSudokuCell extends SudokuCell
 		Integer oldValue = this.value;
 		this.value = value;
 
-		if (value == null)
-		{
-			resetPossibleValues();
-		}
-		else
-		{
-			possibleValues.clear();
-		}
-		
+		resetPossibleValues();
+
 		return this.value == null
 			? oldValue != null
 			: !this.value.equals(oldValue);
@@ -59,7 +52,7 @@ public class MutableSudokuCell extends SudokuCell
 	@Override
 	public void resetPossibleValues()
 	{
-		possibleValues.addAll(ALL_POSSIBLE_VALUES);
+		possibleValues.clear();
 	}
 
 	@Override
@@ -74,7 +67,7 @@ public class MutableSudokuCell extends SudokuCell
 	public boolean addPossibleValue(int value)
 	{
 		SudokuCell.validateValue(value);
-		
+
 		return possibleValues.add(value);
 	}
 }
