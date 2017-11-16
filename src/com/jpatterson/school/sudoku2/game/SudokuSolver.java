@@ -44,17 +44,16 @@ public class SudokuSolver
 		{
 			for (int c = 0; c < 9; c++)
 			{
-				int rowNumber = board.getRowNumber(r, c);
-				int colNumber = board.getColNumber(r, c);
-				int groupNumber = board.getGroupNumber(r, c);
-				
-//				Set<Integer> unusedValues = null;
-//				board.getUnusedValuesForRow(rowNumber);
-//				board.getUnusedValuesForCol(colNumber);
-//				board.getUnusedValuesForGroup(groupNumber);
-				if (board.getSudokuCell(r, c).getValue() == null)
+				SudokuCell sudokuCell = board.getSudokuCell(r, c);
+				if (sudokuCell.getValue() == null)
 				{
-//					for
+					int rowNumber = board.getRowNumber(r, c);
+					int colNumber = board.getColNumber(r, c);
+					int groupNumber = board.getGroupNumber(r, c);
+					
+					for (Integer possibleValue : sudokuCell.getPossibleValues())
+					{
+					}
 				}
 			}
 		}

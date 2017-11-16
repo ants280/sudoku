@@ -39,7 +39,7 @@ public class MutableSudokuCell extends SudokuCell
 		Integer oldValue = this.value;
 		this.value = value;
 
-		resetPossibleValues();
+		possibleValues.clear();
 
 		return this.value == null
 			? oldValue != null
@@ -49,7 +49,7 @@ public class MutableSudokuCell extends SudokuCell
 	@Override
 	public void resetPossibleValues()
 	{
-		possibleValues.clear();
+		possibleValues.addAll(SudokuCell.LEGAL_CELL_VALUES);
 	}
 
 	@Override
