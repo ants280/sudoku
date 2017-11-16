@@ -1,6 +1,5 @@
 package com.jpatterson.school.sudoku2.game;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Set;
@@ -137,13 +136,24 @@ public class SudokuBoard
 
 	public Collection<SudokuCell> getSudokuCellsForGroup(int groupNumber)
 	{
+		return getOtherSudokuCellsForGroup(groupNumber, null, null);
+	}
+
+	public Collection<SudokuCell> getOtherSudokuCellsForGroup(int groupNumber, Integer rowNumber, Integer colNumber)
+	{
 		validateCoord(groupNumber);
+		if (rowNumber != null || colNumber != null)
+		{
+			validateCoords(rowNumber, colNumber);
+		}
 
 		int startingRow = 3 * (groupNumber / 3);
 		int startingCol = 3 * (groupNumber % 3);
 
 		return IntStream.range(startingRow, startingRow + 3)
 			.mapToObj(r -> IntStream.range(startingCol, startingCol + 3)
+				.filter(c -> rowNumber == null || colNumber == null
+					|| r != rowNumber || c != colNumber)
 				.mapToObj(c -> board[r][c]))
 			.flatMap(Function.identity())
 			.collect(Collectors.toList());
@@ -161,11 +171,21 @@ public class SudokuBoard
 
 	public Collection<SudokuCell> getSudokuCellsForRow(int rowNumber)
 	{
+		return getOtherSudokuCellsForRow(rowNumber, null);
+	}
+
+	public Collection<SudokuCell> getOtherSudokuCellsForRow(int rowNumber, Integer colNumber)
+	{
 		validateCoord(rowNumber);
+		if (colNumber != null)
+		{
+			validateCoord(colNumber);
+		}
 
-		return Arrays.stream(board[rowNumber])
+		return IntStream.range(0, 9)
+			.filter(c -> colNumber == null || c != colNumber)
+			.mapToObj(c -> board[rowNumber][c])
 			.collect(Collectors.toList());
-
 	}
 
 	public Set<Integer> getValuesForRow(int rowNumber)
@@ -180,10 +200,20 @@ public class SudokuBoard
 
 	public Collection<SudokuCell> getSudokuCellsForCol(int colNumber)
 	{
-		validateCoord(colNumber);
+		return getOtherSudokuCellsForCol(colNumber, null);
+	}
 
-		return Arrays.stream(board)
-			.map(row -> row[colNumber])
+	public Collection<SudokuCell> getOtherSudokuCellsForCol(int colNumber, Integer rowNumber)
+	{
+		validateCoord(colNumber);
+		if (rowNumber != null)
+		{
+			validateCoord(rowNumber);
+		}
+
+		return IntStream.range(0, 9)
+			.filter(r -> rowNumber == null || r != rowNumber)
+			.mapToObj(r -> board[r][colNumber])
 			.collect(Collectors.toList());
 	}
 
@@ -235,37 +265,5 @@ public class SudokuBoard
 			throw new IllegalArgumentException(
 				"Invalid coordinate: " + coordinate);
 		}
-	}
-
-	public Collection<SudokuCell> getOtherSudokuCellsInRowColumnGroup(int r, int c)
-	{
-		validateCoords(r, c);
-
-		Collection<SudokuCell> otherSudokuCells = new ArrayList<>();
-
-		for (int i = 0; i < 9; i++)
-		{
-			if (i != r)
-			{
-				otherSudokuCells.add(board[i][c]);
-			}
-			if (i != c)
-			{
-				otherSudokuCells.add(board[r][i]);
-			}
-		}
-
-		int groupNumber = getGroupNumber(r, c);
-		int startingRow = 3 * (groupNumber / 3);
-		int startingCol = 3 * (groupNumber % 3);
-		Collection<SudokuCell> otherSudokuCellsForGroup = IntStream.range(startingRow, startingRow + 3)
-			.mapToObj(r2 -> IntStream.range(startingCol, startingCol + 3)
-				.filter(c2 -> r2 != r || c2 != c)
-				.mapToObj(c2 -> board[r2][c2]))
-			.flatMap(Function.identity())
-			.collect(Collectors.toList());
-		otherSudokuCells.addAll(otherSudokuCellsForGroup);
-
-		return otherSudokuCells;
 	}
 }

@@ -5,9 +5,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class SudokuSolver
 {
@@ -104,11 +101,12 @@ public class SudokuSolver
 					}
 					else // level 2
 					{
+						int groupNumber = board.getGroupNumber(r, c);
 						for (Integer possibleValue : sudokuCell.getPossibleValues())
 						{
-							if (noPossibleValuesInCollectionContain(getOtherSudokuCellsForGroup(r, c), possibleValue)
-								|| noPossibleValuesInCollectionContain(getOtherSudokuCellsForRow(r, c), possibleValue)
-								|| noPossibleValuesInCollectionContain(getOtherSudokuCellsForCol(r, c), possibleValue))
+							if (noPossibleValuesInCollectionContain(board.getOtherSudokuCellsForGroup(groupNumber, r, c), possibleValue)
+								|| noPossibleValuesInCollectionContain(board.getOtherSudokuCellsForRow(r, c), possibleValue)
+								|| noPossibleValuesInCollectionContain(board.getOtherSudokuCellsForCol(c, r), possibleValue))
 							{
 								if (Sudoku.DEBUG)
 								{
@@ -168,35 +166,6 @@ public class SudokuSolver
 		{
 			System.err.println(ex);
 		}
-	}
-
-	private Collection<SudokuCell> getOtherSudokuCellsForRow(int r, int c)
-	{
-		return IntStream.range(0, 9)
-			.filter(r2 -> r2 != r)
-			.mapToObj(r2 -> board.getSudokuCell(r2, c))
-			.collect(Collectors.toList());
-	}
-
-	private Collection<SudokuCell> getOtherSudokuCellsForCol(int r, int c)
-	{
-		return IntStream.range(0, 9)
-			.filter(c2 -> c2 != c)
-			.mapToObj(c2 -> board.getSudokuCell(r, c2))
-			.collect(Collectors.toList());
-	}
-
-	private Collection<SudokuCell> getOtherSudokuCellsForGroup(int r, int c)
-	{
-		int groupNumber = board.getGroupNumber(r, c);
-		int startingRow = 3 * (groupNumber / 3);
-		int startingCol = 3 * (groupNumber % 3);
-		return IntStream.range(startingRow, startingRow + 3)
-			.mapToObj(r2 -> IntStream.range(startingCol, startingCol + 3)
-				.filter(c2 -> r2 != r || c2 != c)
-				.mapToObj(c2 -> board.getSudokuCell(r2, c2)))
-			.flatMap(Function.identity())
-			.collect(Collectors.toList());
 	}
 
 	private boolean noPossibleValuesInCollectionContain(
