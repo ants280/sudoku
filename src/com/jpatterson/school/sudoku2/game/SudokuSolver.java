@@ -14,7 +14,7 @@ public class SudokuSolver
 	public void start()
 	{
 		resetPossibleValues();
-		sleep();
+		//sleep();
 		
 		boolean valueFound = false;
 		
@@ -47,12 +47,20 @@ public class SudokuSolver
 				SudokuCell sudokuCell = board.getSudokuCell(r, c);
 				if (sudokuCell.getValue() == null)
 				{
-					int rowNumber = board.getRowNumber(r, c);
-					int colNumber = board.getColNumber(r, c);
-					int groupNumber = board.getGroupNumber(r, c);
-					
-					for (Integer possibleValue : sudokuCell.getPossibleValues())
+					for (int i = 0; i < 9; i++)
 					{
+						// remove possible values that the row already has
+						if (i != r && board.getSudokuCell(i, c).getValue() != null)
+						{
+							sudokuCell.removePossibleValue(board.getSudokuCell(i, c).getValue());
+						}
+						// remove possible values that the col already has
+						if (i != c && board.getSudokuCell(r, i).getValue() != null)
+						{
+							sudokuCell.removePossibleValue(board.getSudokuCell(r, i).getValue());
+						}
+						// remove possible values that the group already has
+						//TODO
 					}
 				}
 			}

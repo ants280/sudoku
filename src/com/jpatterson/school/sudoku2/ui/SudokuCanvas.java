@@ -1,5 +1,6 @@
 package com.jpatterson.school.sudoku2.ui;
 
+import com.jpatterson.school.sudoku2.game.ImmutableSudokuCell;
 import com.jpatterson.school.sudoku2.game.SudokuBoard;
 import com.jpatterson.school.sudoku2.game.SudokuCell;
 import java.awt.Canvas;
@@ -81,8 +82,6 @@ public class SudokuCanvas extends Canvas
 
 	private void paintCells(Graphics graphics)
 	{
-
-		graphics.setColor(Color.BLACK);
 		for (int row = 0; row < 9; row++)
 		{
 			for (int col = 0; col < 9; col++)
@@ -97,6 +96,8 @@ public class SudokuCanvas extends Canvas
 		SudokuCell sudokuCell = board.getSudokuCell(row, col);
 		if (sudokuCell.getValue() != null)
 		{
+			graphics.setColor(sudokuCell instanceof ImmutableSudokuCell
+				? Color.DARK_GRAY : Color.BLACK);
 			graphics.setFont(valueFont);
 			int fontHeightPx = (int) (valueFont.getSize() * 0.75d);
 			FontMetrics fontMetrics = graphics.getFontMetrics();
@@ -111,6 +112,7 @@ public class SudokuCanvas extends Canvas
 		{
 			if (!sudokuCell.getPossibleValues().isEmpty())
 			{
+				graphics.setColor(Color.BLACK);
 				graphics.setFont(possibleValueFont);
 				int fontHeightPx = (int) (possibleValueFont.getSize() * 0.75d);
 				FontMetrics fontMetrics = graphics.getFontMetrics();
