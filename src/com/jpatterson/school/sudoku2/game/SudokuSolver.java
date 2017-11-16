@@ -22,15 +22,20 @@ public class SudokuSolver
 		resetPossibleValues();
 		//sleep();
 
-		boolean valueFound = false;
+		boolean valueFound;
 
 		do
 		{
 			updatePossibleValues();
 
-			setBoardValues();
+			valueFound = setBoardValues();
 		}
 		while (valueFound);
+		
+		if (!board.isSolved())
+		{
+			updatePossibleValues();
+		}
 	}
 
 	private void resetPossibleValues()
@@ -67,8 +72,9 @@ public class SudokuSolver
 		}
 	}
 
-	private void setBoardValues()
+	private boolean setBoardValues()
 	{
+		boolean valueSet = false;
 		for (int r = 0; r < 9; r++)
 		{
 			for (int c = 0; c < 9; c++)
@@ -83,6 +89,7 @@ public class SudokuSolver
 							.iterator()
 							.next();
 						sudokuCell.setValue(value);
+						valueSet = true;
 					}
 					else
 					{
@@ -93,6 +100,7 @@ public class SudokuSolver
 								|| noPossibleValuesInCollectionContain(getOtherSudokuCellsForCol(r, c), possibleValue))
 							{
 								sudokuCell.setValue(possibleValue);
+								valueSet = true;
 								break;
 							}
 						}
@@ -100,6 +108,8 @@ public class SudokuSolver
 				}
 			}
 		}
+		
+		return valueSet;
 	}
 
 	private void sleep()

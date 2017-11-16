@@ -41,7 +41,7 @@ public class SudokuSolverPopup
 			}
 		};
 		this.popupDialog = new JDialog(popupOwner, "Solver", true);
-		this.repaintTimer = new Timer(100, actionEvent -> canvas.repaint());
+		this.repaintTimer = new Timer(10, actionEvent -> canvas.repaint());
 
 		initPopupDialog();
 	}
