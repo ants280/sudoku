@@ -28,11 +28,17 @@ public class SudokuCanvas extends Canvas
 		this.cellLength = 50;
 		this.valueFont = new Font("times", Font.PLAIN, cellLength);
 		this.possibleValueFont = new Font("times", Font.PLAIN, cellLength / 3);
-		this.setSize(getBoardLength(), getBoardLength());
 
 		// TODO: reset these on new game creation
 		this.selectedRow = null;
 		this.selectedCol = null;
+		
+		init();
+	}
+	
+	private void init()
+	{
+		this.setSize(getBoardLength(), getBoardLength());
 	}
 
 	@Override
