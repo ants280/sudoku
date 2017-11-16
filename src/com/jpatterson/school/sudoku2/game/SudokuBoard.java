@@ -1,6 +1,8 @@
 package com.jpatterson.school.sudoku2.game;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -218,5 +220,37 @@ public class SudokuBoard
 			throw new IllegalArgumentException(
 				"Invalid coordinate: " + coordinate);
 		}
+	}
+
+	public Collection<SudokuCell> getOtherSudokuCellsInRowColumnGroup(int r, int c)
+	{
+		validateCoords(r, c);
+		
+		Collection<SudokuCell> otherSudokuCells = new ArrayList<>();
+		
+		for (int i = 0; i < 9; i++)
+		{
+			if (i != r)
+			{
+				otherSudokuCells.add(board[i][c]);
+			}
+			if (i != c)
+			{
+				otherSudokuCells.add(board[r][i]);
+			}
+		}
+		
+		int groupNumber = getGroupNumber(r, c);
+		int startingRow = 3 * (groupNumber / 3);
+		int startingCol = 3 * (groupNumber % 3);
+		Collection<SudokuCell> otherSudokuCellsForGroup = IntStream.range(startingRow, startingRow + 3)
+			.mapToObj(r2 -> IntStream.range(startingCol, startingCol + 3)
+				.filter(c2 -> r2 != r || c2 != c)
+				.mapToObj(c2 -> board[r2][c2]))
+			.flatMap(Function.identity())
+			.collect(Collectors.toList());
+		otherSudokuCells.addAll(otherSudokuCellsForGroup);
+		
+		return otherSudokuCells;
 	}
 }
