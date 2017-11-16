@@ -1,9 +1,16 @@
 package com.jpatterson.school.sudoku2.game;
 
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public abstract class SudokuCell
 {
+	public static final Set<Integer> LEGAL_CELL_VALUES
+		= IntStream.rangeClosed(1, 9)
+		.boxed()
+		.collect(Collectors.toSet());
+
 	public abstract Integer getValue();
 
 	public abstract Set<Integer> getPossibleValues();
@@ -37,7 +44,7 @@ public abstract class SudokuCell
 
 	protected static void validateValue(Integer value) throws IllegalArgumentException
 	{
-		if (value != null && (value < 1 || value > 9))
+		if (value != null && !LEGAL_CELL_VALUES.contains(value))
 		{
 			throw new IllegalArgumentException("Invalid value: " + value);
 		}

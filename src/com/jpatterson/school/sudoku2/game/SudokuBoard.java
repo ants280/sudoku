@@ -11,10 +11,6 @@ public class SudokuBoard
 {
 	private final SudokuCell[][] board;
 
-	private static final Set<Integer> VALUES = IntStream.rangeClosed(1, 9)
-		.boxed()
-		.collect(Collectors.toSet());
-
 	public SudokuBoard(String boardString)
 	{
 		if (!boardString.matches("^\\d{81}$"))
@@ -183,7 +179,7 @@ public class SudokuBoard
 
 	private static Set<Integer> getRemainingValues(Set<Integer> sectionValues)
 	{
-		return VALUES.stream()
+		return SudokuCell.LEGAL_CELL_VALUES.stream()
 			.filter(i -> !sectionValues.contains(i))
 			.collect(Collectors.toSet());
 	}
