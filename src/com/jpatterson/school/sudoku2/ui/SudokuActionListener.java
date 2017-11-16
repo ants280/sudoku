@@ -152,7 +152,8 @@ public class SudokuActionListener
 
 	public void solve(ActionEvent event)
 	{
-		// TODO
+		SudokuSolverPopup sudokuSolverPopup = new SudokuSolverPopup(frame, canvas, board);
+		sudokuSolverPopup.setVisible(true);
 	}
 
 	public void load(ActionEvent event)

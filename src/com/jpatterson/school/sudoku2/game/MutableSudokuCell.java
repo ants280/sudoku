@@ -1,21 +1,18 @@
 package com.jpatterson.school.sudoku2.game;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class MutableSudokuCell extends SudokuCell
 {
-	private static final Collection<Integer> ALL_POSSIBLE_VALUES = IntStream.rangeClosed(1, 9)
-		.boxed()
-		.collect(Collectors.toList());
-
 	private Integer value;
 	private final Set<Integer> possibleValues;
 
+	/**
+	 * Creates a new MutableSudokuCel with no value and an emty set of possible
+	 * values.
+	 */
 	public MutableSudokuCell()
 	{
 		this.value = null;
