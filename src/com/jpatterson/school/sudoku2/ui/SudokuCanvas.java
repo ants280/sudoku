@@ -113,10 +113,10 @@ public class SudokuCanvas extends Canvas
 				{
 					int charWidth = getFontWidth(fontMetrics, possibleValue);
 					int colOffset = getOffset(
-						col + ((1 + (2 * ((possibleValue-1) % 3))) / 6d))
+						col + ((1 + (2 * ((possibleValue - 1) % 3))) / 6d))
 						- (charWidth / 2);
 					int rowOffset = getOffset(
-						row + ((1 + (2 * ((possibleValue-1) / 3))) / 6d))
+						row + ((1 + (2 * ((possibleValue - 1) / 3))) / 6d))
 						+ (fontHeightPx / 2);
 
 					graphics.drawString(
