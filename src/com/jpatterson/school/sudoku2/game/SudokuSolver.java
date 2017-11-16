@@ -20,7 +20,7 @@ public class SudokuSolver
 	public void start()
 	{
 		resetPossibleValues();
-		//sleep();
+		//sleep();  //TODO: it would be nice to report back to the parent popup every time a value is found.  maybe the parent should control this so users can pause between found values if desired
 
 		boolean valueFound;
 
@@ -31,11 +31,6 @@ public class SudokuSolver
 			valueFound = setBoardValues();
 		}
 		while (valueFound);
-		
-		if (!board.isSolved())
-		{
-			updatePossibleValues();
-		}
 	}
 
 	private void resetPossibleValues()
