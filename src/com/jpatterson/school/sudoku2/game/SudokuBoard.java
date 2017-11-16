@@ -58,7 +58,6 @@ public class SudokuBoard
 //		this("370095000600080090008300007000010050160000034040060000700002900020030008000950042"); // 6/5 stars 20170218
 		// TODO: Fix the solver so this can be solved (March 22 puzzle as solved as level 2 solver can proceed)0
 //		this("679810004410569087000070916104080090097020000050930701701040009040098170900050430");
-		
 		// November 16, 2017
 		this("605040902001090003020015600900004800000060000008100009006430080500080200807020306"); // 4/5 stars
 	}
@@ -85,8 +84,10 @@ public class SudokuBoard
 	/**
 	 * @param r The row of the SudokuCell
 	 * @param c The column of the SudokuCell
-	 * @param value The value to add to the the possible values of the SudokuCell
-	 * @return Whether or not the value was successfully removed from the possible values.
+	 * @param value The value to add to the the possible values of the
+	 * SudokuCell
+	 * @return Whether or not the value was successfully removed from the
+	 * possible values.
 	 */
 	public boolean addPossibleValue(int r, int c, Integer value)
 	{
@@ -96,14 +97,16 @@ public class SudokuBoard
 	/**
 	 * @param r The row of the SudokuCell
 	 * @param c The column of the SudokuCell
-	 * @param value The value to remove the the possible values of the SudokuCell
-	 * @return Whether or not the value was successfully removed from the possible values.
+	 * @param value The value to remove the the possible values of the
+	 * SudokuCell
+	 * @return Whether or not the value was successfully removed from the
+	 * possible values.
 	 */
 	public boolean removePossibleValue(int r, int c, Integer value)
 	{
 		return changePossibleValue(r, c, value, SudokuCell::removePossibleValue);
 	}
-	
+
 	private boolean changePossibleValue(int r, int c, Integer value, BiFunction<SudokuCell, Integer, Boolean> changePossibleValueFunction)
 	{
 		return changePossibleValueFunction.apply(getSudokuCell(r, c), value);
@@ -130,7 +133,7 @@ public class SudokuBoard
 		return c;
 	}
 
-	public Set<Integer> getUnusedValuesForGroup(int groupNumber)
+	public Set<Integer> getValuesForGroup(int groupNumber)
 	{
 		validateCoord(groupNumber);
 
@@ -144,10 +147,15 @@ public class SudokuBoard
 			.map(SudokuCell::getValue)
 			.collect(Collectors.toSet());
 
-		return getRemainingValues(groupValues);
+		return groupValues;
 	}
 
-	public Set<Integer> getUnusedValuesForRow(int rowNumber)
+	public Set<Integer> getUnusedValuesForGroup(int groupNumber)
+	{
+		return getRemainingValues(getValuesForGroup(groupNumber));
+	}
+
+	public Set<Integer> getValuesForRow(int rowNumber)
 	{
 		validateCoord(rowNumber);
 
@@ -156,10 +164,15 @@ public class SudokuBoard
 			.map(SudokuCell::getValue)
 			.collect(Collectors.toSet());
 
-		return getRemainingValues(rowValues);
+		return rowValues;
 	}
 
-	public Set<Integer> getUnusedValuesForCol(int colNumber)
+	public Set<Integer> getUnusedValuesForRow(int rowNumber)
+	{
+		return getRemainingValues(getValuesForRow(rowNumber));
+	}
+
+	public Set<Integer> getValuesForCol(int colNumber)
 	{
 		validateCoord(colNumber);
 
@@ -169,7 +182,12 @@ public class SudokuBoard
 			.map(SudokuCell::getValue)
 			.collect(Collectors.toSet());
 
-		return getRemainingValues(colValues);
+		return colValues;
+	}
+
+	public Set<Integer> getUnusedValuesForCol(int colNumber)
+	{
+		return getRemainingValues(getValuesForCol(colNumber));
 	}
 
 	public boolean isSolved()

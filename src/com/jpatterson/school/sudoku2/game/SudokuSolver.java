@@ -1,5 +1,7 @@
 package com.jpatterson.school.sudoku2.game;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public class SudokuSolver
@@ -47,21 +49,15 @@ public class SudokuSolver
 				SudokuCell sudokuCell = board.getSudokuCell(r, c);
 				if (sudokuCell.getValue() == null)
 				{
-					for (int i = 0; i < 9; i++)
-					{
-						// remove possible values that the row already has
-						if (i != r && board.getSudokuCell(i, c).getValue() != null)
-						{
-							sudokuCell.removePossibleValue(board.getSudokuCell(i, c).getValue());
-						}
-						// remove possible values that the col already has
-						if (i != c && board.getSudokuCell(r, i).getValue() != null)
-						{
-							sudokuCell.removePossibleValue(board.getSudokuCell(r, i).getValue());
-						}
-						// remove possible values that the group already has
-						//TODO
-					}
+					int groupNumber = board.getGroupNumber(r, c);
+					Set<Integer> usedValues = new HashSet<>();
+					
+					usedValues.addAll(board.getValuesForRow(r));
+					usedValues.addAll(board.getValuesForCol(c));
+					usedValues.addAll(board.getValuesForGroup(groupNumber));
+					
+					usedValues.stream()
+						.forEach(sudokuCell::removePossibleValue);
 				}
 			}
 		}
