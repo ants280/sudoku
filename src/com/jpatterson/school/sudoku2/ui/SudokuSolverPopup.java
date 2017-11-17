@@ -4,6 +4,8 @@ import com.jpatterson.school.sudoku2.game.SudokuBoard;
 import com.jpatterson.school.sudoku2.game.SudokuSolver;
 import java.awt.Frame;
 import java.awt.GridLayout;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -39,6 +41,12 @@ public class SudokuSolverPopup
 				popupDialog.setVisible(false);
 				return null;
 			}
+
+			@Override
+			protected void done()
+			{
+				repaintTimer.stop();
+			}
 		};
 		this.popupDialog = new JDialog(popupOwner, "Solver", true);
 		this.repaintTimer = new Timer(10, actionEvent -> canvas.repaint());
@@ -72,6 +80,15 @@ public class SudokuSolverPopup
 		popupDialog.pack();
 		popupDialog.setResizable(false);
 		popupDialog.setLocationRelativeTo(popupDialog.getParent());
+		popupDialog.addWindowListener(new WindowAdapter()
+		{
+			@Override
+			public void windowClosing(WindowEvent e)
+			{
+				swingWorker.cancel(true);
+				repaintTimer.stop();
+			}
+		});
 	}
 
 	public void setVisible(boolean visible)

@@ -38,6 +38,8 @@ public class MutableSudokuCell extends SudokuCell
 
 		Integer oldValue = this.value;
 		this.value = value;
+		
+		possibleValues.clear();
 
 		return this.value == null
 			? oldValue != null

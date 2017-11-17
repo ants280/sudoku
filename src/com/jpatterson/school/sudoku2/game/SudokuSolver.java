@@ -3,8 +3,11 @@ package com.jpatterson.school.sudoku2.game;
 import com.jpatterson.school.sudoku2.ui.Sudoku;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public class SudokuSolver
 {
@@ -96,7 +99,7 @@ public class SudokuSolver
 								value, r + 1, c + 1);
 						}
 
-						sudokuCell.setValue(value);
+						setValue(r, c, value);
 						valueSet = true;
 					}
 					else // level 2
@@ -118,7 +121,7 @@ public class SudokuSolver
 										possibleValue, r + 1, c + 1);
 								}
 
-								sudokuCell.setValue(possibleValue);
+								setValue(r, c, possibleValue);
 								valueSet = true;
 								break;
 							}
@@ -146,13 +149,55 @@ public class SudokuSolver
 		boolean valuesCulled = false;
 		for (int i = 0; i < 9; i++)
 		{
-			// row
-//			List<SudokuCell> rowSudokuCells = board.getSudokuCellsForRow(i);
-			
-			// col
-			
-			// group
+			valuesCulled
+				|= cullPossibleValues(board.getSudokuCellsForGroup(i), "group", i)
+				|| cullPossibleValues(board.getSudokuCellsForRow(i), "row", i)
+				|| cullPossibleValues(board.getSudokuCellsForCol(i), "col", i);
+
 		}
+		return valuesCulled;
+	}
+
+	private boolean cullPossibleValues(Collection<SudokuCell> sectionSudokuCells, String sectionType, int sectionNumber)
+	{
+		Map<Set<Integer>, List<SudokuCell>> possibleValuesForSudokuCells = sectionSudokuCells.stream()
+			.filter(sudokuCell -> sudokuCell.getPossibleValues().size() > 1)
+			.collect(Collectors.groupingBy(SudokuCell::getPossibleValues));
+		List<Set<Integer>> possibleValuesToCull = possibleValuesForSudokuCells.entrySet()
+			.stream()
+			.filter(entry -> entry.getKey().size() == entry.getValue().size())
+			.map(Map.Entry::getKey)
+			.collect(Collectors.toList());
+		
+		boolean valuesCulled = false;
+		for (Set<Integer> cullGroup : possibleValuesToCull)
+		{
+			if (Sudoku.DEBUG)
+			{
+				System.out.printf(
+					"Removing possible values %s from some cells "
+					+ "in %s %d because %d other cells "
+					+ "have only these possible values.\n",
+					cullGroup,
+					sectionType,
+					sectionNumber + 1,
+					cullGroup.size());
+			}
+			
+			for (SudokuCell sudokuCell : sectionSudokuCells)
+			{
+				if (sudokuCell.getValue() == null
+					&& !sudokuCell.getPossibleValues().equals(cullGroup))
+				{
+					valuesCulled = true;
+					for (Integer possibleValue : cullGroup)
+					{
+						sudokuCell.removePossibleValue(possibleValue);
+					}
+				}
+			}
+		}
+
 		return valuesCulled;
 	}
 
@@ -174,5 +219,18 @@ public class SudokuSolver
 		return otherSudokuCells.stream()
 			.noneMatch(otherSudokuCell -> otherSudokuCell.getPossibleValues()
 				.contains(possibleValue));
+	}
+
+	private void setValue(int r, int c, Integer value)
+	{
+		board.getSudokuCell(r, c).setValue(value);
+		
+		board.getOtherSudokuCellsForRow(r, c)
+			.forEach(sudokuCell -> sudokuCell.removePossibleValue(value));
+		board.getOtherSudokuCellsForCol(c, r)
+			.forEach(sudokuCell -> sudokuCell.removePossibleValue(value));
+		int groupNumber = board.getGroupNumber(r, c);
+		board.getOtherSudokuCellsForGroup(groupNumber, r, c)
+			.forEach(sudokuCell -> sudokuCell.removePossibleValue(value));
 	}
 }
