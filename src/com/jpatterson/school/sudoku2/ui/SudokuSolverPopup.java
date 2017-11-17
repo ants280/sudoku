@@ -12,14 +12,12 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingWorker;
-import javax.swing.Timer;
 
 public class SudokuSolverPopup
 {
 	private final SudokuCanvas canvas;
 	private final SwingWorker<?, ?> swingWorker;
 	private final JDialog popupDialog;
-	private final Timer repaintTimer;
 
 	public SudokuSolverPopup(Frame popupOwner, SudokuCanvas canvas, SudokuBoard board)
 	{
@@ -41,15 +39,8 @@ public class SudokuSolverPopup
 				popupDialog.setVisible(false);
 				return null;
 			}
-
-			@Override
-			protected void done()
-			{
-				repaintTimer.stop();
-			}
 		};
 		this.popupDialog = new JDialog(popupOwner, "Solver", true);
-		this.repaintTimer = new Timer(10, actionEvent -> canvas.repaint());
 
 		initPopupDialog();
 	}
@@ -67,7 +58,6 @@ public class SudokuSolverPopup
 				progressBar.setIndeterminate(true);
 
 				swingWorker.execute();
-				repaintTimer.start();
 		});
 
 
@@ -86,7 +76,6 @@ public class SudokuSolverPopup
 			public void windowClosing(WindowEvent e)
 			{
 				swingWorker.cancel(true);
-				repaintTimer.stop();
 			}
 		});
 	}
