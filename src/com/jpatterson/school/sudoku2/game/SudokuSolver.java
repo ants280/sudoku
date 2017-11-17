@@ -95,7 +95,7 @@ public class SudokuSolver
 							System.out.printf("SOLVER: "
 								+ "Setting value of %d at [%d,%d] "
 								+ "because it is the only possible "
-								+ "value in the cell",
+								+ "value in the cell.\n",
 								value, r + 1, c + 1);
 						}
 
@@ -175,7 +175,7 @@ public class SudokuSolver
 			if (Sudoku.DEBUG)
 			{
 				System.out.printf(
-					"Removing possible values %s from some cells "
+					"SOLVER: Removing possible values %s from some cells "
 					+ "in %s %d because %d other cells "
 					+ "have only these possible values.\n",
 					cullGroup,
