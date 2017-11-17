@@ -31,10 +31,10 @@ public class SudokuSolver
 
 			valueFound = setBoardValues();
 
-//			if (!valueFound) // level 3
-//			{
-//				valueFound = cullPossibleValues();
-//			}
+			if (!valueFound) // level 3
+			{
+				valueFound = cullPossibleValues();
+			}
 		}
 		while (valueFound);
 	}
@@ -189,10 +189,9 @@ public class SudokuSolver
 				if (sudokuCell.getValue() == null
 					&& !sudokuCell.getPossibleValues().equals(cullGroup))
 				{
-					valuesCulled = true;
 					for (Integer possibleValue : cullGroup)
 					{
-						sudokuCell.removePossibleValue(possibleValue);
+						valuesCulled |= sudokuCell.removePossibleValue(possibleValue);
 					}
 				}
 			}
