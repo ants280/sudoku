@@ -39,6 +39,12 @@ public class SudokuSolverPopup
 				popupDialog.setVisible(false);
 				return null;
 			}
+
+			@Override
+			protected void done()
+			{
+				canvas.repaint();;
+			}
 		};
 		this.popupDialog = new JDialog(popupOwner, "Solver", true);
 
