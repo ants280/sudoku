@@ -31,10 +31,10 @@ public class SudokuSolver
 
 			valueFound = setBoardValues();
 
-			if (!valueFound) // level 3
-			{
-				valueFound = cullPossibleValues();
-			}
+//			if (!valueFound) // level 3
+//			{
+//				valueFound = cullPossibleValues();
+//			}
 		}
 		while (valueFound);
 	}
