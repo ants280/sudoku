@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class SudokuSolver
@@ -21,7 +20,7 @@ public class SudokuSolver
 	public void start()
 	{
 		resetPossibleValues();
-		//sleep();  //TODO: it would be nice to report back to the parent popup every time a value is found.  maybe the parent should control this so users can pause between found values if desired
+		///TODO: it would be nice to report back to the parent popup every time a value is found.  maybe the parent should control this so users can pause between found values if desired
 
 		boolean valueFound;
 
@@ -29,12 +28,10 @@ public class SudokuSolver
 		{
 			updatePossibleValues();
 
-			valueFound = setBoardValues();
+			valueFound = setBoardValues() // levels 1 & 2
+				|| cullPossibleValues() // level 3
+				|| removePossibleValuesFromGroupsWherePossible(); // level 4
 
-			if (!valueFound) // level 3
-			{
-				valueFound = cullPossibleValues();
-			}
 		}
 		while (valueFound);
 	}
@@ -158,6 +155,20 @@ public class SudokuSolver
 		return valuesCulled;
 	}
 
+	/**
+	 * Removes possible values from groups ina row/column what the value must be
+	 * in inside of a different group. For example, if the only positions for a
+	 * 1 in a group are in the first row, 1 cannot be in the first row of the
+	 * other two groups that are horizontal to the group in question.
+	 *
+	 * @return Whether or not any possible values were remove from groups where
+	 * there were not needed.
+	 */
+	private boolean removePossibleValuesFromGroupsWherePossible()
+	{
+		return false; // throw new UnsupportedOperationException("Not supported yet.");
+	}
+
 	private boolean cullPossibleValues(Collection<SudokuCell> sectionSudokuCells, String sectionType, int sectionNumber)
 	{
 		Map<Set<Integer>, List<SudokuCell>> possibleValuesForSudokuCells = sectionSudokuCells.stream()
@@ -168,7 +179,7 @@ public class SudokuSolver
 			.filter(entry -> entry.getKey().size() == entry.getValue().size())
 			.map(Map.Entry::getKey)
 			.collect(Collectors.toList());
-		
+
 		boolean valuesCulled = false;
 		for (Set<Integer> cullGroup : possibleValuesToCull)
 		{
@@ -183,7 +194,7 @@ public class SudokuSolver
 					sectionNumber + 1,
 					cullGroup.size());
 			}
-			
+
 			for (SudokuCell sudokuCell : sectionSudokuCells)
 			{
 				if (sudokuCell.getValue() == null
@@ -200,18 +211,6 @@ public class SudokuSolver
 		return valuesCulled;
 	}
 
-	private void sleep()
-	{
-		try
-		{
-			Thread.sleep(TimeUnit.SECONDS.toMillis(1));
-		}
-		catch (InterruptedException ex)
-		{
-			System.err.println(ex);
-		}
-	}
-
 	private boolean noPossibleValuesInCollectionContain(
 		Collection<SudokuCell> otherSudokuCells, Integer possibleValue)
 	{
@@ -223,7 +222,7 @@ public class SudokuSolver
 	private void setValue(int r, int c, Integer value)
 	{
 		board.getSudokuCell(r, c).setValue(value);
-		
+
 		board.getOtherSudokuCellsForRow(r, c)
 			.forEach(sudokuCell -> sudokuCell.removePossibleValue(value));
 		board.getOtherSudokuCellsForCol(c, r)
