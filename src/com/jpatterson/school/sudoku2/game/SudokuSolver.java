@@ -144,12 +144,12 @@ public class SudokuSolver
 	private boolean cullPossibleValues()
 	{
 		boolean valuesCulled = false;
-		for (int i = 0; i < 9; i++)
+		for (int sectuionNumber = 0; sectuionNumber < 9; sectuionNumber++)
 		{
 			valuesCulled
-				|= cullPossibleValues(board.getSudokuCellsForGroup(i), "group", i)
-				|| cullPossibleValues(board.getSudokuCellsForRow(i), "row", i)
-				|| cullPossibleValues(board.getSudokuCellsForCol(i), "col", i);
+				|= cullPossibleValues(board.getSudokuCellsForGroup(sectuionNumber), "group", sectuionNumber)
+				|| cullPossibleValues(board.getSudokuCellsForRow(sectuionNumber), "row", sectuionNumber)
+				|| cullPossibleValues(board.getSudokuCellsForCol(sectuionNumber), "col", sectuionNumber);
 
 		}
 		return valuesCulled;
@@ -166,6 +166,13 @@ public class SudokuSolver
 	 */
 	private boolean removePossibleValuesFromGroupsWherePossible()
 	{
+		for (int groupNumber = 0; groupNumber < 9; groupNumber++)
+		{
+			for (int i = 0; i < 3; i++)
+			{
+				
+			}
+		}
 		return false; // throw new UnsupportedOperationException("Not supported yet.");
 	}
 

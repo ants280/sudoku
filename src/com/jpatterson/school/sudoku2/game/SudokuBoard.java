@@ -118,17 +118,17 @@ public class SudokuBoard
 	{
 		validateCoords(r, c);
 
-		return (r / 3) * 3 + c / 3;
+		return ((r / 3) * 3) + (c / 3);
 	}
 
-	public int getRowNumber(int r, int c)
+	public int getRowNumber(int r, int c)  // TODO: DELETEME
 	{
 		validateCoords(r, c);
 
 		return r;
 	}
 
-	public int getColNumber(int r, int c)
+	public int getColNumber(int r, int c) // TODO: DELETEME
 	{
 		validateCoords(r, c);
 
