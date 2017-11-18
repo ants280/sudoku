@@ -166,14 +166,29 @@ public class SudokuSolver
 	 */
 	private boolean removePossibleValuesFromGroupsWherePossible()
 	{
+		boolean possibleValuesRemoved = false;
+
 		for (int groupNumber = 0; groupNumber < 9; groupNumber++)
 		{
+			int rowNumber = (groupNumber / 3) * 3;
+			int colNumber = (groupNumber % 3) * 3;
+
 			for (int i = 0; i < 3; i++)
 			{
-				
+				possibleValuesRemoved |= removePossibleValuesFromOtherGroupsForRow(groupNumber, rowNumber + i);
+				possibleValuesRemoved |= removePossibleValuesFromOtherGroupsForCol(groupNumber, colNumber + i);
 			}
 		}
-		return false; // throw new UnsupportedOperationException("Not supported yet.");
+
+		return possibleValuesRemoved;
+	}
+
+	private boolean noPossibleValuesInCollectionContain(
+		Collection<SudokuCell> otherSudokuCells, Integer possibleValue)
+	{
+		return otherSudokuCells.stream()
+			.noneMatch(otherSudokuCell -> otherSudokuCell.getPossibleValues()
+				.contains(possibleValue));
 	}
 
 	private boolean cullPossibleValues(Collection<SudokuCell> sectionSudokuCells, String sectionType, int sectionNumber)
@@ -218,12 +233,14 @@ public class SudokuSolver
 		return valuesCulled;
 	}
 
-	private boolean noPossibleValuesInCollectionContain(
-		Collection<SudokuCell> otherSudokuCells, Integer possibleValue)
+	private boolean removePossibleValuesFromOtherGroupsForRow(int groupNumber, int rowNumber)
 	{
-		return otherSudokuCells.stream()
-			.noneMatch(otherSudokuCell -> otherSudokuCell.getPossibleValues()
-				.contains(possibleValue));
+		return false; // TODO: get other groups, rows...
+	}
+
+	private boolean removePossibleValuesFromOtherGroupsForCol(int groupNumber, int colNumber)
+	{
+		return false; // TODO: get other groups, cols...
 	}
 
 	private void setValue(int r, int c, Integer value)
