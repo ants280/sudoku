@@ -7,6 +7,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class SudokuBoard
 {
@@ -61,8 +62,8 @@ public class SudokuBoard
 //		this("679810004410569087000070916104080090097020000050930701701040009040098170900050430");
 		// November 16-18, 2017
 //		this("605040902001090003020015600900004800000060000008100009006430080500080200807020306"); // 4/5 stars
-//		this("000062507006000001010070008095400002600090005100005970700040050200000800401580000"); // 5/5 stars
-		this("004063100000010002000074683907000000006080900000000504825640000700090000009350700"); // 6/5 stars
+		this("000062507006000001010070008095400002600090005100005970700040050200000800401580000"); // 5/5 stars
+//		this("004063100000010002000074683907000000006080900000000504825640000700090000009350700"); // 6/5 stars
 	}
 
 	@Override
@@ -267,5 +268,42 @@ public class SudokuBoard
 			throw new IllegalArgumentException(
 				"Invalid coordinate: " + coordinate);
 		}
+	}
+
+	public Set<SudokuCell> getSudokuCellsInGroupSection(int groupNumber, SectionType sectionType, int sectionNumber)
+	{
+		validateSection(sectionType, SectionType.ROW, SectionType.COL);
+
+		int r = (sectionType == SectionType.ROW)
+			? sectionNumber
+			: (groupNumber % 3) * 3;
+		int c = (sectionType == SectionType.COL)
+			? sectionNumber
+			: (groupNumber % 3) * 3;
+
+		Stream<SudokuCell> sudokuCellsInGroupSectionStream
+			= (sectionType == SectionType.ROW)
+				? IntStream.range(c, c + 3).mapToObj(c2 -> board[r][c2])
+				: IntStream.range(r, r + 3).mapToObj(r2 -> board[r2][c]);
+
+		return sudokuCellsInGroupSectionStream.collect(Collectors.toSet());
+	}
+
+	public enum SectionType
+	{
+		GROUP, ROW, COL;
+	}
+
+	private void validateSection(SectionType actualSectionType, SectionType... expectedSectionTypes) throws IllegalArgumentException
+	{
+		for (SectionType expectedSectionType : expectedSectionTypes)
+		{
+			if (expectedSectionType == actualSectionType)
+			{
+				return;
+			}
+		}
+		throw new IllegalArgumentException(
+			"Invalid SectionType: " + actualSectionType);
 	}
 }

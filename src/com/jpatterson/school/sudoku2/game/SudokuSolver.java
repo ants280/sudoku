@@ -1,5 +1,6 @@
 package com.jpatterson.school.sudoku2.game;
 
+import com.jpatterson.school.sudoku2.game.SudokuBoard.SectionType;
 import com.jpatterson.school.sudoku2.ui.Sudoku;
 import java.util.Collection;
 import java.util.HashSet;
@@ -24,10 +25,10 @@ public class SudokuSolver
 
 		boolean valueFound;
 
+		updatePossibleValues(); // TODO: is this only needed once (before loop), now that setValue also culls?
+
 		do
 		{
-			updatePossibleValues();
-
 			valueFound = setBoardValues() // levels 1 & 2
 				|| cullPossibleValues() // level 3
 				|| removePossibleValuesFromGroupsWherePossible(); // level 4
@@ -146,10 +147,9 @@ public class SudokuSolver
 		boolean valuesCulled = false;
 		for (int sectuionNumber = 0; sectuionNumber < 9; sectuionNumber++)
 		{
-			valuesCulled
-				|= cullPossibleValues(board.getSudokuCellsForGroup(sectuionNumber), "group", sectuionNumber)
-				|| cullPossibleValues(board.getSudokuCellsForRow(sectuionNumber), "row", sectuionNumber)
-				|| cullPossibleValues(board.getSudokuCellsForCol(sectuionNumber), "col", sectuionNumber);
+			valuesCulled |= cullPossibleValues(board.getSudokuCellsForGroup(sectuionNumber), "group", sectuionNumber);
+			valuesCulled |= cullPossibleValues(board.getSudokuCellsForRow(sectuionNumber), "row", sectuionNumber);
+			valuesCulled |= cullPossibleValues(board.getSudokuCellsForCol(sectuionNumber), "col", sectuionNumber);
 
 		}
 		return valuesCulled;
@@ -175,8 +175,8 @@ public class SudokuSolver
 
 			for (int i = 0; i < 3; i++)
 			{
-				possibleValuesRemoved |= removePossibleValuesFromOtherGroupsForRow(groupNumber, rowNumber + i);
-				possibleValuesRemoved |= removePossibleValuesFromOtherGroupsForCol(groupNumber, colNumber + i);
+				possibleValuesRemoved |= removePossibleValuesFromOtherGroupsForSection(groupNumber, SectionType.ROW, rowNumber + i);
+				possibleValuesRemoved |= removePossibleValuesFromOtherGroupsForSection(groupNumber, SectionType.COL, colNumber + i);
 			}
 		}
 
@@ -233,14 +233,54 @@ public class SudokuSolver
 		return valuesCulled;
 	}
 
-	private boolean removePossibleValuesFromOtherGroupsForRow(int groupNumber, int rowNumber)
+	private boolean removePossibleValuesFromOtherGroupsForSection(int groupNumber, SectionType sectionType, int sectionNumber)
 	{
-		return false; // TODO: get other groups, rows...
-	}
+		int otherSectionNumberA = (((sectionNumber % 3) + 1) % 3) + (3 * (sectionNumber / 3));
+		int otherSectionNumberB = (((sectionNumber % 3) + 2) % 3) + (3 * (sectionNumber / 3));
+		int otherGroupInSectionA = (sectionType == SectionType.ROW)
+			? (((groupNumber % 3) + 1) % 3) + (3 * (groupNumber / 3))
+			: (groupNumber + 3) % 9;
+		int otherGroupInSectionB = (sectionType == SectionType.ROW)
+			? (((groupNumber % 3) + 2) % 3) + (3 * (groupNumber / 3))
+			: (groupNumber + 9) % 9;
 
-	private boolean removePossibleValuesFromOtherGroupsForCol(int groupNumber, int colNumber)
-	{
-		return false; // TODO: get other groups, cols...
+		if (Sudoku.DEBUG)
+		{
+			System.out.printf("\t\tRemoving possible values form other groups for %s %d for group %d."
+				+ "  Other %s numbers in group: %d, %d."
+				+ "  Other group numbers for %s: %d, %d.\n",
+				sectionType, sectionNumber, groupNumber,
+				sectionType, otherSectionNumberA, otherGroupInSectionB,
+				sectionType == SectionType.ROW ? SectionType.COL : SectionType.ROW, otherGroupInSectionA, otherGroupInSectionB);
+		}
+
+		Set<SudokuCell> sudokuCellsInGroupForSection = board.getSudokuCellsInGroupSection(groupNumber, sectionType, sectionNumber);
+		Set<SudokuCell> sudokuCellsInGroupOtherSectionA = board.getSudokuCellsInGroupSection(groupNumber, sectionType, otherSectionNumberA);
+		Set<SudokuCell> sudokuCellsInGroupOtherSectionB = board.getSudokuCellsInGroupSection(groupNumber, sectionType, otherSectionNumberB);
+		Set<SudokuCell> sudokuCellsInOtherGroupForSectionA = board.getSudokuCellsInGroupSection(otherGroupInSectionA, sectionType, sectionNumber);
+		Set<SudokuCell> sudokuCellsInOtherGroupForSectionB = board.getSudokuCellsInGroupSection(otherGroupInSectionB, sectionType, sectionNumber);
+
+		boolean possibleValuesRemoved = false;
+
+		for (int i = 1; i <= 9; i++)
+		{
+			final int possibleValue = i; // compiler is not very smart :p
+			if (sudokuCellsInGroupForSection.stream().anyMatch(sudokuCell -> sudokuCell.getPossibleValues().contains(possibleValue))
+				&& sudokuCellsInGroupOtherSectionA.stream().noneMatch(sudokuCell -> sudokuCell.getPossibleValues().contains(possibleValue))
+				&& sudokuCellsInGroupOtherSectionB.stream().noneMatch(sudokuCell -> sudokuCell.getPossibleValues().contains(possibleValue)))
+			{
+				for (SudokuCell sudokuCell : sudokuCellsInOtherGroupForSectionA)
+				{
+					possibleValuesRemoved |= sudokuCell.removePossibleValue(possibleValue);
+				}
+				for (SudokuCell sudokuCell : sudokuCellsInOtherGroupForSectionB)
+				{
+					possibleValuesRemoved |= sudokuCell.removePossibleValue(possibleValue);
+				}
+			}
+		}
+
+		return possibleValuesRemoved;
 	}
 
 	private void setValue(int r, int c, Integer value)
