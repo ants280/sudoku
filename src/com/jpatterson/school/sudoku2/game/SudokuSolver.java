@@ -242,7 +242,7 @@ public class SudokuSolver
 			: (groupNumber + 3) % 9;
 		int otherGroupInSectionB = (sectionType == SectionType.ROW)
 			? (((groupNumber % 3) + 2) % 3) + (3 * (groupNumber / 3))
-			: (groupNumber + 9) % 9;
+			: (groupNumber + 6) % 9;
 
 		if (Sudoku.DEBUG)
 		{
@@ -252,6 +252,20 @@ public class SudokuSolver
 				sectionType, sectionNumber, groupNumber,
 				sectionType, otherSectionNumberA, otherGroupInSectionB,
 				sectionType == SectionType.ROW ? SectionType.COL : SectionType.ROW, otherGroupInSectionA, otherGroupInSectionB);
+			
+			assert groupNumber >= 0 && groupNumber < 9 : groupNumber;
+			assert sectionNumber != otherSectionNumberA && sectionNumber != otherSectionNumberB && otherSectionNumberA != otherSectionNumberB : groupNumber + " " + otherSectionNumberA + " " + otherSectionNumberB;
+			assert groupNumber != otherGroupInSectionA && groupNumber != otherGroupInSectionB && otherGroupInSectionA != otherGroupInSectionB : groupNumber + " " + otherGroupInSectionA + " " + otherGroupInSectionB;
+			if (sectionType == SectionType.ROW)
+			{
+				assert sectionNumber / 3 == otherSectionNumberA / 3 && otherSectionNumberA / 3 == otherSectionNumberB / 3 : groupNumber + " " + otherSectionNumberA + " " + otherSectionNumberB;
+				assert groupNumber / 3 == otherGroupInSectionA / 3 && otherGroupInSectionA / 3 == otherGroupInSectionB / 3 : groupNumber + " " + otherGroupInSectionA + " " + otherGroupInSectionB;
+			}
+			else
+			{
+				assert sectionNumber / 3 == otherSectionNumberA / 3 && otherSectionNumberA / 3 == otherSectionNumberB / 3 : groupNumber + " " + otherSectionNumberA + " " + otherSectionNumberB;
+				assert groupNumber % 3 == otherGroupInSectionA % 3 && otherGroupInSectionA % 3 == otherGroupInSectionB % 3 : groupNumber + " " + otherGroupInSectionA + " " + otherGroupInSectionB;
+			}
 		}
 
 		Set<SudokuCell> sudokuCellsInGroupForSection = board.getSudokuCellsInGroupSection(groupNumber, sectionType, sectionNumber);
