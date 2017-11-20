@@ -15,17 +15,20 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.text.DefaultEditorKit;
 
-public class SudokuUncaughtExceptionHandler implements UncaughtExceptionHandler {
-
+public class SudokuUncaughtExceptionHandler implements UncaughtExceptionHandler
+{
 	private final Component parentComponent;
 
-	public SudokuUncaughtExceptionHandler(Component parentComponent) {
+	public SudokuUncaughtExceptionHandler(Component parentComponent)
+	{
 		this.parentComponent = parentComponent;
 	}
 
 	@Override
-	public void uncaughtException(Thread t, Throwable e) {
-		try {
+	public void uncaughtException(Thread t, Throwable e)
+	{
+		try
+		{
 			JTextArea textArea = new JTextArea(getFormattedStackTrace(e), 15, 30);
 
 			JMenuItem copyMenuItem = new JMenuItem(new DefaultEditorKit.CopyAction());
@@ -49,12 +52,15 @@ public class SudokuUncaughtExceptionHandler implements UncaughtExceptionHandler 
 				null,
 				null,
 				null);
-		} catch (Throwable throwable) {
+		}
+		catch (Throwable throwable)
+		{
 			throw new RuntimeException(throwable);
 		}
 	}
 
-	private static String getFormattedStackTrace(Throwable e) {
+	private static String getFormattedStackTrace(Throwable e)
+	{
 		StringWriter stackTraceWriter = new StringWriter();
 		e.printStackTrace(new PrintWriter(stackTraceWriter));
 		return stackTraceWriter.toString();

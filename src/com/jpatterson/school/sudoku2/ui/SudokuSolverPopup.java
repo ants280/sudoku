@@ -43,9 +43,10 @@ public class SudokuSolverPopup
 			@Override
 			protected void done()
 			{
-				canvas.repaint();;
+				canvas.repaint();
 			}
 		};
+
 		this.popupDialog = new JDialog(popupOwner, "Solver", true);
 
 		initPopupDialog();
@@ -54,7 +55,7 @@ public class SudokuSolverPopup
 	private void initPopupDialog()
 	{
 		JProgressBar progressBar = new JProgressBar();
-		
+
 		JButton startButton = new JButton("Start");
 		startButton.addActionListener(actionEvent
 			-> 
@@ -65,7 +66,6 @@ public class SudokuSolverPopup
 
 				swingWorker.execute();
 		});
-
 
 		JPanel panel = new JPanel(new GridLayout(2, 1));
 		panel.add(progressBar);
