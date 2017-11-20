@@ -53,9 +53,8 @@ public abstract class SudokuCell
 	@Override
 	public String toString()
 	{
-		return String.format(
-			"SudokuCell{ value:%s, possibleValues: %s }",
-			getValue(),
-			getPossibleValues());
+		return getValue() == null
+			? getPossibleValues().toString()
+			: getValue().toString();
 	}
 }

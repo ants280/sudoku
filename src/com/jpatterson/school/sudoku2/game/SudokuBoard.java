@@ -276,7 +276,7 @@ public class SudokuBoard
 
 		int r = (sectionType == SectionType.ROW)
 			? sectionNumber
-			: (groupNumber % 3) * 3;
+			: (groupNumber / 3) * 3;
 		int c = (sectionType == SectionType.COL)
 			? sectionNumber
 			: (groupNumber % 3) * 3;
