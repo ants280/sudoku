@@ -246,13 +246,13 @@ public class SudokuSolver
 
 		if (Sudoku.DEBUG)
 		{
-			System.out.printf("\t\tRemoving possible values form other groups for %s %d for group %d."
-				+ "  Other %s numbers in group: %d, %d."
-				+ "  Other group numbers for %s: %d, %d.\n",
-				sectionType, sectionNumber, groupNumber,
-				sectionType, otherSectionNumberA, otherGroupInSectionB,
-				sectionType == SectionType.ROW ? SectionType.COL : SectionType.ROW, otherGroupInSectionA, otherGroupInSectionB);
-			
+//			System.out.printf("\t\tRemoving possible values form other groups for %s %d for group %d."
+//				+ "  Other %s numbers in group: %d, %d."
+//				+ "  Other group numbers for %s: %d, %d.\n",
+//				sectionType, sectionNumber, groupNumber,
+//				sectionType, otherSectionNumberA, otherGroupInSectionB,
+//				sectionType == SectionType.ROW ? SectionType.COL : SectionType.ROW, otherGroupInSectionA, otherGroupInSectionB);
+
 			assert groupNumber >= 0 && groupNumber < 9 : groupNumber;
 			assert sectionNumber != otherSectionNumberA && sectionNumber != otherSectionNumberB && otherSectionNumberA != otherSectionNumberB : groupNumber + " " + otherSectionNumberA + " " + otherSectionNumberB;
 			assert groupNumber != otherGroupInSectionA && groupNumber != otherGroupInSectionB && otherGroupInSectionA != otherGroupInSectionB : groupNumber + " " + otherGroupInSectionA + " " + otherGroupInSectionB;
@@ -283,14 +283,25 @@ public class SudokuSolver
 				&& sudokuCellsInGroupOtherSectionA.stream().noneMatch(sudokuCell -> sudokuCell.getPossibleValues().contains(possibleValue))
 				&& sudokuCellsInGroupOtherSectionB.stream().noneMatch(sudokuCell -> sudokuCell.getPossibleValues().contains(possibleValue)))
 			{
+				boolean possibleValueRemovedForOtherGroup = false;
 				for (SudokuCell sudokuCell : sudokuCellsInOtherGroupForSectionA)
 				{
-					possibleValuesRemoved |= sudokuCell.removePossibleValue(possibleValue);
+					possibleValueRemovedForOtherGroup |= sudokuCell.removePossibleValue(possibleValue);
 				}
 				for (SudokuCell sudokuCell : sudokuCellsInOtherGroupForSectionB)
 				{
-					possibleValuesRemoved |= sudokuCell.removePossibleValue(possibleValue);
+					possibleValueRemovedForOtherGroup |= sudokuCell.removePossibleValue(possibleValue);
 				}
+				if (possibleValueRemovedForOtherGroup)
+				{
+					System.out.printf("SOLVER: Possible value %d removed from other groups for %s %d for group %d."
+						+ "  Other %s numbers in group: %d, %d."
+						+ "  Other group numbers for %s: %d, %d. (removed values are from these groups)\n",
+						possibleValue, sectionType, sectionNumber, groupNumber,
+						sectionType, otherSectionNumberA, otherGroupInSectionB,
+						sectionType == SectionType.ROW ? SectionType.COL : SectionType.ROW, otherGroupInSectionA, otherGroupInSectionB);
+				}
+				possibleValuesRemoved |= possibleValueRemovedForOtherGroup;
 			}
 		}
 
