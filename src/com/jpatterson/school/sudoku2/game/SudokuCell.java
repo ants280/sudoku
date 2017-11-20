@@ -49,4 +49,13 @@ public abstract class SudokuCell
 			throw new IllegalArgumentException("Invalid value: " + value);
 		}
 	}
+
+	@Override
+	public String toString()
+	{
+		return String.format(
+			"SudokuCell{ value:%s, possibleValues: %s }",
+			getValue(),
+			getPossibleValues());
+	}
 }
