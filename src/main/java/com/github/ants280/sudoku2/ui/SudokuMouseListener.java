@@ -1,4 +1,4 @@
-package com.jpatterson.school.sudoku2.ui;
+package com.github.ants280.sudoku2.ui;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;

@@ -1,7 +1,7 @@
-package com.jpatterson.school.sudoku2.ui;
+package com.github.ants280.sudoku2.ui;
 
-import com.jpatterson.school.sudoku2.game.SudokuBoard;
-import com.jpatterson.school.sudoku2.game.SudokuSolver;
+import com.github.ants280.sudoku2.game.SudokuBoard;
+import com.github.ants280.sudoku2.game.SudokuSolver;
 import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.event.WindowAdapter;

@@ -1,7 +1,7 @@
-package com.jpatterson.school.sudoku2.game;
+package com.github.ants280.sudoku2.game;
 
-import com.jpatterson.school.sudoku2.game.SudokuBoard.SectionType;
-import com.jpatterson.school.sudoku2.ui.Sudoku;
+import com.github.ants280.sudoku2.game.SudokuBoard.SectionType;
+import com.github.ants280.sudoku2.ui.Sudoku;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.jpatterson.school.sudoku2.game;
+package com.github.ants280.sudoku2.game;
 
 import java.util.Collections;
 import java.util.HashSet;

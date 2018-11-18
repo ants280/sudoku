@@ -1,4 +1,4 @@
-package com.jpatterson.school.sudoku2.ui;
+package com.github.ants280.sudoku2.ui;
 
 import java.awt.Component;
 import java.io.PrintWriter;
