@@ -15,12 +15,6 @@ public final class Sudoku
 
 	public static void main(final String[] args)
 	{
-		// Set the menu of the ConvexHullFrame on the mac menu.
-		if (System.getProperty("mrj.version") != null)
-		{
-			System.setProperty("apple.laf.useScreenMenuBar", "true");
-		}
-
 		SwingUtilities.invokeLater(new Sudoku()::run);
 	}
 
