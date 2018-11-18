@@ -1,6 +1,5 @@
 package com.github.ants280.sudoku2.game;
 
-import com.github.ants280.sudoku2.game.SectionType;
 import com.github.ants280.sudoku2.ui.Sudoku;
 import java.util.Collection;
 import java.util.HashSet;
