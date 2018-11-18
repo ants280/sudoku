@@ -9,7 +9,9 @@ import javax.swing.UnsupportedLookAndFeelException;
 public final class Sudoku
 {
 	public static final boolean DEBUG = true;
-	public static final String VERSION = "2.0.0";
+	// NOTE: The version only shows as non-null when `mvn package` is run.
+	public static final String VERSION
+			= Sudoku.class.getPackage().getSpecificationVersion();
 
 	public static void main(final String[] args)
 	{
@@ -43,13 +45,13 @@ public final class Sudoku
 	{
 		try
 		{
-			if (!System.getProperty("os.name").toLowerCase().contains("mac"))
-			{
-				UIManager.setLookAndFeel(
-						UIManager.getSystemLookAndFeelClassName());
-			}
+			UIManager.setLookAndFeel(
+					UIManager.getSystemLookAndFeelClassName());
 		}
-		catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex)
+		catch (ClassNotFoundException
+				| InstantiationException
+				| IllegalAccessException
+				| UnsupportedLookAndFeelException ex)
 		{
 			JOptionPane.showMessageDialog(null, ex.getMessage());
 		}
