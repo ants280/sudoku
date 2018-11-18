@@ -117,21 +117,36 @@ public class SudokuCanvas extends Canvas
 				int fontHeightPx = (int) (possibleValueFont.getSize() * 0.75d);
 				FontMetrics fontMetrics = graphics.getFontMetrics();
 
-				for (Integer possibleValue : sudokuCell.getPossibleValues())
-				{
-					int charWidth = getFontWidth(fontMetrics, possibleValue);
-					int colOffset = getOffset(
-							col + ((1 + (2 * ((possibleValue - 1) % 3))) / 6d))
-							- (charWidth / 2);
-					int rowOffset = getOffset(
-							row + ((1 + (2 * ((possibleValue - 1) / 3))) / 6d))
-							+ (fontHeightPx / 2);
-
-					graphics.drawString(
-							possibleValue.toString(), colOffset, rowOffset);
-				}
+				sudokuCell.getPossibleValues()
+						.forEach(possibleValue -> paintPossibleCellValue(
+						row,
+						col,
+						possibleValue,
+						graphics,
+						fontMetrics,
+						fontHeightPx));
 			}
 		}
+	}
+
+	private void paintPossibleCellValue(
+			int row,
+			int col,
+			Integer possibleValue,
+			Graphics graphics,
+			FontMetrics fontMetrics,
+			int fontHeightPx)
+	{
+		int charWidth = getFontWidth(fontMetrics, possibleValue);
+		int colOffset = getOffset(
+				col + ((1 + (2 * ((possibleValue - 1) % 3))) / 6d))
+				- (charWidth / 2);
+		int rowOffset = getOffset(
+				row + ((1 + (2 * ((possibleValue - 1) / 3))) / 6d))
+				+ (fontHeightPx / 2);
+
+		graphics.drawString(
+				possibleValue.toString(), colOffset, rowOffset);
 	}
 
 	private int getFontWidth(FontMetrics fontMetrics, Integer cellValue)
@@ -178,7 +193,7 @@ public class SudokuCanvas extends Canvas
 	public void selectCellFromCoordinates(int x, int y)
 	{
 		this.setSelectedRow(y / cellLength);
-		this.setSelectedCol(selectedCol = x / cellLength);
+		this.setSelectedCol(x / cellLength);
 		this.repaint();
 
 		if (Sudoku.DEBUG)
@@ -243,7 +258,8 @@ public class SudokuCanvas extends Canvas
 	{
 		if (selectedRow != null && selectedCol != null)
 		{
-			board.getSudokuCell(selectedRow, selectedCol).setValue(cellValue == 0 ? null : cellValue);
+			board.getSudokuCell(selectedRow, selectedCol)
+					.setValue(cellValue == 0 ? null : cellValue);
 			this.repaint();
 		}
 	}
