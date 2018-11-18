@@ -10,7 +10,7 @@ public class MutableSudokuCell extends SudokuCell
 	private final Set<Integer> possibleValues;
 
 	/**
-	 * Creates a new MutableSudokuCel with no value and an emty set of possible
+	 * Creates a new MutableSudokuCel with no value and an empty set of possible
 	 * values.
 	 */
 	public MutableSudokuCell()

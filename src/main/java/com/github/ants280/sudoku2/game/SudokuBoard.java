@@ -70,11 +70,20 @@ public class SudokuBoard
 	{
 		String boardValues = Arrays.stream(board)
 				.flatMap(Arrays::stream)
-				.map(sudokuCell -> sudokuCell.isEmpty() ? 0 : sudokuCell.getValue())
+				.map(this::getCellValue)
 				.map(String::valueOf)
 				.collect(Collectors.joining());
 
 		return "{" + boardValues + "}";
+	}
+
+	private Integer getCellValue(SudokuCell sudokuCell)
+	{
+		if (sudokuCell.isEmpty() || sudokuCell.getValue() == null)
+		{
+			return 0;
+		}
+		return sudokuCell.getValue();
 	}
 
 	public SudokuCell getSudokuCell(int r, int c)
@@ -94,7 +103,9 @@ public class SudokuBoard
 	 */
 	public boolean addPossibleValue(int r, int c, Integer value)
 	{
-		return changePossibleValue(r, c, value, SudokuCell::addPossibleValue);
+		return changePossibleValue(
+				r, c, value,
+				SudokuCell::addPossibleValue);
 	}
 
 	/**
@@ -107,10 +118,14 @@ public class SudokuBoard
 	 */
 	public boolean removePossibleValue(int r, int c, Integer value)
 	{
-		return changePossibleValue(r, c, value, SudokuCell::removePossibleValue);
+		return changePossibleValue(
+				r, c, value,
+				SudokuCell::removePossibleValue);
 	}
 
-	private boolean changePossibleValue(int r, int c, Integer value, BiFunction<SudokuCell, Integer, Boolean> changePossibleValueFunction)
+	private boolean changePossibleValue(
+			int r, int c, Integer value,
+			BiFunction<SudokuCell, Integer, Boolean> changePossibleValueFunction)
 	{
 		return changePossibleValueFunction.apply(getSudokuCell(r, c), value);
 	}
@@ -141,7 +156,8 @@ public class SudokuBoard
 		return getOtherSudokuCellsForGroup(groupNumber, null, null);
 	}
 
-	public Collection<SudokuCell> getOtherSudokuCellsForGroup(int groupNumber, Integer rowNumber, Integer colNumber)
+	public Collection<SudokuCell> getOtherSudokuCellsForGroup(
+			int groupNumber, Integer rowNumber, Integer colNumber)
 	{
 		validateCoord(groupNumber);
 		if (rowNumber != null || colNumber != null)
@@ -176,7 +192,8 @@ public class SudokuBoard
 		return getOtherSudokuCellsForRow(rowNumber, null);
 	}
 
-	public Collection<SudokuCell> getOtherSudokuCellsForRow(int rowNumber, Integer colNumber)
+	public Collection<SudokuCell> getOtherSudokuCellsForRow(
+			int rowNumber, Integer colNumber)
 	{
 		validateCoord(rowNumber);
 		if (colNumber != null)
@@ -205,7 +222,8 @@ public class SudokuBoard
 		return getOtherSudokuCellsForCol(colNumber, null);
 	}
 
-	public Collection<SudokuCell> getOtherSudokuCellsForCol(int colNumber, Integer rowNumber)
+	public Collection<SudokuCell> getOtherSudokuCellsForCol(
+			int colNumber, Integer rowNumber)
 	{
 		validateCoord(colNumber);
 		if (rowNumber != null)
@@ -254,13 +272,15 @@ public class SudokuBoard
 				.collect(Collectors.toSet());
 	}
 
-	private void validateCoords(int... coordinates) throws IllegalArgumentException
+	private void validateCoords(int... coordinates)
+			throws IllegalArgumentException
 	{
 		IntStream.of(coordinates)
 				.forEach(this::validateCoord);
 	}
 
-	private void validateCoord(int coordinate) throws IllegalArgumentException
+	private void validateCoord(int coordinate)
+			throws IllegalArgumentException
 	{
 		if (coordinate < 0 || coordinate >= 9)
 		{
@@ -269,7 +289,10 @@ public class SudokuBoard
 		}
 	}
 
-	public Set<SudokuCell> getSudokuCellsInGroupSection(int groupNumber, SectionType sectionType, int sectionNumber)
+	public Set<SudokuCell> getSudokuCellsInGroupSection(
+			int groupNumber,
+			SectionType sectionType,
+			 int sectionNumber)
 	{
 		validateSection(sectionType, SectionType.ROW, SectionType.COL);
 
@@ -288,12 +311,10 @@ public class SudokuBoard
 		return sudokuCellsInGroupSectionStream.collect(Collectors.toSet());
 	}
 
-	public enum SectionType
-	{
-		GROUP, ROW, COL;
-	}
-
-	private void validateSection(SectionType actualSectionType, SectionType... expectedSectionTypes) throws IllegalArgumentException
+	private void validateSection(
+			SectionType actualSectionType,
+			SectionType... expectedSectionTypes)
+			throws IllegalArgumentException
 	{
 		for (SectionType expectedSectionType : expectedSectionTypes)
 		{
