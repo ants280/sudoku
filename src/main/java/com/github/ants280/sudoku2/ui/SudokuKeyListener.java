@@ -2,10 +2,12 @@ package com.github.ants280.sudoku2.ui;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
-public class SudokuKeyListener extends KeyAdapter
+public class SudokuKeyListener
+		extends KeyAdapter
+		implements KeyListener
 {
-
 	private final SudokuCanvas canvas;
 
 	public SudokuKeyListener(SudokuCanvas canvas)
@@ -71,6 +73,6 @@ public class SudokuKeyListener extends KeyAdapter
 
 		canvas.setSelectedCellValue(cellValue);
 
-		// TODO: Remove mouse & key listeners if hame is finished
+		// TODO: Remove mouse & key listeners if game is finished
 	}
 }

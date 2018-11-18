@@ -2,8 +2,11 @@ package com.github.ants280.sudoku2.ui;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
-public class SudokuMouseListener extends MouseAdapter
+public class SudokuMouseListener
+		extends MouseAdapter
+		implements MouseListener
 {
 	private final SudokuCanvas canvas;
 	private final SudokuActionListener actionListener;
