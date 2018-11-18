@@ -33,10 +33,10 @@ public class SudokuCanvas extends Canvas
 		// TODO: reset these on new game creation
 		this.selectedRow = null;
 		this.selectedCol = null;
-		
+
 		init();
 	}
-	
+
 	private void init()
 	{
 		this.setSize(getBoardLength(), getBoardLength());
@@ -46,7 +46,7 @@ public class SudokuCanvas extends Canvas
 	public void update(Graphics graphics)
 	{
 		BufferedImage lastDrawnImage
-			= (BufferedImage) this.createImage(getWidth(), getHeight());
+				= (BufferedImage) this.createImage(getWidth(), getHeight());
 
 		//Draws the shape onto the BufferedImage
 		this.paint(lastDrawnImage.getGraphics());
@@ -59,8 +59,8 @@ public class SudokuCanvas extends Canvas
 	public void paint(Graphics graphics)
 	{
 		((Graphics2D) graphics).setRenderingHint(
-			RenderingHints.KEY_TEXT_ANTIALIASING,
-			RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+				RenderingHints.KEY_TEXT_ANTIALIASING,
+				RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
 		paintSelectedCellBackground(graphics);
 		paintCells(graphics);
@@ -73,10 +73,10 @@ public class SudokuCanvas extends Canvas
 		{
 			graphics.setColor(Color.LIGHT_GRAY);
 			graphics.fillRect(
-				selectedCol * (cellLength + 1),
-				selectedRow * (cellLength + 1),
-				cellLength + 1,
-				cellLength + 1);
+					selectedCol * (cellLength + 1),
+					selectedRow * (cellLength + 1),
+					cellLength + 1,
+					cellLength + 1);
 		}
 	}
 
@@ -97,7 +97,7 @@ public class SudokuCanvas extends Canvas
 		if (sudokuCell.getValue() != null)
 		{
 			graphics.setColor(sudokuCell instanceof ImmutableSudokuCell
-				? Color.DARK_GRAY : Color.BLACK);
+					? Color.DARK_GRAY : Color.BLACK);
 			graphics.setFont(valueFont);
 			int fontHeightPx = (int) (valueFont.getSize() * 0.75d);
 			FontMetrics fontMetrics = graphics.getFontMetrics();
@@ -106,7 +106,7 @@ public class SudokuCanvas extends Canvas
 			int rowOffset = getOffset(row + 0.5d) + (fontHeightPx / 2);
 
 			graphics.drawString(
-				sudokuCell.getValue().toString(), colOffset, rowOffset);
+					sudokuCell.getValue().toString(), colOffset, rowOffset);
 		}
 		else
 		{
@@ -121,14 +121,14 @@ public class SudokuCanvas extends Canvas
 				{
 					int charWidth = getFontWidth(fontMetrics, possibleValue);
 					int colOffset = getOffset(
-						col + ((1 + (2 * ((possibleValue - 1) % 3))) / 6d))
-						- (charWidth / 2);
+							col + ((1 + (2 * ((possibleValue - 1) % 3))) / 6d))
+							- (charWidth / 2);
 					int rowOffset = getOffset(
-						row + ((1 + (2 * ((possibleValue - 1) / 3))) / 6d))
-						+ (fontHeightPx / 2);
+							row + ((1 + (2 * ((possibleValue - 1) / 3))) / 6d))
+							+ (fontHeightPx / 2);
 
 					graphics.drawString(
-						possibleValue.toString(), colOffset, rowOffset);
+							possibleValue.toString(), colOffset, rowOffset);
 				}
 			}
 		}
@@ -184,10 +184,10 @@ public class SudokuCanvas extends Canvas
 		if (Sudoku.DEBUG)
 		{
 			System.out.printf("selected cell: x,y=[%d,%d] => col,row=[%d,%d]\n",
-				x,
-				y,
-				selectedCol,
-				selectedRow);
+					x,
+					y,
+					selectedCol,
+					selectedRow);
 		}
 	}
 

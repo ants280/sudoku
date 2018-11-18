@@ -21,8 +21,8 @@ public class SudokuBoard
 		}
 
 		this.board = IntStream.range(0, 9)
-			.map(i -> i * 9)
-			.mapToObj(i -> boardString.substring(i, i + 9)
+				.map(i -> i * 9)
+				.mapToObj(i -> boardString.substring(i, i + 9)
 				.chars()
 				.mapToObj(ch -> (char) ch)
 				.map(Character::valueOf)
@@ -30,7 +30,7 @@ public class SudokuBoard
 				.map(Integer::valueOf)
 				.map(cellValue -> cellValue == 0 ? new MutableSudokuCell() : new ImmutableSudokuCell(cellValue))
 				.toArray(SudokuCell[]::new))
-			.toArray(SudokuCell[][]::new);
+				.toArray(SudokuCell[][]::new);
 	}
 
 	public SudokuBoard()
@@ -69,10 +69,10 @@ public class SudokuBoard
 	public String toString()
 	{
 		String boardValues = Arrays.stream(board)
-			.flatMap(Arrays::stream)
-			.map(sudokuCell -> sudokuCell.isEmpty() ? 0 : sudokuCell.getValue())
-			.map(String::valueOf)
-			.collect(Collectors.joining());
+				.flatMap(Arrays::stream)
+				.map(sudokuCell -> sudokuCell.isEmpty() ? 0 : sudokuCell.getValue())
+				.map(String::valueOf)
+				.collect(Collectors.joining());
 
 		return "{" + boardValues + "}";
 	}
@@ -153,12 +153,12 @@ public class SudokuBoard
 		int startingCol = 3 * (groupNumber % 3);
 
 		return IntStream.range(startingRow, startingRow + 3)
-			.mapToObj(r -> IntStream.range(startingCol, startingCol + 3)
+				.mapToObj(r -> IntStream.range(startingCol, startingCol + 3)
 				.filter(c -> rowNumber == null || colNumber == null
-					|| r != rowNumber || c != colNumber)
+				|| r != rowNumber || c != colNumber)
 				.mapToObj(c -> board[r][c]))
-			.flatMap(Function.identity())
-			.collect(Collectors.toList());
+				.flatMap(Function.identity())
+				.collect(Collectors.toList());
 	}
 
 	public Set<Integer> getValuesForGroup(int groupNumber)
@@ -185,9 +185,9 @@ public class SudokuBoard
 		}
 
 		return IntStream.range(0, 9)
-			.filter(c -> colNumber == null || c != colNumber)
-			.mapToObj(c -> board[rowNumber][c])
-			.collect(Collectors.toList());
+				.filter(c -> colNumber == null || c != colNumber)
+				.mapToObj(c -> board[rowNumber][c])
+				.collect(Collectors.toList());
 	}
 
 	public Set<Integer> getValuesForRow(int rowNumber)
@@ -214,9 +214,9 @@ public class SudokuBoard
 		}
 
 		return IntStream.range(0, 9)
-			.filter(r -> rowNumber == null || r != rowNumber)
-			.mapToObj(r -> board[r][colNumber])
-			.collect(Collectors.toList());
+				.filter(r -> rowNumber == null || r != rowNumber)
+				.mapToObj(r -> board[r][colNumber])
+				.collect(Collectors.toList());
 	}
 
 	public Set<Integer> getValuesForCol(int colNumber)
@@ -232,32 +232,32 @@ public class SudokuBoard
 	public boolean isSolved()
 	{
 		return IntStream.range(0, 9)
-			.allMatch(i -> getUnusedValuesForGroup(i).isEmpty()
+				.allMatch(i -> getUnusedValuesForGroup(i).isEmpty()
 				&& getUnusedValuesForRow(i).isEmpty()
 				&& getUnusedValuesForCol(i).isEmpty());
 	}
 
 	private static Set<Integer> getSectionValues(
-		Collection<SudokuCell> sectionSudokuCells)
+			Collection<SudokuCell> sectionSudokuCells)
 	{
 		return sectionSudokuCells
-			.stream()
-			.filter(sudokuCell -> !sudokuCell.isEmpty())
-			.map(SudokuCell::getValue)
-			.collect(Collectors.toSet());
+				.stream()
+				.filter(sudokuCell -> !sudokuCell.isEmpty())
+				.map(SudokuCell::getValue)
+				.collect(Collectors.toSet());
 	}
 
 	private static Set<Integer> getRemainingValues(Set<Integer> sectionValues)
 	{
 		return SudokuCell.LEGAL_CELL_VALUES.stream()
-			.filter(i -> !sectionValues.contains(i))
-			.collect(Collectors.toSet());
+				.filter(i -> !sectionValues.contains(i))
+				.collect(Collectors.toSet());
 	}
 
 	private void validateCoords(int... coordinates) throws IllegalArgumentException
 	{
 		IntStream.of(coordinates)
-			.forEach(this::validateCoord);
+				.forEach(this::validateCoord);
 	}
 
 	private void validateCoord(int coordinate) throws IllegalArgumentException
@@ -265,7 +265,7 @@ public class SudokuBoard
 		if (coordinate < 0 || coordinate >= 9)
 		{
 			throw new IllegalArgumentException(
-				"Invalid coordinate: " + coordinate);
+					"Invalid coordinate: " + coordinate);
 		}
 	}
 
@@ -274,16 +274,16 @@ public class SudokuBoard
 		validateSection(sectionType, SectionType.ROW, SectionType.COL);
 
 		int r = (sectionType == SectionType.ROW)
-			? sectionNumber
-			: (groupNumber / 3) * 3;
+				? sectionNumber
+				: (groupNumber / 3) * 3;
 		int c = (sectionType == SectionType.COL)
-			? sectionNumber
-			: (groupNumber % 3) * 3;
+				? sectionNumber
+				: (groupNumber % 3) * 3;
 
 		Stream<SudokuCell> sudokuCellsInGroupSectionStream
-			= (sectionType == SectionType.ROW)
-				? IntStream.range(c, c + 3).mapToObj(c2 -> board[r][c2])
-				: IntStream.range(r, r + 3).mapToObj(r2 -> board[r2][c]);
+				= (sectionType == SectionType.ROW)
+						? IntStream.range(c, c + 3).mapToObj(c2 -> board[r][c2])
+						: IntStream.range(r, r + 3).mapToObj(r2 -> board[r2][c]);
 
 		return sudokuCellsInGroupSectionStream.collect(Collectors.toSet());
 	}
@@ -303,6 +303,6 @@ public class SudokuBoard
 			}
 		}
 		throw new IllegalArgumentException(
-			"Invalid SectionType: " + actualSectionType);
+				"Invalid SectionType: " + actualSectionType);
 	}
 }

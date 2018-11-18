@@ -58,13 +58,13 @@ public class SudokuSolverPopup
 
 		JButton startButton = new JButton("Start");
 		startButton.addActionListener(actionEvent
-			-> 
-			{
-				startButton.setEnabled(false);
-				startButton.setText("Solving...");
-				progressBar.setIndeterminate(true);
+				->
+		{
+			startButton.setEnabled(false);
+			startButton.setText("Solving...");
+			progressBar.setIndeterminate(true);
 
-				swingWorker.execute();
+			swingWorker.execute();
 		});
 
 		JPanel panel = new JPanel(new GridLayout(2, 1));

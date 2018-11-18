@@ -30,8 +30,8 @@ public class SudokuSolver
 		do
 		{
 			valueFound = setBoardValues() // levels 1 & 2
-				|| cullPossibleValues() // level 3
-				|| removePossibleValuesFromGroupsWherePossible(); // level 4
+					|| cullPossibleValues() // level 3
+					|| removePossibleValuesFromGroupsWherePossible(); // level 4
 
 		}
 		while (valueFound);
@@ -65,7 +65,7 @@ public class SudokuSolver
 					usedValues.addAll(board.getValuesForGroup(groupNumber));
 
 					usedValues.stream()
-						.forEach(sudokuCell::removePossibleValue);
+							.forEach(sudokuCell::removePossibleValue);
 				}
 			}
 		}
@@ -84,17 +84,17 @@ public class SudokuSolver
 					if (sudokuCell.getPossibleValues().size() == 1) // level 1
 					{
 						Integer value = sudokuCell
-							.getPossibleValues()
-							.iterator()
-							.next();
+								.getPossibleValues()
+								.iterator()
+								.next();
 
 						if (Sudoku.DEBUG)
 						{
 							System.out.printf("SOLVER: "
-								+ "Setting value of %d at [%d,%d] "
-								+ "because it is the only possible "
-								+ "value in the cell.\n",
-								value, r + 1, c + 1);
+									+ "Setting value of %d at [%d,%d] "
+									+ "because it is the only possible "
+									+ "value in the cell.\n",
+									value, r + 1, c + 1);
 						}
 
 						setValue(r, c, value);
@@ -106,17 +106,17 @@ public class SudokuSolver
 						for (Integer possibleValue : sudokuCell.getPossibleValues())
 						{
 							if (noPossibleValuesInCollectionContain(board.getOtherSudokuCellsForGroup(groupNumber, r, c), possibleValue)
-								|| noPossibleValuesInCollectionContain(board.getOtherSudokuCellsForRow(r, c), possibleValue)
-								|| noPossibleValuesInCollectionContain(board.getOtherSudokuCellsForCol(c, r), possibleValue))
+									|| noPossibleValuesInCollectionContain(board.getOtherSudokuCellsForRow(r, c), possibleValue)
+									|| noPossibleValuesInCollectionContain(board.getOtherSudokuCellsForCol(c, r), possibleValue))
 							{
 								if (Sudoku.DEBUG)
 								{
 									System.out.printf("SOLVER: "
-										+ "Setting value of %d at [%d,%d] "
-										+ "because it is the only possible "
-										+ "spot for the value in the "
-										+ "group, row, or column.\n",
-										possibleValue, r + 1, c + 1);
+											+ "Setting value of %d at [%d,%d] "
+											+ "because it is the only possible "
+											+ "spot for the value in the "
+											+ "group, row, or column.\n",
+											possibleValue, r + 1, c + 1);
 								}
 
 								setValue(r, c, possibleValue);
@@ -184,23 +184,23 @@ public class SudokuSolver
 	}
 
 	private boolean noPossibleValuesInCollectionContain(
-		Collection<SudokuCell> otherSudokuCells, Integer possibleValue)
+			Collection<SudokuCell> otherSudokuCells, Integer possibleValue)
 	{
 		return otherSudokuCells.stream()
-			.noneMatch(otherSudokuCell -> otherSudokuCell.getPossibleValues()
+				.noneMatch(otherSudokuCell -> otherSudokuCell.getPossibleValues()
 				.contains(possibleValue));
 	}
 
 	private boolean cullPossibleValues(Collection<SudokuCell> sectionSudokuCells, String sectionType, int sectionNumber)
 	{
 		Map<Set<Integer>, List<SudokuCell>> possibleValuesForSudokuCells = sectionSudokuCells.stream()
-			.filter(sudokuCell -> sudokuCell.getPossibleValues().size() > 1)
-			.collect(Collectors.groupingBy(SudokuCell::getPossibleValues));
+				.filter(sudokuCell -> sudokuCell.getPossibleValues().size() > 1)
+				.collect(Collectors.groupingBy(SudokuCell::getPossibleValues));
 		List<Set<Integer>> possibleValuesToCull = possibleValuesForSudokuCells.entrySet()
-			.stream()
-			.filter(entry -> entry.getKey().size() == entry.getValue().size())
-			.map(Map.Entry::getKey)
-			.collect(Collectors.toList());
+				.stream()
+				.filter(entry -> entry.getKey().size() == entry.getValue().size())
+				.map(Map.Entry::getKey)
+				.collect(Collectors.toList());
 
 		boolean valuesCulled = false;
 		for (Set<Integer> cullGroup : possibleValuesToCull)
@@ -208,19 +208,19 @@ public class SudokuSolver
 			if (Sudoku.DEBUG)
 			{
 				System.out.printf(
-					"SOLVER: Removing possible values %s from some cells "
-					+ "in %s %d because %d other cells "
-					+ "have only these possible values.\n",
-					cullGroup,
-					sectionType,
-					sectionNumber + 1,
-					cullGroup.size());
+						"SOLVER: Removing possible values %s from some cells "
+						+ "in %s %d because %d other cells "
+						+ "have only these possible values.\n",
+						cullGroup,
+						sectionType,
+						sectionNumber + 1,
+						cullGroup.size());
 			}
 
 			for (SudokuCell sudokuCell : sectionSudokuCells)
 			{
 				if (sudokuCell.getValue() == null
-					&& !sudokuCell.getPossibleValues().equals(cullGroup))
+						&& !sudokuCell.getPossibleValues().equals(cullGroup))
 				{
 					for (Integer possibleValue : cullGroup)
 					{
@@ -238,11 +238,11 @@ public class SudokuSolver
 		int otherSectionNumberA = (((sectionNumber % 3) + 1) % 3) + (3 * (sectionNumber / 3));
 		int otherSectionNumberB = (((sectionNumber % 3) + 2) % 3) + (3 * (sectionNumber / 3));
 		int otherGroupInSectionA = (sectionType == SectionType.ROW)
-			? (((groupNumber % 3) + 1) % 3) + (3 * (groupNumber / 3))
-			: (groupNumber + 3) % 9;
+				? (((groupNumber % 3) + 1) % 3) + (3 * (groupNumber / 3))
+				: (groupNumber + 3) % 9;
 		int otherGroupInSectionB = (sectionType == SectionType.ROW)
-			? (((groupNumber % 3) + 2) % 3) + (3 * (groupNumber / 3))
-			: (groupNumber + 6) % 9;
+				? (((groupNumber % 3) + 2) % 3) + (3 * (groupNumber / 3))
+				: (groupNumber + 6) % 9;
 
 		if (Sudoku.DEBUG)
 		{
@@ -280,8 +280,8 @@ public class SudokuSolver
 		{
 			final int possibleValue = i; // compiler is not very smart :p
 			if (sudokuCellsInGroupForSection.stream().anyMatch(sudokuCell -> sudokuCell.getPossibleValues().contains(possibleValue))
-				&& sudokuCellsInGroupOtherSectionA.stream().noneMatch(sudokuCell -> sudokuCell.getPossibleValues().contains(possibleValue))
-				&& sudokuCellsInGroupOtherSectionB.stream().noneMatch(sudokuCell -> sudokuCell.getPossibleValues().contains(possibleValue)))
+					&& sudokuCellsInGroupOtherSectionA.stream().noneMatch(sudokuCell -> sudokuCell.getPossibleValues().contains(possibleValue))
+					&& sudokuCellsInGroupOtherSectionB.stream().noneMatch(sudokuCell -> sudokuCell.getPossibleValues().contains(possibleValue)))
 			{
 				boolean possibleValueRemovedForOtherGroup = false;
 				for (SudokuCell sudokuCell : sudokuCellsInOtherGroupForSectionA)
@@ -295,11 +295,11 @@ public class SudokuSolver
 				if (possibleValueRemovedForOtherGroup)
 				{
 					System.out.printf("SOLVER: Possible value %d removed from other groups for %s %d for group %d."
-						+ "  Other %s numbers in group: %d, %d."
-						+ "  Other group numbers for %s: %d, %d. (removed values are from these groups)\n",
-						possibleValue, sectionType, sectionNumber, groupNumber,
-						sectionType, otherSectionNumberA, otherGroupInSectionB,
-						sectionType == SectionType.ROW ? SectionType.COL : SectionType.ROW, otherGroupInSectionA, otherGroupInSectionB);
+							+ "  Other %s numbers in group: %d, %d."
+							+ "  Other group numbers for %s: %d, %d. (removed values are from these groups)\n",
+							possibleValue, sectionType, sectionNumber, groupNumber,
+							sectionType, otherSectionNumberA, otherGroupInSectionB,
+							sectionType == SectionType.ROW ? SectionType.COL : SectionType.ROW, otherGroupInSectionA, otherGroupInSectionB);
 				}
 				possibleValuesRemoved |= possibleValueRemovedForOtherGroup;
 			}
@@ -313,11 +313,11 @@ public class SudokuSolver
 		board.getSudokuCell(r, c).setValue(value);
 
 		board.getOtherSudokuCellsForRow(r, c)
-			.forEach(sudokuCell -> sudokuCell.removePossibleValue(value));
+				.forEach(sudokuCell -> sudokuCell.removePossibleValue(value));
 		board.getOtherSudokuCellsForCol(c, r)
-			.forEach(sudokuCell -> sudokuCell.removePossibleValue(value));
+				.forEach(sudokuCell -> sudokuCell.removePossibleValue(value));
 		int groupNumber = board.getGroupNumber(r, c);
 		board.getOtherSudokuCellsForGroup(groupNumber, r, c)
-			.forEach(sudokuCell -> sudokuCell.removePossibleValue(value));
+				.forEach(sudokuCell -> sudokuCell.removePossibleValue(value));
 	}
 }

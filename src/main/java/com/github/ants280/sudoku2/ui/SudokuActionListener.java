@@ -40,25 +40,25 @@ public class SudokuActionListener
 	public void help(ActionEvent event)
 	{
 		JOptionPane.showMessageDialog(frame,
-			"Complete the grid,"
-			+ "\nso that every row,"
-			+ "\ncolumn, and 3x3 box"
-			+ "\ncontains every"
-			+ "\ndigit from 1 to 9"
-			+ "\ninclusively.",
-			"Help for " + frame.getTitle(),
-			JOptionPane.QUESTION_MESSAGE);
+				"Complete the grid,"
+				+ "\nso that every row,"
+				+ "\ncolumn, and 3x3 box"
+				+ "\ncontains every"
+				+ "\ndigit from 1 to 9"
+				+ "\ninclusively.",
+				"Help for " + frame.getTitle(),
+				JOptionPane.QUESTION_MESSAGE);
 	}
 
 	public void about(ActionEvent event)
 	{
 		JOptionPane.showMessageDialog(frame,
-			"(c) 2017 Jacob Patterson"
-			+ "\n"
-			+ "\nDescription taken from my newspaper,"
-			+ "\n(c) Universal Uclick",
-			"About " + frame.getTitle(),
-			JOptionPane.INFORMATION_MESSAGE);
+				"(c) 2017 Jacob Patterson"
+				+ "\n"
+				+ "\nDescription taken from my newspaper,"
+				+ "\n(c) Universal Uclick",
+				"About " + frame.getTitle(),
+				JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	public void setPossibleValue(ActionEvent event)
@@ -67,7 +67,7 @@ public class SudokuActionListener
 		Integer c = canvas.getSelectedCol();
 		// TODO: It would be nice to also have this popup on right click (after selection the cell)
 		if (r != null && c != null
-			&& board.getSudokuCell(r, c).getValue() == null)
+				&& board.getSudokuCell(r, c).getValue() == null)
 		{
 			JDialog dialog = new JDialog(frame, "[possible values]", true);
 
@@ -77,21 +77,21 @@ public class SudokuActionListener
 			{
 				int j = i;
 				AbstractButton possibleValueButton = new JToggleButton(
-					String.valueOf(i),
-					selectedSudokuCell.getPossibleValues().contains(i));
+						String.valueOf(i),
+						selectedSudokuCell.getPossibleValues().contains(i));
 
 				possibleValueButton.addActionListener(actionEvent
-					-> 
-					{
-						boolean possibleValueChanged
+						->
+				{
+					boolean possibleValueChanged
 							= selectedSudokuCell.getPossibleValues().contains(j)
 							? board.removePossibleValue(r, c, j)
 							: board.addPossibleValue(r, c, j);
 
-						if (possibleValueChanged)
-						{
-							canvas.repaint();
-						}
+					if (possibleValueChanged)
+					{
+						canvas.repaint();
+					}
 				});
 
 				possibleValueButtonsPanel.add(possibleValueButton);
@@ -122,20 +122,20 @@ public class SudokuActionListener
 			{
 				Integer j = i;
 				AbstractButton valueButton = new JButton(
-					String.valueOf(i));
+						String.valueOf(i));
 				valueButton.setEnabled(
-					!j.equals(selectedSudokuCell.getValue()));
+						!j.equals(selectedSudokuCell.getValue()));
 
 				valueButton.addActionListener(actionEvent
-					-> 
-					{
-						boolean valueChanged = board.getSudokuCell(r, c).setValue(j);
+						->
+				{
+					boolean valueChanged = board.getSudokuCell(r, c).setValue(j);
 
-						dialog.setVisible(false);
-						if (valueChanged)
-						{
-							canvas.repaint();
-						}
+					dialog.setVisible(false);
+					if (valueChanged)
+					{
+						canvas.repaint();
+					}
 				});
 
 				possibleValueButtonsPanel.add(valueButton);

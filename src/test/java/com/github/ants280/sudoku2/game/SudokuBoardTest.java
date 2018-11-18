@@ -1,7 +1,5 @@
 package com.github.ants280.sudoku2.game;
 
-import com.github.ants280.sudoku2.game.SudokuBoard;
-import com.github.ants280.sudoku2.game.SudokuCell;
 import com.github.ants280.sudoku2.game.SudokuBoard.SectionType;
 import java.util.Collection;
 import java.util.List;
@@ -24,15 +22,15 @@ public class SudokuBoardTest
 	public void testToString()
 	{
 		String boardValue
-			= "123456789"
-			+ "456789123"
-			+ "789123456"
-			+ "234567891"
-			+ "567891234"
-			+ "891234567"
-			+ "345678912"
-			+ "678912345"
-			+ "912345670";
+				= "123456789"
+				+ "456789123"
+				+ "789123456"
+				+ "234567891"
+				+ "567891234"
+				+ "891234567"
+				+ "345678912"
+				+ "678912345"
+				+ "912345670";
 
 		SudokuBoard board = new SudokuBoard(boardValue);
 
@@ -46,15 +44,15 @@ public class SudokuBoardTest
 	public void testGetValue()
 	{
 		String boardString
-			= "000000000"
-			+ "000000400"
-			+ "000000000"
-			+ "000000000"
-			+ "000000000"
-			+ "000000000"
-			+ "000000000"
-			+ "000000000"
-			+ "000000000";
+				= "000000000"
+				+ "000000400"
+				+ "000000000"
+				+ "000000000"
+				+ "000000000"
+				+ "000000000"
+				+ "000000000"
+				+ "000000000"
+				+ "000000000";
 		SudokuBoard board = new SudokuBoard(boardString);
 		int r = 1;
 		int c = 6;
@@ -94,7 +92,7 @@ public class SudokuBoardTest
 				int actualGroupNumber = board.getGroupNumber(r, c);
 
 				assertSame(String.format("Incorrect group for [%d,%d]", r, c),
-					expectedGroupNumber, actualGroupNumber);
+						expectedGroupNumber, actualGroupNumber);
 			}
 		}
 	}
@@ -131,15 +129,15 @@ public class SudokuBoardTest
 	public void testGetUnusedValuesForGroup()
 	{
 		String boardString
-			= "000000000"
-			+ "000000000"
-			+ "000000000"
-			+ "382000000"
-			+ "401000000"
-			+ "569000000"
-			+ "000000000"
-			+ "000000000"
-			+ "000000000";
+				= "000000000"
+				+ "000000000"
+				+ "000000000"
+				+ "382000000"
+				+ "401000000"
+				+ "569000000"
+				+ "000000000"
+				+ "000000000"
+				+ "000000000";
 		SudokuBoard board = new SudokuBoard(boardString);
 
 		Set<Integer> unusedValuesForRow = board.getUnusedValuesForGroup(3);
@@ -171,7 +169,7 @@ public class SudokuBoardTest
 			Set<Integer> unusedValuesForGroup = board.getUnusedValuesForGroup(i);
 
 			assertTrue(String.format("Unused values found in group %d: %s. BoardString = %s", i, unusedValuesForGroup, boardStrings[i]),
-				unusedValuesForGroup.isEmpty());
+					unusedValuesForGroup.isEmpty());
 		}
 	}
 
@@ -179,15 +177,15 @@ public class SudokuBoardTest
 	public void testGenUnusedValuesForRow()
 	{
 		String boardString
-			= "000000000"
-			+ "000000000"
-			+ "000000000"
-			+ "000000000"
-			+ "000000000"
-			+ "000000000"
-			+ "000000000"
-			+ "123406789"
-			+ "000000000";
+				= "000000000"
+				+ "000000000"
+				+ "000000000"
+				+ "000000000"
+				+ "000000000"
+				+ "000000000"
+				+ "000000000"
+				+ "123406789"
+				+ "000000000";
 		SudokuBoard board = new SudokuBoard(boardString);
 
 		Set<Integer> unusedValuesForRow = board.getUnusedValuesForRow(7);
@@ -200,15 +198,15 @@ public class SudokuBoardTest
 	public void testGenUnusedValuesForCol()
 	{
 		String boardString
-			= "000001000"
-			+ "000002000"
-			+ "000002000"
-			+ "000004000"
-			+ "000005000"
-			+ "000006000"
-			+ "000007000"
-			+ "000008000"
-			+ "000009000";
+				= "000001000"
+				+ "000002000"
+				+ "000002000"
+				+ "000004000"
+				+ "000005000"
+				+ "000006000"
+				+ "000007000"
+				+ "000008000"
+				+ "000009000";
 		SudokuBoard board = new SudokuBoard(boardString);
 
 		Set<Integer> unusedValuesForRow = board.getUnusedValuesForCol(5);
@@ -229,15 +227,15 @@ public class SudokuBoardTest
 	public void testIsSolved_solved()
 	{
 		String boardString
-			= "123456789"
-			+ "456789123"
-			+ "789123456"
-			+ "234567891"
-			+ "567891234"
-			+ "891234567"
-			+ "345678912"
-			+ "678912345"
-			+ "912345678";
+				= "123456789"
+				+ "456789123"
+				+ "789123456"
+				+ "234567891"
+				+ "567891234"
+				+ "891234567"
+				+ "345678912"
+				+ "678912345"
+				+ "912345678";
 		SudokuBoard board = new SudokuBoard(boardString);
 
 		assertTrue(board.isSolved());
@@ -247,20 +245,20 @@ public class SudokuBoardTest
 	public void testIsSolved_missingLast()
 	{
 		String boardString
-			= "123456789"
-			+ "456789123"
-			+ "789123456"
-			+ "234567891"
-			+ "567891234"
-			+ "891234567"
-			+ "345678912"
-			+ "678912345"
-			+ "912345670";
+				= "123456789"
+				+ "456789123"
+				+ "789123456"
+				+ "234567891"
+				+ "567891234"
+				+ "891234567"
+				+ "345678912"
+				+ "678912345"
+				+ "912345670";
 		SudokuBoard board = new SudokuBoard(boardString);
 
 		assertFalse("8 is missing from the last cell", board.isSolved());
 	}
-	
+
 	@Test
 	public void testGetCellsInGroupSection()
 	{
@@ -328,19 +326,19 @@ public class SudokuBoardTest
 		assertGetCellsInGroupSectionValid(8, SectionType.ROW, 8, "000000000000000000000000000000000000000000000000000000000000000000000000000000123");
 		assertGetCellsInGroupSectionValid(8, SectionType.COL, 8, "000000000000000000000000000000000000000000000000000000000000001000000002000000003");
 	}
-	
+
 	private void assertGetCellsInGroupSectionValid(
-		int groupNumber, SectionType sectionType, int sectionNumber, String boardString)
+			int groupNumber, SectionType sectionType, int sectionNumber, String boardString)
 	{
 		assertTrue(boardString.matches("^0*10*20*30*$"));
 		SudokuBoard sudokuBoard = new SudokuBoard(boardString);
-		
+
 		Collection<SudokuCell> sudokuCellsInGroupSection
-			= sudokuBoard.getSudokuCellsInGroupSection(groupNumber, sectionType, sectionNumber);
-		
+				= sudokuBoard.getSudokuCellsInGroupSection(groupNumber, sectionType, sectionNumber);
+
 		List<Integer> actualSudokuCellValues = sudokuCellsInGroupSection.stream()
-			.map(SudokuCell::getValue)
-			.collect(Collectors.toList());
+				.map(SudokuCell::getValue)
+				.collect(Collectors.toList());
 		assertSame(3, actualSudokuCellValues.size());
 		assertTrue(actualSudokuCellValues.contains(1));
 		assertTrue(actualSudokuCellValues.contains(2));

@@ -25,7 +25,7 @@ public class SudokuFrame extends JFrame
 		this.board = new SudokuBoard();
 		this.canvas = new SudokuCanvas(board);
 		SudokuActionListener actionListener
-			= new SudokuActionListener(this, canvas, board);
+				= new SudokuActionListener(this, canvas, board);
 		this.mouseListener = new SudokuMouseListener(canvas, actionListener);
 		this.keyListener = new SudokuKeyListener(canvas);
 		init(actionListener);
@@ -45,27 +45,27 @@ public class SudokuFrame extends JFrame
 	private JMenuBar createJMenuBar(SudokuActionListener actionListener)
 	{
 		JMenu fileMenu = new JMenu("File");
-			fileMenu.add(createMenuItem("Restart", actionListener::restart));
-			fileMenu.add(createMenuItem("Load Game", actionListener::load));
-			fileMenu.add(createMenuItem("Exit", actionListener::exit));
+		fileMenu.add(createMenuItem("Restart", actionListener::restart));
+		fileMenu.add(createMenuItem("Load Game", actionListener::load));
+		fileMenu.add(createMenuItem("Exit", actionListener::exit));
 		JMenu actionMenu = new JMenu("Action");
-			actionMenu.add(createMenuItem("Set value", actionListener::setValue)); // TODO disable if no SudokuCell is selecetd.
-			actionMenu.add(createMenuItem("Set possible value", actionListener::setPossibleValue));  // TODO disable if no SudokuCell is selecetd.
-			actionMenu.add(createMenuItem("Solve", actionListener::solve));
+		actionMenu.add(createMenuItem("Set value", actionListener::setValue)); // TODO disable if no SudokuCell is selecetd.
+		actionMenu.add(createMenuItem("Set possible value", actionListener::setPossibleValue));  // TODO disable if no SudokuCell is selecetd.
+		actionMenu.add(createMenuItem("Solve", actionListener::solve));
 		JMenu helpMenu = new JMenu("Help");
-			helpMenu.add(createMenuItem("Help", actionListener::help));
-			helpMenu.add(createMenuItem("About", actionListener::about));
+		helpMenu.add(createMenuItem("Help", actionListener::help));
+		helpMenu.add(createMenuItem("About", actionListener::about));
 
 		JMenuBar menuBar = new JMenuBar();
-			menuBar.add(fileMenu);
-			menuBar.add(actionMenu);
-			menuBar.add(helpMenu);
+		menuBar.add(fileMenu);
+		menuBar.add(actionMenu);
+		menuBar.add(helpMenu);
 
 		return menuBar;
 	}
 
 	private JMenuItem createMenuItem(
-		String title, ActionListener actionListener)
+			String title, ActionListener actionListener)
 	{
 		JMenuItem menuItem = new JMenuItem(title);
 		menuItem.addActionListener(actionListener);

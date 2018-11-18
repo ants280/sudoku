@@ -7,9 +7,9 @@ import java.util.stream.IntStream;
 public abstract class SudokuCell
 {
 	public static final Set<Integer> LEGAL_CELL_VALUES
-		= IntStream.rangeClosed(1, 9)
-		.boxed()
-		.collect(Collectors.toSet());
+			= IntStream.rangeClosed(1, 9)
+					.boxed()
+					.collect(Collectors.toSet());
 
 	public abstract Integer getValue();
 
@@ -54,7 +54,7 @@ public abstract class SudokuCell
 	public String toString()
 	{
 		return getValue() == null
-			? getPossibleValues().toString()
-			: getValue().toString();
+				? getPossibleValues().toString()
+				: getValue().toString();
 	}
 }

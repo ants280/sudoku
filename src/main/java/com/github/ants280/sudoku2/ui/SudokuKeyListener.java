@@ -39,7 +39,7 @@ public class SudokuKeyListener extends KeyAdapter
 			case KeyEvent.VK_NUMPAD8:
 			case KeyEvent.VK_NUMPAD9:
 				Integer cellValue = Integer.parseInt(
-					Character.valueOf(event.getKeyChar()).toString());
+						Character.valueOf(event.getKeyChar()).toString());
 				setSelectedCellValue(cellValue);
 				break;
 			case KeyEvent.VK_UP:
@@ -64,9 +64,9 @@ public class SudokuKeyListener extends KeyAdapter
 		if (Sudoku.DEBUG)
 		{
 			System.out.printf("\tSetting value '%d' at [%s,%s]\n",
-				cellValue,
-				canvas.getSelectedRow(),
-				canvas.getSelectedCol());
+					cellValue,
+					canvas.getSelectedRow(),
+					canvas.getSelectedCol());
 		}
 
 		canvas.setSelectedCellValue(cellValue);

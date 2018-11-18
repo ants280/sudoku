@@ -45,14 +45,14 @@ public class SudokuUncaughtExceptionHandler implements UncaughtExceptionHandler
 			panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
 			JOptionPane.showOptionDialog(
-				parentComponent,
-				panel,
-				"Error",
-				JOptionPane.DEFAULT_OPTION,
-				JOptionPane.ERROR_MESSAGE,
-				null,
-				null,
-				null);
+					parentComponent,
+					panel,
+					"Error",
+					JOptionPane.DEFAULT_OPTION,
+					JOptionPane.ERROR_MESSAGE,
+					null,
+					null,
+					null);
 		}
 		catch (HeadlessException throwable)
 		{

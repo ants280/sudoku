@@ -9,7 +9,7 @@ public class SudokuMouseListener extends MouseAdapter
 	private final SudokuActionListener actionListener;
 
 	public SudokuMouseListener(
-		SudokuCanvas canvas, SudokuActionListener actionListener)
+			SudokuCanvas canvas, SudokuActionListener actionListener)
 	{
 		this.canvas = canvas;
 		this.actionListener = actionListener;
