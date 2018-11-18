@@ -1,6 +1,7 @@
 package com.github.ants280.sudoku2.ui;
 
 import java.awt.Component;
+import java.awt.HeadlessException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.Thread.UncaughtExceptionHandler;
@@ -53,7 +54,7 @@ public class SudokuUncaughtExceptionHandler implements UncaughtExceptionHandler
 				null,
 				null);
 		}
-		catch (Throwable throwable)
+		catch (HeadlessException throwable)
 		{
 			throw new RuntimeException(throwable);
 		}

@@ -39,7 +39,7 @@ public final class Sudoku {
 		try {
 			if (!System.getProperty("os.name").toLowerCase().contains("mac")) {
 				UIManager.setLookAndFeel(
-					"com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
+						UIManager.getSystemLookAndFeelClassName());
 			}
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
 			JOptionPane.showMessageDialog(null, ex.getMessage());
