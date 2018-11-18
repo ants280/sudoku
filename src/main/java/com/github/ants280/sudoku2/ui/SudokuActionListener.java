@@ -29,7 +29,7 @@ public class SudokuActionListener
 
 	public void restart(ActionEvent event)
 	{
-		// TODO
+		// TODO : implement game restarting
 	}
 
 	public void exit(ActionEvent event)
@@ -120,23 +120,14 @@ public class SudokuActionListener
 			SudokuCell selectedSudokuCell = board.getSudokuCell(r, c);
 			for (int i = 1; i <= 9; i++)
 			{
-				Integer j = i;
+				Integer v = i;
 				AbstractButton valueButton = new JButton(
 						String.valueOf(i));
 				valueButton.setEnabled(
-						!j.equals(selectedSudokuCell.getValue()));
+						!v.equals(selectedSudokuCell.getValue()));
 
-				valueButton.addActionListener(actionEvent
-						->
-				{
-					boolean valueChanged = board.getSudokuCell(r, c).setValue(j);
-
-					dialog.setVisible(false);
-					if (valueChanged)
-					{
-						canvas.repaint();
-					}
-				});
+				valueButton.addActionListener(
+						actionEvent -> changeValue(r, c, v, dialog));
 
 				possibleValueButtonsPanel.add(valueButton);
 			}
@@ -150,14 +141,26 @@ public class SudokuActionListener
 		}
 	}
 
+	private void changeValue(Integer r, Integer c, Integer v, JDialog dialog)
+	{
+		boolean valueChanged = board.getSudokuCell(r, c).setValue(v);
+
+		dialog.setVisible(false);
+		if (valueChanged)
+		{
+			canvas.repaint();
+		}
+	}
+
 	public void solve(ActionEvent event)
 	{
-		SudokuSolverPopup sudokuSolverPopup = new SudokuSolverPopup(frame, canvas, board);
+		SudokuSolverPopup sudokuSolverPopup
+				= new SudokuSolverPopup(frame, canvas, board);
 		sudokuSolverPopup.setVisible(true);
 	}
 
 	public void load(ActionEvent event)
 	{
-		// TODO
+		// TODO implement game loading
 	}
 }
