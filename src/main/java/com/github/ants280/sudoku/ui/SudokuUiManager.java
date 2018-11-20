@@ -29,8 +29,8 @@ public class SudokuUiManager implements ActionListener
 	private static final String EXPORT_MI = "Export Game...";
 	private static final String EXIT_MI = "Exit";
 	private static final String ACTION_M = "Action";
-	private static final String SET_VALUE_MI = "Set value..."; // TODO : disable if no SudokuCell is selecetd.
-	private static final String SET_POSSIBLE_VALUE_MI = "Set possible value..."; // TODO : disable if no SudokuCell is selecetd.
+	private static final String SET_VALUE_MI = "Set value...";
+	private static final String SET_POSSIBLE_VALUE_MI = "Set possible value...";
 	private static final String SOLVE_MI = "Solve";
 	private static final String HELP_M = "Help";
 	private static final String HELP_MI = "Help";
