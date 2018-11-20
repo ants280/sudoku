@@ -26,7 +26,6 @@ public class SudokuMouseListener
 	@Override
 	public void mouseReleased(MouseEvent mouseEvent)
 	{
-//		canvas.selectCellFromCoordinates(mouseEvent.getX(), mouseEvent.getY());
 		singleClickConsumer.accept(mouseEvent.getX(), mouseEvent.getY());
 		switch (mouseEvent.getButton())
 		{
