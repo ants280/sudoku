@@ -3,36 +3,41 @@ package com.github.ants280.sudoku.ui;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.function.BiConsumer;
 
 public class SudokuMouseListener
 		extends MouseAdapter
 		implements MouseListener
 {
-	private final SudokuCanvas canvas;
-	private final SudokuUiManager actionListener;
+	private final BiConsumer<Integer, Integer> singleClickConsumer;
+	private final Runnable doubleClickRunnable;
+	private final Runnable rightClickRunnable;
 
 	public SudokuMouseListener(
-			SudokuCanvas canvas, SudokuUiManager actionListener)
+			BiConsumer<Integer, Integer> singleClickConsumer,
+			Runnable doubleClickRunnable,
+			Runnable rightClickRunnable)
 	{
-		this.canvas = canvas;
-		this.actionListener = actionListener;
+		this.singleClickConsumer = singleClickConsumer;
+		this.doubleClickRunnable = doubleClickRunnable;
+		this.rightClickRunnable = rightClickRunnable;
 	}
 
 	@Override
-	public void mouseReleased(MouseEvent event)
+	public void mouseReleased(MouseEvent mouseEvent)
 	{
-		switch (event.getButton())
+//		canvas.selectCellFromCoordinates(mouseEvent.getX(), mouseEvent.getY());
+		singleClickConsumer.accept(mouseEvent.getX(), mouseEvent.getY());
+		switch (mouseEvent.getButton())
 		{
 			case MouseEvent.BUTTON1: // left mouse button
-				canvas.selectCellFromCoordinates(event.getX(), event.getY());
-				if (event.getClickCount() == 2)
+				if (mouseEvent.getClickCount() == 2)
 				{
-					actionListener.setValue(null);
+					doubleClickRunnable.run();
 				}
 				break;
 			case MouseEvent.BUTTON3: // right mouse button
-				canvas.selectCellFromCoordinates(event.getX(), event.getY());
-				actionListener.setPossibleValue(null);
+				rightClickRunnable.run();
 				break;
 			default:
 				break;

@@ -10,7 +10,6 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Consumer;
 import javax.swing.AbstractButton;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -39,23 +38,12 @@ public class SudokuUiManager implements ActionListener
 	private final JFrame frame;
 	private final SudokuCanvas canvas;
 	private final SudokuBoard board;
-	private final Map<String, Consumer<ActionEvent>> actionCommands;
+	private final Map<String, Runnable> actionCommands;
 
 	private SudokuUiManager(
 			JFrame frame,
 			SudokuCanvas canvas,
-			SudokuBoard board,
-			JMenu fileMenu,
-			JMenuItem restartMenuItem,
-			JMenuItem loadMenuItem,
-			JMenuItem exitMenuItem,
-			JMenu actionMenu,
-			JMenuItem setValueMenuItem,
-			JMenuItem setPossibleValueMenuItem,
-			JMenuItem solveMenuItem,
-			JMenu helpMenu,
-			JMenuItem helpMenuItem,
-			JMenuItem aboutMenuItem)
+			SudokuBoard board)
 	{
 
 		this.frame = frame;
@@ -80,21 +68,8 @@ public class SudokuUiManager implements ActionListener
 			JMenuItem helpMenuItem,
 			JMenuItem aboutMenuItem)
 	{
-		SudokuUiManager sudokuActionListener = new SudokuUiManager(
-				frame,
-				canvas,
-				board,
-				fileMenu,
-				restartMenuItem,
-				loadMenuItem,
-				exitMenuItem,
-				actionMenu,
-				setValueMenuItem,
-				setPossibleValueMenuItem,
-				solveMenuItem,
-				helpMenu,
-				helpMenuItem,
-				aboutMenuItem);
+		SudokuUiManager sudokuActionListener
+				= new SudokuUiManager(frame, canvas, board);
 
 		sudokuActionListener.initMenu(
 				fileMenu,
@@ -111,9 +86,9 @@ public class SudokuUiManager implements ActionListener
 		sudokuActionListener.initDisplayComponent(canvas);
 	}
 
-	private Map<String, Consumer<ActionEvent>> createActionCommands()
+	private Map<String, Runnable> createActionCommands()
 	{
-		Map<String, Consumer<ActionEvent>> tempActionCommands = new HashMap<>();
+		Map<String, Runnable> tempActionCommands = new HashMap<>();
 		tempActionCommands.put(RESTART_MI, this::restart);
 		tempActionCommands.put(LOAD_MI, this::load);
 		tempActionCommands.put(EXIT_MI, this::exit);
@@ -162,7 +137,10 @@ public class SudokuUiManager implements ActionListener
 
 	private void initDisplayComponent(SudokuCanvas canvas)
 	{
-		MouseListener mouseListener = new SudokuMouseListener(canvas, this);
+		MouseListener mouseListener = new SudokuMouseListener(
+				this::selectCell,
+				this::setValue,
+				this::setPossibleValue);
 		KeyListener keyListener = new SudokuKeyListener(canvas);
 
 		canvas.addMouseListener(mouseListener);
@@ -170,23 +148,22 @@ public class SudokuUiManager implements ActionListener
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e)
+	public void actionPerformed(ActionEvent actionEvent)
 	{
-		actionCommands.get(e.getActionCommand())
-				.accept(e);
+		actionCommands.get(actionEvent.getActionCommand()).run();
 	}
 
-	public void restart(ActionEvent event)
+	public void restart()
 	{
 		// TODO : implement game restarting
 	}
 
-	public void exit(ActionEvent event)
+	public void exit()
 	{
 		Runtime.getRuntime().exit(0);
 	}
 
-	public void help(ActionEvent event)
+	public void help()
 	{
 		JOptionPane.showMessageDialog(frame,
 				"Complete the grid,"
@@ -199,7 +176,7 @@ public class SudokuUiManager implements ActionListener
 				JOptionPane.QUESTION_MESSAGE);
 	}
 
-	public void about(ActionEvent event)
+	public void about()
 	{
 		JOptionPane.showMessageDialog(frame,
 				"(c) 2017 Jacob Patterson"
@@ -210,7 +187,7 @@ public class SudokuUiManager implements ActionListener
 				JOptionPane.INFORMATION_MESSAGE);
 	}
 
-	public void setPossibleValue(ActionEvent event)
+	public void setPossibleValue()
 	{
 		Integer r = canvas.getSelectedRow();
 		Integer c = canvas.getSelectedCol();
@@ -255,8 +232,13 @@ public class SudokuUiManager implements ActionListener
 		}
 	}
 
-	// TODO: combine code with setPossibleValue(ActionEvent), but distinguish possible values from normal ones
-	public void setValue(ActionEvent event)
+	public void selectCell(int x, int y)
+	{
+		canvas.selectCellFromCoordinates(x, y);
+	}
+
+	// TODO: combine code with setPossibleValue(), but distinguish possible values from normal ones
+	public void setValue()
 	{
 		Integer r = canvas.getSelectedRow();
 		Integer c = canvas.getSelectedCol();
@@ -301,14 +283,14 @@ public class SudokuUiManager implements ActionListener
 		}
 	}
 
-	public void solve(ActionEvent event)
+	public void solve()
 	{
 		SudokuSolverPopup sudokuSolverPopup
 				= new SudokuSolverPopup(frame, canvas, board);
 		sudokuSolverPopup.setVisible(true);
 	}
 
-	public void load(ActionEvent event)
+	public void load()
 	{
 		// TODO implement game loading
 	}
