@@ -1,4 +1,4 @@
-package com.github.ants280.sudoku2.game;
+package com.github.ants280.sudoku.game;
 
 import java.util.Collections;
 import java.util.Set;

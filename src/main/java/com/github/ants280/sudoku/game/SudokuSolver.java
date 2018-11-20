@@ -1,6 +1,6 @@
-package com.github.ants280.sudoku2.game;
+package com.github.ants280.sudoku.game;
 
-import com.github.ants280.sudoku2.ui.Sudoku;
+import com.github.ants280.sudoku.ui.Sudoku;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;

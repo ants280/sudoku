@@ -1,8 +1,8 @@
-package com.github.ants280.sudoku2.ui;
+package com.github.ants280.sudoku.ui;
 
-import com.github.ants280.sudoku2.game.ImmutableSudokuCell;
-import com.github.ants280.sudoku2.game.SudokuBoard;
-import com.github.ants280.sudoku2.game.SudokuCell;
+import com.github.ants280.sudoku.game.ImmutableSudokuCell;
+import com.github.ants280.sudoku.game.SudokuBoard;
+import com.github.ants280.sudoku.game.SudokuCell;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Font;

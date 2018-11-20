@@ -1,6 +1,6 @@
-package com.github.ants280.sudoku2.ui;
+package com.github.ants280.sudoku.ui;
 
-import com.github.ants280.sudoku2.game.SudokuBoard;
+import com.github.ants280.sudoku.game.SudokuBoard;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;

@@ -1,7 +1,7 @@
-package com.github.ants280.sudoku2.ui;
+package com.github.ants280.sudoku.ui;
 
-import com.github.ants280.sudoku2.game.SudokuBoard;
-import com.github.ants280.sudoku2.game.SudokuCell;
+import com.github.ants280.sudoku.game.SudokuBoard;
+import com.github.ants280.sudoku.game.SudokuCell;
 import java.awt.BorderLayout;
 import java.awt.Frame;
 import java.awt.GridLayout;
