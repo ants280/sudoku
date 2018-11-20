@@ -141,7 +141,9 @@ public class SudokuUiManager implements ActionListener
 				this::selectCell,
 				this::setValue,
 				this::setPossibleValue);
-		KeyListener keyListener = new SudokuKeyListener(canvas);
+		KeyListener keyListener = new SudokuKeyListener(
+				this::setValue,
+				this::moveSelectedCell);
 
 		canvas.addMouseListener(mouseListener);
 		canvas.addKeyListener(keyListener);
@@ -232,9 +234,32 @@ public class SudokuUiManager implements ActionListener
 		}
 	}
 
+	// TODO: makemost-all methods in this class private
 	public void selectCell(int x, int y)
 	{
 		canvas.selectCellFromCoordinates(x, y);
+	}
+
+	public void moveSelectedCell(MoveDirection moveDirection)
+	{
+		switch (moveDirection)
+		{
+			case UP:
+				canvas.incrementSelectedRow(-1);
+				break;
+			case DOWN:
+				canvas.incrementSelectedRow(1);
+				break;
+			case LEFT:
+				canvas.incrementSelectedCol(-1);
+				break;
+			case RIGHT:
+				canvas.incrementSelectedCol(1);
+				break;
+			default:
+				throw new IllegalArgumentException(
+						"Unknown moveDirection: " + moveDirection);
+		}
 	}
 
 	// TODO: combine code with setPossibleValue(), but distinguish possible values from normal ones
@@ -281,6 +306,21 @@ public class SudokuUiManager implements ActionListener
 		{
 			canvas.repaint();
 		}
+	}
+
+	private void setValue(Integer cellValue)
+	{
+		if (Sudoku.DEBUG)
+		{
+			System.out.printf("\tSetting value '%d' at [%s,%s]\n",
+					cellValue,
+					canvas.getSelectedRow(),
+					canvas.getSelectedCol());
+		}
+
+		canvas.setSelectedCellValue(cellValue);
+
+		// TODO: Remove mouse & key listeners if game is finished (and do some for changeValue...)
 	}
 
 	public void solve()

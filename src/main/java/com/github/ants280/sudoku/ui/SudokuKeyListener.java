@@ -3,16 +3,33 @@ package com.github.ants280.sudoku.ui;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Consumer;
 
 public class SudokuKeyListener
 		extends KeyAdapter
 		implements KeyListener
 {
-	private final SudokuCanvas canvas;
+	private final Consumer<Integer> setSelectedCellValueConsumer;
+	private final Consumer<MoveDirection> moveSelectedCellConsumer;
+	private static final Map<Integer, MoveDirection> MOVE_DIRECTIONS
+			= new HashMap<>();
 
-	public SudokuKeyListener(SudokuCanvas canvas)
+	static
 	{
-		this.canvas = canvas;
+		MOVE_DIRECTIONS.put(KeyEvent.VK_UP, MoveDirection.UP);
+		MOVE_DIRECTIONS.put(KeyEvent.VK_DOWN, MoveDirection.RIGHT);
+		MOVE_DIRECTIONS.put(KeyEvent.VK_LEFT, MoveDirection.LEFT);
+		MOVE_DIRECTIONS.put(KeyEvent.VK_RIGHT, MoveDirection.RIGHT);
+	}
+
+	public SudokuKeyListener(
+			Consumer<Integer> setSelectedCellValueConsumer,
+			Consumer<MoveDirection> moveSelectedCellConsumer)
+	{
+		this.setSelectedCellValueConsumer = setSelectedCellValueConsumer;
+		this.moveSelectedCellConsumer = moveSelectedCellConsumer;
 	}
 
 	@Override
@@ -42,37 +59,17 @@ public class SudokuKeyListener
 			case KeyEvent.VK_NUMPAD9:
 				Integer cellValue = Integer.parseInt(
 						Character.valueOf(event.getKeyChar()).toString());
-				setSelectedCellValue(cellValue);
+				setSelectedCellValueConsumer.accept(cellValue);
 				break;
 			case KeyEvent.VK_UP:
-				canvas.incrementSelectedRow(-1);
-				break;
 			case KeyEvent.VK_DOWN:
-				canvas.incrementSelectedRow(1);
-				break;
 			case KeyEvent.VK_LEFT:
-				canvas.incrementSelectedCol(-1);
-				break;
 			case KeyEvent.VK_RIGHT:
-				canvas.incrementSelectedCol(1);
+				moveSelectedCellConsumer.accept(
+						MOVE_DIRECTIONS.get(event.getKeyCode()));
 				break;
 			default:
 				break;
 		}
-	}
-
-	private void setSelectedCellValue(int cellValue)
-	{
-		if (Sudoku.DEBUG)
-		{
-			System.out.printf("\tSetting value '%d' at [%s,%s]\n",
-					cellValue,
-					canvas.getSelectedRow(),
-					canvas.getSelectedCol());
-		}
-
-		canvas.setSelectedCellValue(cellValue);
-
-		// TODO: Remove mouse & key listeners if game is finished
 	}
 }
