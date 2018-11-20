@@ -27,7 +27,8 @@ public class SudokuUiManager implements ActionListener
 	private static final String ACTION_M = "Action";
 	private static final String HELP_M = "Help";
 	private static final String RESTART_MI = "Restart";
-	private static final String LOAD_MI = "Load Game";
+	private static final String LOAD_MI = "Load Game...";
+	private static final String EXPORT_MI = "Export Game...";
 	private static final String EXIT_MI = "Exit";
 	private static final String SET_VALUE_MI = "Set value..."; // TODO : disable if no SudokuCell is selecetd.
 	private static final String SET_POSSIBLE_VALUE_MI = "Set possible value..."; // TODO : disable if no SudokuCell is selecetd.
@@ -59,6 +60,7 @@ public class SudokuUiManager implements ActionListener
 			JMenu fileMenu,
 			JMenuItem restartMenuItem,
 			JMenuItem loadMenuItem,
+			JMenuItem exportMenuItem,
 			JMenuItem exitMenuItem,
 			JMenu actionMenu,
 			JMenuItem setValueMenuItem,
@@ -75,6 +77,7 @@ public class SudokuUiManager implements ActionListener
 				fileMenu,
 				restartMenuItem,
 				loadMenuItem,
+				exportMenuItem,
 				exitMenuItem,
 				actionMenu,
 				setValueMenuItem,
@@ -91,6 +94,7 @@ public class SudokuUiManager implements ActionListener
 		Map<String, Runnable> tempActionCommands = new HashMap<>();
 		tempActionCommands.put(RESTART_MI, this::restart);
 		tempActionCommands.put(LOAD_MI, this::load);
+		tempActionCommands.put(EXPORT_MI, this::export);
 		tempActionCommands.put(EXIT_MI, this::exit);
 		tempActionCommands.put(SET_VALUE_MI, this::setValue);
 		tempActionCommands.put(SET_POSSIBLE_VALUE_MI, this::setPossibleValue);
@@ -104,6 +108,7 @@ public class SudokuUiManager implements ActionListener
 			JMenu fileMenu,
 			JMenuItem restartMenuItem,
 			JMenuItem loadMenuItem,
+			JMenuItem exportMenuItem,
 			JMenuItem exitMenuItem,
 			JMenu actionMenu,
 			JMenuItem setValueMenuItem,
@@ -116,6 +121,7 @@ public class SudokuUiManager implements ActionListener
 		fileMenu.setText(FILE_M);
 		restartMenuItem.setText(RESTART_MI);
 		loadMenuItem.setText(LOAD_MI);
+		exportMenuItem.setText(EXPORT_MI);
 		exitMenuItem.setText(EXIT_MI);
 		actionMenu.setText(ACTION_M);
 		setValueMenuItem.setText(SET_VALUE_MI);
@@ -127,6 +133,7 @@ public class SudokuUiManager implements ActionListener
 
 		restartMenuItem.addActionListener(this);
 		loadMenuItem.addActionListener(this);
+		exportMenuItem.addActionListener(this);
 		exitMenuItem.addActionListener(this);
 		setValueMenuItem.addActionListener(this);
 		setPossibleValueMenuItem.addActionListener(this);
@@ -332,5 +339,10 @@ public class SudokuUiManager implements ActionListener
 	private void load()
 	{
 		// TODO implement game loading
+	}
+
+	private void export()
+	{
+		// TODO implement game exporting
 	}
 }
