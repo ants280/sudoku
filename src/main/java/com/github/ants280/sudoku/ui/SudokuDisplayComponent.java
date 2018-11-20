@@ -3,7 +3,6 @@ package com.github.ants280.sudoku.ui;
 import com.github.ants280.sudoku.game.ImmutableSudokuCell;
 import com.github.ants280.sudoku.game.SudokuBoard;
 import com.github.ants280.sudoku.game.SudokuCell;
-import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -11,9 +10,9 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
+import javax.swing.JComponent;
 
-// TODO: change canvas to a JComponent
-public class SudokuCanvas extends Canvas
+public class SudokuDisplayComponent extends JComponent
 {
 	private static final long serialVersionUID = 1L;
 
@@ -24,7 +23,7 @@ public class SudokuCanvas extends Canvas
 	private Integer selectedRow;
 	private Integer selectedCol;
 
-	public SudokuCanvas(SudokuBoard board)
+	public SudokuDisplayComponent(SudokuBoard board)
 	{
 		this.board = board;
 		this.cellLength = 50;

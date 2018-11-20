@@ -37,25 +37,25 @@ public class SudokuUiManager implements ActionListener
 	private static final String ABOUT_MI = "About";
 
 	private final JFrame frame;
-	private final SudokuCanvas canvas;
+	private final SudokuDisplayComponent sudokuDisplayComponent;
 	private final SudokuBoard board;
 	private final Map<String, Runnable> actionCommands;
 
 	private SudokuUiManager(
 			JFrame frame,
-			SudokuCanvas canvas,
+			SudokuDisplayComponent sudokuDisplayComponent,
 			SudokuBoard board)
 	{
 
 		this.frame = frame;
-		this.canvas = canvas;
+		this.sudokuDisplayComponent = sudokuDisplayComponent;
 		this.board = board;
 		this.actionCommands = this.createActionCommands();
 	}
 
 	public static void manage(
 			SudokuFrame frame,
-			SudokuCanvas canvas,
+			SudokuDisplayComponent sudokuDisplayComponent,
 			SudokuBoard board,
 			JMenu fileMenu,
 			JMenuItem restartMenuItem,
@@ -71,7 +71,7 @@ public class SudokuUiManager implements ActionListener
 			JMenuItem aboutMenuItem)
 	{
 		SudokuUiManager sudokuActionListener
-				= new SudokuUiManager(frame, canvas, board);
+				= new SudokuUiManager(frame, sudokuDisplayComponent, board);
 
 		sudokuActionListener.initMenu(
 				fileMenu,
@@ -86,7 +86,7 @@ public class SudokuUiManager implements ActionListener
 				helpMenu,
 				helpMenuItem,
 				aboutMenuItem);
-		sudokuActionListener.initDisplayComponent(canvas);
+		sudokuActionListener.initDisplayComponent(sudokuDisplayComponent);
 	}
 
 	private Map<String, Runnable> createActionCommands()
@@ -142,7 +142,8 @@ public class SudokuUiManager implements ActionListener
 		aboutMenuItem.addActionListener(this);
 	}
 
-	private void initDisplayComponent(SudokuCanvas canvas)
+	private void initDisplayComponent(
+			SudokuDisplayComponent sudokuDisplayComponent)
 	{
 		MouseListener mouseListener = new SudokuMouseListener(
 				this::selectCell,
@@ -152,8 +153,8 @@ public class SudokuUiManager implements ActionListener
 				this::setValue,
 				this::moveSelectedCell);
 
-		canvas.addMouseListener(mouseListener);
-		canvas.addKeyListener(keyListener);
+		sudokuDisplayComponent.addMouseListener(mouseListener);
+		sudokuDisplayComponent.addKeyListener(keyListener);
 	}
 
 	@Override
@@ -198,8 +199,8 @@ public class SudokuUiManager implements ActionListener
 
 	private void setPossibleValue()
 	{
-		Integer r = canvas.getSelectedRow();
-		Integer c = canvas.getSelectedCol();
+		Integer r = sudokuDisplayComponent.getSelectedRow();
+		Integer c = sudokuDisplayComponent.getSelectedCol();
 		// TODO: It would be nice to also have this popup on right click (after selection the cell)
 		if (r != null && c != null
 				&& board.getSudokuCell(r, c).getValue() == null)
@@ -225,7 +226,7 @@ public class SudokuUiManager implements ActionListener
 
 					if (possibleValueChanged)
 					{
-						canvas.repaint();
+						sudokuDisplayComponent.repaint();
 					}
 				});
 
@@ -243,7 +244,7 @@ public class SudokuUiManager implements ActionListener
 
 	private void selectCell(int x, int y)
 	{
-		canvas.selectCellFromCoordinates(x, y);
+		sudokuDisplayComponent.selectCellFromCoordinates(x, y);
 	}
 
 	private void moveSelectedCell(MoveDirection moveDirection)
@@ -251,16 +252,16 @@ public class SudokuUiManager implements ActionListener
 		switch (moveDirection)
 		{
 			case UP:
-				canvas.incrementSelectedRow(-1);
+				sudokuDisplayComponent.incrementSelectedRow(-1);
 				break;
 			case DOWN:
-				canvas.incrementSelectedRow(1);
+				sudokuDisplayComponent.incrementSelectedRow(1);
 				break;
 			case LEFT:
-				canvas.incrementSelectedCol(-1);
+				sudokuDisplayComponent.incrementSelectedCol(-1);
 				break;
 			case RIGHT:
-				canvas.incrementSelectedCol(1);
+				sudokuDisplayComponent.incrementSelectedCol(1);
 				break;
 			default:
 				throw new IllegalArgumentException(
@@ -271,8 +272,8 @@ public class SudokuUiManager implements ActionListener
 	// TODO: combine code with setPossibleValue(), but distinguish possible values from normal ones
 	private void setValue()
 	{
-		Integer r = canvas.getSelectedRow();
-		Integer c = canvas.getSelectedCol();
+		Integer r = sudokuDisplayComponent.getSelectedRow();
+		Integer c = sudokuDisplayComponent.getSelectedCol();
 		// TODO: It would be nice to also have this popup on right click (after selection the cell)
 		if (r != null && c != null)
 		{
@@ -310,7 +311,7 @@ public class SudokuUiManager implements ActionListener
 		dialog.setVisible(false);
 		if (valueChanged)
 		{
-			canvas.repaint();
+			sudokuDisplayComponent.repaint();
 		}
 	}
 
@@ -320,11 +321,11 @@ public class SudokuUiManager implements ActionListener
 		{
 			System.out.printf("\tSetting value '%d' at [%s,%s]\n",
 					cellValue,
-					canvas.getSelectedRow(),
-					canvas.getSelectedCol());
+					sudokuDisplayComponent.getSelectedRow(),
+					sudokuDisplayComponent.getSelectedCol());
 		}
 
-		canvas.setSelectedCellValue(cellValue);
+		sudokuDisplayComponent.setSelectedCellValue(cellValue);
 
 		// TODO: Remove mouse & key listeners if game is finished (and do some for changeValue...)
 	}
@@ -332,7 +333,7 @@ public class SudokuUiManager implements ActionListener
 	private void solve()
 	{
 		SudokuSolverPopup sudokuSolverPopup
-				= new SudokuSolverPopup(frame, canvas, board);
+				= new SudokuSolverPopup(frame, sudokuDisplayComponent, board);
 		sudokuSolverPopup.setVisible(true);
 	}
 

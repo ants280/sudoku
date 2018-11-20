@@ -2,7 +2,6 @@ package com.github.ants280.sudoku.ui;
 
 import com.github.ants280.sudoku.game.SudokuBoard;
 import com.github.ants280.sudoku.game.SudokuSolver;
-import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -10,6 +9,7 @@ import java.awt.event.WindowListener;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingWorker;
@@ -19,11 +19,17 @@ public class SudokuSolverPopup
 	private final SwingWorker<?, ?> swingWorker;
 	private final JDialog popupDialog;
 
-	public SudokuSolverPopup(Frame popupOwner, SudokuCanvas canvas, SudokuBoard board)
+	public SudokuSolverPopup(
+			JFrame popupOwner,
+			SudokuDisplayComponent sudokuDisplayComponent,
+			SudokuBoard board)
 	{
 		this.popupDialog = new JDialog(popupOwner, "Solver", true);
 		this.swingWorker
-				= new SudokuSolverPopupSwingWorker(popupDialog, canvas, board);
+				= new SudokuSolverPopupSwingWorker(
+						popupDialog,
+						sudokuDisplayComponent,
+						board);
 
 		initPopupDialog();
 	}
@@ -69,16 +75,16 @@ public class SudokuSolverPopup
 			extends SwingWorker<Void, Void>
 	{
 		private final JDialog popupDialog;
-		private final SudokuCanvas canvas;
+		private final SudokuDisplayComponent sudokuDisplayComponent;
 		private final SudokuBoard board;
 
 		public SudokuSolverPopupSwingWorker(
 				JDialog popupDialog,
-				SudokuCanvas canvas,
+				SudokuDisplayComponent sudokuDisplayComponent,
 				SudokuBoard board)
 		{
 			this.popupDialog = popupDialog;
-			this.canvas = canvas;
+			this.sudokuDisplayComponent = sudokuDisplayComponent;
 			this.board = board;
 		}
 
@@ -101,7 +107,7 @@ public class SudokuSolverPopup
 		@Override
 		protected void done()
 		{
-			canvas.repaint();
+			sudokuDisplayComponent.repaint();
 		}
 	}
 

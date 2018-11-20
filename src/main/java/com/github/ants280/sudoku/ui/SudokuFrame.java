@@ -20,7 +20,8 @@ public class SudokuFrame extends JFrame
 	private void init()
 	{
 		SudokuBoard board = new SudokuBoard();
-		SudokuCanvas canvas = new SudokuCanvas(board);
+		SudokuDisplayComponent sudokuDisplayComponent
+				= new SudokuDisplayComponent(board);
 
 		JMenu fileMenu = new JMenu();
 		JMenuItem restartMenuItem = new JMenuItem();
@@ -53,7 +54,7 @@ public class SudokuFrame extends JFrame
 
 		SudokuUiManager.manage(
 				this,
-				canvas,
+				sudokuDisplayComponent,
 				board,
 				fileMenu,
 				restartMenuItem,
@@ -69,7 +70,7 @@ public class SudokuFrame extends JFrame
 				aboutMenuItem);
 
 		this.setJMenuBar(menuBar);
-		this.add(canvas);
+		this.add(sudokuDisplayComponent);
 		this.pack();
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
