@@ -10,7 +10,6 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.image.BufferedImage;
 import javax.swing.JComponent;
 
 public class SudokuDisplayComponent extends JComponent
@@ -46,28 +45,15 @@ public class SudokuDisplayComponent extends JComponent
 	}
 
 	@Override
-	public void update(Graphics graphics)
-	{
-		BufferedImage lastDrawnImage
-				= (BufferedImage) this.createImage(getWidth(), getHeight());
-
-		//Draws the shape onto the BufferedImage
-		this.paint(lastDrawnImage.getGraphics());
-
-		//Draws the BufferedImage onto the PaintPanel
-		graphics.drawImage(lastDrawnImage, 0, 0, this);
-	}
-
-	@Override
-	public void paint(Graphics graphics)
+	protected void paintComponent(Graphics graphics)
 	{
 		((Graphics2D) graphics).setRenderingHint(
 				RenderingHints.KEY_TEXT_ANTIALIASING,
 				RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
-		paintSelectedCellBackground(graphics);
-		paintCells(graphics);
-		paintLines(graphics);
+		this.paintSelectedCellBackground(graphics);
+		this.paintCells(graphics);
+		this.paintLines(graphics);
 	}
 
 	private void paintSelectedCellBackground(Graphics graphics)
@@ -89,7 +75,7 @@ public class SudokuDisplayComponent extends JComponent
 		{
 			for (int col = 0; col < 9; col++)
 			{
-				paintCell(row, col, graphics);
+				this.paintCell(row, col, graphics);
 			}
 		}
 	}
@@ -185,7 +171,7 @@ public class SudokuDisplayComponent extends JComponent
 
 	private int getBoardLength()
 	{
-		return getOffset(9);
+		return this.getOffset(9);
 	}
 
 	private int getOffset(double cellNumber)
