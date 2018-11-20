@@ -145,25 +145,37 @@ public class SudokuDisplayComponent extends JComponent
 
 	private void paintLines(Graphics graphics)
 	{
+		int boardLength = getBoardLength();
+
 		graphics.setColor(Color.BLACK);
 		for (int i = 0; i <= 9; i++)
 		{
 			int offset = i * (cellLength + 1);
-			graphics.drawLine(0, offset, getBoardLength(), offset); // row
-			graphics.drawLine(offset, 0, offset, getBoardLength()); // col
+
+			// row
+			graphics.drawLine(0, offset, boardLength, offset);
+
+			// col
+			graphics.drawLine(offset, 0, offset, boardLength);
 
 			// Paint thicker lines every three cells (except edges).
 			if (i % 3 == 0)
 			{
 				if (i != 0)
 				{
-					graphics.drawLine(0, offset - 1, getBoardLength(), offset - 1); // row
-					graphics.drawLine(offset - 1, 0, offset - 1, getBoardLength()); // col
+					// row
+					graphics.drawLine(0, offset - 1, boardLength, offset - 1);
+
+					// col
+					graphics.drawLine(offset - 1, 0, offset - 1, boardLength);
 				}
 				if (i != 9)
 				{
-					graphics.drawLine(0, offset + 1, getBoardLength(), offset + 1); // row
-					graphics.drawLine(offset + 1, 0, offset + 1, getBoardLength()); // col
+					// row
+					graphics.drawLine(0, offset + 1, boardLength, offset + 1);
+
+					// col
+					graphics.drawLine(offset + 1, 0, offset + 1, boardLength);
 				}
 			}
 		}
@@ -209,7 +221,8 @@ public class SudokuDisplayComponent extends JComponent
 	{
 		if (Sudoku.DEBUG)
 		{
-			System.out.printf("Incrementing selected row (%d) by %d.\n", selectedRow, i);
+			System.out.printf(
+					"Incrementing selected row (%d) by %d.\n", selectedRow, i);
 		}
 
 		this.setSelectedRow(selectedRow + i);
@@ -220,7 +233,8 @@ public class SudokuDisplayComponent extends JComponent
 	{
 		if (Sudoku.DEBUG)
 		{
-			System.out.printf("Incrementing selected col (%d) by %d.\n", selectedCol, i);
+			System.out.printf(
+					"Incrementing selected col (%d) by %d.\n", selectedCol, i);
 		}
 
 		this.setSelectedCol(selectedCol + i);
