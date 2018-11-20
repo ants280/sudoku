@@ -6,6 +6,8 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.AbstractButton;
@@ -37,6 +39,7 @@ public class SudokuUiManager implements ActionListener
 	private final JFrame frame;
 	private final SudokuDisplayComponent sudokuDisplayComponent;
 	private final SudokuBoard board;
+	private final Collection<JMenuItem> selectedCellMenuItems;
 	private final SudokuBoard initialBoard;
 	private final Map<String, Runnable> actionCommands;
 	private final SudokuMouseListener mouseListener;
@@ -46,13 +49,15 @@ public class SudokuUiManager implements ActionListener
 	private SudokuUiManager(
 			JFrame frame,
 			SudokuDisplayComponent sudokuDisplayComponent,
-			SudokuBoard board)
+			SudokuBoard board,
+			Collection<JMenuItem> selectedCellMenuItems)
 	{
 
 		this.frame = frame;
 		this.sudokuDisplayComponent = sudokuDisplayComponent;
 		this.board = board;
 		this.initialBoard = new SudokuBoard(board.toString());
+		this.selectedCellMenuItems = selectedCellMenuItems;
 		this.actionCommands = this.createActionCommands();
 		this.mouseListener = new SudokuMouseListener(
 				this::selectCell,
@@ -82,7 +87,13 @@ public class SudokuUiManager implements ActionListener
 			JMenuItem aboutMenuItem)
 	{
 		SudokuUiManager sudokuActionListener
-				= new SudokuUiManager(frame, sudokuDisplayComponent, board);
+				= new SudokuUiManager(
+						frame,
+						sudokuDisplayComponent,
+						board,
+						Arrays.asList(
+								setValueMenuItem,
+								setPossibleValueMenuItem));
 
 		sudokuActionListener.initMenu(
 				fileMenu,
@@ -161,6 +172,8 @@ public class SudokuUiManager implements ActionListener
 			listenersAdded = true;
 			frame.addKeyListener(keyListener);
 			sudokuDisplayComponent.addMouseListener(mouseListener);
+			selectedCellMenuItems
+					.forEach(menuItem -> menuItem.setEnabled(false));
 		}
 	}
 
@@ -171,6 +184,8 @@ public class SudokuUiManager implements ActionListener
 			listenersAdded = false;
 			frame.removeKeyListener(keyListener);
 			sudokuDisplayComponent.removeMouseListener(mouseListener);
+			selectedCellMenuItems
+					.forEach(menuItem -> menuItem.setEnabled(false));
 		}
 	}
 
@@ -266,6 +281,7 @@ public class SudokuUiManager implements ActionListener
 	private void selectCell(int x, int y)
 	{
 		sudokuDisplayComponent.selectCellFromCoordinates(x, y);
+		selectedCellMenuItems.forEach(menuItem -> menuItem.setEnabled(true));
 	}
 
 	private void moveSelectedCell(MoveDirection moveDirection)
