@@ -4,6 +4,7 @@ import com.github.ants280.sudoku.game.ImmutableSudokuCell;
 import com.github.ants280.sudoku.game.SudokuBoard;
 import com.github.ants280.sudoku.game.SudokuCell;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
@@ -39,7 +40,9 @@ public class SudokuDisplayComponent extends JComponent
 
 	private void init()
 	{
-		this.setSize(getBoardLength(), getBoardLength());
+		int boardLength = getBoardLength();
+		Dimension preferredSize = new Dimension(boardLength, boardLength);
+		this.setPreferredSize(preferredSize);
 	}
 
 	@Override
