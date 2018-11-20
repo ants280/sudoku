@@ -11,6 +11,7 @@ import java.util.stream.Stream;
 
 public class SudokuBoard
 {
+// TODO: Refactor idea: store board as rows, columns, and groups.  This would make indexing much more simple and setting slightly more complex (and storage space * 3).
 	private final SudokuCell[][] board;
 
 	public SudokuBoard(String boardString)
