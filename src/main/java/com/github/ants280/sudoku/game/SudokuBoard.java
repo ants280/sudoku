@@ -65,7 +65,7 @@ public class SudokuBoard
 
 	private static SudokuCell[][] fromString(String boardString)
 	{
-		if (!boardString.matches("^\\{\\d{81}\\}$"))
+		if (!isValidSavedBoard(boardString))
 		{
 			throw new IllegalArgumentException("Illegal board: " + boardString);
 		}
@@ -83,6 +83,11 @@ public class SudokuBoard
 				: new ImmutableSudokuCell(cellValue))
 				.toArray(SudokuCell[]::new))
 				.toArray(SudokuCell[][]::new);
+	}
+
+	public static boolean isValidSavedBoard(String boardString)
+	{
+		return boardString.matches("^\\{\\d{81}\\}$");
 	}
 
 	public void resetFrom(SudokuBoard other)

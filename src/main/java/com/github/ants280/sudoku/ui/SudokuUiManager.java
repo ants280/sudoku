@@ -195,7 +195,8 @@ public class SudokuUiManager implements ActionListener
 
 	private void help()
 	{
-		JOptionPane.showMessageDialog(frame,
+		JOptionPane.showMessageDialog(
+				frame,
 				"Complete the grid,"
 				+ "\nso that every row,"
 				+ "\ncolumn, and 3x3 box"
@@ -208,7 +209,8 @@ public class SudokuUiManager implements ActionListener
 
 	private void about()
 	{
-		JOptionPane.showMessageDialog(frame,
+		JOptionPane.showMessageDialog(
+				frame,
 				"(c) 2017 Jacob Patterson"
 				+ "\n"
 				+ "\nDescription taken from my newspaper,"
@@ -366,12 +368,50 @@ public class SudokuUiManager implements ActionListener
 
 	private void load()
 	{
-		this.addListeners();
-		// TODO implement game loading
+		Object boardToLoad = JOptionPane.showInputDialog(
+				frame,
+				"Enter a saved game to load.",
+				"Load " + frame.getTitle(),
+				JOptionPane.INFORMATION_MESSAGE,
+				null, // Icon
+				null, // selectionValues (null implies textbox
+				null); // initialSelectionValue
+
+		if (boardToLoad != null)
+		{
+			if (SudokuBoard.isValidSavedBoard(boardToLoad.toString()))
+			{
+				SudokuBoard loadedBoard
+						= new SudokuBoard(boardToLoad.toString());
+				board.resetFrom(loadedBoard);
+				initialBoard.resetFrom(board);
+
+				sudokuDisplayComponent.repaint();
+
+				this.addListeners();
+			}
+			else
+			{
+				JOptionPane.showMessageDialog(
+						frame,
+						"Error loading board.\n"
+						+ "It should be something like '{<81 digits>}' "
+						+ "(without quotes).",
+						"Invalid Board for " + frame.getTitle(),
+						JOptionPane.ERROR_MESSAGE);
+			}
+		}
 	}
 
 	private void export()
 	{
-		// TODO implement game exporting
+		JOptionPane.showInputDialog(
+				frame,
+				"Copy the game state to load later.",
+				"Export " + frame.getTitle(),
+				JOptionPane.INFORMATION_MESSAGE,
+				null, // Icon
+				null, // selectionValues (null implies textbox
+				board.toString());
 	}
 }
