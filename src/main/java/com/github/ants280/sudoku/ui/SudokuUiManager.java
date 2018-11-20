@@ -6,8 +6,6 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseListener;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.AbstractButton;
@@ -40,6 +38,9 @@ public class SudokuUiManager implements ActionListener
 	private final SudokuDisplayComponent sudokuDisplayComponent;
 	private final SudokuBoard board;
 	private final Map<String, Runnable> actionCommands;
+	private final SudokuMouseListener mouseListener;
+	private final SudokuKeyListener keyListener;
+	private boolean listenersAdded;
 
 	private SudokuUiManager(
 			JFrame frame,
@@ -51,6 +52,14 @@ public class SudokuUiManager implements ActionListener
 		this.sudokuDisplayComponent = sudokuDisplayComponent;
 		this.board = board;
 		this.actionCommands = this.createActionCommands();
+		this.mouseListener = new SudokuMouseListener(
+				this::selectCell,
+				this::setValue,
+				this::setPossibleValue);
+		this.keyListener = new SudokuKeyListener(
+				this::setValue,
+				this::moveSelectedCell);
+		this.listenersAdded = false;
 	}
 
 	public static void manage(
@@ -86,7 +95,8 @@ public class SudokuUiManager implements ActionListener
 				helpMenu,
 				helpMenuItem,
 				aboutMenuItem);
-		sudokuActionListener.initDisplayComponent(sudokuDisplayComponent);
+
+		sudokuActionListener.addListeners();
 	}
 
 	private Map<String, Runnable> createActionCommands()
@@ -142,19 +152,24 @@ public class SudokuUiManager implements ActionListener
 		aboutMenuItem.addActionListener(this);
 	}
 
-	private void initDisplayComponent(
-			SudokuDisplayComponent sudokuDisplayComponent)
+	private void addListeners()
 	{
-		MouseListener mouseListener = new SudokuMouseListener(
-				this::selectCell,
-				this::setValue,
-				this::setPossibleValue);
-		KeyListener keyListener = new SudokuKeyListener(
-				this::setValue,
-				this::moveSelectedCell);
+		if (!listenersAdded)
+		{
+			listenersAdded = true;
+			frame.addKeyListener(keyListener);
+			sudokuDisplayComponent.addMouseListener(mouseListener);
+		}
+	}
 
-		sudokuDisplayComponent.addMouseListener(mouseListener);
-		sudokuDisplayComponent.addKeyListener(keyListener);
+	private void removeListeners()
+	{
+		if (listenersAdded)
+		{
+			listenersAdded = false;
+			frame.removeKeyListener(keyListener);
+			sudokuDisplayComponent.removeMouseListener(mouseListener);
+		}
 	}
 
 	@Override
@@ -165,6 +180,7 @@ public class SudokuUiManager implements ActionListener
 
 	private void restart()
 	{
+		this.addListeners();
 		// TODO : implement game restarting
 	}
 
@@ -312,6 +328,11 @@ public class SudokuUiManager implements ActionListener
 		if (valueChanged)
 		{
 			sudokuDisplayComponent.repaint();
+
+			if (board.isSolved())
+			{
+				this.removeListeners();
+			}
 		}
 	}
 
@@ -327,11 +348,15 @@ public class SudokuUiManager implements ActionListener
 
 		sudokuDisplayComponent.setSelectedCellValue(cellValue);
 
-		// TODO: Remove mouse & key listeners if game is finished (and do some for changeValue...)
+		if (board.isSolved())
+		{
+			this.removeListeners();
+		}
 	}
 
 	private void solve()
 	{
+		// TODO: make listeners work with solving (disabled while solving, enabled again when solving finished if board is not yet solved).
 		SudokuSolverPopup sudokuSolverPopup
 				= new SudokuSolverPopup(frame, sudokuDisplayComponent, board);
 		sudokuSolverPopup.setVisible(true);
@@ -339,6 +364,7 @@ public class SudokuUiManager implements ActionListener
 
 	private void load()
 	{
+		this.addListeners();
 		// TODO implement game loading
 	}
 
