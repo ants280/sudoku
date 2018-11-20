@@ -262,6 +262,12 @@ public class SudokuDisplayComponent extends JComponent
 		}
 	}
 
+	public void removeSelectedCell()
+	{
+		selectedRow = null;
+		selectedCol = null;
+	}
+
 	public Integer getSelectedRow()
 	{
 		return selectedRow;

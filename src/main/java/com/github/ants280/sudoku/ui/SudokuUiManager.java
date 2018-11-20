@@ -184,9 +184,22 @@ public class SudokuUiManager implements ActionListener
 			listenersAdded = false;
 			frame.removeKeyListener(keyListener);
 			sudokuDisplayComponent.removeMouseListener(mouseListener);
-			selectedCellMenuItems
-					.forEach(menuItem -> menuItem.setEnabled(false));
 		}
+	}
+
+	private void startGame()
+	{
+		this.addListeners();
+		selectedCellMenuItems
+				.forEach(menuItem -> menuItem.setEnabled(false));
+		sudokuDisplayComponent.removeSelectedCell();
+	}
+
+	private void endGame()
+	{
+		this.removeListeners();
+		selectedCellMenuItems.forEach(menuItem -> menuItem.setEnabled(false));
+		sudokuDisplayComponent.removeSelectedCell();
 	}
 
 	@Override
@@ -200,7 +213,7 @@ public class SudokuUiManager implements ActionListener
 		board.resetFrom(initialBoard);
 		sudokuDisplayComponent.repaint();
 
-		this.addListeners();
+		this.startGame();
 	}
 
 	private void exit()
@@ -351,7 +364,7 @@ public class SudokuUiManager implements ActionListener
 
 			if (board.isSolved())
 			{
-				this.removeListeners();
+				this.endGame();
 			}
 		}
 	}
@@ -370,7 +383,7 @@ public class SudokuUiManager implements ActionListener
 
 		if (board.isSolved())
 		{
-			this.removeListeners();
+			this.endGame();
 		}
 	}
 
