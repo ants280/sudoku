@@ -38,7 +38,6 @@ public class SudokuDisplayComponent extends JComponent
 		this.xOffset = 0;
 		this.yOffset = 0;
 
-		// TODO: reset these on new game creation
 		this.selectedRow = null;
 		this.selectedCol = null;
 

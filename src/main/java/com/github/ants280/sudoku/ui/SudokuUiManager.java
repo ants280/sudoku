@@ -217,7 +217,6 @@ public class SudokuUiManager implements ActionListener
 	{
 		Integer r = sudokuDisplayComponent.getSelectedRow();
 		Integer c = sudokuDisplayComponent.getSelectedCol();
-		// TODO: It would be nice to also have this popup on right click (after selection the cell)
 		if (r != null && c != null
 				&& board.getSudokuCell(r, c).getValue() == null)
 		{
@@ -290,7 +289,6 @@ public class SudokuUiManager implements ActionListener
 	{
 		Integer r = sudokuDisplayComponent.getSelectedRow();
 		Integer c = sudokuDisplayComponent.getSelectedCol();
-		// TODO: It would be nice to also have this popup on right click (after selection the cell)
 		if (r != null && c != null)
 		{
 			JDialog dialog = new JDialog(frame, "[value]", true);
