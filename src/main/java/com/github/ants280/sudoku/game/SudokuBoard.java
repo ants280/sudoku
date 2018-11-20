@@ -85,6 +85,23 @@ public class SudokuBoard
 				.toArray(SudokuCell[][]::new);
 	}
 
+	public void resetFrom(SudokuBoard other)
+	{
+		IntStream.range(0, 81)
+				.forEach(i -> this.getSudokuCell(i / 9, i % 9)
+				.setValue(other.getSudokuCell(i / 9, i % 9).getValue()));
+
+		IntStream.range(0, 81)
+				.forEach(i -> removeAllPossibleValues(
+				this.getSudokuCell(i / 9, i % 9)));
+	}
+
+	private static void removeAllPossibleValues(SudokuCell sudokuCell)
+	{
+		SudokuCell.LEGAL_CELL_VALUES.stream()
+				.forEach(sudokuCell::removePossibleValue);
+	}
+
 	private Integer getCellValue(SudokuCell sudokuCell)
 	{
 		if (sudokuCell.isEmpty() || sudokuCell.getValue() == null)
@@ -300,7 +317,7 @@ public class SudokuBoard
 	public Set<SudokuCell> getSudokuCellsInGroupSection(
 			int groupNumber,
 			SectionType sectionType,
-			 int sectionNumber)
+			int sectionNumber)
 	{
 		validateSection(sectionType, SectionType.ROW, SectionType.COL);
 

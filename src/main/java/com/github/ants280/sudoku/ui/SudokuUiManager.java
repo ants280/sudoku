@@ -37,6 +37,7 @@ public class SudokuUiManager implements ActionListener
 	private final JFrame frame;
 	private final SudokuDisplayComponent sudokuDisplayComponent;
 	private final SudokuBoard board;
+	private final SudokuBoard initialBoard;
 	private final Map<String, Runnable> actionCommands;
 	private final SudokuMouseListener mouseListener;
 	private final SudokuKeyListener keyListener;
@@ -51,6 +52,7 @@ public class SudokuUiManager implements ActionListener
 		this.frame = frame;
 		this.sudokuDisplayComponent = sudokuDisplayComponent;
 		this.board = board;
+		this.initialBoard = new SudokuBoard(board.toString());
 		this.actionCommands = this.createActionCommands();
 		this.mouseListener = new SudokuMouseListener(
 				this::selectCell,
@@ -180,8 +182,10 @@ public class SudokuUiManager implements ActionListener
 
 	private void restart()
 	{
+		board.resetFrom(initialBoard);
+		sudokuDisplayComponent.repaint();
+
 		this.addListeners();
-		// TODO : implement game restarting
 	}
 
 	private void exit()
