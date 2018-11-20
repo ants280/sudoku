@@ -15,11 +15,17 @@ import javax.swing.JComponent;
 public class SudokuDisplayComponent extends JComponent
 {
 	private static final long serialVersionUID = 1L;
+	private static final RenderingHints ANTIALIAS_ON_RENDERING_HINT
+			= new RenderingHints(
+					RenderingHints.KEY_ANTIALIASING,
+					RenderingHints.VALUE_ANTIALIAS_ON);
 
 	private final SudokuBoard board;
-	private final int cellLength;
-	private final Font valueFont;
-	private final Font possibleValueFont;
+	private int cellLength;
+	private Font valueFont;
+	private Font possibleValueFont;
+	private int xOffset;
+	private int yOffset;
 	private Integer selectedRow;
 	private Integer selectedCol;
 
@@ -29,6 +35,8 @@ public class SudokuDisplayComponent extends JComponent
 		this.cellLength = 50;
 		this.valueFont = new Font("times", Font.PLAIN, cellLength);
 		this.possibleValueFont = new Font("times", Font.PLAIN, cellLength / 3);
+		this.xOffset = 0;
+		this.yOffset = 0;
 
 		// TODO: reset these on new game creation
 		this.selectedRow = null;
@@ -39,17 +47,51 @@ public class SudokuDisplayComponent extends JComponent
 
 	private void init()
 	{
-		int boardLength = getBoardLength();
+		int boardLength = cellLength * 9;
 		Dimension preferredSize = new Dimension(boardLength, boardLength);
 		this.setPreferredSize(preferredSize);
+
+		this.addComponentListener(
+				new SudokuComponentListener(this::componentResized));
+	}
+
+	private void componentResized()
+	{
+//		this.cellLength = 50;
+//		this.valueFont = new Font("times", Font.PLAIN, cellLength);
+//		this.possibleValueFont = new Font("times", Font.PLAIN, cellLength / 3);
+
+		int minDimension = Math.min(this.getWidth(), this.getHeight());
+		System.out.printf("%d: [w,h]=[%d,%d], cellLength=%d, minDimension=%d%n",
+				System.currentTimeMillis(), this.getWidth(), this.getHeight(), cellLength, minDimension);
+
+		int newCellLength = minDimension / 9;
+		if (cellLength != newCellLength)
+		{
+			cellLength = newCellLength;
+			xOffset = (this.getWidth() - (cellLength * 9)) / 2;
+			yOffset = (this.getHeight() - (cellLength * 9)) / 2;
+
+			valueFont = valueFont.deriveFont((float) cellLength);
+			possibleValueFont = possibleValueFont
+					.deriveFont((float) (cellLength / 3d));
+
+			this.repaint();
+		}
+
+//		float fontSize = (float) (minDimension / (grid.getLength() * 3d));
+//
+//		if (tileFont.getSize2D() != fontSize)
+//		{
+//			tileFont = tileFont.deriveFont(fontSize);
+//			this.repaint();
+//		}
 	}
 
 	@Override
 	protected void paintComponent(Graphics graphics)
 	{
-		((Graphics2D) graphics).setRenderingHint(
-				RenderingHints.KEY_TEXT_ANTIALIASING,
-				RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+		((Graphics2D) graphics).setRenderingHints(ANTIALIAS_ON_RENDERING_HINT);
 
 		this.paintSelectedCellBackground(graphics);
 		this.paintCells(graphics);
@@ -62,10 +104,10 @@ public class SudokuDisplayComponent extends JComponent
 		{
 			graphics.setColor(Color.LIGHT_GRAY);
 			graphics.fillRect(
-					selectedCol * (cellLength + 1),
-					selectedRow * (cellLength + 1),
-					cellLength + 1,
-					cellLength + 1);
+					xOffset + (selectedCol * cellLength),
+					yOffset + (selectedRow * cellLength),
+					cellLength,
+					cellLength);
 		}
 	}
 
@@ -91,8 +133,8 @@ public class SudokuDisplayComponent extends JComponent
 			int fontHeightPx = (int) (valueFont.getSize() * 0.75d);
 			FontMetrics fontMetrics = graphics.getFontMetrics();
 			int charWidth = getFontWidth(fontMetrics, sudokuCell.getValue());
-			int colOffset = getOffset(col + 0.5d) - (charWidth / 2);
-			int rowOffset = getOffset(row + 0.5d) + (fontHeightPx / 2);
+			int colOffset = (int) (xOffset + (cellLength * (col + 0.5d)) - (charWidth / 2d));
+			int rowOffset = (int) (yOffset + (cellLength * (row + 0.5d)) + (fontHeightPx / 2d));
 
 			graphics.drawString(
 					sudokuCell.getValue().toString(), colOffset, rowOffset);
@@ -107,7 +149,7 @@ public class SudokuDisplayComponent extends JComponent
 				FontMetrics fontMetrics = graphics.getFontMetrics();
 
 				sudokuCell.getPossibleValues()
-						.forEach(possibleValue -> paintPossibleCellValue(
+						.forEach(possibleValue -> this.paintPossibleCellValue(
 						row,
 						col,
 						possibleValue,
@@ -126,13 +168,13 @@ public class SudokuDisplayComponent extends JComponent
 			FontMetrics fontMetrics,
 			int fontHeightPx)
 	{
-		int charWidth = getFontWidth(fontMetrics, possibleValue);
-		int colOffset = getOffset(
-				col + ((1 + (2 * ((possibleValue - 1) % 3))) / 6d))
-				- (charWidth / 2);
-		int rowOffset = getOffset(
-				row + ((1 + (2 * ((possibleValue - 1) / 3))) / 6d))
-				+ (fontHeightPx / 2);
+		int charWidth = fontMetrics.stringWidth(possibleValue.toString());
+		double colPercentage = col + ((1 + (2 * ((possibleValue - 1) % 3))) / 6d);
+		double rowPercentage = row + ((1 + (2 * ((possibleValue - 1) / 3))) / 6d);
+		int colOffset = (int) (xOffset + cellLength * colPercentage
+				- (charWidth / 2d));
+		int rowOffset = (int) (yOffset + cellLength * rowPercentage
+				+ (fontHeightPx / 2d));
 
 		graphics.drawString(
 				possibleValue.toString(), colOffset, rowOffset);
@@ -140,23 +182,31 @@ public class SudokuDisplayComponent extends JComponent
 
 	private int getFontWidth(FontMetrics fontMetrics, Integer cellValue)
 	{
-		return fontMetrics.charsWidth(cellValue.toString().toCharArray(), 0, 1);
+		return fontMetrics.stringWidth(cellValue.toString());
 	}
 
 	private void paintLines(Graphics graphics)
 	{
-		int boardLength = getBoardLength();
+		int boardLength = cellLength * 9;
 
 		graphics.setColor(Color.BLACK);
 		for (int i = 0; i <= 9; i++)
 		{
-			int offset = i * (cellLength + 1);
+			int offset = i * cellLength;
 
 			// row
-			graphics.drawLine(0, offset, boardLength, offset);
+			graphics.drawLine(
+					xOffset + 0,
+					yOffset + offset,
+					xOffset + boardLength,
+					yOffset + offset);
 
 			// col
-			graphics.drawLine(offset, 0, offset, boardLength);
+			graphics.drawLine(
+					xOffset + offset,
+					yOffset + 0,
+					xOffset + offset,
+					yOffset + boardLength);
 
 			// Paint thicker lines every three cells (except edges).
 			if (i % 3 == 0)
@@ -164,37 +214,43 @@ public class SudokuDisplayComponent extends JComponent
 				if (i != 0)
 				{
 					// row
-					graphics.drawLine(0, offset - 1, boardLength, offset - 1);
+					graphics.drawLine(
+							xOffset + 0,
+							yOffset + offset - 1,
+							xOffset + boardLength,
+							yOffset + offset - 1);
 
 					// col
-					graphics.drawLine(offset - 1, 0, offset - 1, boardLength);
+					graphics.drawLine(
+							xOffset + offset - 1,
+							yOffset + 0,
+							xOffset + offset - 1,
+							yOffset + boardLength);
 				}
 				if (i != 9)
 				{
 					// row
-					graphics.drawLine(0, offset + 1, boardLength, offset + 1);
+					graphics.drawLine(
+							xOffset + 0,
+							yOffset + offset + 1,
+							xOffset + boardLength,
+							yOffset + offset + 1);
 
 					// col
-					graphics.drawLine(offset + 1, 0, offset + 1, boardLength);
+					graphics.drawLine(
+							xOffset + offset + 1,
+							yOffset + 0,
+							xOffset + offset + 1,
+							yOffset + boardLength);
 				}
 			}
 		}
 	}
 
-	private int getBoardLength()
-	{
-		return this.getOffset(9);
-	}
-
-	private int getOffset(double cellNumber)
-	{
-		return (int) (cellNumber * (cellLength + 1)) + 1;
-	}
-
 	public void selectCellFromCoordinates(int x, int y)
 	{
-		this.setSelectedRow(y / cellLength);
-		this.setSelectedCol(x / cellLength);
+		this.setSelectedRow((y - yOffset) / cellLength);
+		this.setSelectedCol((x - xOffset) / cellLength);
 		this.repaint();
 
 		if (Sudoku.DEBUG)
