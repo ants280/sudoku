@@ -155,17 +155,17 @@ public class SudokuUiManager implements ActionListener
 		actionCommands.get(actionEvent.getActionCommand()).run();
 	}
 
-	public void restart()
+	private void restart()
 	{
 		// TODO : implement game restarting
 	}
 
-	public void exit()
+	private void exit()
 	{
 		Runtime.getRuntime().exit(0);
 	}
 
-	public void help()
+	private void help()
 	{
 		JOptionPane.showMessageDialog(frame,
 				"Complete the grid,"
@@ -178,7 +178,7 @@ public class SudokuUiManager implements ActionListener
 				JOptionPane.QUESTION_MESSAGE);
 	}
 
-	public void about()
+	private void about()
 	{
 		JOptionPane.showMessageDialog(frame,
 				"(c) 2017 Jacob Patterson"
@@ -189,7 +189,7 @@ public class SudokuUiManager implements ActionListener
 				JOptionPane.INFORMATION_MESSAGE);
 	}
 
-	public void setPossibleValue()
+	private void setPossibleValue()
 	{
 		Integer r = canvas.getSelectedRow();
 		Integer c = canvas.getSelectedCol();
@@ -234,13 +234,12 @@ public class SudokuUiManager implements ActionListener
 		}
 	}
 
-	// TODO: makemost-all methods in this class private
-	public void selectCell(int x, int y)
+	private void selectCell(int x, int y)
 	{
 		canvas.selectCellFromCoordinates(x, y);
 	}
 
-	public void moveSelectedCell(MoveDirection moveDirection)
+	private void moveSelectedCell(MoveDirection moveDirection)
 	{
 		switch (moveDirection)
 		{
@@ -263,7 +262,7 @@ public class SudokuUiManager implements ActionListener
 	}
 
 	// TODO: combine code with setPossibleValue(), but distinguish possible values from normal ones
-	public void setValue()
+	private void setValue()
 	{
 		Integer r = canvas.getSelectedRow();
 		Integer c = canvas.getSelectedCol();
@@ -323,14 +322,14 @@ public class SudokuUiManager implements ActionListener
 		// TODO: Remove mouse & key listeners if game is finished (and do some for changeValue...)
 	}
 
-	public void solve()
+	private void solve()
 	{
 		SudokuSolverPopup sudokuSolverPopup
 				= new SudokuSolverPopup(frame, canvas, board);
 		sudokuSolverPopup.setVisible(true);
 	}
 
-	public void load()
+	private void load()
 	{
 		// TODO implement game loading
 	}
