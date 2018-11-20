@@ -1,9 +1,6 @@
 package com.github.ants280.sudoku.ui;
 
 import com.github.ants280.sudoku.game.SudokuBoard;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseListener;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -11,65 +8,66 @@ import javax.swing.JMenuItem;
 
 public class SudokuFrame extends JFrame
 {
-	private static final long serialVersionUID = -7514585713156161889L;
-
-	private final SudokuBoard board;
-	private final MouseListener mouseListener;
-	private final KeyListener keyListener;
-	private final SudokuCanvas canvas;
+	private static final long serialVersionUID = 1L;
 
 	public SudokuFrame()
 	{
 		super("Sudoku2");
 
-		this.board = new SudokuBoard();
-		this.canvas = new SudokuCanvas(board);
-		SudokuActionListener actionListener
-				= new SudokuActionListener(this, canvas, board);
-		this.mouseListener = new SudokuMouseListener(canvas, actionListener);
-		this.keyListener = new SudokuKeyListener(canvas);
-		init(actionListener);
+		init();
 	}
 
-	private void init(SudokuActionListener actionListener)
+	private void init()
 	{
-		this.setJMenuBar(createJMenuBar(actionListener));
-		this.add(canvas);
-		this.pack();
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		SudokuBoard board = new SudokuBoard();
+		SudokuCanvas canvas = new SudokuCanvas(board);
 
-		canvas.addMouseListener(mouseListener);
-		canvas.addKeyListener(keyListener);
-	}
+		JMenu fileMenu = new JMenu();
+		JMenuItem restartMenuItem = new JMenuItem();
+		JMenuItem loadMenuItem = new JMenuItem();
+		JMenuItem exitMenuItem = new JMenuItem();
+		JMenu actionMenu = new JMenu();
+		JMenuItem setValueMenuItem = new JMenuItem();
+		JMenuItem setPossibleValueMenuItem = new JMenuItem();
+		JMenuItem solveMenuItem = new JMenuItem();
+		JMenu helpMenu = new JMenu();
+		JMenuItem helpMenuItem = new JMenuItem();
+		JMenuItem aboutMenuItem = new JMenuItem();
 
-	private JMenuBar createJMenuBar(SudokuActionListener actionListener)
-	{
-		JMenu fileMenu = new JMenu("File");
-		fileMenu.add(createMenuItem("Restart", actionListener::restart));
-		fileMenu.add(createMenuItem("Load Game", actionListener::load));
-		fileMenu.add(createMenuItem("Exit", actionListener::exit));
-		JMenu actionMenu = new JMenu("Action");
-		actionMenu.add(createMenuItem("Set value", actionListener::setValue)); // TODO disable if no SudokuCell is selecetd.
-		actionMenu.add(createMenuItem("Set possible value", actionListener::setPossibleValue));  // TODO disable if no SudokuCell is selecetd.
-		actionMenu.add(createMenuItem("Solve", actionListener::solve));
-		JMenu helpMenu = new JMenu("Help");
-		helpMenu.add(createMenuItem("Help", actionListener::help));
-		helpMenu.add(createMenuItem("About", actionListener::about));
+		fileMenu.add(restartMenuItem);
+		fileMenu.add(loadMenuItem);
+		fileMenu.addSeparator();
+		fileMenu.add(exitMenuItem);
+		actionMenu.add(setValueMenuItem);
+		actionMenu.add(setPossibleValueMenuItem);
+		actionMenu.add(solveMenuItem);
+		helpMenu.add(helpMenuItem);
+		helpMenu.add(aboutMenuItem);
 
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.add(fileMenu);
 		menuBar.add(actionMenu);
 		menuBar.add(helpMenu);
 
-		return menuBar;
-	}
+		SudokuUiManager.manage(
+				this,
+				canvas,
+				board,
+				fileMenu,
+				restartMenuItem,
+				loadMenuItem,
+				exitMenuItem,
+				actionMenu,
+				setValueMenuItem,
+				setPossibleValueMenuItem,
+				solveMenuItem,
+				helpMenu,
+				helpMenuItem,
+				aboutMenuItem);
 
-	private JMenuItem createMenuItem(
-			String title, ActionListener actionListener)
-	{
-		JMenuItem menuItem = new JMenuItem(title);
-		menuItem.addActionListener(actionListener);
-
-		return menuItem;
+		this.setJMenuBar(menuBar);
+		this.add(canvas);
+		this.pack();
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 }

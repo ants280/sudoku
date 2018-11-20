@@ -12,9 +12,10 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 
+// TODO: change canvas to a JComponent
 public class SudokuCanvas extends Canvas
 {
-	private static final long serialVersionUID = 1136949818910622554L;
+	private static final long serialVersionUID = 1L;
 
 	private final SudokuBoard board;
 	private final int cellLength;

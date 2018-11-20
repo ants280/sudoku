@@ -9,10 +9,10 @@ public class SudokuMouseListener
 		implements MouseListener
 {
 	private final SudokuCanvas canvas;
-	private final SudokuActionListener actionListener;
+	private final SudokuUiManager actionListener;
 
 	public SudokuMouseListener(
-			SudokuCanvas canvas, SudokuActionListener actionListener)
+			SudokuCanvas canvas, SudokuUiManager actionListener)
 	{
 		this.canvas = canvas;
 		this.actionListener = actionListener;
