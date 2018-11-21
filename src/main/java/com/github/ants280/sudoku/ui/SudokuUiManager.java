@@ -10,8 +10,10 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 import javax.swing.AbstractButton;
-import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -247,50 +249,6 @@ public class SudokuUiManager implements ActionListener
 				JOptionPane.INFORMATION_MESSAGE);
 	}
 
-	private void setPossibleValue()
-	{
-		Integer r = sudokuDisplayComponent.getSelectedRow();
-		Integer c = sudokuDisplayComponent.getSelectedCol();
-		if (r != null && c != null
-				&& board.getSudokuCell(r, c).getValue() == null)
-		{
-			JDialog dialog = new JDialog(frame, "[possible values]", true);
-
-			JPanel possibleValueButtonsPanel = new JPanel(new GridLayout(3, 3));
-			SudokuCell selectedSudokuCell = board.getSudokuCell(r, c);
-			for (int i = 1; i <= 9; i++)
-			{
-				int j = i;
-				AbstractButton possibleValueButton = new JToggleButton(
-						String.valueOf(i),
-						selectedSudokuCell.getPossibleValues().contains(i));
-
-				possibleValueButton.addActionListener(actionEvent
-						->
-				{
-					boolean possibleValueChanged
-							= selectedSudokuCell.getPossibleValues().contains(j)
-							? board.removePossibleValue(r, c, j)
-							: board.addPossibleValue(r, c, j);
-
-					if (possibleValueChanged)
-					{
-						sudokuDisplayComponent.repaint();
-					}
-				});
-
-				possibleValueButtonsPanel.add(possibleValueButton);
-			}
-
-			dialog.add(new JLabel("Select possible cell values"), BorderLayout.NORTH);
-			dialog.add(possibleValueButtonsPanel, BorderLayout.CENTER);
-			dialog.pack();
-			dialog.setResizable(false);
-			dialog.setLocationRelativeTo(frame);
-			dialog.setVisible(true);
-		}
-	}
-
 	private void selectCell(int x, int y)
 	{
 		sudokuDisplayComponent.selectCellFromCoordinates(x, y);
@@ -319,32 +277,73 @@ public class SudokuUiManager implements ActionListener
 		}
 	}
 
-	// TODO: combine code with setPossibleValue(), but distinguish possible values from normal ones
 	private void setValue()
+	{
+		showValueDialog(
+				"[value]",
+				"Select cell value",
+				sudokuCell -> true,
+				(selectedSudokuCell, v)
+				-> !v.equals(selectedSudokuCell.getValue()),
+				this::changeCellValue,
+				true);
+	}
+
+	private void setPossibleValue()
+	{
+		showValueDialog(
+				"[possible values]",
+				"Select possible\n"
+				+ "cell values",
+				sudokuCell -> sudokuCell.getValue() == null,
+				(selectedSudokuCell, v)
+				-> selectedSudokuCell.getPossibleValues().contains(v),
+				this::changePossibleCellValue,
+				false);
+	}
+
+	private void showValueDialog(
+			String dialogTitle,
+			String dialogMessage,
+			Function<SudokuCell, Boolean> canSetValueFunction,
+			BiFunction<SudokuCell, Integer, Boolean> buttonSelectedFunction,
+			BiConsumer<SudokuCell, Integer> valueClickConsumer,
+			boolean closeOnDialogOnButtonClick)
 	{
 		Integer r = sudokuDisplayComponent.getSelectedRow();
 		Integer c = sudokuDisplayComponent.getSelectedCol();
-		if (r != null && c != null)
+		if (r != null && c != null
+				&& canSetValueFunction.apply(board.getSudokuCell(r, c)))
 		{
-			JDialog dialog = new JDialog(frame, "[value]", true);
+			JDialog dialog = new JDialog(frame, dialogTitle, true);
 
 			JPanel possibleValueButtonsPanel = new JPanel(new GridLayout(3, 3));
 			SudokuCell selectedSudokuCell = board.getSudokuCell(r, c);
 			for (int i = 1; i <= 9; i++)
 			{
 				Integer v = i;
-				AbstractButton valueButton = new JButton(
-						String.valueOf(i));
-				valueButton.setEnabled(
-						!v.equals(selectedSudokuCell.getValue()));
+				AbstractButton valueButton = new JToggleButton(
+						String.valueOf(i),
+						buttonSelectedFunction
+								.apply(selectedSudokuCell, v));
 
-				valueButton.addActionListener(
-						actionEvent -> changeValue(r, c, v, dialog));
+				valueButton.addActionListener(actionEvent ->
+				{
+					valueClickConsumer.accept(selectedSudokuCell, v);
+
+					if (closeOnDialogOnButtonClick)
+					{
+						dialog.setVisible(false);
+					}
+				});
 
 				possibleValueButtonsPanel.add(valueButton);
 			}
 
-			dialog.add(new JLabel("Select cell value"), BorderLayout.NORTH);
+			String htmlDialogMessage = String.format(
+					"<html>%s</html>",
+					dialogMessage.replaceAll("\n", "<br>"));
+			dialog.add(new JLabel(htmlDialogMessage), BorderLayout.NORTH);
 			dialog.add(possibleValueButtonsPanel, BorderLayout.CENTER);
 			dialog.pack();
 			dialog.setResizable(false);
@@ -353,11 +352,10 @@ public class SudokuUiManager implements ActionListener
 		}
 	}
 
-	private void changeValue(Integer r, Integer c, Integer v, JDialog dialog)
+	private void changeCellValue(SudokuCell sudokuCell, Integer v)
 	{
-		boolean valueChanged = board.getSudokuCell(r, c).setValue(v);
+		boolean valueChanged = sudokuCell.setValue(v);
 
-		dialog.setVisible(false);
 		if (valueChanged)
 		{
 			sudokuDisplayComponent.repaint();
@@ -366,6 +364,19 @@ public class SudokuUiManager implements ActionListener
 			{
 				this.endGame();
 			}
+		}
+	}
+
+	private void changePossibleCellValue(SudokuCell sudokuCell, Integer v)
+	{
+		boolean possibleValueChanged
+				= sudokuCell.getPossibleValues().contains(v)
+				? sudokuCell.removePossibleValue(v)
+				: sudokuCell.addPossibleValue(v);
+
+		if (possibleValueChanged)
+		{
+			sudokuDisplayComponent.repaint();
 		}
 	}
 
@@ -442,5 +453,11 @@ public class SudokuUiManager implements ActionListener
 				null, // Icon
 				null, // selectionValues (null implies textbox
 				board.toString());
+	}
+
+	@FunctionalInterface
+	private interface RowColumnValueConsumer
+	{
+		void accept(int r, int c, int v);
 	}
 }

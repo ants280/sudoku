@@ -3,7 +3,6 @@ package com.github.ants280.sudoku.game;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Set;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -121,43 +120,6 @@ public class SudokuBoard
 		validateCoords(r, c);
 
 		return board[r][c];
-	}
-
-	/**
-	 * @param r The row of the SudokuCell
-	 * @param c The column of the SudokuCell
-	 * @param value The value to add to the the possible values of the
-	 * SudokuCell
-	 * @return Whether or not the value was successfully removed from the
-	 * possible values.
-	 */
-	public boolean addPossibleValue(int r, int c, Integer value)
-	{
-		return changePossibleValue(
-				r, c, value,
-				SudokuCell::addPossibleValue);
-	}
-
-	/**
-	 * @param r The row of the SudokuCell
-	 * @param c The column of the SudokuCell
-	 * @param value The value to remove the the possible values of the
-	 * SudokuCell
-	 * @return Whether or not the value was successfully removed from the
-	 * possible values.
-	 */
-	public boolean removePossibleValue(int r, int c, Integer value)
-	{
-		return changePossibleValue(
-				r, c, value,
-				SudokuCell::removePossibleValue);
-	}
-
-	private boolean changePossibleValue(
-			int r, int c, Integer value,
-			BiFunction<SudokuCell, Integer, Boolean> changePossibleValueFunction)
-	{
-		return changePossibleValueFunction.apply(getSudokuCell(r, c), value);
 	}
 
 	public int getGroupNumber(int r, int c)
