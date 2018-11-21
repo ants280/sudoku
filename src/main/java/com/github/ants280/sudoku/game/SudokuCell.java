@@ -35,14 +35,15 @@ public abstract class SudokuCell
 	 * @return Whether or not the possible value was added (and was not already
 	 * present).
 	 */
-	public abstract boolean addPossibleValue(int value); // TODO: The possibleValue methods are only aplicable to MutableSudokuCell maybe put these methods theer?
+	public abstract boolean addPossibleValue(int value);
 
 	public final boolean isEmpty()
 	{
 		return getValue() == null;
 	}
 
-	protected static void validateValue(Integer value) throws IllegalArgumentException
+	protected static void validateValue(Integer value)
+			throws IllegalArgumentException
 	{
 		if (value != null && !LEGAL_CELL_VALUES.contains(value))
 		{
