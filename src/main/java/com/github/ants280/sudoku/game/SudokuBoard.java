@@ -1,7 +1,10 @@
 package com.github.ants280.sudoku.game;
 
+import static com.github.ants280.sudoku.game.SectionType.*;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.EnumMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -10,12 +13,16 @@ import java.util.stream.Stream;
 
 public class SudokuBoard
 {
-// TODO: Refactor idea: store board as rows, columns, and groups.  This would make indexing much more simple and setting slightly more complex (and storage space * 3).
-	private final SudokuCell[][] board;
+	private Map<SectionType, SudokuCell[][]> sectionTypeCells;
 
 	public SudokuBoard(String boardString)
 	{
-		this.board = fromString(boardString);
+		this.sectionTypeCells = new EnumMap(SectionType.class);
+
+		SudokuCell[][] boardRows = getBoardRowsFromString(boardString);
+		sectionTypeCells.put(ROW, boardRows);
+		sectionTypeCells.put(COL, getBoardColsFromBoardRows(boardRows));
+		sectionTypeCells.put(ROW, getBoardGroupsFromBoardRows(boardRows));
 	}
 
 	public SudokuBoard()
@@ -53,7 +60,7 @@ public class SudokuBoard
 	@Override
 	public String toString()
 	{
-		String boardValues = Arrays.stream(board)
+		String boardValues = Arrays.stream(sectionTypeCells.get(ROW))
 				.flatMap(Arrays::stream)
 				.map(this::getCellValue)
 				.map(String::valueOf)
@@ -62,7 +69,7 @@ public class SudokuBoard
 		return "{" + boardValues + "}";
 	}
 
-	private static SudokuCell[][] fromString(String boardString)
+	private static SudokuCell[][] getBoardRowsFromString(String boardString)
 	{
 		if (!isValidSavedBoard(boardString))
 		{
@@ -82,6 +89,46 @@ public class SudokuBoard
 				: new ImmutableSudokuCell(cellValue))
 				.toArray(SudokuCell[]::new))
 				.toArray(SudokuCell[][]::new);
+	}
+
+	private static SudokuCell[][] getBoardColsFromBoardRows(
+			SudokuCell[][] boardRows)
+	{
+		return IntStream.range(0, 9)
+				.mapToObj(c -> IntStream.range(0, 9)
+				.mapToObj(r -> boardRows[r][c])
+				.toArray(SudokuCell[]::new))
+				.toArray(SudokuCell[][]::new);
+	}
+
+	private static SudokuCell[][] getBoardGroupsFromBoardRows(
+			SudokuCell[][] boardRows)
+	{
+//		int startingRow = (3 * (groupNumber / 3));
+//		int startingCol = (3 * (groupNumber % 3));
+//		Function<Integer, Integer> startingRow = groupNumber -> (3 * (groupNumber / 3));
+//		Function<Integer, Integer> startingCol = groupNumber -> (3 * (groupNumber % 3));
+		return IntStream.range(0, 9)
+				.mapToObj(g -> IntStream.range((3 * (g / 3)), (3 * (g / 3)) + 3)
+				.mapToObj(r -> IntStream.range((3 * (g % 3)), (3 * (g % 3)) + 3)
+				//				.mapToObj(groupNumber -> IntStream.range(startingRow(groupNumber), startingRow(groupNumber) + 3)
+				//				.mapToObj(r -> IntStream.range(startingCol(groupNumber), startingCol(groupNumber) + 3)
+				.mapToObj(c -> boardRows[r][c]))
+				.flatMap(Function.identity())
+				.toArray(SudokuCell[]::new))
+				.toArray(SudokuCell[][]::new);
+		/*
+		int startingRow = 3 * (groupNumber / 3);
+		int startingCol = 3 * (groupNumber % 3);
+
+		return IntStream.range(startingRow, startingRow + 3)
+				.mapToObj(r -> IntStream.range(startingCol, startingCol + 3)
+				.filter(c -> rowNumber == null || colNumber == null
+				|| r != rowNumber || c != colNumber)
+				.mapToObj(c -> this.getSudokuCell(ROW, r, c)))
+				.flatMap(Function.identity())
+				.collect(Collectors.toList())
+		 */
 	}
 
 	public static boolean isValidSavedBoard(String boardString)
@@ -115,11 +162,25 @@ public class SudokuBoard
 		return sudokuCell.getValue();
 	}
 
+	/**
+	 * @param r The row of the SudokuCell
+	 * @param c The column of the SudokuCell
+	 * @return The SudokuCell with the specified coordinates.
+	 * @deprecated Use {@link com.github.ants280.sudoku.game.SudokuCell#g}
+	 */
+	@Deprecated
 	public SudokuCell getSudokuCell(int r, int c)
 	{
 		validateCoords(r, c);
 
-		return board[r][c];
+		return getSudokuCell(ROW, r, c);
+	}
+
+	public SudokuCell getSudokuCell(SectionType sectionType, int r, int c)
+	{
+		validateCoords(r, c);
+
+		return sectionTypeCells.get(sectionType)[r][c];
 	}
 
 	public int getGroupNumber(int r, int c)
@@ -150,7 +211,7 @@ public class SudokuBoard
 				.mapToObj(r -> IntStream.range(startingCol, startingCol + 3)
 				.filter(c -> rowNumber == null || colNumber == null
 				|| r != rowNumber || c != colNumber)
-				.mapToObj(c -> board[r][c]))
+				.mapToObj(c -> this.getSudokuCell(ROW, r, c)))
 				.flatMap(Function.identity())
 				.collect(Collectors.toList());
 	}
@@ -181,7 +242,7 @@ public class SudokuBoard
 
 		return IntStream.range(0, 9)
 				.filter(c -> colNumber == null || c != colNumber)
-				.mapToObj(c -> board[rowNumber][c])
+				.mapToObj(c -> this.getSudokuCell(ROW, rowNumber, c))
 				.collect(Collectors.toList());
 	}
 
@@ -211,7 +272,7 @@ public class SudokuBoard
 
 		return IntStream.range(0, 9)
 				.filter(r -> rowNumber == null || r != rowNumber)
-				.mapToObj(r -> board[r][colNumber])
+				.mapToObj(r -> this.getSudokuCell(ROW, r, colNumber))
 				.collect(Collectors.toList());
 	}
 
@@ -283,8 +344,10 @@ public class SudokuBoard
 
 		Stream<SudokuCell> sudokuCellsInGroupSectionStream
 				= (sectionType == SectionType.ROW)
-						? IntStream.range(c, c + 3).mapToObj(c2 -> board[r][c2])
-						: IntStream.range(r, r + 3).mapToObj(r2 -> board[r2][c]);
+						? IntStream.range(c, c + 3)
+								.mapToObj(c2 -> this.getSudokuCell(ROW, r, c2))
+						: IntStream.range(r, r + 3)
+								.mapToObj(r2 -> this.getSudokuCell(ROW, r2, c));
 
 		return sudokuCellsInGroupSectionStream.collect(Collectors.toSet());
 	}
