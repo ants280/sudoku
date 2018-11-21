@@ -146,21 +146,6 @@ public class SudokuBoard
 		return sudokuCell.getValue();
 	}
 
-	/**
-	 * @param r The row of the SudokuCell
-	 * @param c The column of the SudokuCell
-	 * @return The SudokuCell with the specified coordinates.
-	 * @deprecated Use {@link com.github.ants280.sudoku.game.SudokuBoard#getSudokuCell(com.github.ants280.sudoku.game.SectionType, int, int)
-	 * }
-	 */
-	@Deprecated
-	public SudokuCell getSudokuCell(int r, int c)
-	{
-		validateCoords(r, c);
-
-		return getSudokuCell(ROW, r, c);
-	}
-
 	public SudokuCell getSudokuCell(SectionType sectionType, int r, int c)
 	{
 		validateCoords(r, c);
