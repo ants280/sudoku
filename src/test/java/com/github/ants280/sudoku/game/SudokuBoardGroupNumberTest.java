@@ -21,7 +21,8 @@ public class SudokuBoardGroupNumberTest
 		this.expectedGroupNumber = expectedGroupNumber;
 	}
 
-	@Parameters(name = "{index}: SudokuBoard.getGroupNumber(r:{0}, c:{1}) = expectedGroupNumber:{2}")
+	@Parameters(name = "{index}: SudokuBoard.getGroupNumber(r:{0}, c:{1})"
+			+ " = expectedGroupNumber:{2}")
 	public static Iterable<Object[]> data()
 	{
 		return Arrays.asList(
@@ -108,7 +109,10 @@ public class SudokuBoardGroupNumberTest
 				createTestCase(8, 8, 8));
 	}
 
-	private static Object[] createTestCase(int r, int c, int expectedGroupNumber)
+	private static Object[] createTestCase(
+			int r,
+			int c,
+			int expectedGroupNumber)
 	{
 		return new Object[]
 		{
