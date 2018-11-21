@@ -17,7 +17,7 @@ public class SudokuBoard
 
 	public SudokuBoard(String boardString)
 	{
-		this.sectionTypeCells = new EnumMap(SectionType.class);
+		this.sectionTypeCells = new EnumMap<>(SectionType.class);
 
 		SudokuCell[][] boardRows = getBoardRowsFromString(boardString);
 		sectionTypeCells.put(ROW, boardRows);
@@ -106,8 +106,8 @@ public class SudokuBoard
 	{
 //		int startingRow = (3 * (groupNumber / 3));
 //		int startingCol = (3 * (groupNumber % 3));
-//		Function<Integer, Integer> startingRow = groupNumber -> (3 * (groupNumber / 3));
-//		Function<Integer, Integer> startingCol = groupNumber -> (3 * (groupNumber % 3));
+		Function<Integer, Integer> startingRow = groupNumber -> (3 * (groupNumber / 3));
+		Function<Integer, Integer> startingCol = groupNumber -> (3 * (groupNumber % 3));
 		return IntStream.range(0, 9)
 				.mapToObj(g -> IntStream.range((3 * (g / 3)), (3 * (g / 3)) + 3)
 				.mapToObj(r -> IntStream.range((3 * (g % 3)), (3 * (g % 3)) + 3)
@@ -117,18 +117,6 @@ public class SudokuBoard
 				.flatMap(Function.identity())
 				.toArray(SudokuCell[]::new))
 				.toArray(SudokuCell[][]::new);
-		/*
-		int startingRow = 3 * (groupNumber / 3);
-		int startingCol = 3 * (groupNumber % 3);
-
-		return IntStream.range(startingRow, startingRow + 3)
-				.mapToObj(r -> IntStream.range(startingCol, startingCol + 3)
-				.filter(c -> rowNumber == null || colNumber == null
-				|| r != rowNumber || c != colNumber)
-				.mapToObj(c -> this.getSudokuCell(ROW, r, c)))
-				.flatMap(Function.identity())
-				.collect(Collectors.toList())
-		 */
 	}
 
 	public static boolean isValidSavedBoard(String boardString)
