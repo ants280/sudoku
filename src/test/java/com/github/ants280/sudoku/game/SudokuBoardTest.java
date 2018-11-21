@@ -180,10 +180,10 @@ public class SudokuBoardTest
 				+ "000009000}";
 		SudokuBoard board = new SudokuBoard(boardString);
 
-		Set<Integer> unusedValuesForRow = board.getUnusedValuesForCol(5);
+		Set<Integer> unusedValuesForCol = board.getUnusedValuesForCol(5);
 
-		assertSame(1, unusedValuesForRow.size());
-		assertTrue(unusedValuesForRow.contains(3));
+		assertSame(1, unusedValuesForCol.size());
+		assertTrue(unusedValuesForCol.contains(3));
 	}
 
 	@Test
