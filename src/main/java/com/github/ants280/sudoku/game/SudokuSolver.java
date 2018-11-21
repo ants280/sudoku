@@ -1,5 +1,6 @@
 package com.github.ants280.sudoku.game;
 
+import static com.github.ants280.sudoku.game.SectionType.ROW;
 import com.github.ants280.sudoku.ui.Sudoku;
 import java.util.Collection;
 import java.util.HashSet;
@@ -42,7 +43,7 @@ public class SudokuSolver
 		{
 			for (int c = 0; c < 9; c++)
 			{
-				board.getSudokuCell(r, c).resetPossibleValues();
+				board.getSudokuCell(ROW, r, c).resetPossibleValues();
 			}
 		}
 	}
@@ -53,7 +54,7 @@ public class SudokuSolver
 		{
 			for (int c = 0; c < 9; c++)
 			{
-				SudokuCell sudokuCell = board.getSudokuCell(r, c);
+				SudokuCell sudokuCell = board.getSudokuCell(SectionType.ROW, r, c);
 				if (sudokuCell.getValue() == null)
 				{
 					int groupNumber = board.getGroupNumber(r, c);
@@ -77,7 +78,7 @@ public class SudokuSolver
 		{
 			for (int c = 0; c < 9; c++)
 			{
-				final SudokuCell sudokuCell = board.getSudokuCell(r, c);
+				final SudokuCell sudokuCell = board.getSudokuCell(SectionType.ROW, r, c);
 				if (sudokuCell.getValue() == null)
 				{
 					if (sudokuCell.getPossibleValues().size() == 1) // level 1
@@ -309,7 +310,7 @@ public class SudokuSolver
 
 	private void setValue(int r, int c, Integer value)
 	{
-		board.getSudokuCell(r, c).setValue(value);
+		board.getSudokuCell(SectionType.ROW, r, c).setValue(value);
 
 		board.getOtherSudokuCellsForRow(r, c)
 				.forEach(sudokuCell -> sudokuCell.removePossibleValue(value));

@@ -1,6 +1,7 @@
 package com.github.ants280.sudoku.ui;
 
 import com.github.ants280.sudoku.game.ImmutableSudokuCell;
+import static com.github.ants280.sudoku.game.SectionType.ROW;
 import com.github.ants280.sudoku.game.SudokuBoard;
 import com.github.ants280.sudoku.game.SudokuCell;
 import java.awt.Color;
@@ -121,9 +122,10 @@ public class SudokuDisplayComponent extends JComponent
 		}
 	}
 
+	// TODO : Do all painting in this class by col then row.
 	private void paintCell(int row, int col, Graphics graphics)
 	{
-		SudokuCell sudokuCell = board.getSudokuCell(row, col);
+		SudokuCell sudokuCell = board.getSudokuCell(ROW, row, col);
 		if (sudokuCell.getValue() != null)
 		{
 			graphics.setColor(sudokuCell instanceof ImmutableSudokuCell
@@ -322,7 +324,7 @@ public class SudokuDisplayComponent extends JComponent
 	{
 		if (selectedRow != null && selectedCol != null)
 		{
-			board.getSudokuCell(selectedRow, selectedCol)
+			board.getSudokuCell(ROW, selectedRow, selectedCol)
 					.setValue(cellValue == 0 ? null : cellValue);
 			this.repaint();
 		}
