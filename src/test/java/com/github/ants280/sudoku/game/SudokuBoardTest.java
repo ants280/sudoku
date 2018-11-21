@@ -1,5 +1,6 @@
 package com.github.ants280.sudoku.game;
 
+import static com.github.ants280.sudoku.game.SectionType.*;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -57,7 +58,7 @@ public class SudokuBoardTest
 		int c = 6;
 		Integer value = 4;
 
-		Integer actualValue = board.getSudokuCell(r, c).getValue();
+		Integer actualValue = board.getSudokuCell(ROW, r, c).getValue();
 
 		assertEquals(value, actualValue);
 	}
@@ -70,8 +71,8 @@ public class SudokuBoardTest
 		int c = 6;
 		Integer value = 4;
 
-		board.getSudokuCell(r, c).setValue(value);
-		Integer actualValue = board.getSudokuCell(r, c).getValue();
+		board.getSudokuCell(ROW, r, c).setValue(value);
+		Integer actualValue = board.getSudokuCell(ROW, r, c).getValue();
 
 		assertEquals(value, actualValue);
 	}
