@@ -9,11 +9,14 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.function.BiConsumer;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JSlider;
@@ -27,13 +30,14 @@ public class SudokuSolverPopup implements ActionListener, ChangeListener
 	private final SudokuBoard sudokuBoard;
 	private final SudokuSolver sudokuSolver;
 	private final JDialog popupDialog;
-	private final Timer timer;
 	private final JSlider timerSlider;
+	private final Timer timer;
 	private final JProgressBar progressBar;
 	private final JButton startStopButton;
 	private static final String ACTION_TIMER = "timer";
 	private static final String BUTTON_START = "Start";
 	private static final String BUTTON_STOP = "Stop";
+	private static final int SLIDER_MULTIPLIER = 250;
 
 	public SudokuSolverPopup(
 			JFrame popupOwner,
@@ -47,9 +51,10 @@ public class SudokuSolverPopup implements ActionListener, ChangeListener
 				setValueConsumer,
 				toggleSudokuCellPossibleValue);
 		this.popupDialog = new JDialog(popupOwner, "Solver", true);
-		int delay = 1_000;
-		this.timer = new Timer(delay, null);
-		this.timerSlider = new JSlider(SwingConstants.HORIZONTAL, 250, 10_000, delay);
+		this.timerSlider = new JSlider(SwingConstants.HORIZONTAL, 0, 40, 4);
+		this.timer = new Timer(
+				timerSlider.getValue() * SLIDER_MULTIPLIER,
+				null);
 		this.progressBar = new JProgressBar();
 		this.startStopButton = new JButton(BUTTON_START);
 
@@ -58,15 +63,24 @@ public class SudokuSolverPopup implements ActionListener, ChangeListener
 
 	private void init()
 	{
-		timer.setInitialDelay(timer.getDelay());
-		timer.setActionCommand(ACTION_TIMER);
-		timer.addActionListener(this);
-
-		timerSlider.setMajorTickSpacing(1_000);
-		timerSlider.setMinorTickSpacing(250);
+		timerSlider.setMajorTickSpacing(4);
+		timerSlider.setMinorTickSpacing(1);
 		timerSlider.setSnapToTicks(true);
 		timerSlider.setPaintTicks(true);
 		timerSlider.addChangeListener(this);
+		//Create the label table
+		Dictionary<Integer, JLabel> labelTable = new Hashtable<>();
+		for (int i = timerSlider.getMinimum();
+				i <= timerSlider.getMaximum();
+				i++)
+		{
+			labelTable.put(i, new JLabel(String.format("%02f", i / 4d)));
+		}
+		timerSlider.setLabelTable(labelTable);
+
+		timer.setInitialDelay(timer.getDelay());
+		timer.setActionCommand(ACTION_TIMER);
+		timer.addActionListener(this);
 
 		this.updateProgressBar();
 
@@ -105,21 +119,17 @@ public class SudokuSolverPopup implements ActionListener, ChangeListener
 	{
 		switch (actionEvent.getActionCommand())
 		{
-//			case ACTION_BUTTON_CLICK:
-//				if (timer.isRunning())
-//				{
-//					timer.stop();
-//					startStopButton.setText(BUTTON_START);
-//				}
-//				else
-//				{
-//					timer.start();
-//					startStopButton.setText(BUTTON_STOP);
-//				}
-//				break;
 			case BUTTON_START:
-				timer.start();
-				startStopButton.setText(BUTTON_STOP);
+				if (timerSlider.getValue() == 0)
+				{
+					sudokuSolver.solveFast();
+					popupDialog.setVisible(false);
+				}
+				else
+				{
+					timer.start();
+					startStopButton.setText(BUTTON_STOP);
+				}
 				break;
 			case BUTTON_STOP:
 				timer.stop();
@@ -141,7 +151,7 @@ public class SudokuSolverPopup implements ActionListener, ChangeListener
 	@Override
 	public void stateChanged(ChangeEvent changeEvent)
 	{
-		timer.setDelay(timerSlider.getValue());
+		timer.setDelay(timerSlider.getValue() * SLIDER_MULTIPLIER);
 	}
 
 	private static class CancelTimerWindowListener
