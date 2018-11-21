@@ -1,7 +1,6 @@
 package com.github.ants280.sudoku.ui;
 
 import com.github.ants280.sudoku.game.ImmutableSudokuCell;
-import static com.github.ants280.sudoku.game.SectionType.ROW;
 import com.github.ants280.sudoku.game.SudokuBoard;
 import com.github.ants280.sudoku.game.SudokuCell;
 import java.awt.Color;
@@ -78,14 +77,6 @@ public class SudokuDisplayComponent extends JComponent
 
 			this.repaint();
 		}
-
-//		float fontSize = (float) (minDimension / (grid.getLength() * 3d));
-//
-//		if (tileFont.getSize2D() != fontSize)
-//		{
-//			tileFont = tileFont.deriveFont(fontSize);
-//			this.repaint();
-//		}
 	}
 
 	@Override
@@ -94,7 +85,8 @@ public class SudokuDisplayComponent extends JComponent
 		((Graphics2D) graphics).setRenderingHints(ANTIALIAS_ON_RENDERING_HINT);
 
 		this.paintSelectedCellBackground(graphics);
-		this.paintCells(graphics);
+		board.getAllSudokuCells()
+				.forEach(sudokuCell -> this.paintCell(sudokuCell, graphics));
 		this.paintLines(graphics);
 	}
 
@@ -111,21 +103,8 @@ public class SudokuDisplayComponent extends JComponent
 		}
 	}
 
-	private void paintCells(Graphics graphics)
+	private void paintCell(SudokuCell sudokuCell, Graphics graphics)
 	{
-		for (int row = 0; row < 9; row++)
-		{
-			for (int col = 0; col < 9; col++)
-			{
-				this.paintCell(row, col, graphics);
-			}
-		}
-	}
-
-	// TODO : Do all painting in this class by col then row.
-	private void paintCell(int row, int col, Graphics graphics)
-	{
-		SudokuCell sudokuCell = board.getSudokuCell(ROW, row, col);
 		if (sudokuCell.getValue() != null)
 		{
 			graphics.setColor(sudokuCell instanceof ImmutableSudokuCell
@@ -134,8 +113,8 @@ public class SudokuDisplayComponent extends JComponent
 			int fontHeightPx = (int) (valueFont.getSize() * 0.75d);
 			FontMetrics fontMetrics = graphics.getFontMetrics();
 			int charWidth = getFontWidth(fontMetrics, sudokuCell.getValue());
-			int colOffset = (int) (xOffset + (cellLength * (col + 0.5d)) - (charWidth / 2d));
-			int rowOffset = (int) (yOffset + (cellLength * (row + 0.5d)) + (fontHeightPx / 2d));
+			int colOffset = (int) (xOffset + (cellLength * (sudokuCell.getColumnNumber() + 0.5d)) - (charWidth / 2d));
+			int rowOffset = (int) (yOffset + (cellLength * (sudokuCell.getRowNumber() + 0.5d)) + (fontHeightPx / 2d));
 
 			graphics.drawString(
 					sudokuCell.getValue().toString(), colOffset, rowOffset);
@@ -151,8 +130,7 @@ public class SudokuDisplayComponent extends JComponent
 
 				sudokuCell.getPossibleValues()
 						.forEach(possibleValue -> this.paintPossibleCellValue(
-						row,
-						col,
+						sudokuCell,
 						possibleValue,
 						graphics,
 						fontMetrics,
@@ -162,16 +140,15 @@ public class SudokuDisplayComponent extends JComponent
 	}
 
 	private void paintPossibleCellValue(
-			int row,
-			int col,
+			SudokuCell sudokuCell,
 			Integer possibleValue,
 			Graphics graphics,
 			FontMetrics fontMetrics,
 			int fontHeightPx)
 	{
 		int charWidth = fontMetrics.stringWidth(possibleValue.toString());
-		double colPercentage = col + ((1 + (2 * ((possibleValue - 1) % 3))) / 6d);
-		double rowPercentage = row + ((1 + (2 * ((possibleValue - 1) / 3))) / 6d);
+		double colPercentage = sudokuCell.getColumnNumber() + ((1 + (2 * ((possibleValue - 1) % 3))) / 6d);
+		double rowPercentage = sudokuCell.getRowNumber() + ((1 + (2 * ((possibleValue - 1) / 3))) / 6d);
 		int colOffset = (int) (xOffset + cellLength * colPercentage
 				- (charWidth / 2d));
 		int rowOffset = (int) (yOffset + cellLength * rowPercentage

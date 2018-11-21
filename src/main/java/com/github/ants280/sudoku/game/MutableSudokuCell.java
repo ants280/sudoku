@@ -2,6 +2,7 @@ package com.github.ants280.sudoku.game;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 public class MutableSudokuCell extends SudokuCell
@@ -9,12 +10,10 @@ public class MutableSudokuCell extends SudokuCell
 	private Integer value;
 	private final Set<Integer> possibleValues;
 
-	/**
-	 * Creates a new MutableSudokuCel with no value and an empty set of possible
-	 * values.
-	 */
-	public MutableSudokuCell()
+	public MutableSudokuCell(int rowNumber, int columnNumber, int groupNumber)
 	{
+		super(rowNumber, columnNumber, groupNumber);
+
 		this.value = null;
 		this.possibleValues = new HashSet<>();
 	}
@@ -66,5 +65,41 @@ public class MutableSudokuCell extends SudokuCell
 		SudokuCell.validateValue(value);
 
 		return possibleValues.add(value);
+	}
+
+	@Override
+	public int hashCode()
+	{
+		int hash = 5;
+		hash = 83 * hash + Objects.hashCode(this.value);
+		hash = 83 * hash + Objects.hashCode(this.possibleValues);
+		return hash;
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (this == obj)
+		{
+			return true;
+		}
+		if (obj == null)
+		{
+			return false;
+		}
+		if (getClass() != obj.getClass())
+		{
+			return false;
+		}
+		final MutableSudokuCell other = (MutableSudokuCell) obj;
+		if (!Objects.equals(this.value, other.value))
+		{
+			return false;
+		}
+		if (!Objects.equals(this.possibleValues, other.possibleValues))
+		{
+			return false;
+		}
+		return true;
 	}
 }

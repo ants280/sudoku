@@ -2,7 +2,9 @@ package com.github.ants280.sudoku.game;
 
 import static com.github.ants280.sudoku.game.SectionType.*;
 import java.util.Arrays;
-import static org.junit.Assert.*;
+import java.util.List;
+import java.util.stream.Collectors;
+import org.junit.Assert;
 import org.junit.Test;
 
 public class SudokuBoardTest
@@ -12,7 +14,7 @@ public class SudokuBoardTest
 	{
 		SudokuBoard board = new SudokuBoard("{123456789}");
 
-		fail("The following sudkuBoard should be invalid because it is too small: " + board);
+		Assert.fail("The following sudkuBoard should be invalid because it is too small: " + board);
 	}
 
 	@Test
@@ -34,7 +36,7 @@ public class SudokuBoardTest
 		String actualBoardString = board.toString();
 		String expectedBoardString = boardValue;
 
-		assertEquals(expectedBoardString, actualBoardString);
+		Assert.assertEquals(expectedBoardString, actualBoardString);
 	}
 
 	@Test
@@ -55,9 +57,9 @@ public class SudokuBoardTest
 		int c = 6;
 		Integer value = 4;
 
-		Integer actualValue = board.getSudokuCell(ROW, r, c).getValue();
+		Integer actualValue = board.getSudokuCell(r, c).getValue();
 
-		assertEquals(value, actualValue);
+		Assert.assertEquals(value, actualValue);
 	}
 
 	@Test
@@ -68,10 +70,10 @@ public class SudokuBoardTest
 		int c = 6;
 		Integer value = 4;
 
-		board.getSudokuCell(ROW, r, c).setValue(value);
-		Integer actualValue = board.getSudokuCell(ROW, r, c).getValue();
+		board.getSudokuCell(r, c).setValue(value);
+		Integer actualValue = board.getSudokuCell(r, c).getValue();
 
-		assertEquals(value, actualValue);
+		Assert.assertEquals(value, actualValue);
 	}
 
 	@Test
@@ -89,13 +91,10 @@ public class SudokuBoardTest
 				+ "000000000}";
 		SudokuBoard board = new SudokuBoard(boardString);
 
-		int[] expectedValues = new int[]
-		{
-			3, 8, 2, 4, 0, 1, 5, 6, 9
-		};
-		int[] actualValues = getValues(board.getSudokuCells(GROUP, 3));
+		List<Integer> expectedValues = Arrays.asList(3, 8, 2, 4, 0, 1, 5, 6, 9);
+		List<Integer> actualValues = getValues(board.getSudokuCells(GROUP, 3));
 
-		assertArrayEquals(expectedValues, actualValues);
+		Assert.assertEquals(expectedValues, actualValues);
 	}
 
 	@Test
@@ -113,18 +112,15 @@ public class SudokuBoardTest
 			"{000000000000000000000000000000000000000000000000000000000123000000456000000789000}",
 			"{000000000000000000000000000000000000000000000000000000000000123000000456000000789}"
 		};
-		int[] expectedValues = new int[]
-		{
-			1, 2, 3, 4, 5, 6, 7, 8, 9
-		};
+		List<Integer> expectedValues = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9);
 
 		for (int i = 0; i < 9; i++)
 		{
 			SudokuBoard board = new SudokuBoard(boardStrings[i]);
 
-			int[] actualValues = getValues(board.getSudokuCells(GROUP, i));
+			List<Integer> actualValues = getValues(board.getSudokuCells(GROUP, i));
 
-			assertArrayEquals(String.format(
+			Assert.assertEquals(String.format(
 					"Unused values found in group %d. BoardString = %s",
 					i,
 					boardStrings[i]),
@@ -148,13 +144,10 @@ public class SudokuBoardTest
 				+ "000000000}";
 		SudokuBoard board = new SudokuBoard(boardString);
 
-		int[] expectedValues = new int[]
-		{
-			1, 2, 3, 4, 0, 6, 7, 8, 9
-		};
-		int[] actualValues = getValues(board.getSudokuCells(ROW, 7));
+		List<Integer> expectedValues = Arrays.asList(1, 2, 3, 4, 0, 6, 7, 8, 9);
+		List<Integer> actualValues = getValues(board.getSudokuCells(ROW, 7));
 
-		assertArrayEquals(expectedValues, actualValues);
+		Assert.assertEquals(expectedValues, actualValues);
 	}
 
 	@Test
@@ -172,13 +165,10 @@ public class SudokuBoardTest
 				+ "000009000}";
 		SudokuBoard board = new SudokuBoard(boardString);
 
-		int[] expectedValues = new int[]
-		{
-			1, 2, 2, 4, 5, 6, 7, 8, 9
-		};
-		int[] actualValues = getValues(board.getSudokuCells(COL, 5));
+		List<Integer> expectedValues = Arrays.asList(1, 2, 2, 4, 5, 6, 7, 8, 9);
+		List<Integer> actualValues = getValues(board.getSudokuCells(COL, 5));
 
-		assertArrayEquals(expectedValues, actualValues);
+		Assert.assertEquals(expectedValues, actualValues);
 	}
 
 	@Test
@@ -196,7 +186,7 @@ public class SudokuBoardTest
 				+ "000000000}";
 		SudokuBoard board = new SudokuBoard(sudokuBoard);
 
-		assertFalse(board.isSolved());
+		Assert.assertFalse(board.isSolved());
 	}
 
 	@Test
@@ -214,7 +204,7 @@ public class SudokuBoardTest
 				+ "912345678}";
 		SudokuBoard board = new SudokuBoard(boardString);
 
-		assertTrue(board.isSolved());
+		Assert.assertTrue(board.isSolved());
 	}
 
 	@Test
@@ -232,15 +222,14 @@ public class SudokuBoardTest
 				+ "912345670}";
 		SudokuBoard board = new SudokuBoard(boardString);
 
-		assertFalse("8 is missing from the last cell", board.isSolved());
+		Assert.assertFalse("8 is missing from the last cell", board.isSolved());
 	}
 
-	private static int[] getValues(SudokuCell[] sudokuCells)
+	private static List<Integer> getValues(List<SudokuCell> sudokuCells)
 	{
-		return Arrays.stream(sudokuCells)
+		return sudokuCells.stream()
 				.map(SudokuCell::getValue)
 				.map(v -> v == null ? 0 : v)
-				.mapToInt(Integer::intValue)
-				.toArray();
+				.collect(Collectors.toList());
 	}
 }

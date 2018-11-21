@@ -1,31 +1,30 @@
 package com.github.ants280.sudoku.game;
 
 import static com.github.ants280.sudoku.game.SectionType.*;
+import com.github.ants280.sudoku.ui.Sudoku;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public class SudokuBoard
 {
 	private final List<SudokuCell> allSudokuCells;
-	private final Map<SectionType, SudokuCell[][]> sectionTypeCells;
+	private final Map<SectionType, Map<Integer, List<SudokuCell>>> sectionTypeCells;
 
 	public SudokuBoard(String boardString)
 	{
 		this.allSudokuCells = getAllSudokuCells(boardString);
 		this.sectionTypeCells = new EnumMap<>(SectionType.class);
 
-		SudokuCell[][] boardRows = getBoardRows(allSudokuCells);
-		sectionTypeCells.put(ROW, boardRows);
-		sectionTypeCells.put(COL, getBoardColsFromBoardRows(boardRows));
-		sectionTypeCells.put(GROUP, getBoardGroupsFromBoardRows(boardRows));
+		sectionTypeCells.put(ROW, allSudokuCells.stream().collect(Collectors.groupingBy(SudokuCell::getRowNumber)));
+		sectionTypeCells.put(COL, allSudokuCells.stream().collect(Collectors.groupingBy(SudokuCell::getColumnNumber)));
+		sectionTypeCells.put(GROUP, allSudokuCells.stream().collect(Collectors.groupingBy(SudokuCell::getGroupNumber)));
 	}
 
 	public SudokuBoard()
@@ -72,7 +71,6 @@ public class SudokuBoard
 		return "{" + boardValues + "}";
 	}
 
-	//<editor-fold defaultstate="collapsed" desc="static constructor helpers">
 	private static List<SudokuCell> getAllSudokuCells(String boardString)
 	{
 		if (!isValidSavedBoard(boardString))
@@ -80,51 +78,20 @@ public class SudokuBoard
 			throw new IllegalArgumentException("Illegal board: " + boardString);
 		}
 
-		return boardString.substring(1, boardString.length() - 1)
-				.chars()
-				.mapToObj(ch -> (char) ch)
-				.map(Character::valueOf)
-				.map(character -> character.toString())
-				.map(Integer::valueOf)
-				.map(cellValue -> cellValue == 0
-				? new MutableSudokuCell()
-				: new ImmutableSudokuCell(cellValue))
-				.collect(Collectors.toList());
+		SudokuCell[] allSudokuCells = new SudokuCell[81];
+		for (int i = 0; i < allSudokuCells.length; i++)
+		{
+			String cellValueString = String.valueOf(boardString.charAt(i + 1));
+			int cellValue = Integer.parseInt(cellValueString);
+			int rowNumber = i / 9;
+			int columnNumber = i % 9;
+			int groupNumber = ((rowNumber / 3) * 3) + (columnNumber / 3);
+			allSudokuCells[i] = (cellValue == 0)
+					? new MutableSudokuCell(rowNumber, columnNumber, groupNumber)
+					: new ImmutableSudokuCell(rowNumber, columnNumber, groupNumber, cellValue);
+		}
+		return Arrays.asList(allSudokuCells);
 	}
-
-	private static SudokuCell[][] getBoardRows(List<SudokuCell> sudokuCells)
-	{
-		return IntStream.range(0, 9)
-				.map(i -> i * 9)
-				.mapToObj(r -> sudokuCells.subList(r, r + 9))
-				.map(rowList -> rowList.stream().toArray(SudokuCell[]::new))
-				.toArray(SudokuCell[][]::new);
-	}
-
-	private static SudokuCell[][] getBoardColsFromBoardRows(
-			SudokuCell[][] boardRows)
-	{
-		return IntStream.range(0, 9)
-				.mapToObj(c -> IntStream.range(0, 9)
-				.mapToObj(r -> boardRows[r][c])
-				.toArray(SudokuCell[]::new))
-				.toArray(SudokuCell[][]::new);
-	}
-
-	private static SudokuCell[][] getBoardGroupsFromBoardRows(
-			SudokuCell[][] boardRows)
-	{
-		Function<Integer, Integer> _r = g -> (3 * (g / 3)); // starting row
-		Function<Integer, Integer> _c = g -> (3 * (g % 3)); // starting col
-		return IntStream.range(0, 9)
-				.mapToObj(g -> IntStream.range(_r.apply(g), _r.apply(g) + 3)
-				.mapToObj(r -> IntStream.range(_c.apply(g), _c.apply(g) + 3)
-				.mapToObj(c -> boardRows[r][c]))
-				.flatMap(Function.identity())
-				.toArray(SudokuCell[]::new))
-				.toArray(SudokuCell[][]::new);
-	}
-	//</editor-fold>
 
 	public void resetFrom(SudokuBoard other)
 	{
@@ -138,28 +105,33 @@ public class SudokuBoard
 		return Collections.unmodifiableList(allSudokuCells);
 	}
 
-	public SudokuCell getSudokuCell(SectionType sectionType, int r, int c)
+	public SudokuCell getSudokuCell(int r, int c)
 	{
 		validateCoords(r, c);
 
-		return sectionTypeCells.get(sectionType)[r][c];
+		if (Sudoku.DEBUG
+				&& sectionTypeCells.get(ROW).get(r).get(c).getRowNumber() != r
+				&& sectionTypeCells.get(ROW).get(r).get(c).getColumnNumber() != c)
+		{
+			throw new IllegalArgumentException("bad r/c: " + r + " " + c);
+		}
+
+		return sectionTypeCells.get(ROW).get(r).get(c);
 	}
 
-	public SudokuCell[] getSudokuCells(
+	public List<SudokuCell> getSudokuCells(
 			SectionType sectionType,
 			int sectionNumber)
 	{
 		validateCoords(sectionNumber);
 
-		return Arrays.copyOf(
-				sectionTypeCells.get(sectionType)[sectionNumber],
-				9);
+		return sectionTypeCells.get(sectionType).get(sectionNumber);
 	}
 
 	public boolean isSolved()
 	{
-		Predicate<SudokuCell[]> hasAllValues
-				= sudokuCells -> Arrays.stream(sudokuCells)
+		Predicate<List<SudokuCell>> hasAllValues
+				= sudokuCells -> sudokuCells.stream()
 						.map(SudokuCell::getValue)
 						.filter(v -> v != null)
 						.mapToInt(Integer::intValue)
@@ -168,15 +140,9 @@ public class SudokuBoard
 
 		return sectionTypeCells.values()
 				.stream()
-				.flatMap(Stream::of)
+				.map(Map::values)
+				.flatMap(Collection::stream)
 				.allMatch(hasAllValues);
-	}
-
-	public static int getGroupNumber(int r, int c)
-	{
-		validateCoords(r, c);
-
-		return ((r / 3) * 3) + (c / 3);
 	}
 
 	public static boolean isValidSavedBoard(String boardString)

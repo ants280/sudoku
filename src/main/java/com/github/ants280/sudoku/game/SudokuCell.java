@@ -10,6 +10,31 @@ public abstract class SudokuCell
 			= IntStream.rangeClosed(1, 9)
 					.boxed()
 					.collect(Collectors.toSet());
+	private final int rowNumber;
+	private final int columnNumber;
+	private final int groupNumber;
+
+	public SudokuCell(int rowNumber, int columnNumber, int groupNumber)
+	{
+		this.rowNumber = rowNumber;
+		this.columnNumber = columnNumber;
+		this.groupNumber = groupNumber;
+	}
+
+	public int getRowNumber()
+	{
+		return rowNumber;
+	}
+
+	public int getColumnNumber()
+	{
+		return columnNumber;
+	}
+
+	public int getGroupNumber()
+	{
+		return groupNumber;
+	}
 
 	public abstract Integer getValue();
 
@@ -36,11 +61,6 @@ public abstract class SudokuCell
 	 * present).
 	 */
 	public abstract boolean addPossibleValue(int value);
-
-	public final boolean isEmpty()
-	{
-		return getValue() == null;
-	}
 
 	protected static void validateValue(Integer value)
 			throws IllegalArgumentException

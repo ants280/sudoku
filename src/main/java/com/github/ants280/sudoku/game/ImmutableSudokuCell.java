@@ -7,8 +7,10 @@ public class ImmutableSudokuCell extends SudokuCell
 {
 	private final int value;
 
-	public ImmutableSudokuCell(int value)
+	public ImmutableSudokuCell(int rowNumber, int columnNumber, int groupNumber, int value)
 	{
+		super(rowNumber, columnNumber, groupNumber);
+
 		SudokuCell.validateValue(value);
 		this.value = value;
 	}
@@ -48,4 +50,36 @@ public class ImmutableSudokuCell extends SudokuCell
 	{
 		return false;
 	}
+
+	@Override
+	public int hashCode()
+	{
+		int hash = 7;
+		hash = 71 * hash + this.value;
+		return hash;
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (this == obj)
+		{
+			return true;
+		}
+		if (obj == null)
+		{
+			return false;
+		}
+		if (getClass() != obj.getClass())
+		{
+			return false;
+		}
+		final ImmutableSudokuCell other = (ImmutableSudokuCell) obj;
+		if (this.value != other.value)
+		{
+			return false;
+		}
+		return true;
+	}
+
 }
