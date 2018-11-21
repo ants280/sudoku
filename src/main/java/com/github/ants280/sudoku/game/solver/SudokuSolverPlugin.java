@@ -7,6 +7,8 @@ import java.util.function.BiConsumer;
 public abstract class SudokuSolverPlugin
 {
 	protected final SudokuBoard sudokuBoard;
+	protected final BiConsumer<SudokuCell, Integer> setValueConsumer;
+	protected final BiConsumer<SudokuCell, Integer> toggleSudokuCellPossibleValue;
 
 	public SudokuSolverPlugin(
 			SudokuBoard sudokuBoard,
@@ -14,6 +16,8 @@ public abstract class SudokuSolverPlugin
 			BiConsumer<SudokuCell, Integer> toggleSudokuCellPossibleValue)
 	{
 		this.sudokuBoard = sudokuBoard;
+		this.setValueConsumer = setValueConsumer;
+		this.toggleSudokuCellPossibleValue = toggleSudokuCellPossibleValue;
 	}
 
 	/**

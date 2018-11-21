@@ -14,6 +14,15 @@ public class SudokuSolver
 			BiConsumer<SudokuCell, Integer> setValueConsumer,
 			BiConsumer<SudokuCell, Integer> toggleSudokuCellPossibleValue)
 	{
+		BiConsumer<SudokuCell, Integer> updatedSetValueConsumer
+				= setValueConsumer.andThen(getClearNearbyPossibleValuesConsumer(sudokuBoard));
+
+		sudokuBoard.getAllSudokuCells()
+				.stream()
+				.filter(sudokuCell -> sudokuCell.getValue() == null)
+				.forEach(sudokuCell -> sudokuCell.resetPossibleValues());
+
+
 		this.solverPlugins = Arrays.asList();
 	}
 
@@ -29,5 +38,13 @@ public class SudokuSolver
 		{
 			// Run the plugin!
 		}
+	}
+
+	private static BiConsumer<SudokuCell, Integer> getClearNearbyPossibleValuesConsumer(SudokuBoard sudokuBoard)
+	{
+		return (sudokuCell, v) ->
+		{
+
+		};
 	}
 }
