@@ -104,15 +104,11 @@ public class SudokuBoard
 	private static SudokuCell[][] getBoardGroupsFromBoardRows(
 			SudokuCell[][] boardRows)
 	{
-//		int startingRow = (3 * (groupNumber / 3));
-//		int startingCol = (3 * (groupNumber % 3));
-		Function<Integer, Integer> startingRow = groupNumber -> (3 * (groupNumber / 3));
-		Function<Integer, Integer> startingCol = groupNumber -> (3 * (groupNumber % 3));
+		Function<Integer, Integer> _r = g -> (3 * (g / 3)); // starting row
+		Function<Integer, Integer> _c = g -> (3 * (g % 3)); // starting col
 		return IntStream.range(0, 9)
-				.mapToObj(g -> IntStream.range((3 * (g / 3)), (3 * (g / 3)) + 3)
-				.mapToObj(r -> IntStream.range((3 * (g % 3)), (3 * (g % 3)) + 3)
-				//				.mapToObj(groupNumber -> IntStream.range(startingRow(groupNumber), startingRow(groupNumber) + 3)
-				//				.mapToObj(r -> IntStream.range(startingCol(groupNumber), startingCol(groupNumber) + 3)
+				.mapToObj(g -> IntStream.range(_r.apply(g), _r.apply(g) + 3)
+				.mapToObj(r -> IntStream.range(_c.apply(g), _c.apply(g) + 3)
 				.mapToObj(c -> boardRows[r][c]))
 				.flatMap(Function.identity())
 				.toArray(SudokuCell[]::new))
