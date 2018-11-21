@@ -447,17 +447,12 @@ public class SudokuUiManager implements ActionListener
 	{
 		JOptionPane.showInputDialog(
 				frame,
-				"Copy the game state to load later.",
+				"Copy the game state to load later.\n"
+				+ "Warning: this does not save possible values.",
 				"Export " + frame.getTitle(),
 				JOptionPane.INFORMATION_MESSAGE,
 				null, // Icon
 				null, // selectionValues (null implies textbox
 				board.toString());
-	}
-
-	@FunctionalInterface
-	private interface RowColumnValueConsumer
-	{
-		void accept(int r, int c, int v);
 	}
 }

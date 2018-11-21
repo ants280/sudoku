@@ -133,12 +133,6 @@ public class SudokuBoard
 				.setValue(other.getAllSudokuCells().get(i).getValue()));
 	}
 
-	/**
-	 * Used by {@link com.github.ants280.sudoku.game.SudokuBoard#resetFrom(com.github.ants280.sudoku.game.SudokuBoard)
-	 * }
-	 *
-	 * @return The SudokuCells on the board, ordered by row, then column.
-	 */
 	private List<SudokuCell> getAllSudokuCells()
 	{
 		return Collections.unmodifiableList(allSudokuCells);
