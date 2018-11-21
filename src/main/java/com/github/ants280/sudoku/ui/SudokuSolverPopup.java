@@ -3,7 +3,6 @@ package com.github.ants280.sudoku.ui;
 import com.github.ants280.sudoku.game.SudokuBoard;
 import com.github.ants280.sudoku.game.SudokuCell;
 import com.github.ants280.sudoku.game.SudokuSolver;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -13,6 +12,7 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.function.BiConsumer;
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -51,7 +51,7 @@ public class SudokuSolverPopup implements ActionListener, ChangeListener
 				setValueConsumer,
 				toggleSudokuCellPossibleValue);
 		this.popupDialog = new JDialog(popupOwner, "Solver", true);
-		this.timerSlider = new JSlider(SwingConstants.HORIZONTAL, 0, 40, 4);
+		this.timerSlider = new JSlider(SwingConstants.VERTICAL, 0, 40, 4);
 		this.timer = new Timer(
 				timerSlider.getValue() * SLIDER_MULTIPLIER,
 				null);
@@ -63,18 +63,18 @@ public class SudokuSolverPopup implements ActionListener, ChangeListener
 
 	private void init()
 	{
-		timerSlider.setMajorTickSpacing(4);
-		timerSlider.setMinorTickSpacing(1);
-		timerSlider.setSnapToTicks(true);
-		timerSlider.setPaintTicks(true);
 		timerSlider.addChangeListener(this);
+		timerSlider.setMajorTickSpacing(4);
+		timerSlider.setPaintTicks(true);
 		//Create the label table
 		Dictionary<Integer, JLabel> labelTable = new Hashtable<>();
 		for (int i = timerSlider.getMinimum();
 				i <= timerSlider.getMaximum();
-				i++)
+				i += 4)
 		{
-			labelTable.put(i, new JLabel(String.format("%02f", i / 4d)));
+			labelTable.put(
+					i,
+					new JLabel(String.format("%.2f sec/move", i / 4d)));
 		}
 		timerSlider.setLabelTable(labelTable);
 
@@ -86,7 +86,8 @@ public class SudokuSolverPopup implements ActionListener, ChangeListener
 
 		startStopButton.addActionListener(this);
 
-		JPanel panel = new JPanel(new GridLayout(3, 1));
+		JPanel panel = new JPanel();
+		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		panel.add(timerSlider);
 		panel.add(progressBar);
 		panel.add(startStopButton);
@@ -94,7 +95,6 @@ public class SudokuSolverPopup implements ActionListener, ChangeListener
 
 		popupDialog.add(panel);
 		popupDialog.pack();
-		popupDialog.setResizable(false);
 		popupDialog.setLocationRelativeTo(popupDialog.getParent());
 		popupDialog.addWindowListener(new CancelTimerWindowListener(timer));
 	}
