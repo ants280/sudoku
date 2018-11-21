@@ -1,10 +1,9 @@
 package com.github.ants280.sudoku.game;
 
 import static com.github.ants280.sudoku.game.SectionType.*;
-import java.util.Collection;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
@@ -78,26 +77,6 @@ public class SudokuBoardTest
 	}
 
 	@Test
-	public void testGetGroupNumber()
-	{
-		SudokuBoard board = new SudokuBoard();
-
-		for (int r = 0; r < 9; r++)
-		{
-			for (int c = 0; c < 9; c++)
-			{
-				int expectedGroupNumber = (r / 3) * 3 + c / 3;
-				//System.out.printf("{making sure [%d,%d] is in group %d\n", r, c, expectedGroupNumber);
-
-				int actualGroupNumber = board.getGroupNumber(r, c);
-
-				assertSame(String.format("{Incorrect group for [%d,%d]", r, c),
-						expectedGroupNumber, actualGroupNumber);
-			}
-		}
-	}
-
-	@Test
 	public void testGetUnusedValuesForGroup()
 	{
 		String boardString
@@ -112,7 +91,8 @@ public class SudokuBoardTest
 				+ "000000000}";
 		SudokuBoard board = new SudokuBoard(boardString);
 
-		Set<Integer> unusedValuesForRow = board.getUnusedValuesForGroup(3);
+		Set<Integer> unusedValuesForRow
+				= getUnusedValues(board.getSudokuCells(GROUP, 3));
 
 		assertSame(1, unusedValuesForRow.size());
 		assertTrue(unusedValuesForRow.contains(7));
@@ -138,9 +118,13 @@ public class SudokuBoardTest
 		{
 			SudokuBoard board = new SudokuBoard(boardStrings[i]);
 
-			Set<Integer> unusedValuesForGroup = board.getUnusedValuesForGroup(i);
+			Set<Integer> unusedValuesForGroup
+					= getUnusedValues(board.getSudokuCells(GROUP, i));
 
-			assertTrue(String.format("Unused values found in group %d: %s. BoardString = %s", i, unusedValuesForGroup, boardStrings[i]),
+			assertTrue(String.format(
+					"Unused values found in group %d: %s. BoardString = %s", i,
+					unusedValuesForGroup,
+					boardStrings[i]),
 					unusedValuesForGroup.isEmpty());
 		}
 	}
@@ -160,7 +144,7 @@ public class SudokuBoardTest
 				+ "000000000}";
 		SudokuBoard board = new SudokuBoard(boardString);
 
-		Set<Integer> unusedValuesForRow = board.getUnusedValuesForRow(7);
+		Set<Integer> unusedValuesForRow = getUnusedValues(board.getSudokuCells(ROW, 7));
 
 		assertSame(1, unusedValuesForRow.size());
 		assertTrue(unusedValuesForRow.contains(5));
@@ -181,7 +165,7 @@ public class SudokuBoardTest
 				+ "000009000}";
 		SudokuBoard board = new SudokuBoard(boardString);
 
-		Set<Integer> unusedValuesForCol = board.getUnusedValuesForCol(5);
+		Set<Integer> unusedValuesForCol = getUnusedValues(board.getSudokuCells(COL, 5));
 
 		assertSame(1, unusedValuesForCol.size());
 		assertTrue(unusedValuesForCol.contains(3));
@@ -190,7 +174,17 @@ public class SudokuBoardTest
 	@Test
 	public void testIsSolved_empty()
 	{
-		SudokuBoard board = new SudokuBoard();
+		String sudokuBoard
+				= "{000000000"
+				+ "000000000"
+				+ "000000000"
+				+ "000000000"
+				+ "000000000"
+				+ "000000000"
+				+ "000000000"
+				+ "000000000"
+				+ "000000000}";
+		SudokuBoard board = new SudokuBoard(sudokuBoard);
 
 		assertFalse(board.isSolved());
 	}
@@ -231,89 +225,13 @@ public class SudokuBoardTest
 		assertFalse("8 is missing from the last cell", board.isSolved());
 	}
 
-	@Test
-	public void testGetCellsInGroupSection()
+	private static Set<Integer> getUnusedValues(SudokuCell[] sudokuCells)
 	{
-		// group 0
-		assertGetCellsInGroupSectionValid(0, SectionType.ROW, 0, "{123000000000000000000000000000000000000000000000000000000000000000000000000000000}");
-		assertGetCellsInGroupSectionValid(0, SectionType.COL, 0, "{100000000200000000300000000000000000000000000000000000000000000000000000000000000}");
-		assertGetCellsInGroupSectionValid(0, SectionType.ROW, 1, "{000000000123000000000000000000000000000000000000000000000000000000000000000000000}");
-		assertGetCellsInGroupSectionValid(0, SectionType.COL, 1, "{010000000020000000030000000000000000000000000000000000000000000000000000000000000}");
-		assertGetCellsInGroupSectionValid(0, SectionType.ROW, 2, "{000000000000000000123000000000000000000000000000000000000000000000000000000000000}");
-		assertGetCellsInGroupSectionValid(0, SectionType.COL, 2, "{001000000002000000003000000000000000000000000000000000000000000000000000000000000}");
-		// group 1
-		assertGetCellsInGroupSectionValid(1, SectionType.ROW, 0, "{000123000000000000000000000000000000000000000000000000000000000000000000000000000}");
-		assertGetCellsInGroupSectionValid(1, SectionType.COL, 3, "{000100000000200000000300000000000000000000000000000000000000000000000000000000000}");
-		assertGetCellsInGroupSectionValid(1, SectionType.ROW, 1, "{000000000000123000000000000000000000000000000000000000000000000000000000000000000}");
-		assertGetCellsInGroupSectionValid(1, SectionType.COL, 4, "{000010000000020000000030000000000000000000000000000000000000000000000000000000000}");
-		assertGetCellsInGroupSectionValid(1, SectionType.ROW, 2, "{000000000000000000000123000000000000000000000000000000000000000000000000000000000}");
-		assertGetCellsInGroupSectionValid(1, SectionType.COL, 5, "{000001000000002000000003000000000000000000000000000000000000000000000000000000000}");
-		// group 2
-		assertGetCellsInGroupSectionValid(2, SectionType.ROW, 0, "{000000123000000000000000000000000000000000000000000000000000000000000000000000000}");
-		assertGetCellsInGroupSectionValid(2, SectionType.COL, 6, "{000000100000000200000000300000000000000000000000000000000000000000000000000000000}");
-		assertGetCellsInGroupSectionValid(2, SectionType.ROW, 1, "{000000000000000123000000000000000000000000000000000000000000000000000000000000000}");
-		assertGetCellsInGroupSectionValid(2, SectionType.COL, 7, "{000000010000000020000000030000000000000000000000000000000000000000000000000000000}");
-		assertGetCellsInGroupSectionValid(2, SectionType.ROW, 2, "{000000000000000000000000123000000000000000000000000000000000000000000000000000000}");
-		assertGetCellsInGroupSectionValid(2, SectionType.COL, 8, "{000000001000000002000000003000000000000000000000000000000000000000000000000000000}");
-		// group 3
-		assertGetCellsInGroupSectionValid(3, SectionType.ROW, 3, "{000000000000000000000000000123000000000000000000000000000000000000000000000000000}");
-		assertGetCellsInGroupSectionValid(3, SectionType.COL, 0, "{000000000000000000000000000100000000200000000300000000000000000000000000000000000}");
-		assertGetCellsInGroupSectionValid(3, SectionType.ROW, 4, "{000000000000000000000000000000000000123000000000000000000000000000000000000000000}");
-		assertGetCellsInGroupSectionValid(3, SectionType.COL, 1, "{000000000000000000000000000010000000020000000030000000000000000000000000000000000}");
-		assertGetCellsInGroupSectionValid(3, SectionType.ROW, 5, "{000000000000000000000000000000000000000000000123000000000000000000000000000000000}");
-		assertGetCellsInGroupSectionValid(3, SectionType.COL, 2, "{000000000000000000000000000001000000002000000003000000000000000000000000000000000}");
-		// group 4
-		assertGetCellsInGroupSectionValid(4, SectionType.ROW, 3, "{000000000000000000000000000000123000000000000000000000000000000000000000000000000}");
-		assertGetCellsInGroupSectionValid(4, SectionType.COL, 3, "{000000000000000000000000000000100000000200000000300000000000000000000000000000000}");
-		assertGetCellsInGroupSectionValid(4, SectionType.ROW, 4, "{000000000000000000000000000000000000000123000000000000000000000000000000000000000}");
-		assertGetCellsInGroupSectionValid(4, SectionType.COL, 4, "{000000000000000000000000000000010000000020000000030000000000000000000000000000000}");
-		assertGetCellsInGroupSectionValid(4, SectionType.ROW, 5, "{000000000000000000000000000000000000000000000000123000000000000000000000000000000}");
-		assertGetCellsInGroupSectionValid(4, SectionType.COL, 5, "{000000000000000000000000000000001000000002000000003000000000000000000000000000000}");
-		// group 5
-		assertGetCellsInGroupSectionValid(5, SectionType.ROW, 3, "{000000000000000000000000000000000123000000000000000000000000000000000000000000000}");
-		assertGetCellsInGroupSectionValid(5, SectionType.COL, 6, "{000000000000000000000000000000000100000000200000000300000000000000000000000000000}");
-		assertGetCellsInGroupSectionValid(5, SectionType.ROW, 4, "{000000000000000000000000000000000000000000123000000000000000000000000000000000000}");
-		assertGetCellsInGroupSectionValid(5, SectionType.COL, 7, "{000000000000000000000000000000000010000000020000000030000000000000000000000000000}");
-		assertGetCellsInGroupSectionValid(5, SectionType.ROW, 5, "{000000000000000000000000000000000000000000000000000123000000000000000000000000000}");
-		assertGetCellsInGroupSectionValid(5, SectionType.COL, 8, "{000000000000000000000000000000000001000000002000000003000000000000000000000000000}");
-		// group 6
-		assertGetCellsInGroupSectionValid(6, SectionType.ROW, 6, "{000000000000000000000000000000000000000000000000000000123000000000000000000000000}");
-		assertGetCellsInGroupSectionValid(6, SectionType.COL, 0, "{000000000000000000000000000000000000000000000000000000100000000200000000300000000}");
-		assertGetCellsInGroupSectionValid(6, SectionType.ROW, 7, "{000000000000000000000000000000000000000000000000000000000000000123000000000000000}");
-		assertGetCellsInGroupSectionValid(6, SectionType.COL, 1, "{000000000000000000000000000000000000000000000000000000010000000020000000030000000}");
-		assertGetCellsInGroupSectionValid(6, SectionType.ROW, 8, "{000000000000000000000000000000000000000000000000000000000000000000000000123000000}");
-		assertGetCellsInGroupSectionValid(6, SectionType.COL, 2, "{000000000000000000000000000000000000000000000000000000001000000002000000003000000}");
-		// group 7
-		assertGetCellsInGroupSectionValid(7, SectionType.ROW, 6, "{000000000000000000000000000000000000000000000000000000000123000000000000000000000}");
-		assertGetCellsInGroupSectionValid(7, SectionType.COL, 3, "{000000000000000000000000000000000000000000000000000000000100000000200000000300000}");
-		assertGetCellsInGroupSectionValid(7, SectionType.ROW, 7, "{000000000000000000000000000000000000000000000000000000000000000000123000000000000}");
-		assertGetCellsInGroupSectionValid(7, SectionType.COL, 4, "{000000000000000000000000000000000000000000000000000000000010000000020000000030000}");
-		assertGetCellsInGroupSectionValid(7, SectionType.ROW, 8, "{000000000000000000000000000000000000000000000000000000000000000000000000000123000}");
-		assertGetCellsInGroupSectionValid(7, SectionType.COL, 5, "{000000000000000000000000000000000000000000000000000000000001000000002000000003000}");
-		// group 8
-		assertGetCellsInGroupSectionValid(8, SectionType.ROW, 6, "{000000000000000000000000000000000000000000000000000000000000123000000000000000000}");
-		assertGetCellsInGroupSectionValid(8, SectionType.COL, 6, "{000000000000000000000000000000000000000000000000000000000000100000000200000000300}");
-		assertGetCellsInGroupSectionValid(8, SectionType.ROW, 7, "{000000000000000000000000000000000000000000000000000000000000000000000123000000000}");
-		assertGetCellsInGroupSectionValid(8, SectionType.COL, 7, "{000000000000000000000000000000000000000000000000000000000000010000000020000000030}");
-		assertGetCellsInGroupSectionValid(8, SectionType.ROW, 8, "{000000000000000000000000000000000000000000000000000000000000000000000000000000123}");
-		assertGetCellsInGroupSectionValid(8, SectionType.COL, 8, "{000000000000000000000000000000000000000000000000000000000000001000000002000000003}");
-	}
-
-	private void assertGetCellsInGroupSectionValid(
-			int groupNumber, SectionType sectionType, int sectionNumber, String boardString)
-	{
-		assertTrue(boardString.matches("^\\{0*10*20*30*\\}$"));
-		SudokuBoard sudokuBoard = new SudokuBoard(boardString);
-
-		Collection<SudokuCell> sudokuCellsInGroupSection
-				= sudokuBoard.getSudokuCellsInGroupSection(groupNumber, sectionType, sectionNumber);
-
-		List<Integer> actualSudokuCellValues = sudokuCellsInGroupSection.stream()
+		Set<Integer> unusedValues = new HashSet<>(SudokuCell.LEGAL_CELL_VALUES);
+		Stream.of(sudokuCells)
 				.map(SudokuCell::getValue)
-				.collect(Collectors.toList());
-		assertSame(3, actualSudokuCellValues.size());
-		assertTrue(actualSudokuCellValues.contains(1));
-		assertTrue(actualSudokuCellValues.contains(2));
-		assertTrue(actualSudokuCellValues.contains(3));
+				.filter(value -> value != null)
+				.forEach(unusedValues::remove);
+		return unusedValues;
 	}
 }

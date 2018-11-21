@@ -1,13 +1,13 @@
 package com.github.ants280.sudoku.game;
 
 import static com.github.ants280.sudoku.game.SectionType.*;
-import java.util.Collection;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -64,7 +64,8 @@ public class SudokuBoard
 	public String toString()
 	{
 		String boardValues = allSudokuCells.stream()
-				.map(this::getCellValue)
+				.map(SudokuCell::getValue)
+				.map(v -> v == null ? 0 : v)
 				.map(String::valueOf)
 				.collect(Collectors.joining());
 
@@ -133,23 +134,6 @@ public class SudokuBoard
 		IntStream.range(0, 81)
 				.forEach(i -> allSudokuCells.get(i)
 				.setValue(other.getAllSudokuCells().get(i).getValue()));
-
-		allSudokuCells.stream().forEach(SudokuBoard::removeAllPossibleValues);
-	}
-
-	private static void removeAllPossibleValues(SudokuCell sudokuCell)
-	{
-		SudokuCell.LEGAL_CELL_VALUES.stream()
-				.forEach(sudokuCell::removePossibleValue);
-	}
-
-	private Integer getCellValue(SudokuCell sudokuCell)
-	{
-		if (sudokuCell.isEmpty() || sudokuCell.getValue() == null)
-		{
-			return 0;
-		}
-		return sudokuCell.getValue();
 	}
 
 	private List<SudokuCell> getAllSudokuCells()
@@ -164,142 +148,48 @@ public class SudokuBoard
 		return sectionTypeCells.get(sectionType)[r][c];
 	}
 
-	public int getGroupNumber(int r, int c)
+	public SudokuCell[] getSudokuCells(
+			SectionType sectionType,
+			int sectionNumber)
+	{
+		validateCoords(sectionNumber);
+
+		return Arrays.copyOf(
+				sectionTypeCells.get(sectionType)[sectionNumber],
+				9);
+	}
+
+	public static int getGroupNumber(int r, int c)
 	{
 		validateCoords(r, c);
 
 		return ((r / 3) * 3) + (c / 3);
 	}
 
-	public Collection<SudokuCell> getSudokuCellsForGroup(int groupNumber)
-	{
-		return getOtherSudokuCellsForGroup(groupNumber, null, null);
-	}
-
-	public Collection<SudokuCell> getOtherSudokuCellsForGroup(
-			int groupNumber, Integer rowNumber, Integer colNumber)
-	{
-		validateCoord(groupNumber);
-		if (rowNumber != null || colNumber != null)
-		{
-			validateCoords(rowNumber, colNumber);
-		}
-
-		int startingRow = 3 * (groupNumber / 3);
-		int startingCol = 3 * (groupNumber % 3);
-
-		return IntStream.range(startingRow, startingRow + 3)
-				.mapToObj(r -> IntStream.range(startingCol, startingCol + 3)
-				.filter(c -> rowNumber == null || colNumber == null
-				|| r != rowNumber || c != colNumber)
-				.mapToObj(c -> this.getSudokuCell(ROW, r, c)))
-				.flatMap(Function.identity())
-				.collect(Collectors.toList());
-	}
-
-	public Set<Integer> getValuesForGroup(int groupNumber)
-	{
-		return getSectionValues(getSudokuCellsForGroup(groupNumber));
-	}
-
-	public Set<Integer> getUnusedValuesForGroup(int groupNumber)
-	{
-		return getRemainingValues(getValuesForGroup(groupNumber));
-	}
-
-	public Collection<SudokuCell> getSudokuCellsForRow(int rowNumber)
-	{
-		return getOtherSudokuCellsForRow(rowNumber, null);
-	}
-
-	public Collection<SudokuCell> getOtherSudokuCellsForRow(
-			int rowNumber, Integer colNumber)
-	{
-		validateCoord(rowNumber);
-		if (colNumber != null)
-		{
-			validateCoord(colNumber);
-		}
-
-		return IntStream.range(0, 9)
-				.filter(c -> colNumber == null || c != colNumber)
-				.mapToObj(c -> this.getSudokuCell(ROW, rowNumber, c))
-				.collect(Collectors.toList());
-	}
-
-	public Set<Integer> getValuesForRow(int rowNumber)
-	{
-		return getSectionValues(getSudokuCellsForRow(rowNumber));
-	}
-
-	public Set<Integer> getUnusedValuesForRow(int rowNumber)
-	{
-		return getRemainingValues(getValuesForRow(rowNumber));
-	}
-
-	public Collection<SudokuCell> getSudokuCellsForCol(int colNumber)
-	{
-		return getOtherSudokuCellsForCol(colNumber, null);
-	}
-
-	public Collection<SudokuCell> getOtherSudokuCellsForCol(
-			int colNumber, Integer rowNumber)
-	{
-		validateCoord(colNumber);
-		if (rowNumber != null)
-		{
-			validateCoord(rowNumber);
-		}
-
-		return IntStream.range(0, 9)
-				.filter(r -> rowNumber == null || r != rowNumber)
-				.mapToObj(r -> this.getSudokuCell(ROW, r, colNumber))
-				.collect(Collectors.toList());
-	}
-
-	public Set<Integer> getValuesForCol(int colNumber)
-	{
-		return getSectionValues(getSudokuCellsForCol(colNumber));
-	}
-
-	public Set<Integer> getUnusedValuesForCol(int colNumber)
-	{
-		return getRemainingValues(getValuesForCol(colNumber));
-	}
-
 	public boolean isSolved()
 	{
-		return IntStream.range(0, 9)
-				.allMatch(i -> getUnusedValuesForGroup(i).isEmpty()
-				&& getUnusedValuesForRow(i).isEmpty()
-				&& getUnusedValuesForCol(i).isEmpty());
-	}
+		Predicate<SudokuCell[]> hasAllValues
+				= sudokuCells -> Arrays.stream(sudokuCells)
+						.map(SudokuCell::getValue)
+						.filter(v -> v != null)
+						.mapToInt(Integer::intValue)
+						.map(i -> 1 << i)
+						.sum() == ((1 << 10) - 2);
 
-	private static Set<Integer> getSectionValues(
-			Collection<SudokuCell> sectionSudokuCells)
-	{
-		return sectionSudokuCells
+		return sectionTypeCells.values()
 				.stream()
-				.filter(sudokuCell -> !sudokuCell.isEmpty())
-				.map(SudokuCell::getValue)
-				.collect(Collectors.toSet());
+				.flatMap(Stream::of)
+				.allMatch(hasAllValues);
 	}
 
-	private static Set<Integer> getRemainingValues(Set<Integer> sectionValues)
-	{
-		return SudokuCell.LEGAL_CELL_VALUES.stream()
-				.filter(i -> !sectionValues.contains(i))
-				.collect(Collectors.toSet());
-	}
-
-	private void validateCoords(int... coordinates)
+	private static void validateCoords(int... coordinates)
 			throws IllegalArgumentException
 	{
 		IntStream.of(coordinates)
-				.forEach(this::validateCoord);
+				.forEach(SudokuBoard::validateCoord);
 	}
 
-	private void validateCoord(int coordinate)
+	private static void validateCoord(int coordinate)
 			throws IllegalArgumentException
 	{
 		if (coordinate < 0 || coordinate >= 9)
@@ -307,45 +197,5 @@ public class SudokuBoard
 			throw new IllegalArgumentException(
 					"Invalid coordinate: " + coordinate);
 		}
-	}
-
-	public Set<SudokuCell> getSudokuCellsInGroupSection(
-			int groupNumber,
-			SectionType sectionType,
-			int sectionNumber)
-	{
-		validateSection(sectionType, SectionType.ROW, SectionType.COL);
-
-		int r = (sectionType == SectionType.ROW)
-				? sectionNumber
-				: (groupNumber / 3) * 3;
-		int c = (sectionType == SectionType.COL)
-				? sectionNumber
-				: (groupNumber % 3) * 3;
-
-		Stream<SudokuCell> sudokuCellsInGroupSectionStream
-				= (sectionType == SectionType.ROW)
-						? IntStream.range(c, c + 3)
-								.mapToObj(c2 -> this.getSudokuCell(ROW, r, c2))
-						: IntStream.range(r, r + 3)
-								.mapToObj(r2 -> this.getSudokuCell(ROW, r2, c));
-
-		return sudokuCellsInGroupSectionStream.collect(Collectors.toSet());
-	}
-
-	private void validateSection(
-			SectionType actualSectionType,
-			SectionType... expectedSectionTypes)
-			throws IllegalArgumentException
-	{
-		for (SectionType expectedSectionType : expectedSectionTypes)
-		{
-			if (expectedSectionType == actualSectionType)
-			{
-				return;
-			}
-		}
-		throw new IllegalArgumentException(
-				"Invalid SectionType: " + actualSectionType);
 	}
 }
