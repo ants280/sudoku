@@ -123,12 +123,12 @@ public class SudokuBoard
 	public void resetFrom(SudokuBoard other)
 	{
 		IntStream.range(0, 81)
-				.forEach(i -> this.getSudokuCell(i / 9, i % 9)
-				.setValue(other.getSudokuCell(i / 9, i % 9).getValue()));
+				.forEach(i -> this.getSudokuCell(ROW, i / 9, i % 9)
+				.setValue(other.getSudokuCell(ROW, i / 9, i % 9).getValue()));
 
 		IntStream.range(0, 81)
 				.forEach(i -> removeAllPossibleValues(
-				this.getSudokuCell(i / 9, i % 9)));
+				this.getSudokuCell(ROW, i / 9, i % 9)));
 	}
 
 	private static void removeAllPossibleValues(SudokuCell sudokuCell)
