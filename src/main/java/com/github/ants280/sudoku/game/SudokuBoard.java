@@ -22,7 +22,7 @@ public class SudokuBoard
 		SudokuCell[][] boardRows = getBoardRowsFromString(boardString);
 		sectionTypeCells.put(ROW, boardRows);
 		sectionTypeCells.put(COL, getBoardColsFromBoardRows(boardRows));
-		sectionTypeCells.put(ROW, getBoardGroupsFromBoardRows(boardRows));
+		sectionTypeCells.put(GROUP, getBoardGroupsFromBoardRows(boardRows));
 	}
 
 	public SudokuBoard()
