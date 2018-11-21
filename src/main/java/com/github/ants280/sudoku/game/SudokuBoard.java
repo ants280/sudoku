@@ -72,6 +72,7 @@ public class SudokuBoard
 		return "{" + boardValues + "}";
 	}
 
+	//<editor-fold defaultstate="collapsed" desc="static constructor helpers">
 	private static List<SudokuCell> getAllSudokuCells(String boardString)
 	{
 		if (!isValidSavedBoard(boardString))
@@ -123,11 +124,7 @@ public class SudokuBoard
 				.toArray(SudokuCell[]::new))
 				.toArray(SudokuCell[][]::new);
 	}
-
-	public static boolean isValidSavedBoard(String boardString)
-	{
-		return boardString.matches("^\\{\\d{81}\\}$");
-	}
+	//</editor-fold>
 
 	public void resetFrom(SudokuBoard other)
 	{
@@ -136,6 +133,12 @@ public class SudokuBoard
 				.setValue(other.getAllSudokuCells().get(i).getValue()));
 	}
 
+	/**
+	 * Used by {@link com.github.ants280.sudoku.game.SudokuBoard#resetFrom(com.github.ants280.sudoku.game.SudokuBoard)
+	 * }
+	 *
+	 * @return The SudokuCells on the board, ordered by row, then column.
+	 */
 	private List<SudokuCell> getAllSudokuCells()
 	{
 		return Collections.unmodifiableList(allSudokuCells);
@@ -159,13 +162,6 @@ public class SudokuBoard
 				9);
 	}
 
-	public static int getGroupNumber(int r, int c)
-	{
-		validateCoords(r, c);
-
-		return ((r / 3) * 3) + (c / 3);
-	}
-
 	public boolean isSolved()
 	{
 		Predicate<SudokuCell[]> hasAllValues
@@ -180,6 +176,18 @@ public class SudokuBoard
 				.stream()
 				.flatMap(Stream::of)
 				.allMatch(hasAllValues);
+	}
+
+	public static int getGroupNumber(int r, int c)
+	{
+		validateCoords(r, c);
+
+		return ((r / 3) * 3) + (c / 3);
+	}
+
+	public static boolean isValidSavedBoard(String boardString)
+	{
+		return boardString.matches("^\\{\\d{81}\\}$");
 	}
 
 	private static void validateCoords(int... coordinates)
