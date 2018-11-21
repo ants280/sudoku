@@ -319,14 +319,4 @@ public class SudokuDisplayComponent extends JComponent
 			selectedCol = i;
 		}
 	}
-
-	public void setSelectedCellValue(int cellValue)
-	{
-		if (selectedRow != null && selectedCol != null)
-		{
-			board.getSudokuCell(ROW, selectedRow, selectedCol)
-					.setValue(cellValue == 0 ? null : cellValue);
-			this.repaint();
-		}
-	}
 }

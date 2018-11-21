@@ -133,7 +133,7 @@ public class SudokuBoard
 				.setValue(other.getAllSudokuCells().get(i).getValue()));
 	}
 
-	private List<SudokuCell> getAllSudokuCells()
+	public List<SudokuCell> getAllSudokuCells()
 	{
 		return Collections.unmodifiableList(allSudokuCells);
 	}

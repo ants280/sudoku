@@ -34,7 +34,7 @@ public class SudokuUiManager implements ActionListener
 	private static final String ACTION_M = "Action";
 	private static final String SET_VALUE_MI = "Set value...";
 	private static final String SET_POSSIBLE_VALUE_MI = "Set possible value...";
-	private static final String SOLVE_MI = "Solve";
+	private static final String SOLVE_MI = "Solve...";
 	private static final String HELP_M = "Help";
 	private static final String HELP_MI = "Help";
 	private static final String ABOUT_MI = "About";
@@ -67,7 +67,7 @@ public class SudokuUiManager implements ActionListener
 				this::setValue,
 				this::setPossibleValue);
 		this.keyListener = new SudokuKeyListener(
-				this::setValue,
+				this::setSelectedCellValue,
 				this::moveSelectedCell);
 		this.listenersAdded = false;
 	}
@@ -286,7 +286,7 @@ public class SudokuUiManager implements ActionListener
 				sudokuCell -> true,
 				(selectedSudokuCell, v)
 				-> !v.equals(selectedSudokuCell.getValue()),
-				this::changeCellValue,
+				this::setSudokuCellValue,
 				true);
 	}
 
@@ -299,7 +299,7 @@ public class SudokuUiManager implements ActionListener
 				sudokuCell -> sudokuCell.getValue() == null,
 				(selectedSudokuCell, v)
 				-> selectedSudokuCell.getPossibleValues().contains(v),
-				this::changePossibleCellValue,
+				this::toggleSudokuCellPossibleValue,
 				false);
 	}
 
@@ -352,7 +352,7 @@ public class SudokuUiManager implements ActionListener
 		}
 	}
 
-	private void changeCellValue(SudokuCell sudokuCell, Integer v)
+	private void setSudokuCellValue(SudokuCell sudokuCell, Integer v)
 	{
 		boolean valueChanged = sudokuCell.setValue(v);
 
@@ -367,7 +367,9 @@ public class SudokuUiManager implements ActionListener
 		}
 	}
 
-	private void changePossibleCellValue(SudokuCell sudokuCell, Integer v)
+	private void toggleSudokuCellPossibleValue(
+			SudokuCell sudokuCell,
+			Integer v)
 	{
 		boolean possibleValueChanged
 				= sudokuCell.getPossibleValues().contains(v)
@@ -380,7 +382,7 @@ public class SudokuUiManager implements ActionListener
 		}
 	}
 
-	private void setValue(Integer cellValue)
+	private void setSelectedCellValue(Integer cellValue)
 	{
 		if (Sudoku.DEBUG)
 		{
@@ -390,19 +392,21 @@ public class SudokuUiManager implements ActionListener
 					sudokuDisplayComponent.getSelectedCol());
 		}
 
-		sudokuDisplayComponent.setSelectedCellValue(cellValue);
+		SudokuCell selectedSudokuCell = board.getSudokuCell(ROW,
+				sudokuDisplayComponent.getSelectedRow(),
+				sudokuDisplayComponent.getSelectedCol());
 
-		if (board.isSolved())
-		{
-			this.endGame();
-		}
+		this.setSudokuCellValue(selectedSudokuCell, cellValue);
 	}
 
 	private void solve()
 	{
-		// TODO: make listeners work with solving (disabled while solving, enabled again when solving finished if board is not yet solved).
 		SudokuSolverPopup sudokuSolverPopup
-				= new SudokuSolverPopup(frame, sudokuDisplayComponent, board);
+				= new SudokuSolverPopup(
+						frame,
+						board,
+						this::setSudokuCellValue,
+						this::toggleSudokuCellPossibleValue);
 		sudokuSolverPopup.setVisible(true);
 	}
 
