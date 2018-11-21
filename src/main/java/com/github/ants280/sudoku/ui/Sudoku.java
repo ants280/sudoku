@@ -49,5 +49,9 @@ public final class Sudoku
 		{
 			JOptionPane.showMessageDialog(null, ex.getMessage());
 		}
+
+		//UIManager.getDefaults().entrySet().forEach(System.out::println);
+		// System look and feel overrides :
+		UIManager.put("Slider.paintValue", Boolean.FALSE);
 	}
 }
