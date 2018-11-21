@@ -12,8 +12,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
-import java.util.function.Function;
+import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 import javax.swing.AbstractButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -306,15 +306,15 @@ public class SudokuUiManager implements ActionListener
 	private void showValueDialog(
 			String dialogTitle,
 			String dialogMessage,
-			Function<SudokuCell, Boolean> canSetValueFunction,
-			BiFunction<SudokuCell, Integer, Boolean> buttonSelectedFunction,
+			Predicate<SudokuCell> canSetValuePredicate,
+			BiPredicate<SudokuCell, Integer> buttonSelectedFunction,
 			BiConsumer<SudokuCell, Integer> valueClickConsumer,
 			boolean closeOnDialogOnButtonClick)
 	{
 		Integer r = sudokuDisplayComponent.getSelectedRow();
 		Integer c = sudokuDisplayComponent.getSelectedCol();
 		if (r != null && c != null
-				&& canSetValueFunction.apply(board.getSudokuCell(ROW, r, c)))
+				&& canSetValuePredicate.test(board.getSudokuCell(ROW, r, c)))
 		{
 			JDialog dialog = new JDialog(frame, dialogTitle, true);
 
@@ -325,8 +325,7 @@ public class SudokuUiManager implements ActionListener
 				Integer v = i;
 				AbstractButton valueButton = new JToggleButton(
 						String.valueOf(i),
-						buttonSelectedFunction
-								.apply(selectedSudokuCell, v));
+						buttonSelectedFunction.test(selectedSudokuCell, v));
 
 				valueButton.addActionListener(actionEvent ->
 				{
