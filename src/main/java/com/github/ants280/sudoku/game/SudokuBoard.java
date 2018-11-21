@@ -129,20 +129,6 @@ public class SudokuBoard
 		return ((r / 3) * 3) + (c / 3);
 	}
 
-	public int getRowNumber(int r, int c)  // TODO: DELETEME
-	{
-		validateCoords(r, c);
-
-		return r;
-	}
-
-	public int getColNumber(int r, int c) // TODO: DELETEME
-	{
-		validateCoords(r, c);
-
-		return c;
-	}
-
 	public Collection<SudokuCell> getSudokuCellsForGroup(int groupNumber)
 	{
 		return getOtherSudokuCellsForGroup(groupNumber, null, null);

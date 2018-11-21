@@ -97,34 +97,6 @@ public class SudokuBoardTest
 	}
 
 	@Test
-	public void testGetRowNumber()
-	{
-		SudokuBoard board = new SudokuBoard();
-
-		for (int r = 0; r < 9; r++)
-		{
-			for (int c = 0; c < 9; c++)
-			{
-				assertSame(r, board.getRowNumber(r, c));
-			}
-		}
-	}
-
-	@Test
-	public void testGetColNumber()
-	{
-		SudokuBoard board = new SudokuBoard();
-
-		for (int r = 0; r < 9; r++)
-		{
-			for (int c = 0; c < 9; c++)
-			{
-				assertSame(c, board.getColNumber(r, c));
-			}
-		}
-	}
-
-	@Test
 	public void testGetUnusedValuesForGroup()
 	{
 		String boardString
