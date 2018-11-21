@@ -1,9 +1,7 @@
 package com.github.ants280.sudoku.game;
 
 import static com.github.ants280.sudoku.game.SectionType.*;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Stream;
+import java.util.Arrays;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
@@ -77,7 +75,7 @@ public class SudokuBoardTest
 	}
 
 	@Test
-	public void testGetUnusedValuesForGroup()
+	public void testGetSudokuCells_group()
 	{
 		String boardString
 				= "{000000000"
@@ -91,15 +89,17 @@ public class SudokuBoardTest
 				+ "000000000}";
 		SudokuBoard board = new SudokuBoard(boardString);
 
-		Set<Integer> unusedValuesForRow
-				= getUnusedValues(board.getSudokuCells(GROUP, 3));
+		int[] expectedValues = new int[]
+		{
+			3, 8, 2, 4, 0, 1, 5, 6, 9
+		};
+		int[] actualValues = getValues(board.getSudokuCells(GROUP, 3));
 
-		assertSame(1, unusedValuesForRow.size());
-		assertTrue(unusedValuesForRow.contains(7));
+		assertArrayEquals(expectedValues, actualValues);
 	}
 
 	@Test
-	public void testGetUnusedValuesForGroup_extreme()
+	public void testGetSudokuCells_groupExtreme()
 	{
 		String[] boardStrings = new String[]
 		{
@@ -113,24 +113,28 @@ public class SudokuBoardTest
 			"{000000000000000000000000000000000000000000000000000000000123000000456000000789000}",
 			"{000000000000000000000000000000000000000000000000000000000000123000000456000000789}"
 		};
+		int[] expectedValues = new int[]
+		{
+			1, 2, 3, 4, 5, 6, 7, 8, 9
+		};
 
 		for (int i = 0; i < 9; i++)
 		{
 			SudokuBoard board = new SudokuBoard(boardStrings[i]);
 
-			Set<Integer> unusedValuesForGroup
-					= getUnusedValues(board.getSudokuCells(GROUP, i));
+			int[] actualValues = getValues(board.getSudokuCells(GROUP, i));
 
-			assertTrue(String.format(
-					"Unused values found in group %d: %s. BoardString = %s", i,
-					unusedValuesForGroup,
+			assertArrayEquals(String.format(
+					"Unused values found in group %d. BoardString = %s",
+					i,
 					boardStrings[i]),
-					unusedValuesForGroup.isEmpty());
+					expectedValues,
+					actualValues);
 		}
 	}
 
 	@Test
-	public void testGenUnusedValuesForRow()
+	public void testGetSudokuCells_row()
 	{
 		String boardString
 				= "{000000000"
@@ -144,14 +148,17 @@ public class SudokuBoardTest
 				+ "000000000}";
 		SudokuBoard board = new SudokuBoard(boardString);
 
-		Set<Integer> unusedValuesForRow = getUnusedValues(board.getSudokuCells(ROW, 7));
+		int[] expectedValues = new int[]
+		{
+			1, 2, 3, 4, 0, 6, 7, 8, 9
+		};
+		int[] actualValues = getValues(board.getSudokuCells(ROW, 7));
 
-		assertSame(1, unusedValuesForRow.size());
-		assertTrue(unusedValuesForRow.contains(5));
+		assertArrayEquals(expectedValues, actualValues);
 	}
 
 	@Test
-	public void testGenUnusedValuesForCol()
+	public void testGetSudokuCells_col()
 	{
 		String boardString
 				= "{000001000"
@@ -165,10 +172,13 @@ public class SudokuBoardTest
 				+ "000009000}";
 		SudokuBoard board = new SudokuBoard(boardString);
 
-		Set<Integer> unusedValuesForCol = getUnusedValues(board.getSudokuCells(COL, 5));
+		int[] expectedValues = new int[]
+		{
+			1, 2, 2, 4, 5, 6, 7, 8, 9
+		};
+		int[] actualValues = getValues(board.getSudokuCells(COL, 5));
 
-		assertSame(1, unusedValuesForCol.size());
-		assertTrue(unusedValuesForCol.contains(3));
+		assertArrayEquals(expectedValues, actualValues);
 	}
 
 	@Test
@@ -225,13 +235,12 @@ public class SudokuBoardTest
 		assertFalse("8 is missing from the last cell", board.isSolved());
 	}
 
-	private static Set<Integer> getUnusedValues(SudokuCell[] sudokuCells)
+	private static int[] getValues(SudokuCell[] sudokuCells)
 	{
-		Set<Integer> unusedValues = new HashSet<>(SudokuCell.LEGAL_CELL_VALUES);
-		Stream.of(sudokuCells)
+		return Arrays.stream(sudokuCells)
 				.map(SudokuCell::getValue)
-				.filter(value -> value != null)
-				.forEach(unusedValues::remove);
-		return unusedValues;
+				.map(v -> v == null ? 0 : v)
+				.mapToInt(Integer::intValue)
+				.toArray();
 	}
 }
