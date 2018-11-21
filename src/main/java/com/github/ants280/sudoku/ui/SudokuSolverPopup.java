@@ -51,7 +51,7 @@ public class SudokuSolverPopup implements ActionListener, ChangeListener
 				setValueConsumer,
 				toggleSudokuCellPossibleValue);
 		this.popupDialog = new JDialog(popupOwner, "Solver", true);
-		this.timerSlider = new JSlider(SwingConstants.VERTICAL, 0, 40, 4);
+		this.timerSlider = new JSlider(SwingConstants.VERTICAL, 0, 12, 4);
 		this.timer = new Timer(
 				timerSlider.getValue() * SLIDER_MULTIPLIER,
 				null);
@@ -65,7 +65,10 @@ public class SudokuSolverPopup implements ActionListener, ChangeListener
 	{
 		timerSlider.addChangeListener(this);
 		timerSlider.setMajorTickSpacing(4);
+		timerSlider.setMinorTickSpacing(1);
 		timerSlider.setPaintTicks(true);
+		timerSlider.setSnapToTicks(true);
+		timerSlider.setPaintLabels(true);
 		//Create the label table
 		Dictionary<Integer, JLabel> labelTable = new Hashtable<>();
 		for (int i = timerSlider.getMinimum();
