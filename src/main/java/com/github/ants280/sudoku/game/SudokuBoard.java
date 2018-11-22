@@ -82,12 +82,12 @@ public class SudokuBoard
 		{
 			String cellValueString = String.valueOf(boardString.charAt(i + 1));
 			int cellValue = Integer.parseInt(cellValueString);
-			int rowNumber = i / 9;
-			int columnNumber = i % 9;
-			int groupNumber = ((rowNumber / 3) * 3) + (columnNumber / 3);
+			int rowIndex = i / 9;
+			int columnIndex = i % 9;
+			int groupIndex = ((rowIndex / 3) * 3) + (columnIndex / 3);
 			allSudokuCells[i] = (cellValue == 0)
-					? new MutableSudokuCell(rowNumber, columnNumber, groupNumber)
-					: new ImmutableSudokuCell(rowNumber, columnNumber, groupNumber, cellValue);
+					? new MutableSudokuCell(rowIndex, columnIndex, groupIndex)
+					: new ImmutableSudokuCell(rowIndex, columnIndex, groupIndex, cellValue);
 		}
 		return Arrays.asList(allSudokuCells);
 	}
