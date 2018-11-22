@@ -166,7 +166,7 @@ public class SudokuBoardTest
 		SudokuBoard board = new SudokuBoard(boardString);
 
 		List<Integer> expectedValues = Arrays.asList(1, 2, 2, 4, 5, 6, 7, 8, 9);
-		List<Integer> actualValues = getValues(board.getSudokuCells(COL, 5));
+		List<Integer> actualValues = getValues(board.getSudokuCells(COLUMN, 5));
 
 		Assert.assertEquals(expectedValues, actualValues);
 	}

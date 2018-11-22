@@ -23,7 +23,7 @@ public class SudokuBoard
 		this.sectionTypeCells = new EnumMap<>(SectionType.class);
 
 		sectionTypeCells.put(ROW, allSudokuCells.stream().collect(Collectors.groupingBy(SudokuCell::getRowNumber)));
-		sectionTypeCells.put(COL, allSudokuCells.stream().collect(Collectors.groupingBy(SudokuCell::getColumnNumber)));
+		sectionTypeCells.put(COLUMN, allSudokuCells.stream().collect(Collectors.groupingBy(SudokuCell::getColumnNumber)));
 		sectionTypeCells.put(GROUP, allSudokuCells.stream().collect(Collectors.groupingBy(SudokuCell::getGroupNumber)));
 	}
 
