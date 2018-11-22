@@ -12,7 +12,7 @@ public class SudokuFrame extends JFrame
 
 	public SudokuFrame()
 	{
-		super("Sudoku2");
+		super("Sudoku");
 
 		init();
 	}
