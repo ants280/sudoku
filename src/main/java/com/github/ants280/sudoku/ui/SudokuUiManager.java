@@ -404,6 +404,7 @@ public class SudokuUiManager implements ActionListener
 				= new SudokuSolverPopup(
 						frame,
 						board,
+						sudokuDisplayComponent,
 						this::setSudokuCellValue,
 						this::toggleSudokuCellPossibleValue);
 		sudokuSolverPopup.setVisible(true);

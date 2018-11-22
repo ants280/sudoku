@@ -28,6 +28,7 @@ import javax.swing.event.ChangeListener;
 public class SudokuSolverPopup implements ActionListener, ChangeListener
 {
 	private final SudokuBoard sudokuBoard;
+	private final SudokuDisplayComponent sudokuDisplayComponent;
 	private final SudokuSolver sudokuSolver;
 	private final JDialog popupDialog;
 	private final JSlider timerSlider;
@@ -42,10 +43,12 @@ public class SudokuSolverPopup implements ActionListener, ChangeListener
 	public SudokuSolverPopup(
 			JFrame popupOwner,
 			SudokuBoard sudokuBoard,
+			SudokuDisplayComponent sudokuDisplayComponent,
 			BiConsumer<SudokuCell, Integer> setValueConsumer,
 			BiConsumer<SudokuCell, Integer> toggleSudokuCellPossibleValue)
 	{
 		this.sudokuBoard = sudokuBoard;
+		this.sudokuDisplayComponent = sudokuDisplayComponent;
 		this.sudokuSolver = new SudokuSolver(
 				sudokuBoard,
 				setValueConsumer,
@@ -133,6 +136,7 @@ public class SudokuSolverPopup implements ActionListener, ChangeListener
 					timer.start();
 					startStopButton.setText(BUTTON_STOP);
 					sudokuSolver.initialize();
+					sudokuDisplayComponent.repaint();
 				}
 				break;
 			case BUTTON_STOP:
