@@ -1,7 +1,7 @@
 package com.github.ants280.sudoku.ui;
 
 import com.github.ants280.sudoku.game.SudokuBoard;
-import com.github.ants280.sudoku.game.SudokuSolver;
+import com.github.ants280.sudoku.game.solver.SudokuSolver;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;

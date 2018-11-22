@@ -1,8 +1,8 @@
-package com.github.ants280.sudoku.game;
+package com.github.ants280.sudoku.game.solver;
 
-import com.github.ants280.sudoku.game.solver.CullPussibleValuesSudokuSolverPlugin;
-import com.github.ants280.sudoku.game.solver.OnlyPossibleValueSudokuSolverPlugin;
-import com.github.ants280.sudoku.game.solver.SudokuSolverPlugin;
+import com.github.ants280.sudoku.game.SectionType;
+import com.github.ants280.sudoku.game.SudokuBoard;
+import com.github.ants280.sudoku.game.SudokuCell;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiConsumer;
