@@ -1,5 +1,6 @@
 package com.github.ants280.sudoku.game;
 
+import com.github.ants280.sudoku.game.solver.CullPussibleValuesSudokuSolverPlugin;
 import com.github.ants280.sudoku.game.solver.OnlyPossibleValueSudokuSolverPlugin;
 import com.github.ants280.sudoku.game.solver.SudokuSolverPlugin;
 import java.util.Arrays;
@@ -19,7 +20,8 @@ public class SudokuSolver
 				= getClearNearbyPossibleValuesConsumer(sudokuBoard);
 
 		this.solverPlugins = Arrays.asList(
-				new OnlyPossibleValueSudokuSolverPlugin(sudokuBoard, removeNearbyPossibleValuesConsumer));
+				new OnlyPossibleValueSudokuSolverPlugin(sudokuBoard, removeNearbyPossibleValuesConsumer),
+				new CullPussibleValuesSudokuSolverPlugin(sudokuBoard));
 	}
 
 	public void initialize()
