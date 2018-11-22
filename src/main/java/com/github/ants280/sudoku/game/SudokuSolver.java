@@ -44,7 +44,10 @@ public class SudokuSolver
 	{
 		return (sudokuCell, v) ->
 		{
-
+			Arrays.stream(SectionType.values())
+					.forEach(sectionType
+							-> sudokuBoard.getSudokuCells(sectionType, sudokuCell.getIndex(sectionType))
+							.forEach(nearbySudokuCell -> nearbySudokuCell.removePossibleValue(v)));
 		};
 	}
 }

@@ -7,12 +7,16 @@ public class ImmutableSudokuCell extends SudokuCell
 {
 	private final int value;
 
-	public ImmutableSudokuCell(int rowNumber, int columnNumber, int groupNumber, int value)
+	public ImmutableSudokuCell(
+			int rowIndex,
+			int columnIndex,
+			int groupIndex,
+			int cellValue)
 	{
-		super(rowNumber, columnNumber, groupNumber);
+		super(rowIndex, columnIndex, groupIndex);
 
-		SudokuCell.validateValue(value);
-		this.value = value;
+		SudokuCell.validateValue(cellValue);
+		this.value = cellValue;
 	}
 
 	@Override

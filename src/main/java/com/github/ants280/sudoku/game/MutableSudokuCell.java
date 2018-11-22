@@ -10,9 +10,9 @@ public class MutableSudokuCell extends SudokuCell
 	private Integer value;
 	private final Set<Integer> possibleValues;
 
-	public MutableSudokuCell(int rowNumber, int columnNumber, int groupNumber)
+	public MutableSudokuCell(int rowIndex, int columnIndex, int groupIndex)
 	{
-		super(rowNumber, columnNumber, groupNumber);
+		super(rowIndex, columnIndex, groupIndex);
 
 		this.value = null;
 		this.possibleValues = new HashSet<>();

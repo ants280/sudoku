@@ -1,6 +1,7 @@
 package com.github.ants280.sudoku.ui;
 
 import com.github.ants280.sudoku.game.ImmutableSudokuCell;
+import com.github.ants280.sudoku.game.SectionType;
 import com.github.ants280.sudoku.game.SudokuBoard;
 import com.github.ants280.sudoku.game.SudokuCell;
 import java.awt.Color;
@@ -113,8 +114,8 @@ public class SudokuDisplayComponent extends JComponent
 			int fontHeightPx = (int) (valueFont.getSize() * 0.75d);
 			FontMetrics fontMetrics = graphics.getFontMetrics();
 			int charWidth = getFontWidth(fontMetrics, sudokuCell.getValue());
-			int colOffset = (int) (xOffset + (cellLength * (sudokuCell.getColumnNumber() + 0.5d)) - (charWidth / 2d));
-			int rowOffset = (int) (yOffset + (cellLength * (sudokuCell.getRowNumber() + 0.5d)) + (fontHeightPx / 2d));
+			int colOffset = (int) (xOffset + (cellLength * (sudokuCell.getIndex(SectionType.COLUMN) + 0.5d)) - (charWidth / 2d));
+			int rowOffset = (int) (yOffset + (cellLength * (sudokuCell.getIndex(SectionType.ROW) + 0.5d)) + (fontHeightPx / 2d));
 
 			graphics.drawString(
 					sudokuCell.getValue().toString(), colOffset, rowOffset);
@@ -147,8 +148,8 @@ public class SudokuDisplayComponent extends JComponent
 			int fontHeightPx)
 	{
 		int charWidth = fontMetrics.stringWidth(possibleValue.toString());
-		double colPercentage = sudokuCell.getColumnNumber() + ((1 + (2 * ((possibleValue - 1) % 3))) / 6d);
-		double rowPercentage = sudokuCell.getRowNumber() + ((1 + (2 * ((possibleValue - 1) / 3))) / 6d);
+		double colPercentage = sudokuCell.getIndex(SectionType.COLUMN) + ((1 + (2 * ((possibleValue - 1) % 3))) / 6d);
+		double rowPercentage = sudokuCell.getIndex(SectionType.ROW) + ((1 + (2 * ((possibleValue - 1) / 3))) / 6d);
 		int colOffset = (int) (xOffset + cellLength * colPercentage
 				- (charWidth / 2d));
 		int rowOffset = (int) (yOffset + cellLength * rowPercentage

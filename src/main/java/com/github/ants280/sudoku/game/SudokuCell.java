@@ -1,5 +1,7 @@
 package com.github.ants280.sudoku.game;
 
+import java.util.EnumMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -10,30 +12,20 @@ public abstract class SudokuCell
 			= IntStream.rangeClosed(1, 9)
 					.boxed()
 					.collect(Collectors.toSet());
-	private final int rowNumber;
-	private final int columnNumber;
-	private final int groupNumber;
+	private final Map<SectionType, Integer> sectionTypeIndices;
 
-	public SudokuCell(int rowNumber, int columnNumber, int groupNumber)
+	public SudokuCell(int rowIndex, int columnIndex, int groupIndex)
 	{
-		this.rowNumber = rowNumber;
-		this.columnNumber = columnNumber;
-		this.groupNumber = groupNumber;
+		SudokuBoard.validateIndices(rowIndex, columnIndex, groupIndex);
+		this.sectionTypeIndices = new EnumMap<>(SectionType.class);
+		sectionTypeIndices.put(SectionType.ROW, rowIndex);
+		sectionTypeIndices.put(SectionType.COLUMN, columnIndex);
+		sectionTypeIndices.put(SectionType.GROUP, groupIndex);
 	}
 
-	public int getRowNumber()
+	public int getIndex(SectionType sectionType)
 	{
-		return rowNumber;
-	}
-
-	public int getColumnNumber()
-	{
-		return columnNumber;
-	}
-
-	public int getGroupNumber()
-	{
-		return groupNumber;
+		return sectionTypeIndices.get(sectionType);
 	}
 
 	public abstract Integer getValue();

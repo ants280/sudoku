@@ -1,7 +1,6 @@
 package com.github.ants280.sudoku.game;
 
 import static com.github.ants280.sudoku.game.SectionType.*;
-import com.github.ants280.sudoku.ui.Sudoku;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -22,9 +21,9 @@ public class SudokuBoard
 		this.allSudokuCells = getAllSudokuCells(boardString);
 		this.sectionTypeCells = new EnumMap<>(SectionType.class);
 
-		sectionTypeCells.put(ROW, allSudokuCells.stream().collect(Collectors.groupingBy(SudokuCell::getRowNumber)));
-		sectionTypeCells.put(COLUMN, allSudokuCells.stream().collect(Collectors.groupingBy(SudokuCell::getColumnNumber)));
-		sectionTypeCells.put(GROUP, allSudokuCells.stream().collect(Collectors.groupingBy(SudokuCell::getGroupNumber)));
+		sectionTypeCells.put(ROW, allSudokuCells.stream().collect(Collectors.groupingBy(sudokuCell -> sudokuCell.getIndex(ROW))));
+		sectionTypeCells.put(COLUMN, allSudokuCells.stream().collect(Collectors.groupingBy(sudokuCell -> sudokuCell.getIndex(COLUMN))));
+		sectionTypeCells.put(GROUP, allSudokuCells.stream().collect(Collectors.groupingBy(sudokuCell -> sudokuCell.getIndex(GROUP))));
 	}
 
 	public SudokuBoard()
@@ -107,14 +106,7 @@ public class SudokuBoard
 
 	public SudokuCell getSudokuCell(int r, int c)
 	{
-		validateCoords(r, c);
-
-		if (Sudoku.DEBUG
-				&& sectionTypeCells.get(ROW).get(r).get(c).getRowNumber() != r
-				&& sectionTypeCells.get(ROW).get(r).get(c).getColumnNumber() != c)
-		{
-			throw new IllegalArgumentException("bad r/c: " + r + " " + c);
-		}
+		validateIndices(r, c);
 
 		return sectionTypeCells.get(ROW).get(r).get(c);
 	}
@@ -123,7 +115,7 @@ public class SudokuBoard
 			SectionType sectionType,
 			int sectionNumber)
 	{
-		validateCoords(sectionNumber);
+		validateIndices(sectionNumber);
 
 		return sectionTypeCells.get(sectionType).get(sectionNumber);
 	}
@@ -150,20 +142,20 @@ public class SudokuBoard
 		return boardString.matches("^\\{\\d{81}\\}$");
 	}
 
-	private static void validateCoords(int... coordinates)
+	public static void validateIndices(int... indices)
 			throws IllegalArgumentException
 	{
-		IntStream.of(coordinates)
-				.forEach(SudokuBoard::validateCoord);
+		IntStream.of(indices)
+				.forEach(SudokuBoard::validateIndex);
 	}
 
-	private static void validateCoord(int coordinate)
+	private static void validateIndex(int index)
 			throws IllegalArgumentException
 	{
-		if (coordinate < 0 || coordinate >= 9)
+		if (index < 0 || index >= 9)
 		{
 			throw new IllegalArgumentException(
-					"Invalid coordinate: " + coordinate);
+					"Invalid index: " + index);
 		}
 	}
 }
