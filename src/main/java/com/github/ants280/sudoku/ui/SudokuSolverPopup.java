@@ -119,6 +119,7 @@ public class SudokuSolverPopup implements ActionListener, ChangeListener
 		switch (actionEvent.getActionCommand())
 		{
 			case BUTTON_START:
+				sudokuSolver.initialize();
 				if (timerSlider.getValue() == 0)
 				{
 					sudokuSolver.solveFast();
@@ -128,7 +129,6 @@ public class SudokuSolverPopup implements ActionListener, ChangeListener
 				{
 					timer.start();
 					startStopButton.setText(BUTTON_STOP);
-					sudokuSolver.initialize();
 				}
 				repaintCanvasCallback.run();
 				break;
