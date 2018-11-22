@@ -132,6 +132,7 @@ public class SudokuSolverPopup implements ActionListener, ChangeListener
 				{
 					timer.start();
 					startStopButton.setText(BUTTON_STOP);
+					sudokuSolver.initialize();
 				}
 				break;
 			case BUTTON_STOP:
