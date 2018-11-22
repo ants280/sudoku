@@ -113,11 +113,11 @@ public class SudokuBoard
 
 	public List<SudokuCell> getSudokuCells(
 			SectionType sectionType,
-			int sectionNumber)
+			int sectionIndex)
 	{
-		validateIndices(sectionNumber);
+		validateIndices(sectionIndex);
 
-		return sectionTypeCells.get(sectionType).get(sectionNumber);
+		return sectionTypeCells.get(sectionType).get(sectionIndex);
 	}
 
 	public boolean isSolved()
