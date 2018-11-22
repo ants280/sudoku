@@ -284,7 +284,7 @@ public class SudokuUiManager implements ActionListener
 				"Select cell value",
 				sudokuCell -> true,
 				(selectedSudokuCell, v)
-				-> !v.equals(selectedSudokuCell.getValue()),
+				-> v.equals(selectedSudokuCell.getValue()),
 				this::setSudokuCellValue,
 				true);
 	}
