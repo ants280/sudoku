@@ -7,23 +7,35 @@ import java.util.function.BiConsumer;
 
 public class SudokuSolver
 {
+	private final SudokuBoard sudokuBoard;
 	private final List<SudokuSolverPlugin> solverPlugins;
+	private final BiConsumer<SudokuCell, Integer> removeNearbyPossibleValuesConsumer;
 
 	public SudokuSolver(
 			SudokuBoard sudokuBoard,
 			BiConsumer<SudokuCell, Integer> setValueConsumer,
 			BiConsumer<SudokuCell, Integer> toggleSudokuCellPossibleValue)
 	{
-		BiConsumer<SudokuCell, Integer> updatedSetValueConsumer
-				= setValueConsumer.andThen(getClearNearbyPossibleValuesConsumer(sudokuBoard));
+		this.sudokuBoard = sudokuBoard;
+		this.removeNearbyPossibleValuesConsumer
+				= getClearNearbyPossibleValuesConsumer(sudokuBoard);
 
+		BiConsumer<SudokuCell, Integer> updatedSetValueConsumer
+				= setValueConsumer.andThen(removeNearbyPossibleValuesConsumer);
+		this.solverPlugins = Arrays.asList();
+	}
+
+	public void initialize()
+	{
 		sudokuBoard.getAllSudokuCells()
 				.stream()
 				.filter(sudokuCell -> sudokuCell.getValue() == null)
 				.forEach(sudokuCell -> sudokuCell.resetPossibleValues());
-
-
-		this.solverPlugins = Arrays.asList();
+		sudokuBoard.getAllSudokuCells()
+				.stream()
+				.filter(sudokuCell -> sudokuCell.getValue() != null)
+				.forEach(sudokuCell -> removeNearbyPossibleValuesConsumer
+				.accept(sudokuCell, sudokuCell.getValue()));
 	}
 
 	public boolean makeMove()
@@ -40,14 +52,14 @@ public class SudokuSolver
 		}
 	}
 
-	private static BiConsumer<SudokuCell, Integer> getClearNearbyPossibleValuesConsumer(SudokuBoard sudokuBoard)
+	private static BiConsumer<SudokuCell, Integer>
+			getClearNearbyPossibleValuesConsumer(SudokuBoard sudokuBoard)
 	{
 		return (sudokuCell, v) ->
 		{
 			Arrays.stream(SectionType.values())
-					.forEach(sectionType
-							-> sudokuBoard.getSudokuCells(sectionType, sudokuCell.getIndex(sectionType))
-							.forEach(nearbySudokuCell -> nearbySudokuCell.removePossibleValue(v)));
+					.forEach(sectionType -> sudokuBoard.getSudokuCells(sectionType, sudokuCell.getIndex(sectionType))
+					.forEach(nearbySudokuCell -> nearbySudokuCell.removePossibleValue(v)));
 		};
 	}
 }
