@@ -12,6 +12,7 @@ import java.util.Hashtable;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -32,8 +33,11 @@ public class SudokuSolverPopup implements ActionListener, ChangeListener
 	private final JSlider timerSlider;
 	private final Timer timer;
 	private final JProgressBar progressBar;
+	private final JCheckBox resetPossibleValuesWhenStartingCheckBox;
 	private final JButton startStopButton;
 	private static final String ACTION_TIMER = "timer";
+	private static final String BUTTON_RESET_POSSIBLE_VALUES
+			= "Reset possible values";
 	private static final String BUTTON_START = "Start";
 	private static final String BUTTON_STOP = "Stop";
 	private static final int SLIDER_MULTIPLIER = 250;
@@ -52,6 +56,8 @@ public class SudokuSolverPopup implements ActionListener, ChangeListener
 				timerSlider.getValue() * SLIDER_MULTIPLIER,
 				null);
 		this.progressBar = new JProgressBar();
+		this.resetPossibleValuesWhenStartingCheckBox
+				= new JCheckBox(BUTTON_RESET_POSSIBLE_VALUES, true);
 		this.startStopButton = new JButton(BUTTON_START);
 
 		init();
@@ -89,6 +95,7 @@ public class SudokuSolverPopup implements ActionListener, ChangeListener
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		panel.add(timerSlider);
 		panel.add(progressBar);
+		panel.add(resetPossibleValuesWhenStartingCheckBox);
 		panel.add(startStopButton);
 		panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
@@ -119,7 +126,11 @@ public class SudokuSolverPopup implements ActionListener, ChangeListener
 		switch (actionEvent.getActionCommand())
 		{
 			case BUTTON_START:
-				sudokuSolver.initialize();
+				if (resetPossibleValuesWhenStartingCheckBox.isSelected())
+				{
+					sudokuSolver.initialize();
+				}
+
 				if (timerSlider.getValue() == 0)
 				{
 					sudokuSolver.solveFast();
@@ -138,6 +149,7 @@ public class SudokuSolverPopup implements ActionListener, ChangeListener
 				break;
 			case ACTION_TIMER:
 				boolean moveMade = sudokuSolver.makeMove();
+
 				if (!moveMade || sudokuBoard.isSolved())
 				{
 					timer.stop();
