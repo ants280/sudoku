@@ -11,17 +11,12 @@ public class SudokuSolver
 	private final List<SudokuSolverPlugin> solverPlugins;
 	private final BiConsumer<SudokuCell, Integer> removeNearbyPossibleValuesConsumer;
 
-	public SudokuSolver(
-			SudokuBoard sudokuBoard,
-			BiConsumer<SudokuCell, Integer> setValueConsumer,
-			BiConsumer<SudokuCell, Integer> toggleSudokuCellPossibleValue)
+	public SudokuSolver(SudokuBoard sudokuBoard)
 	{
 		this.sudokuBoard = sudokuBoard;
 		this.removeNearbyPossibleValuesConsumer
 				= getClearNearbyPossibleValuesConsumer(sudokuBoard);
 
-		BiConsumer<SudokuCell, Integer> updatedSetValueConsumer
-				= setValueConsumer.andThen(removeNearbyPossibleValuesConsumer);
 		this.solverPlugins = Arrays.asList();
 	}
 
@@ -31,6 +26,7 @@ public class SudokuSolver
 				.stream()
 				.filter(sudokuCell -> sudokuCell.getValue() == null)
 				.forEach(sudokuCell -> sudokuCell.resetPossibleValues());
+
 		sudokuBoard.getAllSudokuCells()
 				.stream()
 				.filter(sudokuCell -> sudokuCell.getValue() != null)

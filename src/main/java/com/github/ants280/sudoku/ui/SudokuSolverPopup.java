@@ -1,7 +1,6 @@
 package com.github.ants280.sudoku.ui;
 
 import com.github.ants280.sudoku.game.SudokuBoard;
-import com.github.ants280.sudoku.game.SudokuCell;
 import com.github.ants280.sudoku.game.SudokuSolver;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,7 +9,6 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.Dictionary;
 import java.util.Hashtable;
-import java.util.function.BiConsumer;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -28,7 +26,7 @@ import javax.swing.event.ChangeListener;
 public class SudokuSolverPopup implements ActionListener, ChangeListener
 {
 	private final SudokuBoard sudokuBoard;
-	private final SudokuDisplayComponent sudokuDisplayComponent;
+	private final Runnable repaintCanvasCallback;
 	private final SudokuSolver sudokuSolver;
 	private final JDialog popupDialog;
 	private final JSlider timerSlider;
@@ -43,16 +41,11 @@ public class SudokuSolverPopup implements ActionListener, ChangeListener
 	public SudokuSolverPopup(
 			JFrame popupOwner,
 			SudokuBoard sudokuBoard,
-			SudokuDisplayComponent sudokuDisplayComponent,
-			BiConsumer<SudokuCell, Integer> setValueConsumer,
-			BiConsumer<SudokuCell, Integer> toggleSudokuCellPossibleValue)
+			Runnable repaintCanvasCallback)
 	{
 		this.sudokuBoard = sudokuBoard;
-		this.sudokuDisplayComponent = sudokuDisplayComponent;
-		this.sudokuSolver = new SudokuSolver(
-				sudokuBoard,
-				setValueConsumer,
-				toggleSudokuCellPossibleValue);
+		this.repaintCanvasCallback = repaintCanvasCallback;
+		this.sudokuSolver = new SudokuSolver(sudokuBoard);
 		this.popupDialog = new JDialog(popupOwner, "Solver", true);
 		this.timerSlider = new JSlider(SwingConstants.VERTICAL, 0, 12, 4);
 		this.timer = new Timer(
@@ -136,8 +129,8 @@ public class SudokuSolverPopup implements ActionListener, ChangeListener
 					timer.start();
 					startStopButton.setText(BUTTON_STOP);
 					sudokuSolver.initialize();
-					sudokuDisplayComponent.repaint();
 				}
+				repaintCanvasCallback.run();
 				break;
 			case BUTTON_STOP:
 				timer.stop();
@@ -149,6 +142,10 @@ public class SudokuSolverPopup implements ActionListener, ChangeListener
 				{
 					timer.stop();
 					popupDialog.setVisible(false);
+				}
+				else
+				{
+					repaintCanvasCallback.run();
 				}
 				break;
 			default:
