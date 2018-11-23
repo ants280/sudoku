@@ -248,14 +248,22 @@ public class SudokuDisplayComponent extends JComponent
 
 	public void incrementSelectedRow(int i)
 	{
-		this.setSelectedRow(selectedRow + i);
-		this.repaint();
+		if (selectedRow != null)
+		{
+			this.setSelectedRow(selectedRow + i);
+
+			this.repaint();
+		}
 	}
 
 	public void incrementSelectedCol(int i)
 	{
-		this.setSelectedCol(selectedCol + i);
-		this.repaint();
+		if (selectedCol != null)
+		{
+			this.setSelectedCol(selectedCol + i);
+
+			this.repaint();
+		}
 	}
 
 	private void setSelectedRow(int i)
