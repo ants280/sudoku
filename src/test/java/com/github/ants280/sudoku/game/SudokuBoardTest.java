@@ -14,7 +14,8 @@ public class SudokuBoardTest
 	{
 		SudokuBoard board = new SudokuBoard("{123456789}");
 
-		Assert.fail("The following sudkuBoard should be invalid because it is too small: " + board);
+		Assert.fail("The following sudkuBoard should be invalid "
+				+ "because it is too small: " + board);
 	}
 
 	@Test
