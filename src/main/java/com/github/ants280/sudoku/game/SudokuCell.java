@@ -78,7 +78,7 @@ public class SudokuCell
 				: !this.value.equals(oldValue);
 	}
 
-	public void resetPossibleValues()
+	public void resetPossibleValues() // TODO : rename to clearPossibleValues()
 	{
 		if (locked)
 		{
