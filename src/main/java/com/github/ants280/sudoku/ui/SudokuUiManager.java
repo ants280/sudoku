@@ -383,7 +383,7 @@ public class SudokuUiManager implements ActionListener
 				"Load " + frame.getTitle(),
 				JOptionPane.INFORMATION_MESSAGE,
 				null, // Icon
-				null, // selectionValues (null implies textbox
+				null, // selectionValues (null implies textbox)
 				null); // initialSelectionValue
 
 		if (boardToLoad != null)
