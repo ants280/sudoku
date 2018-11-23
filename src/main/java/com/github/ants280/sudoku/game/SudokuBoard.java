@@ -19,11 +19,14 @@ public class SudokuBoard
 	public SudokuBoard(String boardString)
 	{
 		this.allSudokuCells = getAllSudokuCells(boardString);
-		this.sectionTypeCells = new EnumMap<>(SectionType.class);
 
-		sectionTypeCells.put(ROW, allSudokuCells.stream().collect(Collectors.groupingBy(sudokuCell -> sudokuCell.getIndex(ROW))));
-		sectionTypeCells.put(COLUMN, allSudokuCells.stream().collect(Collectors.groupingBy(sudokuCell -> sudokuCell.getIndex(COLUMN))));
-		sectionTypeCells.put(GROUP, allSudokuCells.stream().collect(Collectors.groupingBy(sudokuCell -> sudokuCell.getIndex(GROUP))));
+		this.sectionTypeCells = new EnumMap<>(SectionType.class);
+		sectionTypeCells.put(ROW, allSudokuCells.stream().collect(Collectors
+				.groupingBy(sudokuCell -> sudokuCell.getIndex(ROW))));
+		sectionTypeCells.put(COLUMN, allSudokuCells.stream().collect(Collectors
+				.groupingBy(sudokuCell -> sudokuCell.getIndex(COLUMN))));
+		sectionTypeCells.put(GROUP, allSudokuCells.stream().collect(Collectors
+				.groupingBy(sudokuCell -> sudokuCell.getIndex(GROUP))));
 	}
 
 	public SudokuBoard()
@@ -61,13 +64,12 @@ public class SudokuBoard
 	@Override
 	public String toString()
 	{
-		String boardValues = allSudokuCells.stream()
-				.map(SudokuCell::getValue)
-				.map(v -> v == null ? 0 : v)
-				.map(String::valueOf)
-				.collect(Collectors.joining());
-
-		return "{" + boardValues + "}";
+		return String.format("{%s}",
+				allSudokuCells.stream()
+						.map(SudokuCell::getValue)
+						.map(v -> v == null ? 0 : v)
+						.map(String::valueOf)
+						.collect(Collectors.joining()));
 	}
 
 	private static List<SudokuCell> getAllSudokuCells(String boardString)
