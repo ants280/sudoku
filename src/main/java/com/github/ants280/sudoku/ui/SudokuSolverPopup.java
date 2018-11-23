@@ -152,7 +152,8 @@ public class SudokuSolverPopup implements ActionListener, ChangeListener
 					timer.stop();
 					popupDialog.setVisible(false);
 				}
-				else
+
+				if (moveMade)
 				{
 					repaintCanvasCallback.run();
 				}
