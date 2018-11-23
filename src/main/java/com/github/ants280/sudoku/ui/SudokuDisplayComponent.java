@@ -1,6 +1,5 @@
 package com.github.ants280.sudoku.ui;
 
-import com.github.ants280.sudoku.game.ImmutableSudokuCell;
 import com.github.ants280.sudoku.game.SectionType;
 import com.github.ants280.sudoku.game.SudokuBoard;
 import com.github.ants280.sudoku.game.SudokuCell;
@@ -102,7 +101,7 @@ public class SudokuDisplayComponent extends JComponent
 	{
 		if (sudokuCell.getValue() != null)
 		{
-			graphics.setColor(sudokuCell instanceof ImmutableSudokuCell
+			graphics.setColor(sudokuCell.isLocked()
 					? Color.DARK_GRAY : Color.BLACK);
 			graphics.setFont(valueFont);
 			int fontHeightPx = (int) (valueFont.getSize() * 0.75d);

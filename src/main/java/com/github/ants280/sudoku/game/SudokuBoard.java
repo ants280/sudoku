@@ -31,16 +31,13 @@ public class SudokuBoard
 
 	public SudokuBoard()
 	{
-//		this("{000" + "000" + "000"
-//			+ "000" + "000" + "000"
-//			+ "000" + "000" + "000"
-//			+ "000" + "000" + "000"
-//			+ "000" + "000" + "000"
-//			+ "000" + "000" + "000"
-//			+ "000" + "000" + "000"
-//			+ "000" + "000" + "000"
-//			+ "000" + "000" + "000}");
-
+		this(String.format(
+				"{%s}",
+				IntStream.range(0, 81)
+						.map(i -> 0)
+						.boxed()
+						.map(String::valueOf)
+						.collect(Collectors.joining())));
 //		this("{000000000000000000000000000000000000000000000000000000000000000000000000000000000}");
 //		this("{768945123239617854145823976473261589582394617691758342827136495956482731314579268}");
 		// May 18-24 2015
@@ -57,7 +54,7 @@ public class SudokuBoard
 //		this("{605040902001090003020015600900004800000060000008100009006430080500080200807020306}"); // 4/5 stars
 //		this("{000062507006000001010070008095400002600090005100005970700040050200000800401580000}"); // 5/5 stars
 		// problem boards:
-		this("{004063100000010002000074683907000000006080900000000504825640000700090000009350700}"); // 6/5 stars 2017-11-18
+//		this("{004063100000010002000074683907000000006080900000000504825640000700090000009350700}"); // 6/5 stars 2017-11-18
 //		this("{003070600000159020900000005700000010006040900040000006400000002070362000009080700}"); // :(
 	}
 
@@ -87,9 +84,12 @@ public class SudokuBoard
 			int rowIndex = i / 9;
 			int columnIndex = i % 9;
 			int groupIndex = ((rowIndex / 3) * 3) + (columnIndex / 3);
-			allSudokuCells[i] = (cellValue == 0)
-					? new MutableSudokuCell(rowIndex, columnIndex, groupIndex)
-					: new ImmutableSudokuCell(rowIndex, columnIndex, groupIndex, cellValue);
+			allSudokuCells[i] = new SudokuCell(
+					rowIndex,
+					columnIndex,
+					groupIndex,
+					cellValue == 0 ? null : cellValue,
+					cellValue != 0); // locked
 		}
 		return Arrays.asList(allSudokuCells);
 	}
