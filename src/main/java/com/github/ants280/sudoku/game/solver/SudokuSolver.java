@@ -60,6 +60,8 @@ public class SudokuSolver
 		{
 			Arrays.stream(SectionType.values())
 					.forEach(sectionType -> sudokuBoard.getSudokuCells(sectionType, sudokuCell.getIndex(sectionType))
+					.stream()
+					.filter(nearbySudokuCell -> nearbySudokuCell.getValue() == null)
 					.forEach(nearbySudokuCell -> nearbySudokuCell.removePossibleValue(v)));
 		};
 	}
