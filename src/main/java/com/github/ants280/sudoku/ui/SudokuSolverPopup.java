@@ -4,9 +4,6 @@ import com.github.ants280.sudoku.game.SudokuBoard;
 import com.github.ants280.sudoku.game.solver.SudokuSolver;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.util.Dictionary;
 import java.util.Hashtable;
 import javax.swing.BorderFactory;
@@ -102,7 +99,7 @@ public class SudokuSolverPopup implements ActionListener, ChangeListener
 		popupDialog.add(panel);
 		popupDialog.pack();
 		popupDialog.setLocationRelativeTo(popupDialog.getParent());
-		popupDialog.addWindowListener(new CancelTimerWindowListener(timer));
+		popupDialog.addWindowListener(new StopTimerWindowListener(timer));
 	}
 
 	public void setVisible(boolean visible)
@@ -169,23 +166,5 @@ public class SudokuSolverPopup implements ActionListener, ChangeListener
 	public void stateChanged(ChangeEvent changeEvent)
 	{
 		timer.setDelay(timerSlider.getValue() * SLIDER_MULTIPLIER);
-	}
-
-	private static class CancelTimerWindowListener
-			extends WindowAdapter
-			implements WindowListener
-	{
-		private final Timer timer;
-
-		public CancelTimerWindowListener(Timer timer)
-		{
-			this.timer = timer;
-		}
-
-		@Override
-		public void windowClosing(WindowEvent e)
-		{
-			timer.stop();
-		}
 	}
 }
