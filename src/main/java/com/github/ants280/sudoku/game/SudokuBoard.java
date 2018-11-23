@@ -98,7 +98,7 @@ public class SudokuBoard
 	{
 		IntStream.range(0, 81)
 				.forEach(i -> allSudokuCells.get(i)
-				.setValue(other.getAllSudokuCells().get(i).getValue()));
+				.resetFrom(other.getAllSudokuCells().get(i)));
 	}
 
 	public List<SudokuCell> getAllSudokuCells()

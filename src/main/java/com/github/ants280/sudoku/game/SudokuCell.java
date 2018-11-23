@@ -137,6 +137,16 @@ public class SudokuCell
 		}
 	}
 
+	public void resetFrom(SudokuCell otherSudokuCell)
+	{
+		value = otherSudokuCell.getValue();
+
+		possibleValues.clear();
+		possibleValues.addAll(otherSudokuCell.getPossibleValues());
+
+		locked = otherSudokuCell.isLocked();
+	}
+
 	@Override
 	public String toString()
 	{
