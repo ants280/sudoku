@@ -78,7 +78,7 @@ public class SudokuCell
 				: !this.value.equals(oldValue);
 	}
 
-	public void resetPossibleValues() // TODO : rename to clearPossibleValues()
+	public void clearPossibleValues()
 	{
 		if (locked)
 		{
@@ -86,7 +86,7 @@ public class SudokuCell
 					"Reset possible values of a locked SudokuCell.");
 		}
 
-		possibleValues.addAll(SudokuCell.LEGAL_CELL_VALUES);
+		possibleValues.clear();
 	}
 
 	public boolean removePossibleValue(int value)
@@ -117,7 +117,7 @@ public class SudokuCell
 
 	public void setLocked(boolean locked)
 	{
-		if (value == null)
+		if (locked && value == null)
 		{
 			throw new IllegalArgumentException(
 					"Cannot lock an empty SudokuCell.");

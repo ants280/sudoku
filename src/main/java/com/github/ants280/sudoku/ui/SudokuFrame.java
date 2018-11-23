@@ -31,6 +31,7 @@ public class SudokuFrame extends JFrame
 		JMenu actionMenu = new JMenu();
 		JMenuItem setValueMenuItem = new JMenuItem();
 		JMenuItem setPossibleValueMenuItem = new JMenuItem();
+		JMenuItem clearPossibleValuesMenuItem = new JMenuItem();
 		JMenuItem clearCellsMenuItem = new JMenuItem();
 		JMenuItem lockCellsMenuItem = new JMenuItem();
 		JMenuItem solveMenuItem = new JMenuItem();
@@ -45,6 +46,7 @@ public class SudokuFrame extends JFrame
 		fileMenu.add(exitMenuItem);
 		actionMenu.add(setValueMenuItem);
 		actionMenu.add(setPossibleValueMenuItem);
+		actionMenu.add(clearPossibleValuesMenuItem);
 		actionMenu.addSeparator();
 		actionMenu.add(clearCellsMenuItem);
 		actionMenu.add(lockCellsMenuItem);
@@ -70,6 +72,7 @@ public class SudokuFrame extends JFrame
 				actionMenu,
 				setValueMenuItem,
 				setPossibleValueMenuItem,
+				clearPossibleValuesMenuItem,
 				clearCellsMenuItem,
 				lockCellsMenuItem,
 				solveMenuItem,

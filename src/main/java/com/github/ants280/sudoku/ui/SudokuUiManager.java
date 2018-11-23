@@ -27,6 +27,7 @@ public class SudokuUiManager implements ActionListener
 	private static final String ACTION_M = "Action";
 	private static final String SET_VALUE_MI = "Set value...";
 	private static final String SET_POSSIBLE_VALUE_MI = "Set possible value...";
+	private static final String CLEAR_POSSIBLE_VALUES_MI = "Clear possible values";
 	private static final String CLEAR_CELLS_MI = "Clear cells...";
 	private static final String LOCK_CELLS_MI = "Lock cells...";
 	private static final String SOLVE_MI = "Solve...";
@@ -79,6 +80,7 @@ public class SudokuUiManager implements ActionListener
 			JMenu actionMenu,
 			JMenuItem setValueMenuItem,
 			JMenuItem setPossibleValueMenuItem,
+			JMenuItem clearPossibleValuesMenuItem,
 			JMenuItem clearCellsMenuItem,
 			JMenuItem lockCellsMenuItem,
 			JMenuItem solveMenuItem,
@@ -104,6 +106,7 @@ public class SudokuUiManager implements ActionListener
 				actionMenu,
 				setValueMenuItem,
 				setPossibleValueMenuItem,
+				clearPossibleValuesMenuItem,
 				clearCellsMenuItem,
 				lockCellsMenuItem,
 				solveMenuItem,
@@ -123,6 +126,7 @@ public class SudokuUiManager implements ActionListener
 		tempActionCommands.put(EXIT_MI, this::exit);
 		tempActionCommands.put(SET_VALUE_MI, this::setValue);
 		tempActionCommands.put(SET_POSSIBLE_VALUE_MI, this::setPossibleValue);
+		tempActionCommands.put(CLEAR_POSSIBLE_VALUES_MI, this::clearPossibleValues);
 		tempActionCommands.put(CLEAR_CELLS_MI, this::clearCells);
 		tempActionCommands.put(LOCK_CELLS_MI, this::lockCells);
 		tempActionCommands.put(SOLVE_MI, this::solve);
@@ -140,6 +144,7 @@ public class SudokuUiManager implements ActionListener
 			JMenu actionMenu,
 			JMenuItem setValueMenuItem,
 			JMenuItem setPossibleValueMenuItem,
+			JMenuItem clearPossibleValuesMenuItem,
 			JMenuItem clearCellsMenuItem,
 			JMenuItem lockCellsMenuItem,
 			JMenuItem solveMenuItem,
@@ -155,6 +160,7 @@ public class SudokuUiManager implements ActionListener
 		actionMenu.setText(ACTION_M);
 		setValueMenuItem.setText(SET_VALUE_MI);
 		setPossibleValueMenuItem.setText(SET_POSSIBLE_VALUE_MI);
+		clearPossibleValuesMenuItem.setText(CLEAR_POSSIBLE_VALUES_MI);
 		clearCellsMenuItem.setText(CLEAR_CELLS_MI);
 		lockCellsMenuItem.setText(LOCK_CELLS_MI);
 		solveMenuItem.setText(SOLVE_MI);
@@ -168,6 +174,7 @@ public class SudokuUiManager implements ActionListener
 		exitMenuItem.addActionListener(this);
 		setValueMenuItem.addActionListener(this);
 		setPossibleValueMenuItem.addActionListener(this);
+		clearPossibleValuesMenuItem.addActionListener(this);
 		clearCellsMenuItem.addActionListener(this);
 		lockCellsMenuItem.addActionListener(this);
 		solveMenuItem.addActionListener(this);
@@ -320,9 +327,11 @@ public class SudokuUiManager implements ActionListener
 	{
 		Integer r = sudokuDisplayComponent.getSelectedRow();
 		Integer c = sudokuDisplayComponent.getSelectedCol();
+		Predicate<SudokuCell> lockedSudokuCellPredicate = SudokuCell::isLocked;
 		if (r != null && c != null
-				&& canSetValuePredicate.test(
-						board.getSudokuCells(SectionType.ROW, r).get(c)))
+				&& lockedSudokuCellPredicate.negate()
+						.and(canSetValuePredicate)
+						.test(board.getSudokuCells(SectionType.ROW, r).get(c)))
 		{
 			SelectSudokuCellDialog selectSudokuCellDialog
 					= new SelectSudokuCellDialog(
@@ -340,15 +349,18 @@ public class SudokuUiManager implements ActionListener
 
 	private void setSudokuCellValue(SudokuCell sudokuCell, Integer v)
 	{
-		boolean valueChanged = sudokuCell.setValue(v);
-
-		if (valueChanged)
+		if (!sudokuCell.isLocked())
 		{
-			sudokuDisplayComponent.repaint();
+			boolean valueChanged = sudokuCell.setValue(v);
 
-			if (board.isSolved())
+			if (valueChanged)
 			{
-				this.endGame();
+				sudokuDisplayComponent.repaint();
+
+				if (board.isSolved())
+				{
+					this.endGame();
+				}
 			}
 		}
 	}
@@ -357,14 +369,17 @@ public class SudokuUiManager implements ActionListener
 			SudokuCell sudokuCell,
 			Integer v)
 	{
-		boolean possibleValueChanged
-				= sudokuCell.getPossibleValues().contains(v)
-				? sudokuCell.removePossibleValue(v)
-				: sudokuCell.addPossibleValue(v);
-
-		if (possibleValueChanged)
+		if (!sudokuCell.isLocked())
 		{
-			sudokuDisplayComponent.repaint();
+			boolean possibleValueChanged
+					= sudokuCell.getPossibleValues().contains(v)
+					? sudokuCell.removePossibleValue(v)
+					: sudokuCell.addPossibleValue(v);
+
+			if (possibleValueChanged)
+			{
+				sudokuDisplayComponent.repaint();
+			}
 		}
 	}
 
@@ -441,11 +456,52 @@ public class SudokuUiManager implements ActionListener
 
 	private void clearCells()
 	{
-		// TODO : Implement cell clearing.
+		// TODO : confirmation popup
+		board.getAllSudokuCells().forEach(this::clearSudokuCell);
+
+		// seemingly backwards, but clearing cells cannot be undone.
+		initialBoard.resetFrom(board);
+
+		sudokuDisplayComponent.repaint();
+	}
+
+	private void clearPossibleValues()
+	{
+		board.getAllSudokuCells()
+				.stream()
+				.filter(sudokuCell -> !sudokuCell.isLocked())
+				.forEach(SudokuCell::clearPossibleValues);
+
+		sudokuDisplayComponent.repaint();
 	}
 
 	private void lockCells()
 	{
-		// TODO : Implement cell locking.
+		// TODO : confirmation popup
+		board.getAllSudokuCells().forEach(this::lockSudokuCell);
+
+		// seemingly backwards, but locking cells cannot be undone.
+		initialBoard.resetFrom(board);
+
+		sudokuDisplayComponent.repaint();
+	}
+
+	private void clearSudokuCell(SudokuCell sudokuCell)
+	{
+		sudokuCell.setLocked(false);
+		sudokuCell.setValue(null);
+		sudokuCell.clearPossibleValues();
+	}
+
+	private void lockSudokuCell(SudokuCell sudokuCell)
+	{
+		if (sudokuCell.getValue() != null)
+		{
+			sudokuCell.setLocked(true);
+		}
+		else
+		{
+			sudokuCell.clearPossibleValues();
+		}
 	}
 }

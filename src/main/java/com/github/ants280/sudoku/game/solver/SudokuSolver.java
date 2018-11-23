@@ -29,7 +29,8 @@ public class SudokuSolver
 		sudokuBoard.getAllSudokuCells()
 				.stream()
 				.filter(sudokuCell -> sudokuCell.getValue() == null)
-				.forEach(sudokuCell -> sudokuCell.resetPossibleValues());
+				.forEach(sudokuCell -> SudokuCell.LEGAL_CELL_VALUES
+				.forEach(sudokuCell::addPossibleValue));
 
 		sudokuBoard.getAllSudokuCells()
 				.stream()
