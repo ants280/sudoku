@@ -1,5 +1,6 @@
 package com.github.ants280.sudoku.ui;
 
+import com.github.ants280.sudoku.game.SectionType;
 import com.github.ants280.sudoku.game.SudokuBoard;
 import com.github.ants280.sudoku.game.SudokuCell;
 import java.awt.BorderLayout;
@@ -313,12 +314,14 @@ public class SudokuUiManager implements ActionListener
 		Integer r = sudokuDisplayComponent.getSelectedRow();
 		Integer c = sudokuDisplayComponent.getSelectedCol();
 		if (r != null && c != null
-				&& canSetValuePredicate.test(board.getSudokuCell(r, c)))
+				&& canSetValuePredicate.test(
+						board.getSudokuCells(SectionType.ROW, r).get(c)))
 		{
 			JDialog dialog = new JDialog(frame, dialogTitle, true);
 
 			JPanel possibleValueButtonsPanel = new JPanel(new GridLayout(3, 3));
-			SudokuCell selectedSudokuCell = board.getSudokuCell(r, c);
+			SudokuCell selectedSudokuCell
+					= board.getSudokuCells(SectionType.ROW, r).get(c);
 			for (int i = 1; i <= 9; i++)
 			{
 				Integer v = i;
@@ -383,9 +386,10 @@ public class SudokuUiManager implements ActionListener
 
 	private void setSelectedCellValue(Integer cellValue)
 	{
-		SudokuCell selectedSudokuCell = board.getSudokuCell(
-				sudokuDisplayComponent.getSelectedRow(),
-				sudokuDisplayComponent.getSelectedCol());
+		SudokuCell selectedSudokuCell = board.getSudokuCells(
+				SectionType.ROW,
+				sudokuDisplayComponent.getSelectedRow())
+				.get(sudokuDisplayComponent.getSelectedCol());
 
 		this.setSudokuCellValue(selectedSudokuCell, cellValue);
 	}

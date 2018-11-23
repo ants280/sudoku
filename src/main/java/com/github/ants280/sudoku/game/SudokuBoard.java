@@ -106,13 +106,6 @@ public class SudokuBoard
 		return Collections.unmodifiableList(allSudokuCells);
 	}
 
-	public SudokuCell getSudokuCell(int r, int c)
-	{
-		validateIndices(r, c);
-
-		return sectionTypeCells.get(ROW).get(r).get(c);
-	}
-
 	public List<SudokuCell> getSudokuCells(
 			SectionType sectionType,
 			int sectionIndex)
