@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+// TODO: remove abstract constraint, add 'locked:boolean' field, delete classes which implement.
 public abstract class SudokuCell
 {
 	public static final Set<Integer> LEGAL_CELL_VALUES
