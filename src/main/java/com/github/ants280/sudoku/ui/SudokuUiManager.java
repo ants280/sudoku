@@ -383,14 +383,6 @@ public class SudokuUiManager implements ActionListener
 
 	private void setSelectedCellValue(Integer cellValue)
 	{
-		if (Sudoku.DEBUG)
-		{
-			System.out.printf("\tSetting value '%d' at [%s,%s]\n",
-					cellValue,
-					sudokuDisplayComponent.getSelectedRow(),
-					sudokuDisplayComponent.getSelectedCol());
-		}
-
 		SudokuCell selectedSudokuCell = board.getSudokuCell(
 				sudokuDisplayComponent.getSelectedRow(),
 				sudokuDisplayComponent.getSelectedCol());

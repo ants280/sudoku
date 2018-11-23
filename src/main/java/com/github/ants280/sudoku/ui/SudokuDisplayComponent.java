@@ -62,8 +62,6 @@ public class SudokuDisplayComponent extends JComponent
 //		this.possibleValueFont = new Font("times", Font.PLAIN, cellLength / 3);
 
 		int minDimension = Math.min(this.getWidth(), this.getHeight());
-		System.out.printf("%d: [w,h]=[%d,%d], cellLength=%d, minDimension=%d%n",
-				System.currentTimeMillis(), this.getWidth(), this.getHeight(), cellLength, minDimension);
 
 		int newCellLength = minDimension / 9;
 		if (cellLength != newCellLength)
@@ -231,15 +229,6 @@ public class SudokuDisplayComponent extends JComponent
 		this.setSelectedRow((y - yOffset) / cellLength);
 		this.setSelectedCol((x - xOffset) / cellLength);
 		this.repaint();
-
-		if (Sudoku.DEBUG)
-		{
-			System.out.printf("selected cell: x,y=[%d,%d] => col,row=[%d,%d]\n",
-					x,
-					y,
-					selectedCol,
-					selectedRow);
-		}
 	}
 
 	public void removeSelectedCell()
@@ -260,24 +249,12 @@ public class SudokuDisplayComponent extends JComponent
 
 	public void incrementSelectedRow(int i)
 	{
-		if (Sudoku.DEBUG)
-		{
-			System.out.printf(
-					"Incrementing selected row (%d) by %d.\n", selectedRow, i);
-		}
-
 		this.setSelectedRow(selectedRow + i);
 		this.repaint();
 	}
 
 	public void incrementSelectedCol(int i)
 	{
-		if (Sudoku.DEBUG)
-		{
-			System.out.printf(
-					"Incrementing selected col (%d) by %d.\n", selectedCol, i);
-		}
-
 		this.setSelectedCol(selectedCol + i);
 		this.repaint();
 	}
