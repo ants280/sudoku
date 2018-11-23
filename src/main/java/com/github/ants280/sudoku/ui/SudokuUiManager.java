@@ -273,7 +273,7 @@ public class SudokuUiManager implements ActionListener
 
 	private void setValue()
 	{
-		showValueDialog(
+		this.showValueDialog(
 				"[value]",
 				"Select cell value",
 				sudokuCell -> true,
@@ -285,7 +285,7 @@ public class SudokuUiManager implements ActionListener
 
 	private void setPossibleValue()
 	{
-		showValueDialog(
+		this.showValueDialog(
 				"[possible values]",
 				"Select possible\n"
 				+ "cell values",
@@ -310,8 +310,6 @@ public class SudokuUiManager implements ActionListener
 				&& canSetValuePredicate.test(
 						board.getSudokuCells(SectionType.ROW, r).get(c)))
 		{
-			SudokuCell selectedSudokuCell
-					= board.getSudokuCells(SectionType.ROW, r).get(c);
 			SelectSudokuCellDialog selectSudokuCellDialog
 					= new SelectSudokuCellDialog(
 							frame,
@@ -320,7 +318,7 @@ public class SudokuUiManager implements ActionListener
 							buttonSelectedFunction,
 							valueClickConsumer,
 							closeOnDialogOnButtonClick,
-							selectedSudokuCell);
+							board.getSudokuCells(SectionType.ROW, r).get(c));
 
 			selectSudokuCellDialog.setVisible(true);
 		}
@@ -373,6 +371,7 @@ public class SudokuUiManager implements ActionListener
 						frame,
 						board,
 						sudokuDisplayComponent::repaint);
+
 		sudokuSolverPopup.setVisible(true);
 	}
 
