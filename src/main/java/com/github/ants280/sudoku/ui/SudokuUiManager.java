@@ -450,19 +450,29 @@ public class SudokuUiManager implements ActionListener
 				"Export " + frame.getTitle(),
 				JOptionPane.INFORMATION_MESSAGE,
 				null, // Icon
-				null, // selectionValues (null implies textbox
+				null, // selectionValues (null implies textbox)
 				board.toString());
 	}
 
 	private void clearCells()
 	{
-		// TODO : confirmation popup
-		board.getAllSudokuCells().forEach(this::clearSudokuCell);
+		int choice = JOptionPane.showConfirmDialog(
+				frame,
+				"Clear all cells.\n"
+				+ "WARNING: This will remove all values and possible values "
+				+ "and cannot be undone.",
+				"Clear all cells?",
+				JOptionPane.YES_NO_OPTION);
 
-		// seemingly backwards, but clearing cells cannot be undone.
-		initialBoard.resetFrom(board);
+		if (choice == JOptionPane.YES_OPTION)
+		{
+			board.getAllSudokuCells().forEach(this::clearSudokuCell);
 
-		sudokuDisplayComponent.repaint();
+			// Seemingly backwards, but clearing cells cannot be undone.
+			initialBoard.resetFrom(board);
+
+			sudokuDisplayComponent.repaint();
+		}
 	}
 
 	private void clearPossibleValues()
@@ -477,13 +487,23 @@ public class SudokuUiManager implements ActionListener
 
 	private void lockCells()
 	{
-		// TODO : confirmation popup
-		board.getAllSudokuCells().forEach(this::lockSudokuCell);
+		int choice = JOptionPane.showConfirmDialog(
+				frame,
+				"Lock all cells.\n"
+				+ "WARNING: This will remove all possible values "
+				+ "and cannot be undone.",
+				"Lock all cells?",
+				JOptionPane.YES_NO_OPTION);
 
-		// seemingly backwards, but locking cells cannot be undone.
-		initialBoard.resetFrom(board);
+		if (choice == JOptionPane.YES_OPTION)
+		{
+			board.getAllSudokuCells().forEach(this::lockSudokuCell);
 
-		sudokuDisplayComponent.repaint();
+			// Seemingly backwards, but locking cells cannot be undone.
+			initialBoard.resetFrom(board);
+
+			sudokuDisplayComponent.repaint();
+		}
 	}
 
 	private void clearSudokuCell(SudokuCell sudokuCell)
