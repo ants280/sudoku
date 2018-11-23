@@ -3,8 +3,6 @@ package com.github.ants280.sudoku.ui;
 import com.github.ants280.sudoku.game.SectionType;
 import com.github.ants280.sudoku.game.SudokuBoard;
 import com.github.ants280.sudoku.game.SudokuCell;
-import java.awt.BorderLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
@@ -14,15 +12,10 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
-import javax.swing.AbstractButton;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JToggleButton;
 
 public class SudokuUiManager implements ActionListener
 {
@@ -304,8 +297,8 @@ public class SudokuUiManager implements ActionListener
 	}
 
 	private void showValueDialog(
-			String dialogTitle,
-			String dialogMessage,
+			String title,
+			String message,
 			Predicate<SudokuCell> canSetValuePredicate,
 			BiPredicate<SudokuCell, Integer> buttonSelectedFunction,
 			BiConsumer<SudokuCell, Integer> valueClickConsumer,
@@ -317,40 +310,19 @@ public class SudokuUiManager implements ActionListener
 				&& canSetValuePredicate.test(
 						board.getSudokuCells(SectionType.ROW, r).get(c)))
 		{
-			JDialog dialog = new JDialog(frame, dialogTitle, true);
-
-			JPanel possibleValueButtonsPanel = new JPanel(new GridLayout(3, 3));
 			SudokuCell selectedSudokuCell
 					= board.getSudokuCells(SectionType.ROW, r).get(c);
-			for (int i = 1; i <= 9; i++)
-			{
-				Integer v = i;
-				AbstractButton valueButton = new JToggleButton(
-						String.valueOf(i),
-						buttonSelectedFunction.test(selectedSudokuCell, v));
+			SelectSudokuCellDialog selectSudokuCellDialog
+					= new SelectSudokuCellDialog(
+							frame,
+							title,
+							message,
+							buttonSelectedFunction,
+							valueClickConsumer,
+							closeOnDialogOnButtonClick,
+							selectedSudokuCell);
 
-				valueButton.addActionListener(actionEvent ->
-				{
-					valueClickConsumer.accept(selectedSudokuCell, v);
-
-					if (closeOnDialogOnButtonClick)
-					{
-						dialog.setVisible(false);
-					}
-				});
-
-				possibleValueButtonsPanel.add(valueButton);
-			}
-
-			String htmlDialogMessage = String.format(
-					"<html>%s</html>",
-					dialogMessage.replaceAll("\n", "<br>"));
-			dialog.add(new JLabel(htmlDialogMessage), BorderLayout.NORTH);
-			dialog.add(possibleValueButtonsPanel, BorderLayout.CENTER);
-			dialog.pack();
-			dialog.setResizable(false);
-			dialog.setLocationRelativeTo(frame);
-			dialog.setVisible(true);
+			selectSudokuCellDialog.setVisible(true);
 		}
 	}
 
