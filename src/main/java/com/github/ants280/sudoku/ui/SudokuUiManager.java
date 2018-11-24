@@ -408,7 +408,8 @@ public class SudokuUiManager implements ActionListener
 	{
 		Object boardToLoad = JOptionPane.showInputDialog(
 				frame,
-				"Enter a saved game to load.",
+				"Enter a saved game to load.\n"
+				+ "WARNING: This cannot be undone.",
 				"Load " + frame.getTitle(),
 				JOptionPane.INFORMATION_MESSAGE,
 				null, // Icon
@@ -422,6 +423,7 @@ public class SudokuUiManager implements ActionListener
 				SudokuBoard loadedBoard
 						= new SudokuBoard(boardToLoad.toString());
 				board.resetFrom(loadedBoard);
+
 				initialBoard.resetFrom(board);
 
 				sudokuDisplayComponent.removeSelectedCell();
@@ -469,7 +471,6 @@ public class SudokuUiManager implements ActionListener
 		{
 			board.getAllSudokuCells().forEach(this::clearSudokuCell);
 
-			// Seemingly backwards, but clearing cells cannot be undone.
 			initialBoard.resetFrom(board);
 
 			sudokuDisplayComponent.removeSelectedCell();
@@ -501,7 +502,6 @@ public class SudokuUiManager implements ActionListener
 		{
 			board.getAllSudokuCells().forEach(this::lockSudokuCell);
 
-			// Seemingly backwards, but locking cells cannot be undone.
 			initialBoard.resetFrom(board);
 
 			sudokuDisplayComponent.removeSelectedCell();
