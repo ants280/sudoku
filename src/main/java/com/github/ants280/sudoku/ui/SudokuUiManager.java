@@ -445,10 +445,8 @@ public class SudokuUiManager implements ActionListener
 
 				initialBoard.resetFrom(board);
 
-				sudokuDisplayComponent.removeSelectedCell();
 				sudokuDisplayComponent.repaint();
-
-				this.addListeners();
+				this.startGame();
 			}
 			else
 			{
