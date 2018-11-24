@@ -424,6 +424,7 @@ public class SudokuUiManager implements ActionListener
 				board.resetFrom(loadedBoard);
 				initialBoard.resetFrom(board);
 
+				sudokuDisplayComponent.removeSelectedCell();
 				sudokuDisplayComponent.repaint();
 
 				this.addListeners();
@@ -471,6 +472,7 @@ public class SudokuUiManager implements ActionListener
 			// Seemingly backwards, but clearing cells cannot be undone.
 			initialBoard.resetFrom(board);
 
+			sudokuDisplayComponent.removeSelectedCell();
 			sudokuDisplayComponent.repaint();
 		}
 	}
@@ -502,6 +504,7 @@ public class SudokuUiManager implements ActionListener
 			// Seemingly backwards, but locking cells cannot be undone.
 			initialBoard.resetFrom(board);
 
+			sudokuDisplayComponent.removeSelectedCell();
 			sudokuDisplayComponent.repaint();
 		}
 	}
