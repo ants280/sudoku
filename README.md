@@ -3,7 +3,7 @@
 A basic sudoku game with a logic-based solver.
 
 ## Screenshot
-![slideGame screenshot](screenshot.png)
+![screenshot](screenshot.png)
 
 ## License
 Project is licensed under the [MIT license](LICENSE).
