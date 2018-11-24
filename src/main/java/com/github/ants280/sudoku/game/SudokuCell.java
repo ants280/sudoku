@@ -20,7 +20,12 @@ public class SudokuCell
 	private boolean locked;
 	private final Set<Integer> possibleValues;
 
-	public SudokuCell(int rowIndex, int columnIndex, int groupIndex, Integer value, boolean locked)
+	public SudokuCell(
+			int rowIndex,
+			int columnIndex,
+			int groupIndex,
+			Integer value,
+			boolean locked)
 	{
 		this.sectionTypeIndices = new EnumMap<>(SectionType.class);
 		sectionTypeIndices.put(SectionType.ROW, rowIndex);
