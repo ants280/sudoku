@@ -136,7 +136,7 @@ public class SudokuBoard
 		return boardString.matches("^\\{\\d{81}\\}$");
 	}
 
-	public static void validateIndices(int... indices)
+	private static void validateIndices(int... indices)
 			throws IllegalArgumentException
 	{
 		IntStream.of(indices)

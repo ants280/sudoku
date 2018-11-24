@@ -22,7 +22,6 @@ public class SudokuCell
 
 	public SudokuCell(int rowIndex, int columnIndex, int groupIndex, Integer value, boolean locked)
 	{
-		SudokuBoard.validateIndices(rowIndex, columnIndex, groupIndex);
 		this.sectionTypeIndices = new EnumMap<>(SectionType.class);
 		sectionTypeIndices.put(SectionType.ROW, rowIndex);
 		sectionTypeIndices.put(SectionType.COLUMN, columnIndex);
