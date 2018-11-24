@@ -13,6 +13,7 @@ import java.util.function.BiConsumer;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -39,6 +40,7 @@ public class SudokuUiManager implements ActionListener
 	private final JFrame frame;
 	private final SudokuDisplayComponent sudokuDisplayComponent;
 	private final SudokuBoard board;
+	private final JLabel messageLabel;
 	private final Collection<JMenuItem> selectedCellMenuItems;
 	private final SudokuBoard initialBoard;
 	private final Map<String, Runnable> actionCommands;
@@ -50,12 +52,14 @@ public class SudokuUiManager implements ActionListener
 			JFrame frame,
 			SudokuDisplayComponent sudokuDisplayComponent,
 			SudokuBoard board,
+			JLabel messageLabel,
 			Collection<JMenuItem> selectedCellMenuItems)
 	{
 
 		this.frame = frame;
 		this.sudokuDisplayComponent = sudokuDisplayComponent;
 		this.board = board;
+		this.messageLabel = messageLabel;
 		this.initialBoard = new SudokuBoard(board.toString());
 		this.selectedCellMenuItems = selectedCellMenuItems;
 		this.actionCommands = this.createActionCommands();
@@ -73,6 +77,7 @@ public class SudokuUiManager implements ActionListener
 			SudokuFrame frame,
 			SudokuDisplayComponent sudokuDisplayComponent,
 			SudokuBoard board,
+			JLabel messageLabel,
 			JMenu fileMenu,
 			JMenuItem restartMenuItem,
 			JMenuItem loadMenuItem,
@@ -95,6 +100,7 @@ public class SudokuUiManager implements ActionListener
 						frame,
 						sudokuDisplayComponent,
 						board,
+						messageLabel,
 						Arrays.asList(
 								setValueMenuItem,
 								setPossibleValueMenuItem));
@@ -214,6 +220,7 @@ public class SudokuUiManager implements ActionListener
 	private void startGame()
 	{
 		this.addListeners();
+		this.updateMessageLabel();
 		selectedCellMenuItems
 				.forEach(menuItem -> menuItem.setEnabled(false));
 		sudokuDisplayComponent.removeSelectedCell();
@@ -222,6 +229,7 @@ public class SudokuUiManager implements ActionListener
 	private void endGame()
 	{
 		this.removeListeners();
+		this.updateMessageLabel();
 		selectedCellMenuItems.forEach(menuItem -> menuItem.setEnabled(false));
 		sudokuDisplayComponent.removeSelectedCell();
 	}
@@ -406,7 +414,11 @@ public class SudokuUiManager implements ActionListener
 				= new SudokuSolverPopup(
 						frame,
 						board,
-						sudokuDisplayComponent::repaint);
+						() ->
+				{
+					sudokuDisplayComponent.repaint();
+					this.updateMessageLabel();
+				});
 
 		sudokuSolverPopup.setVisible(true);
 	}
@@ -538,5 +550,11 @@ public class SudokuUiManager implements ActionListener
 		{
 			sudokuCell.clearPossibleValues();
 		}
+	}
+
+	private void updateMessageLabel()
+	{
+		messageLabel.setText(board.isSolved() ? "You win!" : "");
+		frame.pack(); // keep the board canvas the same size
 	}
 }

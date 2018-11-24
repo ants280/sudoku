@@ -1,10 +1,17 @@
 package com.github.ants280.sudoku.ui;
 
 import com.github.ants280.sudoku.game.SudokuBoard;
+import java.awt.BorderLayout;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.border.Border;
 
 public class SudokuFrame extends JFrame
 {
@@ -19,6 +26,13 @@ public class SudokuFrame extends JFrame
 
 	private void init()
 	{
+		JLabel messageLabel = new BorderedLabel();
+		JPanel topPanel = new JPanel();
+		topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.X_AXIS));
+		topPanel.add(Box.createGlue());
+		topPanel.add(messageLabel);
+		topPanel.add(Box.createGlue());
+
 		SudokuBoard board = new SudokuBoard();
 		SudokuDisplayComponent sudokuDisplayComponent
 				= new SudokuDisplayComponent(board);
@@ -66,6 +80,7 @@ public class SudokuFrame extends JFrame
 				this,
 				sudokuDisplayComponent,
 				board,
+				messageLabel,
 				fileMenu,
 				restartMenuItem,
 				loadMenuItem,
@@ -84,8 +99,27 @@ public class SudokuFrame extends JFrame
 				aboutMenuItem);
 
 		this.setJMenuBar(menuBar);
+		this.add(topPanel, BorderLayout.NORTH);
 		this.add(sudokuDisplayComponent);
 		this.pack();
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+
+	private static class BorderedLabel extends JLabel
+	{
+		private static final Border EMPTY_BORDER
+				= BorderFactory.createEmptyBorder(0, 0, 0, 0);
+		private static final Border TOP_BOTTOM_BORDER
+				= BorderFactory.createEmptyBorder(10, 0, 10, 0);
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public void setText(String text)
+		{
+			super.setText(text);
+			this.setBorder(text == null || text.isEmpty()
+					? EMPTY_BORDER
+					: TOP_BOTTOM_BORDER);
+		}
 	}
 }
