@@ -15,6 +15,13 @@ public class SudokuBoard
 {
 	private final List<SudokuCell> allSudokuCells;
 	private final Map<SectionType, Map<Integer, List<SudokuCell>>> sectionTypeCells;
+	private static final Predicate<List<SudokuCell>> CELL_SECTION_HAS_ALL_VALUES
+			= sudokuCells -> sudokuCells.stream()
+					.map(SudokuCell::getValue)
+					.filter(v -> v != null)
+					.mapToInt(Integer::intValue)
+					.map(i -> 1 << i)
+					.sum() == ((1 << 10) - 2);
 
 	public SudokuBoard(String boardString)
 	{
@@ -117,19 +124,11 @@ public class SudokuBoard
 
 	public boolean isSolved()
 	{
-		Predicate<List<SudokuCell>> hasAllValues
-				= sudokuCells -> sudokuCells.stream()
-						.map(SudokuCell::getValue)
-						.filter(v -> v != null)
-						.mapToInt(Integer::intValue)
-						.map(i -> 1 << i)
-						.sum() == ((1 << 10) - 2);
-
 		return sectionTypeCells.values()
 				.stream()
 				.map(Map::values)
 				.flatMap(Collection::stream)
-				.allMatch(hasAllValues);
+				.allMatch(CELL_SECTION_HAS_ALL_VALUES);
 	}
 
 	public static boolean isValidSavedBoard(String boardString)
