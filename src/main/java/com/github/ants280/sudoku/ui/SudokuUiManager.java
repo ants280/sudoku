@@ -30,6 +30,7 @@ public class SudokuUiManager implements ActionListener
 	private static final String CLEAR_POSSIBLE_VALUES_MI = "Clear possible values";
 	private static final String CLEAR_CELLS_MI = "Clear cells...";
 	private static final String LOCK_CELLS_MI = "Lock cells...";
+	private static final String UNLOCK_CELLS_MI = "Unlock cells...";
 	private static final String SOLVE_MI = "Solve...";
 	private static final String HELP_M = "Help";
 	private static final String HELP_MI = "Help";
@@ -83,6 +84,7 @@ public class SudokuUiManager implements ActionListener
 			JMenuItem clearPossibleValuesMenuItem,
 			JMenuItem clearCellsMenuItem,
 			JMenuItem lockCellsMenuItem,
+			JMenuItem unLockCellsMenuItem,
 			JMenuItem solveMenuItem,
 			JMenu helpMenu,
 			JMenuItem helpMenuItem,
@@ -109,6 +111,7 @@ public class SudokuUiManager implements ActionListener
 				clearPossibleValuesMenuItem,
 				clearCellsMenuItem,
 				lockCellsMenuItem,
+				unLockCellsMenuItem,
 				solveMenuItem,
 				helpMenu,
 				helpMenuItem,
@@ -128,7 +131,8 @@ public class SudokuUiManager implements ActionListener
 		tempActionCommands.put(SET_POSSIBLE_VALUE_MI, this::setPossibleValue);
 		tempActionCommands.put(CLEAR_POSSIBLE_VALUES_MI, this::clearPossibleValues);
 		tempActionCommands.put(CLEAR_CELLS_MI, this::clearCells);
-		tempActionCommands.put(LOCK_CELLS_MI, this::lockCells);
+		tempActionCommands.put(LOCK_CELLS_MI, () -> this.lockCells(true));
+		tempActionCommands.put(UNLOCK_CELLS_MI, () -> this.lockCells(false));
 		tempActionCommands.put(SOLVE_MI, this::solve);
 		tempActionCommands.put(HELP_MI, this::help);
 		tempActionCommands.put(ABOUT_MI, this::about);
@@ -147,6 +151,7 @@ public class SudokuUiManager implements ActionListener
 			JMenuItem clearPossibleValuesMenuItem,
 			JMenuItem clearCellsMenuItem,
 			JMenuItem lockCellsMenuItem,
+			JMenuItem unLockCellsMenuItem,
 			JMenuItem solveMenuItem,
 			JMenu helpMenu,
 			JMenuItem helpMenuItem,
@@ -163,6 +168,7 @@ public class SudokuUiManager implements ActionListener
 		clearPossibleValuesMenuItem.setText(CLEAR_POSSIBLE_VALUES_MI);
 		clearCellsMenuItem.setText(CLEAR_CELLS_MI);
 		lockCellsMenuItem.setText(LOCK_CELLS_MI);
+		unLockCellsMenuItem.setText(UNLOCK_CELLS_MI);
 		solveMenuItem.setText(SOLVE_MI);
 		helpMenu.setText(HELP_M);
 		helpMenuItem.setText(HELP_MI);
@@ -177,6 +183,7 @@ public class SudokuUiManager implements ActionListener
 		clearPossibleValuesMenuItem.addActionListener(this);
 		clearCellsMenuItem.addActionListener(this);
 		lockCellsMenuItem.addActionListener(this);
+		unLockCellsMenuItem.addActionListener(this);
 		solveMenuItem.addActionListener(this);
 		helpMenuItem.addActionListener(this);
 		aboutMenuItem.addActionListener(this);
@@ -422,7 +429,7 @@ public class SudokuUiManager implements ActionListener
 			{
 				SudokuBoard loadedBoard
 						= new SudokuBoard(boardToLoad.toString());
-				board.resetFrom(loadedBoard);
+				board.resetFrom(loadedBoard); // Note: all valued cells locked
 
 				initialBoard.resetFrom(board);
 
@@ -488,19 +495,24 @@ public class SudokuUiManager implements ActionListener
 		sudokuDisplayComponent.repaint();
 	}
 
-	private void lockCells()
+	private void lockCells(boolean lockedState)
 	{
 		int choice = JOptionPane.showConfirmDialog(
 				frame,
-				"Lock all cells.\n"
-				+ "WARNING: This will remove all possible values "
-				+ "and cannot be undone.",
+				String.format(
+						"%s all cells.\n"
+						+ "WARNING: This will remove all possible values "
+						+ "and cannot be undone.",
+						lockedState ? "Lock" : "Unlock"),
 				"Lock all cells?",
 				JOptionPane.YES_NO_OPTION);
 
 		if (choice == JOptionPane.YES_OPTION)
 		{
-			board.getAllSudokuCells().forEach(this::lockSudokuCell);
+			board.getAllSudokuCells()
+					.forEach(sudokuCell -> this.lockSudokuCell(
+					sudokuCell,
+					lockedState));
 
 			initialBoard.resetFrom(board);
 
@@ -516,11 +528,11 @@ public class SudokuUiManager implements ActionListener
 		sudokuCell.clearPossibleValues();
 	}
 
-	private void lockSudokuCell(SudokuCell sudokuCell)
+	private void lockSudokuCell(SudokuCell sudokuCell, boolean lockedState)
 	{
 		if (sudokuCell.getValue() != null)
 		{
-			sudokuCell.setLocked(true);
+			sudokuCell.setLocked(lockedState);
 		}
 		else
 		{
