@@ -137,12 +137,14 @@ public class SudokuSolverPopup implements ActionListener, ChangeListener
 				{
 					timer.start();
 					startStopButton.setText(BUTTON_STOP);
+					resetPossibleValuesWhenStartingCheckBox.setEnabled(false);
 				}
 				repaintCanvasCallback.run();
 				break;
 			case BUTTON_STOP:
 				timer.stop();
 				startStopButton.setText(BUTTON_START);
+				resetPossibleValuesWhenStartingCheckBox.setEnabled(true);
 				break;
 			case ACTION_TIMER:
 				boolean moveMade = sudokuSolver.makeMove();
