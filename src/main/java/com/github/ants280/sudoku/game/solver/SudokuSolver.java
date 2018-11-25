@@ -9,7 +9,7 @@ import java.util.function.BiConsumer;
 
 public class SudokuSolver
 {
-	private final SudokuBoard sudokuBoard;
+	protected final SudokuBoard sudokuBoard;
 	private final List<SudokuSolverPlugin> solverPlugins;
 	private final BiConsumer<SudokuCell, Integer> removeNearbyPossibleValuesConsumer;
 

@@ -437,7 +437,9 @@ public class SudokuUiManager implements ActionListener
 		int choice = JOptionPane.showConfirmDialog(
 				frame,
 				"This will find the first valid solution for the board, "
-				+ "if any.\n",
+				+ "if any.\n"
+				+ "This will clear all possible values "
+				+ "and only update the board if it possible to solve.",
 				"Solve Brute force?",
 				JOptionPane.YES_NO_OPTION);
 
@@ -445,7 +447,7 @@ public class SudokuUiManager implements ActionListener
 		{
 			SudokuSolver solver = new SudokuBruteForceSolver(board);
 
-			solver.solveFast();
+//			solver.solveFast();
 
 			sudokuDisplayComponent.repaint();
 			this.updateMessageLabel();
