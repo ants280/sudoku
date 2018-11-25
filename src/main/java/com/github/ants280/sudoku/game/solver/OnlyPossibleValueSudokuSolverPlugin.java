@@ -25,7 +25,8 @@ public class OnlyPossibleValueSudokuSolverPlugin extends SudokuSolverPlugin
 		Optional<SudokuCell> onePossibleValueSudoukCellOptional
 				= sudokuBoard.getAllSudokuCells()
 						.stream()
-						.filter(sudokuCell -> sudokuCell.getPossibleValues().size() == 1)
+						.filter(sudokuCell -> sudokuCell.getValue() == null
+						&& sudokuCell.getPossibleValues().size() == 1)
 						.findFirst();
 
 		if (onePossibleValueSudoukCellOptional.isPresent())

@@ -52,7 +52,8 @@ public class CullPussibleValuesSudokuSolverPlugin extends SudokuSolverPlugin
 					for (int possibleValue : possibleValues)
 					{
 						List<SudokuCell> sudokuCellsToCull = sudokuCells.stream()
-								.filter(sudokuCell -> !possibleValues.equals(sudokuCell.getPossibleValues())
+								.filter(sudokuCell -> sudokuCell.getValue() == null
+								&& !possibleValues.equals(sudokuCell.getPossibleValues())
 								&& sudokuCell.getPossibleValues().contains(possibleValue))
 								.collect(Collectors.toList());
 
