@@ -437,8 +437,7 @@ public class SudokuUiManager implements ActionListener
 		int choice = JOptionPane.showConfirmDialog(
 				frame,
 				"This will find the first valid solution for the board, "
-				+ "if any.\n"
-				+ "This will only update the board if it possible to solve.",
+				+ "if any.\n",
 				"Solve Brute force?",
 				JOptionPane.YES_NO_OPTION);
 
