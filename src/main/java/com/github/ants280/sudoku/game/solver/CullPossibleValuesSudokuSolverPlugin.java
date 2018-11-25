@@ -20,9 +20,9 @@ import java.util.stream.Collectors;
  * and 6, those possible values can be removed from all other sets of possible
  * values in the group.
  */
-public class CullPussibleValuesSudokuSolverPlugin extends SudokuSolverPlugin
+public class CullPossibleValuesSudokuSolverPlugin extends SudokuSolverPlugin
 {
-	public CullPussibleValuesSudokuSolverPlugin(SudokuBoard sudokuBoard)
+	public CullPossibleValuesSudokuSolverPlugin(SudokuBoard sudokuBoard)
 	{
 		super(sudokuBoard);
 	}
