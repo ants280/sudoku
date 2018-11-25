@@ -60,9 +60,8 @@ public class SudokuBruteForceSolver extends SudokuSolver
 			{
 				return true;
 			}
-
-			sudokuCell.setValue(null);
 		}
+		sudokuCell.setValue(null);
 
 		return false;
 	}
