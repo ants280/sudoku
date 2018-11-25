@@ -3,6 +3,7 @@ package com.github.ants280.sudoku.ui;
 import com.github.ants280.sudoku.game.SectionType;
 import com.github.ants280.sudoku.game.SudokuBoard;
 import com.github.ants280.sudoku.game.SudokuCell;
+import com.github.ants280.sudoku.game.solver.SudokuBruteForceSolver;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
@@ -32,7 +33,8 @@ public class SudokuUiManager implements ActionListener
 	private static final String CLEAR_CELLS_MI = "Clear cells...";
 	private static final String LOCK_CELLS_MI = "Lock cells...";
 	private static final String UNLOCK_CELLS_MI = "Unlock cells...";
-	private static final String SOLVE_MI = "Solve...";
+	private static final String SOLVE_LOGIC_MI = "Solve with Logic...";
+	private static final String SOLVE_BRUTE_FORCE_MI = "Solve with Brute Force...";
 	private static final String HELP_M = "Help";
 	private static final String HELP_MI = "Help";
 	private static final String ABOUT_MI = "About";
@@ -90,7 +92,8 @@ public class SudokuUiManager implements ActionListener
 			JMenuItem clearCellsMenuItem,
 			JMenuItem lockCellsMenuItem,
 			JMenuItem unLockCellsMenuItem,
-			JMenuItem solveMenuItem,
+			JMenuItem solveLogicMenuItem,
+			JMenuItem solveBruteForceMenuItem,
 			JMenu helpMenu,
 			JMenuItem helpMenuItem,
 			JMenuItem aboutMenuItem)
@@ -118,7 +121,8 @@ public class SudokuUiManager implements ActionListener
 				clearCellsMenuItem,
 				lockCellsMenuItem,
 				unLockCellsMenuItem,
-				solveMenuItem,
+				solveLogicMenuItem,
+				solveBruteForceMenuItem,
 				helpMenu,
 				helpMenuItem,
 				aboutMenuItem);
@@ -139,7 +143,8 @@ public class SudokuUiManager implements ActionListener
 		tempActionCommands.put(CLEAR_CELLS_MI, this::clearCells);
 		tempActionCommands.put(LOCK_CELLS_MI, () -> this.lockCells(true));
 		tempActionCommands.put(UNLOCK_CELLS_MI, () -> this.lockCells(false));
-		tempActionCommands.put(SOLVE_MI, this::solve);
+		tempActionCommands.put(SOLVE_LOGIC_MI, this::solveLogic);
+		tempActionCommands.put(SOLVE_BRUTE_FORCE_MI, this::solveBruteForce);
 		tempActionCommands.put(HELP_MI, this::help);
 		tempActionCommands.put(ABOUT_MI, this::about);
 		return tempActionCommands;
@@ -158,7 +163,8 @@ public class SudokuUiManager implements ActionListener
 			JMenuItem clearCellsMenuItem,
 			JMenuItem lockCellsMenuItem,
 			JMenuItem unLockCellsMenuItem,
-			JMenuItem solveMenuItem,
+			JMenuItem solveLogicMenuItem,
+			JMenuItem solveBruteForceMenuItem,
 			JMenu helpMenu,
 			JMenuItem helpMenuItem,
 			JMenuItem aboutMenuItem)
@@ -175,7 +181,8 @@ public class SudokuUiManager implements ActionListener
 		clearCellsMenuItem.setText(CLEAR_CELLS_MI);
 		lockCellsMenuItem.setText(LOCK_CELLS_MI);
 		unLockCellsMenuItem.setText(UNLOCK_CELLS_MI);
-		solveMenuItem.setText(SOLVE_MI);
+		solveLogicMenuItem.setText(SOLVE_LOGIC_MI);
+		solveBruteForceMenuItem.setText(SOLVE_BRUTE_FORCE_MI);
 		helpMenu.setText(HELP_M);
 		helpMenuItem.setText(HELP_MI);
 		aboutMenuItem.setText(ABOUT_MI);
@@ -190,7 +197,8 @@ public class SudokuUiManager implements ActionListener
 		clearCellsMenuItem.addActionListener(this);
 		lockCellsMenuItem.addActionListener(this);
 		unLockCellsMenuItem.addActionListener(this);
-		solveMenuItem.addActionListener(this);
+		solveLogicMenuItem.addActionListener(this);
+		solveBruteForceMenuItem.addActionListener(this);
 		helpMenuItem.addActionListener(this);
 		aboutMenuItem.addActionListener(this);
 	}
@@ -408,7 +416,7 @@ public class SudokuUiManager implements ActionListener
 		this.setSudokuCellValue(selectedSudokuCell, cellValue);
 	}
 
-	private void solve()
+	private void solveLogic()
 	{
 		SudokuSolverPopup sudokuSolverPopup
 				= new SudokuSolverPopup(
@@ -421,6 +429,26 @@ public class SudokuUiManager implements ActionListener
 				});
 
 		sudokuSolverPopup.setVisible(true);
+	}
+
+	private void solveBruteForce()
+	{
+		int choice = JOptionPane.showConfirmDialog(
+				frame,
+				"This vill find the first valid solution for the board, "
+				+ "if any.",
+				"Solve Brute force?",
+				JOptionPane.YES_NO_OPTION);
+
+		if (choice == JOptionPane.YES_OPTION)
+		{
+			SudokuBruteForceSolver solver = new SudokuBruteForceSolver(board);
+
+			board.resetFrom(solver.getSolvedSudokuBoard());
+
+			sudokuDisplayComponent.repaint();
+			this.updateMessageLabel();
+		}
 	}
 
 	private void load()
