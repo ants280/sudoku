@@ -4,6 +4,7 @@ import com.github.ants280.sudoku.game.SectionType;
 import com.github.ants280.sudoku.game.SudokuBoard;
 import com.github.ants280.sudoku.game.SudokuCell;
 import com.github.ants280.sudoku.game.solver.SudokuBruteForceSolver;
+import com.github.ants280.sudoku.game.solver.SudokuSolver;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
@@ -435,16 +436,17 @@ public class SudokuUiManager implements ActionListener
 	{
 		int choice = JOptionPane.showConfirmDialog(
 				frame,
-				"This vill find the first valid solution for the board, "
-				+ "if any.",
+				"This will find the first valid solution for the board, "
+				+ "if any.\n"
+				+ "This will only update the board if it possible to solve.",
 				"Solve Brute force?",
 				JOptionPane.YES_NO_OPTION);
 
 		if (choice == JOptionPane.YES_OPTION)
 		{
-			SudokuBruteForceSolver solver = new SudokuBruteForceSolver(board);
+			SudokuSolver solver = new SudokuBruteForceSolver(board);
 
-			board.resetFrom(solver.getSolvedSudokuBoard());
+			solver.solveFast();
 
 			sudokuDisplayComponent.repaint();
 			this.updateMessageLabel();

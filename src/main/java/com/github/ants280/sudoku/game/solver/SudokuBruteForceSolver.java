@@ -2,17 +2,22 @@ package com.github.ants280.sudoku.game.solver;
 
 import com.github.ants280.sudoku.game.SudokuBoard;
 
-public class SudokuBruteForceSolver
+public class SudokuBruteForceSolver extends SudokuSolver
 {
-	private final SudokuBoard sudokuBoard;
-
 	public SudokuBruteForceSolver(SudokuBoard sudokuBoard)
 	{
-		this.sudokuBoard = sudokuBoard;
+		super(sudokuBoard);
 	}
 
-	public SudokuBoard getSolvedSudokuBoard()
+	@Override
+	public boolean makeMove()
 	{
-		return sudokuBoard;
+		return false;
+	}
+
+	@Override
+	public void solveFast()
+	{
+		super.initialize();
 	}
 }
