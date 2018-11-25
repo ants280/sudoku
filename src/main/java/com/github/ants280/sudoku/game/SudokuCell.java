@@ -37,19 +37,6 @@ public class SudokuCell
 		this.possibleValues = new HashSet<>();
 	}
 
-	/**
-	 * @param other The cell to create this sudokuCell from.
-	 * @deprecated This shouldn't be needed.
-	 */
-	@Deprecated
-	public SudokuCell(SudokuCell other)
-	{
-		this.sectionTypeIndices = new EnumMap<>(other.getSectionTypeIndices());
-		this.value = other.getValue();
-		this.locked = other.isLocked();
-		this.possibleValues = new HashSet<>(other.getPossibleValues());
-	}
-
 	public int getIndex(SectionType sectionType)
 	{
 		return sectionTypeIndices.get(sectionType);
@@ -75,7 +62,7 @@ public class SudokuCell
 		return locked;
 	}
 
-	public boolean setValue(Integer value)
+	public void setValue(Integer value)
 	{
 		if (locked)
 		{
@@ -85,15 +72,7 @@ public class SudokuCell
 
 		SudokuCell.validateValue(value);
 
-		Integer oldValue = this.value;
 		this.value = value;
-
-		// TODO: Is this side effect really needed?
-		possibleValues.clear();
-
-		return this.value == null
-				? oldValue != null
-				: !this.value.equals(oldValue);
 	}
 
 	public void clearPossibleValues()

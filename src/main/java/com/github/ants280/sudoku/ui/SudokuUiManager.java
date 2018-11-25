@@ -375,16 +375,14 @@ public class SudokuUiManager implements ActionListener
 	{
 		if (!sudokuCell.isLocked())
 		{
-			boolean valueChanged = sudokuCell.setValue(v);
+			sudokuCell.setValue(v);
 
-			if (valueChanged)
+			sudokuDisplayComponent.repaint();
+			this.updateMessageLabel();
+
+			if (board.isSolved())
 			{
-				sudokuDisplayComponent.repaint();
-
-				if (board.isSolved())
-				{
-					this.endGame();
-				}
+				this.endGame();
 			}
 		}
 	}

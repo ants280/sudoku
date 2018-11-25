@@ -50,10 +50,8 @@ public class SudokuBruteForceSolver extends SudokuSolver
 			return canBruteForceSolve(index + 1);
 		}
 
-		SudokuCell initialSudokuCell = new SudokuCell(sudokuCell);
-		Set<Integer> possibleValuesToTry
-				= initialSudokuCell.getPossibleValues();
-		for (Integer possibleValue : possibleValuesToTry)
+		Set<Integer> possibleValues = sudokuCell.getPossibleValues();
+		for (Integer possibleValue : possibleValues)
 		{
 			sudokuCell.setValue(possibleValue);
 
@@ -65,8 +63,6 @@ public class SudokuBruteForceSolver extends SudokuSolver
 
 			sudokuCell.setValue(null);
 		}
-		// restore possible values:
-		sudokuCell.resetFrom(initialSudokuCell);
 
 		return false;
 	}
