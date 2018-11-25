@@ -37,6 +37,11 @@ public class SudokuCell
 		this.possibleValues = new HashSet<>();
 	}
 
+	/**
+	 * @param other The cell to create this sudokuCell from.
+	 * @deprecated This shouldn't be needed.
+	 */
+	@Deprecated
 	public SudokuCell(SudokuCell other)
 	{
 		this.sectionTypeIndices = new EnumMap<>(other.getSectionTypeIndices());
@@ -83,6 +88,7 @@ public class SudokuCell
 		Integer oldValue = this.value;
 		this.value = value;
 
+		// TODO: Is this side effect really needed?
 		possibleValues.clear();
 
 		return this.value == null
