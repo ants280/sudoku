@@ -4,8 +4,8 @@ import com.github.ants280.sudoku.game.SectionType;
 import com.github.ants280.sudoku.game.SudokuBoard;
 import com.github.ants280.sudoku.game.SudokuCell;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import java.util.function.Predicate;
 
 public class SudokuBruteForceSolver extends SudokuSolver
@@ -50,7 +50,7 @@ public class SudokuBruteForceSolver extends SudokuSolver
 			return canBruteForceSolve(index + 1);
 		}
 
-		Set<Integer> possibleValues = sudokuCell.getPossibleValues();
+		Collection<Integer> possibleValues = sudokuCell.getPossibleValues();
 		for (Integer possibleValue : possibleValues)
 		{
 			sudokuCell.setValue(possibleValue);

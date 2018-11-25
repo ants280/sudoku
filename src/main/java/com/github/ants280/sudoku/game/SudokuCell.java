@@ -1,5 +1,6 @@
 package com.github.ants280.sudoku.game;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashSet;
@@ -52,7 +53,7 @@ public class SudokuCell
 		return value;
 	}
 
-	public Set<Integer> getPossibleValues()
+	public Collection<Integer> getPossibleValues()
 	{
 		return Collections.unmodifiableSet(possibleValues);
 	}

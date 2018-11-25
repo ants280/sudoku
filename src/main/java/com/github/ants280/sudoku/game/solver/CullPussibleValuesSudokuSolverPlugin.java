@@ -3,9 +3,9 @@ package com.github.ants280.sudoku.game.solver;
 import com.github.ants280.sudoku.game.SectionType;
 import com.github.ants280.sudoku.game.SudokuBoard;
 import com.github.ants280.sudoku.game.SudokuCell;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -37,7 +37,7 @@ public class CullPussibleValuesSudokuSolverPlugin extends SudokuSolverPlugin
 				List<SudokuCell> sudokuCells
 						= sudokuBoard.getSudokuCells(sectionType, index);
 
-				List<Set<Integer>> possibleValueGroups = sudokuCells.stream()
+				List<Collection<Integer>> possibleValueGroups = sudokuCells.stream()
 						.map(SudokuCell::getPossibleValues)
 						.filter(collection -> !collection.isEmpty())
 						.collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
@@ -47,7 +47,7 @@ public class CullPussibleValuesSudokuSolverPlugin extends SudokuSolverPlugin
 						.map(Map.Entry::getKey)
 						.collect(Collectors.toList());
 
-				for (Set<Integer> possibleValues : possibleValueGroups)
+				for (Collection<Integer> possibleValues : possibleValueGroups)
 				{
 					for (int possibleValue : possibleValues)
 					{
