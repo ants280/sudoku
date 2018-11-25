@@ -37,6 +37,14 @@ public class SudokuCell
 		this.possibleValues = new HashSet<>();
 	}
 
+	public SudokuCell(SudokuCell other)
+	{
+		this.sectionTypeIndices = new EnumMap<>(other.getSectionTypeIndices());
+		this.value = other.getValue();
+		this.locked = other.isLocked();
+		this.possibleValues = new HashSet<>(other.getPossibleValues());
+	}
+
 	public int getIndex(SectionType sectionType)
 	{
 		return sectionTypeIndices.get(sectionType);

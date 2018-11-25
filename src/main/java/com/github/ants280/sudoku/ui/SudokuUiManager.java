@@ -447,7 +447,7 @@ public class SudokuUiManager implements ActionListener
 		{
 			SudokuSolver solver = new SudokuBruteForceSolver(board);
 
-//			solver.solveFast();
+			solver.solveFast();
 
 			sudokuDisplayComponent.repaint();
 			this.updateMessageLabel();

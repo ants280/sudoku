@@ -4,22 +4,18 @@ import com.github.ants280.sudoku.game.SectionType;
 import com.github.ants280.sudoku.game.SudokuBoard;
 import com.github.ants280.sudoku.game.SudokuCell;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 
 public class SudokuBruteForceSolver extends SudokuSolver
 {
-	private static final Predicate<List<SudokuCell>> HAS_NO_DUPLICATE_VALUES
-			= sudokuCells -> sudokuCells.size()
-			== sudokuCells.stream().distinct().count();
 	private final Predicate<SudokuCell> HAS_VALID_SECTIONS
 			= sudokuCell -> Arrays.stream(SectionType.values())
 					.map(sectionType -> sudokuBoard.getSudokuCells(
 					sectionType,
 					sudokuCell.getIndex(sectionType)))
-					.allMatch(HAS_NO_DUPLICATE_VALUES);
+					.noneMatch(this::hasDuplicateValues);
 
 	public SudokuBruteForceSolver(SudokuBoard sudokuBoard)
 	{
@@ -35,16 +31,9 @@ public class SudokuBruteForceSolver extends SudokuSolver
 	@Override
 	public void solveFast()
 	{
-//		SudokuBoard initialBoard = new SudokuBoard(sudokuBoard);
-
 		super.initialize();
 
-		boolean bruteForceSolverSuccess = canBruteForceSolve(0);
-
-//		if (!bruteForceSolverSuccess)
-//		{
-//			sudokuBoard.resetFrom(initialBoard); // TODO: is this needed?
-//		}
+		canBruteForceSolve(0);
 	}
 
 	private boolean canBruteForceSolve(int index)
@@ -56,8 +45,14 @@ public class SudokuBruteForceSolver extends SudokuSolver
 		}
 
 		SudokuCell sudokuCell = allSudokuCells.get(index);
+		if (sudokuCell.getValue() != null)
+		{
+			return canBruteForceSolve(index + 1);
+		}
+
+		SudokuCell initialSudokuCell = new SudokuCell(sudokuCell);
 		Set<Integer> possibleValuesToTry
-				= new HashSet<>(sudokuCell.getPossibleValues());
+				= initialSudokuCell.getPossibleValues();
 		for (Integer possibleValue : possibleValuesToTry)
 		{
 			sudokuCell.setValue(possibleValue);
@@ -67,12 +62,23 @@ public class SudokuBruteForceSolver extends SudokuSolver
 			{
 				return true;
 			}
-			else
-			{
-				sudokuCell.setValue(null);
-			}
+
+			sudokuCell.setValue(null);
 		}
+		// restore possible values:
+		sudokuCell.resetFrom(initialSudokuCell);
 
 		return false;
+	}
+
+	private boolean hasDuplicateValues(List<SudokuCell> sudokuCells)
+	{
+		int[] cellValues = sudokuCells.stream()
+				.filter(sudokuCell -> sudokuCell.getValue() != null)
+				.mapToInt(SudokuCell::getValue)
+				.toArray();
+
+		return cellValues.length
+				!= Arrays.stream(cellValues).distinct().count();
 	}
 }
