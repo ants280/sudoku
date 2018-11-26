@@ -54,13 +54,25 @@ public class SudokuBoardTest
 				+ "000000000"
 				+ "000000000}";
 		SudokuBoard board = new SudokuBoard(boardString);
+		int allCellsIndex = 15;
 		int r = 1;
 		int c = 6;
+		int group = 2;
+		int groupIndex = 3;
 		Integer value = 4;
 
-		Integer actualValue = board.getSudokuCells(ROW, r).get(c).getValue();
-
-		Assert.assertEquals(value, actualValue);
+		Assert.assertEquals(
+				value,
+				board.getAllSudokuCells().get(allCellsIndex).getValue());
+		Assert.assertEquals(
+				value,
+				board.getSudokuCells(ROW, r).get(c).getValue());
+		Assert.assertEquals(
+				value,
+				board.getSudokuCells(COLUMN, c).get(r).getValue());
+		Assert.assertEquals(
+				value,
+				board.getSudokuCells(GROUP, group).get(groupIndex).getValue());
 	}
 
 	@Test
