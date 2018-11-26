@@ -9,6 +9,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.Dictionary;
 import java.util.Hashtable;
+import java.util.concurrent.TimeUnit;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -40,7 +41,8 @@ public class SudokuSolverPopup implements ActionListener, ChangeListener
 			= "Reset possible values";
 	private static final String BUTTON_START = "Start";
 	private static final String BUTTON_STOP = "Stop";
-	private static final int SLIDER_MULTIPLIER = 250;
+	private static final int ONE_SECOND_IN_MILLIS
+			= (int) TimeUnit.MILLISECONDS.convert(1, TimeUnit.SECONDS);
 
 	public SudokuSolverPopup(
 			JFrame popupOwner,
@@ -51,10 +53,12 @@ public class SudokuSolverPopup implements ActionListener, ChangeListener
 		this.repaintCanvasCallback = repaintCanvasCallback;
 		this.sudokuSolver = new SudokuSolver(sudokuBoard);
 		this.popupDialog = new JDialog(popupOwner, "Solver", true);
-		this.timerSlider = new JSlider(SwingConstants.VERTICAL, 0, 12, 4);
-		this.timer = new Timer(
-				timerSlider.getValue() * SLIDER_MULTIPLIER,
-				null);
+		this.timerSlider = new JSlider(
+				SwingConstants.VERTICAL, // orientation
+				0, // min
+				3 * ONE_SECOND_IN_MILLIS, // max
+				ONE_SECOND_IN_MILLIS); // value
+		this.timer = new Timer(timerSlider.getValue(), null);
 		this.progressBar = new JProgressBar();
 		this.resetPossibleValuesWhenStartingCheckBox
 				= new JCheckBox(BUTTON_RESET_POSSIBLE_VALUES, true);
@@ -66,20 +70,21 @@ public class SudokuSolverPopup implements ActionListener, ChangeListener
 	private void init()
 	{
 		timerSlider.addChangeListener(this);
-		timerSlider.setMajorTickSpacing(4);
-		timerSlider.setMinorTickSpacing(1);
+		timerSlider.setMajorTickSpacing(ONE_SECOND_IN_MILLIS);
+		timerSlider.setMinorTickSpacing(ONE_SECOND_IN_MILLIS / 4);
 		timerSlider.setPaintTicks(true);
-		timerSlider.setSnapToTicks(true);
 		timerSlider.setPaintLabels(true);
 		//Create the label table
 		Dictionary<Integer, JLabel> labelTable = new Hashtable<>();
 		for (int i = timerSlider.getMinimum();
 				i <= timerSlider.getMaximum();
-				i += 4)
+				i += ONE_SECOND_IN_MILLIS)
 		{
 			labelTable.put(
 					i,
-					new JLabel(String.format("%.2f sec/move", i / 4d)));
+					new JLabel(String.format(
+							"%.2f sec/move",
+							Double.valueOf(i) / ONE_SECOND_IN_MILLIS)));
 		}
 		timerSlider.setLabelTable(labelTable);
 
@@ -171,7 +176,7 @@ public class SudokuSolverPopup implements ActionListener, ChangeListener
 	@Override
 	public void stateChanged(ChangeEvent changeEvent)
 	{
-		timer.setDelay(timerSlider.getValue() * SLIDER_MULTIPLIER);
+		timer.setDelay(timerSlider.getValue());
 	}
 
 	private static class StopTimerWindowListener
