@@ -34,7 +34,8 @@ public class SudokuDisplayComponent extends JComponent
 		this.board = board;
 		this.cellLength = 50;
 		this.valueFont = new Font("times", Font.PLAIN, cellLength);
-		this.possibleValueFont = new Font("times", Font.PLAIN, cellLength / 3);
+		this.possibleValueFont = valueFont
+				.deriveFont((float) (cellLength / 3d));
 		this.xOffset = 0;
 		this.yOffset = 0;
 
@@ -73,6 +74,7 @@ public class SudokuDisplayComponent extends JComponent
 		}
 	}
 
+	//<editor-fold defaultstate="collapsed" desc="painting">
 	@Override
 	protected void paintComponent(Graphics graphics)
 	{
@@ -104,13 +106,15 @@ public class SudokuDisplayComponent extends JComponent
 			graphics.setColor(sudokuCell.isLocked()
 					? Color.DARK_GRAY : Color.BLACK);
 			graphics.setFont(valueFont);
+			int charWidth = graphics.getFontMetrics()
+					.stringWidth(sudokuCell.getValue().toString());
 			int fontHeightPx = (int) (valueFont.getSize() * 0.75d);
-			FontMetrics fontMetrics = graphics.getFontMetrics();
-			int charWidth = getFontWidth(fontMetrics, sudokuCell.getValue());
+			int cellColumn = sudokuCell.getIndex(SectionType.COLUMN);
+			int cellRow = sudokuCell.getIndex(SectionType.ROW);
 			int colOffset = (int) (xOffset - (charWidth / 2d)
-					+ (cellLength * (sudokuCell.getIndex(SectionType.COLUMN) + 0.5d)));
+					+ (cellLength * (cellColumn + 0.5d)));
 			int rowOffset = (int) (yOffset + (fontHeightPx / 2d)
-					+ (cellLength * (sudokuCell.getIndex(SectionType.ROW) + 0.5d)));
+					+ (cellLength * (cellRow + 0.5d)));
 
 			graphics.drawString(
 					sudokuCell.getValue().toString(), colOffset, rowOffset);
@@ -154,11 +158,6 @@ public class SudokuDisplayComponent extends JComponent
 
 		graphics.drawString(
 				possibleValue.toString(), colOffset, rowOffset);
-	}
-
-	private int getFontWidth(FontMetrics fontMetrics, Integer cellValue)
-	{
-		return fontMetrics.stringWidth(cellValue.toString());
 	}
 
 	private void paintLines(Graphics graphics)
@@ -222,7 +221,9 @@ public class SudokuDisplayComponent extends JComponent
 			}
 		}
 	}
+//</editor-fold>
 
+	//<editor-fold defaultstate="collapsed" desc="selectedCell">
 	public void selectCellFromCoordinates(int x, int y)
 	{
 		this.setSelectedRow((y - yOffset) / cellLength);
@@ -281,4 +282,5 @@ public class SudokuDisplayComponent extends JComponent
 			selectedCol = i;
 		}
 	}
+//</editor-fold>
 }
