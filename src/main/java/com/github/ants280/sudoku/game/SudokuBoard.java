@@ -25,7 +25,8 @@ public class SudokuBoard
 
 	public SudokuBoard(String boardString)
 	{
-		this.allSudokuCells = getAllSudokuCells(boardString);
+		this.allSudokuCells = Collections
+				.unmodifiableList(getAllSudokuCells(boardString));
 
 		this.sectionTypeCells = new EnumMap<>(SectionType.class);
 		sectionTypeCells.put(ROW, allSudokuCells.stream().collect(Collectors
@@ -94,7 +95,7 @@ public class SudokuBoard
 
 	public List<SudokuCell> getAllSudokuCells()
 	{
-		return Collections.unmodifiableList(allSudokuCells);
+		return allSudokuCells;
 	}
 
 	public List<SudokuCell> getSudokuCells(
