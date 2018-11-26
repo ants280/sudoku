@@ -5,6 +5,7 @@ import com.github.ants280.sudoku.game.SudokuBoard;
 import com.github.ants280.sudoku.game.SudokuCell;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -68,12 +69,12 @@ public class SudokuBruteForceSolver extends SudokuSolver
 
 	private boolean hasDuplicateValues(List<SudokuCell> sudokuCells)
 	{
-		int[] cellValues = sudokuCells.stream()
-				.filter(sudokuCell -> sudokuCell.getValue() != null)
-				.mapToInt(SudokuCell::getValue)
-				.toArray();
+		Collection<Integer> usedValuesSet = new HashSet<>();
 
-		return cellValues.length
-				!= Arrays.stream(cellValues).distinct().count();
+		return !sudokuCells.stream()
+				.filter(sudokuCell -> sudokuCell.getValue() != null)
+				.map(SudokuCell::getValue)
+				// "true if this collection changed as a result of the call" :
+				.allMatch(usedValuesSet::add);
 	}
 }
