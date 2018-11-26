@@ -581,7 +581,7 @@ public class SudokuUiManager implements ActionListener
 
 	private void updateMessageLabel()
 	{
-		messageLabel.setText(board.isSolved() ? "You win!" : "");
+		messageLabel.setText(board.isSolved() ? "Board Solved" : "");
 		frame.pack(); // keep the board canvas the same size
 	}
 }
