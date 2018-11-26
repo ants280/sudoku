@@ -33,7 +33,7 @@ public class SudokuDisplayComponent extends JComponent
 	{
 		this.board = board;
 		this.cellLength = 50;
-		this.valueFont = new Font("times", Font.PLAIN, cellLength);
+		this.valueFont = new Font(null, Font.PLAIN, cellLength);
 		this.possibleValueFont = valueFont
 				.deriveFont((float) (cellLength / 3d));
 		this.xOffset = 0;
