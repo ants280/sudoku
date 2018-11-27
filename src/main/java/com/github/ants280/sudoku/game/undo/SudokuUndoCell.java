@@ -18,6 +18,11 @@ public class SudokuUndoCell extends SudokuCell
 		this.commandHistory = commandHistory;
 	}
 
+	public CommandHistory<SudokuCellChangeCommand> getCommandHistory()
+	{
+		return commandHistory;
+	}
+
 	@Override
 	public void setValue(Integer value)
 	{

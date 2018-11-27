@@ -260,6 +260,7 @@ public class SudokuUiManager implements ActionListener
 		selectedCellMenuItems
 				.forEach(menuItem -> menuItem.setEnabled(false));
 		sudokuDisplayComponent.removeSelectedCell();
+		commandHistory.reset();
 	}
 
 	private void endGame()
@@ -472,7 +473,10 @@ public class SudokuUiManager implements ActionListener
 		{
 			SudokuSolver solver = new SudokuBruteForceSolver(board);
 
+			commandHistory.reset();
+			commandHistory.setEnabled(false);
 			solver.solveFast();
+			commandHistory.setEnabled(true);
 
 			sudokuDisplayComponent.repaint();
 			this.updateMessageLabel();
@@ -548,6 +552,7 @@ public class SudokuUiManager implements ActionListener
 
 			sudokuDisplayComponent.removeSelectedCell();
 			sudokuDisplayComponent.repaint();
+			commandHistory.reset();
 		}
 	}
 
@@ -584,6 +589,7 @@ public class SudokuUiManager implements ActionListener
 
 			sudokuDisplayComponent.removeSelectedCell();
 			sudokuDisplayComponent.repaint();
+			commandHistory.reset();
 		}
 	}
 

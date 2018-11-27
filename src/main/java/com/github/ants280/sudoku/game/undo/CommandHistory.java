@@ -9,27 +9,32 @@ public class CommandHistory<T extends Command> implements Command
 	private final Deque<T> undoHistory;
 	private final Deque<T> redoHistory;
 	private final BiConsumer<Boolean, Boolean> undoRedoEmptyConsumer;
+	private boolean enabled;
 
 	public CommandHistory(BiConsumer<Boolean, Boolean> undoRedoEmptyConsumer)
 	{
 		this.undoHistory = new LinkedList<>();
 		this.redoHistory = new LinkedList<>();
 		this.undoRedoEmptyConsumer = undoRedoEmptyConsumer;
+		this.enabled = true;
 	}
 
 	public void addCommand(T command)
 	{
-		undoHistory.add(command);
+		if (enabled)
+		{
+			undoHistory.add(command);
 
-		redoHistory.clear();
+			redoHistory.clear();
 
-		undoRedoEmptyConsumer.accept(false, true);
+			undoRedoEmptyConsumer.accept(false, true);
+		}
 	}
 
 	@Override
 	public void undo()
 	{
-		if (!undoHistory.isEmpty())
+		if (enabled && !undoHistory.isEmpty())
 		{
 			T command = undoHistory.pop();
 
@@ -44,7 +49,7 @@ public class CommandHistory<T extends Command> implements Command
 	@Override
 	public void redo()
 	{
-		if (!redoHistory.isEmpty())
+		if (enabled && !redoHistory.isEmpty())
 		{
 			T command = redoHistory.pop();
 
@@ -58,9 +63,17 @@ public class CommandHistory<T extends Command> implements Command
 
 	public void reset()
 	{
-		undoHistory.clear();
-		redoHistory.clear();
+		if (enabled)
+		{
+			undoHistory.clear();
+			redoHistory.clear();
 
-		undoRedoEmptyConsumer.accept(true, true);
+			undoRedoEmptyConsumer.accept(true, true);
+		}
+	}
+
+	public void setEnabled(boolean enabled)
+	{
+		this.enabled = enabled;
 	}
 }
