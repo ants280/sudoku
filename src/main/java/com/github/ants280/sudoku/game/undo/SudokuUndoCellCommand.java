@@ -1,13 +1,13 @@
 package com.github.ants280.sudoku.game.undo;
 
-public class SudokuCellChangeCommand implements Command
+public class SudokuUndoCellCommand implements Command
 {
 	private final SudokuUndoCell sudokuCell;
 	private final SudokuCellChangeType sudokuCellChangeType;
 	private final Integer oldValue;
 	private final Integer newValue;
 
-	public SudokuCellChangeCommand(
+	public SudokuUndoCellCommand(
 			SudokuUndoCell sudokuCell,
 			SudokuCellChangeType sudokuCellChangeType,
 			Integer oldValue,

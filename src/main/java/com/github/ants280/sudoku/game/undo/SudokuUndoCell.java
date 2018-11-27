@@ -4,10 +4,10 @@ import com.github.ants280.sudoku.game.SudokuCell;
 
 public class SudokuUndoCell extends SudokuCell
 {
-	private final CommandHistory<SudokuCellChangeCommand> commandHistory;
+	private final CommandHistory<SudokuUndoCellCommand> commandHistory;
 
 	public SudokuUndoCell(
-			CommandHistory<SudokuCellChangeCommand> commandHistory,
+			CommandHistory<SudokuUndoCellCommand> commandHistory,
 			int rowIndex,
 			int columnIndex,
 			int groupIndex,
@@ -18,7 +18,7 @@ public class SudokuUndoCell extends SudokuCell
 		this.commandHistory = commandHistory;
 	}
 
-	public CommandHistory<SudokuCellChangeCommand> getCommandHistory()
+	public CommandHistory<SudokuUndoCellCommand> getCommandHistory()
 	{
 		return commandHistory;
 	}
@@ -30,7 +30,7 @@ public class SudokuUndoCell extends SudokuCell
 
 		super.setValue(value);
 
-		commandHistory.addCommand(new SudokuCellChangeCommand(
+		commandHistory.addCommand(new SudokuUndoCellCommand(
 				this,
 				SudokuCellChangeType.CHANGE_VALUE,
 				oldValue,
@@ -45,7 +45,7 @@ public class SudokuUndoCell extends SudokuCell
 
 		boolean valueRemoved = super.removePossibleValue(value);
 
-		commandHistory.addCommand(new SudokuCellChangeCommand(
+		commandHistory.addCommand(new SudokuUndoCellCommand(
 				this,
 				SudokuCellChangeType.REMOVE_POSSIBLE_VALUE,
 				oldPossibleValuePresent ? value : null,
@@ -62,7 +62,7 @@ public class SudokuUndoCell extends SudokuCell
 
 		boolean valueAdded = super.addPossibleValue(value);
 
-		commandHistory.addCommand(new SudokuCellChangeCommand(
+		commandHistory.addCommand(new SudokuUndoCellCommand(
 				this,
 				SudokuCellChangeType.ADD_POSSIBLE_VALUE,
 				oldPossibleValuePresent ? value : null,

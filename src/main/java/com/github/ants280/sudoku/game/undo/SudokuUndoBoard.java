@@ -5,11 +5,11 @@ import com.github.ants280.sudoku.game.SudokuCell;
 
 public class SudokuUndoBoard extends SudokuBoard
 {
-	private final CommandHistory<SudokuCellChangeCommand> commandHistory;
+	private final CommandHistory<SudokuUndoCellCommand> commandHistory;
 
 	public SudokuUndoBoard(
 			SudokuBoard board,
-			CommandHistory<SudokuCellChangeCommand> commandHistory)
+			CommandHistory<SudokuUndoCellCommand> commandHistory)
 	{
 		super(board);
 

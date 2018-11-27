@@ -6,7 +6,7 @@ import com.github.ants280.sudoku.game.SudokuCell;
 import com.github.ants280.sudoku.game.solver.SudokuBruteForceSolver;
 import com.github.ants280.sudoku.game.solver.SudokuSolver;
 import com.github.ants280.sudoku.game.undo.CommandHistory;
-import com.github.ants280.sudoku.game.undo.SudokuCellChangeCommand;
+import com.github.ants280.sudoku.game.undo.SudokuUndoCellCommand;
 import com.github.ants280.sudoku.game.undo.SudokuUndoBoard;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -49,7 +49,7 @@ public class SudokuUiManager implements ActionListener
 	private final SudokuDisplayComponent sudokuDisplayComponent;
 	private final SudokuBoard board;
 	private final JLabel messageLabel;
-	private final CommandHistory<SudokuCellChangeCommand> commandHistory;
+	private final CommandHistory<SudokuUndoCellCommand> commandHistory;
 	private final JMenuItem undoMenuItem;
 	private final JMenuItem redoMenuItem;
 	private final Collection<JMenuItem> selectedCellMenuItems;
