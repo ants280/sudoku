@@ -12,7 +12,7 @@ import java.util.stream.IntStream;
 
 public class SudokuCell
 {
-	public static final Set<Integer> LEGAL_CELL_VALUES
+	private static final Set<Integer> LEGAL_CELL_VALUES
 			= IntStream.rangeClosed(1, 9)
 					.boxed()
 					.collect(Collectors.toSet());
@@ -85,6 +85,11 @@ public class SudokuCell
 		}
 
 		possibleValues.clear();
+	}
+
+	public void restoreAllPossibleValues()
+	{
+		LEGAL_CELL_VALUES.forEach(this::addPossibleValue);
 	}
 
 	public boolean removePossibleValue(int value)

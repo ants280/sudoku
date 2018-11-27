@@ -61,29 +61,44 @@ public class SudokuBoard
 						.collect(Collectors.joining()));
 	}
 
-	private static List<SudokuCell> getAllSudokuCells(String boardString)
+	private List<SudokuCell> getAllSudokuCells(String boardString)
 	{
 		if (!isValidSavedBoard(boardString))
 		{
 			throw new IllegalArgumentException("Illegal board: " + boardString);
 		}
 
-		SudokuCell[] allSudokuCells = new SudokuCell[81];
-		for (int i = 0; i < allSudokuCells.length; i++)
+		SudokuCell[] allSudokuCellsArray = new SudokuCell[81];
+		for (int i = 0; i < allSudokuCellsArray.length; i++)
 		{
 			String cellValueString = String.valueOf(boardString.charAt(i + 1));
 			int cellValue = Integer.parseInt(cellValueString);
 			int rowIndex = i / 9;
 			int columnIndex = i % 9;
 			int groupIndex = ((rowIndex / 3) * 3) + (columnIndex / 3);
-			allSudokuCells[i] = new SudokuCell(
+			allSudokuCellsArray[i] = createSudokuCell(
 					rowIndex,
 					columnIndex,
 					groupIndex,
 					cellValue == 0 ? null : cellValue,
-					cellValue != 0); // locked
+					cellValue != 0);
 		}
-		return Arrays.asList(allSudokuCells);
+		return Arrays.asList(allSudokuCellsArray);
+	}
+
+	protected SudokuCell createSudokuCell(
+			int rowIndex,
+			int columnIndex,
+			int groupIndex,
+			Integer cellValue,
+			boolean locked)
+	{
+		return new SudokuCell(
+				rowIndex,
+				columnIndex,
+				groupIndex,
+				cellValue,
+				locked);
 	}
 
 	public void resetFrom(SudokuBoard other)

@@ -2,6 +2,7 @@ package com.github.ants280.sudoku.ui;
 
 import com.github.ants280.sudoku.game.SudokuBoard;
 import java.awt.BorderLayout;
+import java.awt.event.KeyEvent;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -11,6 +12,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 import javax.swing.border.Border;
 
 public class SudokuFrame extends JFrame
@@ -43,6 +45,8 @@ public class SudokuFrame extends JFrame
 		JMenuItem exportMenuItem = new JMenuItem();
 		JMenuItem exitMenuItem = new JMenuItem();
 		JMenu actionMenu = new JMenu();
+		JMenuItem undoMenuItem = new JMenuItem();
+		JMenuItem redoMenuItem = new JMenuItem();
 		JMenuItem setValueMenuItem = new JMenuItem();
 		JMenuItem setPossibleValueMenuItem = new JMenuItem();
 		JMenuItem clearPossibleValuesMenuItem = new JMenuItem();
@@ -60,6 +64,8 @@ public class SudokuFrame extends JFrame
 		fileMenu.add(exportMenuItem);
 		fileMenu.addSeparator();
 		fileMenu.add(exitMenuItem);
+		actionMenu.add(undoMenuItem);
+		actionMenu.add(redoMenuItem);
 		actionMenu.add(setValueMenuItem);
 		actionMenu.add(setPossibleValueMenuItem);
 		actionMenu.add(clearPossibleValuesMenuItem);
@@ -89,6 +95,8 @@ public class SudokuFrame extends JFrame
 				exportMenuItem,
 				exitMenuItem,
 				actionMenu,
+				undoMenuItem,
+				redoMenuItem,
 				setValueMenuItem,
 				setPossibleValueMenuItem,
 				clearPossibleValuesMenuItem,
@@ -100,6 +108,11 @@ public class SudokuFrame extends JFrame
 				helpMenu,
 				helpMenuItem,
 				aboutMenuItem);
+
+		undoMenuItem.setAccelerator(
+				KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_DOWN_MASK));
+		redoMenuItem.setAccelerator(
+				KeyStroke.getKeyStroke(KeyEvent.VK_Y, KeyEvent.CTRL_DOWN_MASK));
 
 		this.setJMenuBar(menuBar);
 		this.add(topPanel, BorderLayout.NORTH);

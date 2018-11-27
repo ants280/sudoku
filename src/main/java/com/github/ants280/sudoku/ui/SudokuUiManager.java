@@ -5,6 +5,9 @@ import com.github.ants280.sudoku.game.SudokuBoard;
 import com.github.ants280.sudoku.game.SudokuCell;
 import com.github.ants280.sudoku.game.solver.SudokuBruteForceSolver;
 import com.github.ants280.sudoku.game.solver.SudokuSolver;
+import com.github.ants280.sudoku.game.undo.CommandHistory;
+import com.github.ants280.sudoku.game.undo.SudokuCellChangeCommand;
+import com.github.ants280.sudoku.game.undo.SudokuUndoBoard;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
@@ -28,6 +31,8 @@ public class SudokuUiManager implements ActionListener
 	private static final String EXPORT_MI = "Export Game...";
 	private static final String EXIT_MI = "Exit";
 	private static final String ACTION_M = "Action";
+	private static final String UNDO_MI = "Undo";
+	private static final String REDO_MI = "Redo";
 	private static final String SET_VALUE_MI = "Set value...";
 	private static final String SET_POSSIBLE_VALUE_MI = "Set possible value...";
 	private static final String CLEAR_POSSIBLE_VALUES_MI = "Clear possible values";
@@ -44,6 +49,9 @@ public class SudokuUiManager implements ActionListener
 	private final SudokuDisplayComponent sudokuDisplayComponent;
 	private final SudokuBoard board;
 	private final JLabel messageLabel;
+	private final CommandHistory<SudokuCellChangeCommand> commandHistory;
+	private final JMenuItem undoMenuItem;
+	private final JMenuItem redoMenuItem;
 	private final Collection<JMenuItem> selectedCellMenuItems;
 	private final SudokuBoard initialBoard;
 	private final Map<String, Runnable> actionCommands;
@@ -56,14 +64,19 @@ public class SudokuUiManager implements ActionListener
 			SudokuDisplayComponent sudokuDisplayComponent,
 			SudokuBoard board,
 			JLabel messageLabel,
+			JMenuItem undoMenuItem,
+			JMenuItem redoMenuItem,
 			Collection<JMenuItem> selectedCellMenuItems)
 	{
 
 		this.frame = frame;
 		this.sudokuDisplayComponent = sudokuDisplayComponent;
-		this.board = board;
+		this.commandHistory = new CommandHistory<>(this::undoRedoChanged);
+		this.board = new SudokuUndoBoard(board, commandHistory);
 		this.messageLabel = messageLabel;
 		this.initialBoard = new SudokuBoard(board.toString());
+		this.undoMenuItem = undoMenuItem;
+		this.redoMenuItem = redoMenuItem;
 		this.selectedCellMenuItems = selectedCellMenuItems;
 		this.actionCommands = this.createActionCommands();
 		this.mouseListener = new SudokuMouseListener(
@@ -87,6 +100,8 @@ public class SudokuUiManager implements ActionListener
 			JMenuItem exportMenuItem,
 			JMenuItem exitMenuItem,
 			JMenu actionMenu,
+			JMenuItem undoMenuItem,
+			JMenuItem redoMenuItem,
 			JMenuItem setValueMenuItem,
 			JMenuItem setPossibleValueMenuItem,
 			JMenuItem clearPossibleValuesMenuItem,
@@ -105,6 +120,8 @@ public class SudokuUiManager implements ActionListener
 						sudokuDisplayComponent,
 						board,
 						messageLabel,
+						undoMenuItem,
+						redoMenuItem,
 						Arrays.asList(
 								setValueMenuItem,
 								setPossibleValueMenuItem));
@@ -116,6 +133,8 @@ public class SudokuUiManager implements ActionListener
 				exportMenuItem,
 				exitMenuItem,
 				actionMenu,
+				undoMenuItem,
+				redoMenuItem,
 				setValueMenuItem,
 				setPossibleValueMenuItem,
 				clearPossibleValuesMenuItem,
@@ -138,6 +157,8 @@ public class SudokuUiManager implements ActionListener
 		tempActionCommands.put(LOAD_MI, this::load);
 		tempActionCommands.put(EXPORT_MI, this::export);
 		tempActionCommands.put(EXIT_MI, this::exit);
+		tempActionCommands.put(UNDO_MI, this::undo);
+		tempActionCommands.put(REDO_MI, this::redo);
 		tempActionCommands.put(SET_VALUE_MI, this::setValue);
 		tempActionCommands.put(SET_POSSIBLE_VALUE_MI, this::setPossibleValue);
 		tempActionCommands.put(CLEAR_POSSIBLE_VALUES_MI, this::clearPossibleValues);
@@ -158,6 +179,8 @@ public class SudokuUiManager implements ActionListener
 			JMenuItem exportMenuItem,
 			JMenuItem exitMenuItem,
 			JMenu actionMenu,
+			JMenuItem undoMenuItem,
+			JMenuItem redoMenuItem,
 			JMenuItem setValueMenuItem,
 			JMenuItem setPossibleValueMenuItem,
 			JMenuItem clearPossibleValuesMenuItem,
@@ -176,6 +199,8 @@ public class SudokuUiManager implements ActionListener
 		exportMenuItem.setText(EXPORT_MI);
 		exitMenuItem.setText(EXIT_MI);
 		actionMenu.setText(ACTION_M);
+		undoMenuItem.setText(UNDO_MI);
+		redoMenuItem.setText(REDO_MI);
 		setValueMenuItem.setText(SET_VALUE_MI);
 		setPossibleValueMenuItem.setText(SET_POSSIBLE_VALUE_MI);
 		clearPossibleValuesMenuItem.setText(CLEAR_POSSIBLE_VALUES_MI);
@@ -192,6 +217,8 @@ public class SudokuUiManager implements ActionListener
 		loadMenuItem.addActionListener(this);
 		exportMenuItem.addActionListener(this);
 		exitMenuItem.addActionListener(this);
+		undoMenuItem.addActionListener(this);
+		redoMenuItem.addActionListener(this);
 		setValueMenuItem.addActionListener(this);
 		setPossibleValueMenuItem.addActionListener(this);
 		clearPossibleValuesMenuItem.addActionListener(this);
@@ -583,5 +610,27 @@ public class SudokuUiManager implements ActionListener
 	{
 		messageLabel.setText(board.isSolved() ? "Board Solved" : "");
 		frame.pack(); // keep the board canvas the same size
+	}
+
+	private void undo()
+	{
+		commandHistory.redo();
+
+		sudokuDisplayComponent.repaint();
+		this.updateMessageLabel();
+	}
+
+	private void redo()
+	{
+		commandHistory.redo();
+
+		sudokuDisplayComponent.repaint();
+		this.updateMessageLabel();
+	}
+
+	private void undoRedoChanged(boolean undoEmpty, boolean redoEmpty)
+	{
+		undoMenuItem.setEnabled(!undoEmpty);
+		redoMenuItem.setEnabled(!redoEmpty);
 	}
 }
