@@ -17,7 +17,6 @@ public class SudokuUndoBoard extends SudokuBoard
 	{
 		this.getAllSudokuCells()
 				.stream()
-				// TODO: This cast is ugly.  Pehaps use generics?
 				.forEach(sudokuCell -> ((SudokuUndoCell) sudokuCell)
 				.setCommandHistory(commandHistory));
 	}
