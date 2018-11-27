@@ -45,8 +45,7 @@ public class SudokuUndoCell extends SudokuCell
 	@Override
 	public boolean removePossibleValue(int value)
 	{
-		boolean oldPossibleValuePresent
-				= this.getPossibleValues().contains(value);
+		boolean oldPossibleValuePresent = this.hasPossibleValue(value);
 
 		boolean valueRemoved = super.removePossibleValue(value);
 
@@ -62,8 +61,7 @@ public class SudokuUndoCell extends SudokuCell
 	@Override
 	public boolean addPossibleValue(int value)
 	{
-		boolean oldPossibleValuePresent
-				= this.getPossibleValues().contains(value);
+		boolean oldPossibleValuePresent = this.hasPossibleValue(value);
 
 		boolean valueAdded = super.addPossibleValue(value);
 

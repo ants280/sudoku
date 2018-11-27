@@ -358,7 +358,7 @@ public class SudokuUiManager implements ActionListener
 				+ "cell values",
 				sudokuCell -> sudokuCell.getValue() == null,
 				(selectedSudokuCell, v)
-				-> selectedSudokuCell.getPossibleValues().contains(v),
+				-> selectedSudokuCell.hasPossibleValue(v),
 				this::toggleSudokuCellPossibleValue,
 				false);
 	}
@@ -416,7 +416,7 @@ public class SudokuUiManager implements ActionListener
 		if (!sudokuCell.isLocked())
 		{
 			boolean possibleValueChanged
-					= sudokuCell.getPossibleValues().contains(v)
+					= sudokuCell.hasPossibleValue(v)
 					? sudokuCell.removePossibleValue(v)
 					: sudokuCell.addPossibleValue(v);
 

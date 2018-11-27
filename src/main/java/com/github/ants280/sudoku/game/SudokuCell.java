@@ -43,11 +43,6 @@ public class SudokuCell
 		return sectionTypeIndices.get(sectionType);
 	}
 
-	private Map<SectionType, Integer> getSectionTypeIndices()
-	{
-		return Collections.unmodifiableMap(sectionTypeIndices);
-	}
-
 	public Integer getValue()
 	{
 		return value;
@@ -56,6 +51,11 @@ public class SudokuCell
 	public Collection<Integer> getPossibleValues()
 	{
 		return Collections.unmodifiableSet(possibleValues);
+	}
+
+	public boolean hasPossibleValue(int value)
+	{
+		return possibleValues.contains(value);
 	}
 
 	public boolean isLocked()

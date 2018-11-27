@@ -34,7 +34,7 @@ public class LastPossibleValueInSectionSudokuSolverPlugin extends SudokuSolverPl
 							.anyMatch(sudokuCells -> sudokuCells.stream()
 							.allMatch(otherSudokuCell -> otherSudokuCell.equals(sudokuCell)
 							|| otherSudokuCell.getValue() != null
-							|| !otherSudokuCell.getPossibleValues().contains(possibleValue)));
+							|| !otherSudokuCell.hasPossibleValue(possibleValue)));
 
 					if (onlyPossibleValueInASection)
 					{

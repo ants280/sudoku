@@ -61,7 +61,8 @@ public class SudokuSolver
 			Arrays.stream(SectionType.values())
 					.forEach(sectionType -> sudokuBoard.getSudokuCells(sectionType, sudokuCell.getIndex(sectionType))
 					.stream()
-					.filter(nearbySudokuCell -> nearbySudokuCell.getValue() == null)
+					.filter(nearbySudokuCell -> nearbySudokuCell.getValue() == null
+					&& nearbySudokuCell.getPossibleValues().contains(v))
 					.forEach(nearbySudokuCell -> nearbySudokuCell.removePossibleValue(v)));
 		};
 	}
