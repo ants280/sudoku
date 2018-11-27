@@ -23,7 +23,7 @@ public class CommandHistory<T extends Command> implements Command
 	{
 		if (enabled)
 		{
-			undoHistory.add(command);
+			undoHistory.push(command);
 
 			redoHistory.clear();
 
