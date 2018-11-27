@@ -1,50 +1,54 @@
 package com.github.ants280.sudoku.game.undo;
 
 import com.github.ants280.sudoku.game.SudokuCell;
-import java.util.function.BiConsumer;
 
 public enum SudokuCellChangeType
 {
 	ADD_POSSIBLE_VALUE(
-			(sudokuCell, oldValue) ->
+			(sudokuCell, oldValue, newValue) ->
 	{
-		if (oldValue != null)
+		if (oldValue == null)
 		{
-			sudokuCell.removePossibleValue(oldValue);
+			sudokuCell.removePossibleValue(newValue);
 		}
 	},
-			(sudokuCell, newValue) -> sudokuCell.addPossibleValue(newValue)),
+			(sudokuCell, oldValue, newValue) -> sudokuCell.addPossibleValue(newValue)),
 	REMOVE_POSSIBLE_VALUE(
-			(sudokuCell, oldValue) ->
+			(sudokuCell, oldValue, newValue) ->
 	{
-		if (oldValue != null)
+		if (oldValue == null)
 		{
-			sudokuCell.addPossibleValue(oldValue);
+			sudokuCell.addPossibleValue(newValue);
 		}
 	},
-			(sudokuCell, newValue) -> sudokuCell.removePossibleValue(newValue)),
+			(sudokuCell, oldValue, newValue) -> sudokuCell.removePossibleValue(newValue)),
 	CHANGE_VALUE(
-			(sudokuCell, oldValue) -> sudokuCell.setValue(oldValue),
-			(sudokuCell, newValue) -> sudokuCell.setValue(newValue));
+			(sudokuCell, oldValue, newValue) -> sudokuCell.setValue(oldValue),
+			(sudokuCell, oldValue, newValue) -> sudokuCell.setValue(newValue));
 
-	private final BiConsumer<SudokuCell, Integer> undoCommand;
-	private final BiConsumer<SudokuCell, Integer> redoCommand;
+	private final SudokuCellChange undoCommand;
+	private final SudokuCellChange redoCommand;
 
 	SudokuCellChangeType(
-			BiConsumer<SudokuCell, Integer> undoCommand,
-			BiConsumer<SudokuCell, Integer> redoCommand)
+			SudokuCellChange undoCommand,
+			SudokuCellChange redoCommand)
 	{
 		this.undoCommand = undoCommand;
 		this.redoCommand = redoCommand;
 	}
 
-	public void undo(SudokuCell sudokuCell, Integer oldValue)
+	public void undo(SudokuCell sudokuCell, Integer oldValue, Integer newValue)
 	{
-		undoCommand.accept(sudokuCell, oldValue);
+		undoCommand.changeCell(sudokuCell, oldValue, newValue);
 	}
 
-	public void redo(SudokuCell sudokuCell, Integer newValue)
+	public void redo(SudokuCell sudokuCell, Integer oldValue, Integer newValue)
 	{
-		redoCommand.accept(sudokuCell, newValue);
+		redoCommand.changeCell(sudokuCell, oldValue, newValue);
+	}
+
+	private static interface SudokuCellChange
+	{
+		void changeCell(SudokuCell cell, Integer oldValue, Integer newValue);
 	}
 }
