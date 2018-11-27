@@ -107,11 +107,11 @@ public class SudokuCell
 
 		if (hasPossibleValue(value))
 		{
-			possibleValues.add(value);
+			possibleValues.remove(value);
 		}
 		else
 		{
-			possibleValues.remove(value);
+			possibleValues.add(value);
 		}
 	}
 
