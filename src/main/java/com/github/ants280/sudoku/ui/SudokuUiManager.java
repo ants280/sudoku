@@ -415,15 +415,9 @@ public class SudokuUiManager implements ActionListener
 	{
 		if (!sudokuCell.isLocked())
 		{
-			boolean possibleValueChanged
-					= sudokuCell.hasPossibleValue(v)
-					? sudokuCell.removePossibleValue(v)
-					: sudokuCell.addPossibleValue(v);
+			sudokuCell.togglePossibleValue(v);
 
-			if (possibleValueChanged)
-			{
-				sudokuDisplayComponent.repaint();
-			}
+			sudokuDisplayComponent.repaint();
 		}
 	}
 

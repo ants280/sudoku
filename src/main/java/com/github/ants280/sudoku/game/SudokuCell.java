@@ -12,13 +12,14 @@ import java.util.stream.IntStream;
 
 public class SudokuCell
 {
-	private static final Set<Integer> LEGAL_CELL_VALUES
+	private static final Collection<Integer> LEGAL_CELL_VALUES
 			= IntStream.rangeClosed(1, 9)
 					.boxed()
-					.collect(Collectors.toSet());
+					.collect(Collectors.toList());
 	private final Map<SectionType, Integer> sectionTypeIndices;
 	private Integer value;
 	private boolean locked;
+	// TODO: make this be a binary string to simplify toggling.  Also sholud reduce dependence on getPossibleValues...
 	private final Set<Integer> possibleValues;
 
 	public SudokuCell(
@@ -89,43 +90,29 @@ public class SudokuCell
 
 	public void restoreAllPossibleValues()
 	{
-		LEGAL_CELL_VALUES.forEach(this::addPossibleValue);
+		LEGAL_CELL_VALUES.stream()
+				.filter(v -> !this.hasPossibleValue(v))
+				.forEach(this::togglePossibleValue);
 	}
 
-	public boolean removePossibleValue(int value)
+	public void togglePossibleValue(int value)
 	{
 		if (locked)
 		{
 			throw new IllegalArgumentException(
-					"Cannot remove possible values of locked SudokuCell.");
-		}
-
-		SudokuCell.validateValue(value);
-
-		if (!hasPossibleValue(value))
-		{
-			throw new IllegalArgumentException("Cannot remove possible value which is not present");
-		}
-
-		return possibleValues.remove(value);
-	}
-
-	public boolean addPossibleValue(int value)
-	{
-		if (locked)
-		{
-			throw new IllegalArgumentException(
-					"Cannot add possible value to a locked SudokuCell.");
+					"Cannot toggle possible values of locked SudokuCell.");
 		}
 
 		SudokuCell.validateValue(value);
 
 		if (hasPossibleValue(value))
 		{
-			throw new IllegalArgumentException("Cannot add possible value which is already present");
+			possibleValues.add(value);
 		}
-
-		return possibleValues.add(value);
+		else
+		{
+			possibleValues.remove(value);
+		}
 	}
 
 	public void setLocked(boolean locked)

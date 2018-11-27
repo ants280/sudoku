@@ -37,40 +37,20 @@ public class SudokuUndoCell extends SudokuCell
 
 		commandHistory.addCommand(new SudokuUndoCellCommand(
 				this,
-				SudokuCellChangeType.CHANGE_VALUE,
+				SudokuCellChangeType.SET_VALUE,
 				oldValue,
 				value));
 	}
 
 	@Override
-	public boolean removePossibleValue(int value)
+	public void togglePossibleValue(int value)
 	{
-		boolean oldPossibleValuePresent = this.hasPossibleValue(value);
-
-		boolean valueRemoved = super.removePossibleValue(value);
+		super.togglePossibleValue(value);
 
 		commandHistory.addCommand(new SudokuUndoCellCommand(
 				this,
-				SudokuCellChangeType.REMOVE_POSSIBLE_VALUE,
-				oldPossibleValuePresent ? value : null,
+				SudokuCellChangeType.TOGGLE_POSSIBLE_VALUE,
+				value,
 				value));
-
-		return valueRemoved;
-	}
-
-	@Override
-	public boolean addPossibleValue(int value)
-	{
-		boolean oldPossibleValuePresent = this.hasPossibleValue(value);
-
-		boolean valueAdded = super.addPossibleValue(value);
-
-		commandHistory.addCommand(new SudokuUndoCellCommand(
-				this,
-				SudokuCellChangeType.ADD_POSSIBLE_VALUE,
-				oldPossibleValuePresent ? value : null,
-				value));
-
-		return valueAdded;
 	}
 }

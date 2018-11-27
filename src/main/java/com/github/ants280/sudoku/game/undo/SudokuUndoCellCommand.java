@@ -23,7 +23,7 @@ public class SudokuUndoCellCommand implements Command
 	public void undo()
 	{
 		sudokuCell.getCommandHistory().setEnabled(false);
-		sudokuCellChangeType.undo(sudokuCell, oldValue, newValue);
+		sudokuCellChangeType.applyChange(sudokuCell, oldValue);
 		sudokuCell.getCommandHistory().setEnabled(true);
 	}
 
@@ -31,7 +31,7 @@ public class SudokuUndoCellCommand implements Command
 	public void redo()
 	{
 		sudokuCell.getCommandHistory().setEnabled(false);
-		sudokuCellChangeType.redo(sudokuCell, oldValue, newValue);
+		sudokuCellChangeType.applyChange(sudokuCell, newValue);
 		sudokuCell.getCommandHistory().setEnabled(true);
 	}
 }

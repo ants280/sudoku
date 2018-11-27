@@ -54,13 +54,13 @@ public class CullPossibleValuesSudokuSolverPlugin extends SudokuSolverPlugin
 						List<SudokuCell> sudokuCellsToCull = sudokuCells.stream()
 								.filter(sudokuCell -> sudokuCell.getValue() == null
 								&& !possibleValues.equals(sudokuCell.getPossibleValues())
-								&& sudokuCell.getPossibleValues().contains(possibleValue))
+								&& sudokuCell.hasPossibleValue(possibleValue))
 								.collect(Collectors.toList());
 
 						if (!sudokuCellsToCull.isEmpty())
 						{
 							sudokuCellsToCull.forEach(sudokuCell
-									-> sudokuCell.removePossibleValue(possibleValue));
+									-> sudokuCell.togglePossibleValue(possibleValue));
 
 							return true;
 						}
