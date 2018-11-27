@@ -185,12 +185,12 @@ public class SudokuCell
 		return this.locked == other.isLocked()
 				&& Objects.equals(
 						this.sectionTypeIndices,
-						other.getSectionTypeIndices())
+						other.sectionTypeIndices)
 				&& Objects.equals(
 						this.value,
-						other.getValue())
+						other.value)
 				&& Objects.equals(
 						this.possibleValues,
-						other.getPossibleValues());
+						other.possibleValues);
 	}
 }
