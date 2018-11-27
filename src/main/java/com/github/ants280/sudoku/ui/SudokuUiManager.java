@@ -494,6 +494,7 @@ public class SudokuUiManager implements ActionListener
 		{
 			if (SudokuBoard.isValidSavedBoard(boardToLoad.toString()))
 			{
+				commandHistory.reset();
 				SudokuBoard loadedBoard
 						= new SudokuBoard(boardToLoad.toString());
 				board.resetFrom(loadedBoard); // Note: all valued cells locked
@@ -521,7 +522,7 @@ public class SudokuUiManager implements ActionListener
 		JOptionPane.showInputDialog(
 				frame,
 				"Copy the game state to load later.\n"
-				+ "Warning: this does not save possible values.",
+				+ "WARNING: This does not save possible values.",
 				"Export " + frame.getTitle(),
 				JOptionPane.INFORMATION_MESSAGE,
 				null, // Icon
@@ -541,13 +542,13 @@ public class SudokuUiManager implements ActionListener
 
 		if (choice == JOptionPane.YES_OPTION)
 		{
+			commandHistory.reset();
 			board.getAllSudokuCells().forEach(this::clearSudokuCell);
 
 			initialBoard.resetFrom(board);
 
 			sudokuDisplayComponent.removeSelectedCell();
 			sudokuDisplayComponent.repaint();
-			commandHistory.reset();
 		}
 	}
 
@@ -575,6 +576,7 @@ public class SudokuUiManager implements ActionListener
 
 		if (choice == JOptionPane.YES_OPTION)
 		{
+			commandHistory.reset();
 			board.getAllSudokuCells()
 					.forEach(sudokuCell -> this.lockSudokuCell(
 					sudokuCell,
@@ -584,7 +586,6 @@ public class SudokuUiManager implements ActionListener
 
 			sudokuDisplayComponent.removeSelectedCell();
 			sudokuDisplayComponent.repaint();
-			commandHistory.reset();
 		}
 	}
 
