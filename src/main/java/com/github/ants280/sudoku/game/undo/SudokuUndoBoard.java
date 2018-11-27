@@ -11,9 +11,9 @@ public class SudokuUndoBoard extends SudokuBoard
 			SudokuBoard board,
 			CommandHistory<SudokuCellChangeCommand> commandHistory)
 	{
+		super(board);
 
 		this.commandHistory = commandHistory;
-		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
 	@Override
