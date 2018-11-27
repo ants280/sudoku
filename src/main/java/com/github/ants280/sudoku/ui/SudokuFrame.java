@@ -1,6 +1,9 @@
 package com.github.ants280.sudoku.ui;
 
 import com.github.ants280.sudoku.game.SudokuBoard;
+import com.github.ants280.sudoku.game.undo.CommandHistory;
+import com.github.ants280.sudoku.game.undo.SudokuUndoBoard;
+import com.github.ants280.sudoku.game.undo.SudokuUndoCellCommand;
 import java.awt.BorderLayout;
 import java.awt.event.KeyEvent;
 import javax.swing.BorderFactory;
@@ -18,10 +21,14 @@ import javax.swing.border.Border;
 public class SudokuFrame extends JFrame
 {
 	private static final long serialVersionUID = 1L;
+	private final JMenuItem undoMenuItem;
+	private final JMenuItem redoMenuItem;
 
 	public SudokuFrame()
 	{
 		super("Sudoku");
+		this.undoMenuItem = new JMenuItem();
+		this.redoMenuItem = new JMenuItem();
 
 		init();
 	}
@@ -35,7 +42,9 @@ public class SudokuFrame extends JFrame
 		topPanel.add(messageLabel);
 		topPanel.add(Box.createGlue());
 
-		SudokuBoard board = new SudokuBoard();
+		CommandHistory<SudokuUndoCellCommand> commandHistory
+				= new CommandHistory<>(this::undoRedoChanged);
+		SudokuBoard board = new SudokuUndoBoard(commandHistory);
 		SudokuDisplayComponent sudokuDisplayComponent
 				= new SudokuDisplayComponent(board);
 
@@ -45,8 +54,6 @@ public class SudokuFrame extends JFrame
 		JMenuItem exportMenuItem = new JMenuItem();
 		JMenuItem exitMenuItem = new JMenuItem();
 		JMenu actionMenu = new JMenu();
-		JMenuItem undoMenuItem = new JMenuItem();
-		JMenuItem redoMenuItem = new JMenuItem();
 		JMenuItem setValueMenuItem = new JMenuItem();
 		JMenuItem setPossibleValueMenuItem = new JMenuItem();
 		JMenuItem clearPossibleValuesMenuItem = new JMenuItem();
@@ -89,6 +96,7 @@ public class SudokuFrame extends JFrame
 				sudokuDisplayComponent,
 				board,
 				messageLabel,
+				commandHistory,
 				fileMenu,
 				restartMenuItem,
 				loadMenuItem,
@@ -109,6 +117,7 @@ public class SudokuFrame extends JFrame
 				helpMenuItem,
 				aboutMenuItem);
 
+		this.undoRedoChanged(true, true);
 		undoMenuItem.setAccelerator(
 				KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_DOWN_MASK));
 		redoMenuItem.setAccelerator(
@@ -137,5 +146,11 @@ public class SudokuFrame extends JFrame
 					? EMPTY_BORDER
 					: TOP_BOTTOM_BORDER);
 		}
+	}
+
+	private void undoRedoChanged(boolean undoEmpty, boolean redoEmpty)
+	{
+		undoMenuItem.setEnabled(!undoEmpty);
+		redoMenuItem.setEnabled(!redoEmpty);
 	}
 }

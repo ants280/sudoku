@@ -6,7 +6,6 @@ import com.github.ants280.sudoku.game.SudokuCell;
 import com.github.ants280.sudoku.game.solver.SudokuBruteForceSolver;
 import com.github.ants280.sudoku.game.solver.SudokuSolver;
 import com.github.ants280.sudoku.game.undo.CommandHistory;
-import com.github.ants280.sudoku.game.undo.SudokuUndoBoard;
 import com.github.ants280.sudoku.game.undo.SudokuUndoCellCommand;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -50,8 +49,6 @@ public class SudokuUiManager implements ActionListener
 	private final SudokuBoard board;
 	private final JLabel messageLabel;
 	private final CommandHistory<SudokuUndoCellCommand> commandHistory;
-	private final JMenuItem undoMenuItem;
-	private final JMenuItem redoMenuItem;
 	private final Collection<JMenuItem> selectedCellMenuItems;
 	private final SudokuBoard initialBoard;
 	private final Map<String, Runnable> actionCommands;
@@ -64,19 +61,16 @@ public class SudokuUiManager implements ActionListener
 			SudokuDisplayComponent sudokuDisplayComponent,
 			SudokuBoard board,
 			JLabel messageLabel,
-			JMenuItem undoMenuItem,
-			JMenuItem redoMenuItem,
+			CommandHistory<SudokuUndoCellCommand> commandHistory,
 			Collection<JMenuItem> selectedCellMenuItems)
 	{
 
 		this.frame = frame;
 		this.sudokuDisplayComponent = sudokuDisplayComponent;
-		this.commandHistory = new CommandHistory<>(this::undoRedoChanged);
-		this.board = new SudokuUndoBoard(board, commandHistory);
+		this.board = board;
 		this.messageLabel = messageLabel;
+		this.commandHistory = commandHistory;
 		this.initialBoard = new SudokuBoard(board.toString());
-		this.undoMenuItem = undoMenuItem;
-		this.redoMenuItem = redoMenuItem;
 		this.selectedCellMenuItems = selectedCellMenuItems;
 		this.actionCommands = this.createActionCommands();
 		this.mouseListener = new SudokuMouseListener(
@@ -94,6 +88,7 @@ public class SudokuUiManager implements ActionListener
 			SudokuDisplayComponent sudokuDisplayComponent,
 			SudokuBoard board,
 			JLabel messageLabel,
+			CommandHistory<SudokuUndoCellCommand> commandHistory,
 			JMenu fileMenu,
 			JMenuItem restartMenuItem,
 			JMenuItem loadMenuItem,
@@ -120,8 +115,7 @@ public class SudokuUiManager implements ActionListener
 						sudokuDisplayComponent,
 						board,
 						messageLabel,
-						undoMenuItem,
-						redoMenuItem,
+						commandHistory,
 						Arrays.asList(
 								setValueMenuItem,
 								setPossibleValueMenuItem));
@@ -633,11 +627,5 @@ public class SudokuUiManager implements ActionListener
 
 		sudokuDisplayComponent.repaint();
 		this.updateMessageLabel();
-	}
-
-	private void undoRedoChanged(boolean undoEmpty, boolean redoEmpty)
-	{
-		undoMenuItem.setEnabled(!undoEmpty);
-		redoMenuItem.setEnabled(!redoEmpty);
 	}
 }

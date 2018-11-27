@@ -7,11 +7,9 @@ public class SudokuUndoBoard extends SudokuBoard
 {
 	private final CommandHistory<SudokuUndoCellCommand> commandHistory;
 
-	public SudokuUndoBoard(
-			SudokuBoard board,
-			CommandHistory<SudokuUndoCellCommand> commandHistory)
+	public SudokuUndoBoard(CommandHistory<SudokuUndoCellCommand> commandHistory)
 	{
-		super(board);
+		super();
 
 		this.commandHistory = commandHistory;
 	}
