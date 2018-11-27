@@ -102,6 +102,11 @@ public class SudokuCell
 
 		SudokuCell.validateValue(value);
 
+		if (!hasPossibleValue(value))
+		{
+			throw new IllegalArgumentException("Cannot remove possible value which is not present");
+		}
+
 		return possibleValues.remove(value);
 	}
 
@@ -114,6 +119,11 @@ public class SudokuCell
 		}
 
 		SudokuCell.validateValue(value);
+
+		if (hasPossibleValue(value))
+		{
+			throw new IllegalArgumentException("Cannot add possible value which is already present");
+		}
 
 		return possibleValues.add(value);
 	}

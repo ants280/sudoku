@@ -5,22 +5,10 @@ import com.github.ants280.sudoku.game.SudokuCell;
 public enum SudokuCellChangeType
 {
 	ADD_POSSIBLE_VALUE(
-			(sudokuCell, oldValue, newValue) ->
-	{
-		if (oldValue == null)
-		{
-			sudokuCell.removePossibleValue(newValue);
-		}
-	},
+			(sudokuCell, oldValue, newValue) -> sudokuCell.removePossibleValue(newValue),
 			(sudokuCell, oldValue, newValue) -> sudokuCell.addPossibleValue(newValue)),
 	REMOVE_POSSIBLE_VALUE(
-			(sudokuCell, oldValue, newValue) ->
-	{
-		if (oldValue == null)
-		{
-			sudokuCell.addPossibleValue(newValue);
-		}
-	},
+			(sudokuCell, oldValue, newValue) -> sudokuCell.addPossibleValue(newValue),
 			(sudokuCell, oldValue, newValue) -> sudokuCell.removePossibleValue(newValue)),
 	CHANGE_VALUE(
 			(sudokuCell, oldValue, newValue) -> sudokuCell.setValue(oldValue),
