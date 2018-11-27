@@ -615,7 +615,7 @@ public class SudokuUiManager implements ActionListener
 
 	private void undo()
 	{
-		commandHistory.redo();
+		commandHistory.undo();
 
 		sudokuDisplayComponent.repaint();
 		this.updateMessageLabel();
