@@ -5,13 +5,21 @@ import com.github.ants280.sudoku.game.SudokuCell;
 
 public class SudokuUndoBoard extends SudokuBoard
 {
-	private final CommandHistory<SudokuUndoCellCommand> commandHistory;
-
 	public SudokuUndoBoard(CommandHistory<SudokuUndoCellCommand> commandHistory)
 	{
 		super();
 
-		this.commandHistory = commandHistory;
+		this.initCommandHistoryForSudokuCells(commandHistory);
+	}
+
+	private void initCommandHistoryForSudokuCells(
+			CommandHistory<SudokuUndoCellCommand> commandHistory)
+	{
+		this.getAllSudokuCells()
+				.stream()
+				// TODO: This cast is ugly.  Pehaps use generics?
+				.forEach(sudokuCell -> ((SudokuUndoCell) sudokuCell)
+				.setCommandHistory(commandHistory));
 	}
 
 	@Override
@@ -23,7 +31,6 @@ public class SudokuUndoBoard extends SudokuBoard
 			boolean locked)
 	{
 		return new SudokuUndoCell(
-				commandHistory,
 				rowIndex,
 				columnIndex,
 				groupIndex,

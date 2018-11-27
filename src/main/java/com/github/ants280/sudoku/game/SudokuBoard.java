@@ -37,12 +37,6 @@ public class SudokuBoard
 				.groupingBy(sudokuCell -> sudokuCell.getIndex(GROUP))));
 	}
 
-	public SudokuBoard(SudokuBoard other)
-	{
-		this.allSudokuCells = other.allSudokuCells;
-		this.sectionTypeCells = other.sectionTypeCells;
-	}
-
 	public SudokuBoard()
 	{
 		this("{000000000000000000000000000000000000000000000000000000000000000000000000000000000}");

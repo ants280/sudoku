@@ -4,10 +4,9 @@ import com.github.ants280.sudoku.game.SudokuCell;
 
 public class SudokuUndoCell extends SudokuCell
 {
-	private final CommandHistory<SudokuUndoCellCommand> commandHistory;
+	private CommandHistory<SudokuUndoCellCommand> commandHistory;
 
 	public SudokuUndoCell(
-			CommandHistory<SudokuUndoCellCommand> commandHistory,
 			int rowIndex,
 			int columnIndex,
 			int groupIndex,
@@ -15,12 +14,18 @@ public class SudokuUndoCell extends SudokuCell
 			boolean locked)
 	{
 		super(rowIndex, columnIndex, groupIndex, value, locked);
-		this.commandHistory = commandHistory;
+		this.commandHistory = null;
 	}
 
 	public CommandHistory<SudokuUndoCellCommand> getCommandHistory()
 	{
 		return commandHistory;
+	}
+
+	public void setCommandHistory(
+			CommandHistory<SudokuUndoCellCommand> commandHistory)
+	{
+		this.commandHistory = commandHistory;
 	}
 
 	@Override
