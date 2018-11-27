@@ -2,6 +2,8 @@ package com.github.ants280.sudoku.ui;
 
 import com.github.ants280.sudoku.game.SudokuBoard;
 import com.github.ants280.sudoku.game.solver.SudokuSolver;
+import com.github.ants280.sudoku.game.undo.CommandHistory;
+import com.github.ants280.sudoku.game.undo.SudokuUndoCellCommand;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -28,6 +30,7 @@ import javax.swing.event.ChangeListener;
 public class SudokuSolverPopup implements ActionListener, ChangeListener
 {
 	private final SudokuBoard sudokuBoard;
+	private final CommandHistory<SudokuUndoCellCommand> commandHistory;
 	private final Runnable repaintCanvasCallback;
 	private final SudokuSolver sudokuSolver;
 	private final JDialog popupDialog;
@@ -47,9 +50,11 @@ public class SudokuSolverPopup implements ActionListener, ChangeListener
 	public SudokuSolverPopup(
 			JFrame popupOwner,
 			SudokuBoard sudokuBoard,
+			CommandHistory<SudokuUndoCellCommand> commandHistory,
 			Runnable repaintCanvasCallback)
 	{
 		this.sudokuBoard = sudokuBoard;
+		this.commandHistory = commandHistory;
 		this.repaintCanvasCallback = repaintCanvasCallback;
 		this.sudokuSolver = new SudokuSolver(sudokuBoard);
 		this.popupDialog = new JDialog(popupOwner, "Solver", true);
@@ -134,6 +139,7 @@ public class SudokuSolverPopup implements ActionListener, ChangeListener
 				if (resetPossibleValuesWhenStartingCheckBox.isSelected())
 				{
 					sudokuSolver.initialize();
+					commandHistory.reset();
 				}
 
 				if (timerSlider.getValue() == 0)

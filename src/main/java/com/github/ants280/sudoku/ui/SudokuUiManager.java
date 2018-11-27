@@ -6,8 +6,8 @@ import com.github.ants280.sudoku.game.SudokuCell;
 import com.github.ants280.sudoku.game.solver.SudokuBruteForceSolver;
 import com.github.ants280.sudoku.game.solver.SudokuSolver;
 import com.github.ants280.sudoku.game.undo.CommandHistory;
-import com.github.ants280.sudoku.game.undo.SudokuUndoCellCommand;
 import com.github.ants280.sudoku.game.undo.SudokuUndoBoard;
+import com.github.ants280.sudoku.game.undo.SudokuUndoCellCommand;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
@@ -449,6 +449,7 @@ public class SudokuUiManager implements ActionListener
 				= new SudokuSolverPopup(
 						frame,
 						board,
+						commandHistory,
 						() ->
 				{
 					sudokuDisplayComponent.repaint();
