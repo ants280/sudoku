@@ -147,10 +147,12 @@ public class SudokuDisplayComponent extends JComponent
 			int fontHeightPx)
 	{
 		int charWidth = fontMetrics.stringWidth(possibleValue.toString());
+		int possibleValueCol = (possibleValue - 1) % 3;
+		int possibleValueRow = (possibleValue - 1) / 3;
 		double colPercentage = sudokuCell.getIndex(SectionType.COLUMN)
-				+ ((1 + (2 * ((possibleValue - 1) % 3))) / 6d);
+				+ ((1 + (2 * possibleValueCol)) / 6d);
 		double rowPercentage = sudokuCell.getIndex(SectionType.ROW)
-				+ ((1 + (2 * ((possibleValue - 1) / 3))) / 6d);
+				+ ((1 + (2 * possibleValueRow)) / 6d);
 		int colOffset = (int) (xOffset + cellLength * colPercentage
 				- (charWidth / 2d));
 		int rowOffset = (int) (yOffset + cellLength * rowPercentage
