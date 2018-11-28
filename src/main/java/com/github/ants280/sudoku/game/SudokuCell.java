@@ -150,9 +150,9 @@ public class SudokuCell
 	@Override
 	public String toString()
 	{
-		return this.getValue() == null
+		return value == null
 				? getPossibleValues().toString()
-				: getValue().toString();
+				: value.toString();
 	}
 
 	@Override
