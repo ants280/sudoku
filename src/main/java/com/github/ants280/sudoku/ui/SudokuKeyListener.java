@@ -58,7 +58,7 @@ public class SudokuKeyListener
 			case KeyEvent.VK_NUMPAD8:
 			case KeyEvent.VK_NUMPAD9:
 				Integer cellValue = Integer.parseInt(
-						Character.valueOf(event.getKeyChar()).toString());
+						Character.toString(event.getKeyChar()));
 				setSelectedCellValueConsumer
 						.accept(cellValue == 0 ? null : cellValue);
 				break;
