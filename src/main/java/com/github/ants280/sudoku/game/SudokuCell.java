@@ -90,6 +90,12 @@ public class SudokuCell
 
 	public void restoreAllPossibleValues()
 	{
+		if (locked)
+		{
+			throw new IllegalArgumentException(
+					"Restoring possible values of a locked SudokuCell.");
+		}
+
 		LEGAL_CELL_VALUES.stream()
 				.filter(v -> !this.hasPossibleValue(v))
 				.forEach(this::togglePossibleValue);
