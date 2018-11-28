@@ -12,6 +12,7 @@
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
 		<main.class>com.github.ants280.sudoku.ui.Sudoku</main.class>
+		<sonar.java.libraries>target/classes</sonar.java.libraries>
 	</properties>
 	<build>
 		<!-- package and increment version: mvn clean && mvn versions:set -DremoveSnapshot && mvn package && mvn versions:set -DnextSnapshot=true -->
@@ -102,6 +103,27 @@
 				<configuration>
 					<mainClass>${main.class}</mainClass>
 				</configuration>
+			</plugin>
+			<plugin>
+				<!-- for test coverage (with sonar) -->
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.2</version>
+				<executions> 
+					<execution>  
+						<id>pre-test</id>  
+						<goals>  
+							<goal>prepare-agent</goal>  
+						</goals>  
+					</execution> 
+					<execution>  
+						<id>post-test</id>  
+						<phase>test</phase>  
+						<goals>  
+							<goal>report</goal>  
+						</goals>  
+					</execution>  
+				</executions>  
 			</plugin>
 		</plugins>
 	</build>
