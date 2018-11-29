@@ -56,14 +56,14 @@ public class SudokuSolver
 	private static BiConsumer<SudokuCell, Integer>
 			getClearNearbyPossibleValuesConsumer(SudokuBoard sudokuBoard)
 	{
-		return (sudokuCell, v) ->
-		{
-			Arrays.stream(SectionType.values())
-					.forEach(sectionType -> sudokuBoard.getSudokuCells(sectionType, sudokuCell.getIndex(sectionType))
-					.stream()
-					.filter(nearbySudokuCell -> nearbySudokuCell.getValue() == null
-					&& nearbySudokuCell.hasPossibleValue(v))
-					.forEach(nearbySudokuCell -> nearbySudokuCell.togglePossibleValue(v)));
-		};
+		return (sudokuCell, v) -> Arrays.stream(SectionType.values())
+				.forEach(sectionType -> sudokuBoard.getSudokuCells(
+				sectionType,
+				sudokuCell.getIndex(sectionType))
+				.stream()
+				.filter(nearbySudokuCell -> nearbySudokuCell.getValue() == null
+				&& nearbySudokuCell.hasPossibleValue(v))
+				.forEach(nearbySudokuCell -> nearbySudokuCell
+				.togglePossibleValue(v)));
 	}
 }
