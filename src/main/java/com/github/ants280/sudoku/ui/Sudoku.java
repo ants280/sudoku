@@ -8,10 +8,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 public final class Sudoku
 {
-	// NOTE: The version only shows as non-null when `mvn package` is run.
-	public static final String VERSION
-			= Sudoku.class.getPackage().getSpecificationVersion();
-
 	public static void main(final String[] args)
 	{
 		SwingUtilities.invokeLater(new Sudoku()::run);
