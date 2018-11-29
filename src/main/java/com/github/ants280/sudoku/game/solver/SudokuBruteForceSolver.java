@@ -11,7 +11,7 @@ import java.util.function.Predicate;
 
 public class SudokuBruteForceSolver extends SudokuSolver
 {
-	private final Predicate<SudokuCell> HAS_VALID_SECTIONS
+	private final Predicate<SudokuCell> hasValidSections
 			= sudokuCell -> Arrays.stream(SectionType.values())
 					.map(sectionType -> sudokuBoard.getSudokuCells(
 					sectionType,
@@ -56,14 +56,14 @@ public class SudokuBruteForceSolver extends SudokuSolver
 		{
 			sudokuCell.setValue(possibleValue);
 
-			if (HAS_VALID_SECTIONS.test(sudokuCell)
+			if (hasValidSections.test(sudokuCell)
 					&& canBruteForceSolve(index + 1))
 			{
 				return true;
 			}
 		}
-		sudokuCell.setValue(null);
 
+		sudokuCell.setValue(null);
 		return false;
 	}
 
