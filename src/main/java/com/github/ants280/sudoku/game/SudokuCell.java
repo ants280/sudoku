@@ -19,7 +19,6 @@ public class SudokuCell
 	private final Map<SectionType, Integer> sectionTypeIndices;
 	private Integer value;
 	private boolean locked;
-	// TODO: make this be a binary string to simplify toggling.  Also sholud reduce dependence on getPossibleValues...
 	private final Set<Integer> possibleValues;
 
 	public SudokuCell(
