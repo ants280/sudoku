@@ -130,14 +130,12 @@ public class SudokuBoard
 	}
 
 	private static void validateIndices(int... indices)
-			throws IllegalArgumentException
 	{
 		IntStream.of(indices)
 				.forEach(SudokuBoard::validateIndex);
 	}
 
 	private static void validateIndex(int index)
-			throws IllegalArgumentException
 	{
 		if (index < 0 || index >= 9)
 		{

@@ -135,7 +135,6 @@ public class SudokuCell
 	}
 
 	private static void validateValue(Integer value)
-			throws IllegalArgumentException
 	{
 		if (value != null && !LEGAL_CELL_VALUES.contains(value))
 		{
