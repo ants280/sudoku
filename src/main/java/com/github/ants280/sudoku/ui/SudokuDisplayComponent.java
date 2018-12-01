@@ -20,7 +20,7 @@ public class SudokuDisplayComponent extends JComponent
 					RenderingHints.KEY_ANTIALIASING,
 					RenderingHints.VALUE_ANTIALIAS_ON);
 
-	private final SudokuBoard board;
+	private final transient SudokuBoard board;
 	private int cellLength;
 	private Font valueFont;
 	private Font possibleValueFont;
