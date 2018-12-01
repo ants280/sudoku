@@ -22,7 +22,7 @@ public final class Sudoku
 	{
 		setLookAndFeel();
 
-		Window frame = new SudokuFrame();
+		Window frame = new SudokuFrame().getFrame();
 		Thread.setDefaultUncaughtExceptionHandler(
 				new SudokuUncaughtExceptionHandler(frame));
 

@@ -18,15 +18,15 @@ import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.border.Border;
 
-public class SudokuFrame extends JFrame
+public class SudokuFrame
 {
-	private static final long serialVersionUID = 1L;
+	private final JFrame frame;
 	private final JMenuItem undoMenuItem;
 	private final JMenuItem redoMenuItem;
 
 	public SudokuFrame()
 	{
-		super("Sudoku");
+		this.frame = new JFrame("Sudoku");
 		this.undoMenuItem = new JMenuItem();
 		this.redoMenuItem = new JMenuItem();
 
@@ -92,7 +92,7 @@ public class SudokuFrame extends JFrame
 		menuBar.add(helpMenu);
 
 		SudokuUiManager.manage(
-				this,
+				frame,
 				sudokuDisplayComponent,
 				board,
 				messageLabel,
@@ -123,11 +123,16 @@ public class SudokuFrame extends JFrame
 		redoMenuItem.setAccelerator(
 				KeyStroke.getKeyStroke(KeyEvent.VK_Y, KeyEvent.CTRL_DOWN_MASK));
 
-		this.setJMenuBar(menuBar);
-		this.add(topPanel, BorderLayout.NORTH);
-		this.add(sudokuDisplayComponent);
-		this.pack();
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setJMenuBar(menuBar);
+		frame.add(topPanel, BorderLayout.NORTH);
+		frame.add(sudokuDisplayComponent);
+		frame.pack();
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+
+	public JFrame getFrame()
+	{
+		return frame;
 	}
 
 	private static class BorderedLabel extends JLabel

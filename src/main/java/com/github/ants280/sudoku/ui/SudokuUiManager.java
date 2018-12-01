@@ -84,7 +84,7 @@ public class SudokuUiManager implements ActionListener
 	}
 
 	public static void manage(
-			SudokuFrame frame,
+			JFrame frame,
 			SudokuDisplayComponent sudokuDisplayComponent,
 			SudokuBoard board,
 			JLabel messageLabel,
