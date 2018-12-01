@@ -37,25 +37,18 @@ public class CullPossibleValuesSudokuSolverPlugin extends SudokuSolverPlugin
 				List<SudokuCell> sudokuCells
 						= sudokuBoard.getSudokuCells(sectionType, index);
 
-				List<Collection<Integer>> possibleValueGroups = sudokuCells.stream()
-						.map(SudokuCell::getPossibleValues)
-						.filter(collection -> !collection.isEmpty())
-						.collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
-						.entrySet() // Map.Entry<Set<Integer>, Long>
-						.stream()
-						.filter(entry -> entry.getValue() > 1 && entry.getKey().size() == entry.getValue())
-						.map(Map.Entry::getKey)
-						.collect(Collectors.toList());
+				List<Collection<Integer>> possibleValueGroups
+						= getPossibleValueGroups(sudokuCells);
 
 				for (Collection<Integer> possibleValues : possibleValueGroups)
 				{
 					for (int possibleValue : possibleValues)
 					{
-						List<SudokuCell> sudokuCellsToCull = sudokuCells.stream()
-								.filter(sudokuCell -> sudokuCell.getValue() == null
-								&& !possibleValues.equals(sudokuCell.getPossibleValues())
-								&& sudokuCell.hasPossibleValue(possibleValue))
-								.collect(Collectors.toList());
+						List<SudokuCell> sudokuCellsToCull
+								= this.getCellsToCull(
+										sudokuCells,
+										possibleValues,
+										possibleValue);
 
 						if (!sudokuCellsToCull.isEmpty())
 						{
@@ -71,5 +64,30 @@ public class CullPossibleValuesSudokuSolverPlugin extends SudokuSolverPlugin
 		}
 
 		return false;
+	}
+
+	private List<Collection<Integer>> getPossibleValueGroups(List<SudokuCell> sudokuCells)
+	{
+		return sudokuCells.stream()
+				.map(SudokuCell::getPossibleValues)
+				.filter(collection -> !collection.isEmpty())
+				.collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+				.entrySet() // Map.Entry<Set<Integer>, Long>
+				.stream()
+				.filter(entry -> entry.getValue() > 1 && entry.getKey().size() == entry.getValue())
+				.map(Map.Entry::getKey)
+				.collect(Collectors.toList());
+	}
+
+	private List<SudokuCell> getCellsToCull(
+			List<SudokuCell> sudokuCells,
+			Collection<Integer> possibleValues,
+			int possibleValue)
+	{
+		return sudokuCells.stream()
+				.filter(sudokuCell -> sudokuCell.getValue() == null
+				&& !possibleValues.equals(sudokuCell.getPossibleValues())
+				&& sudokuCell.hasPossibleValue(possibleValue))
+				.collect(Collectors.toList());
 	}
 }
