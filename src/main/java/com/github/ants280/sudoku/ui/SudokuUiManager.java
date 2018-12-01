@@ -9,7 +9,6 @@ import com.github.ants280.sudoku.game.undo.CommandHistory;
 import com.github.ants280.sudoku.game.undo.SudokuUndoCellCommand;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -56,7 +55,7 @@ public class SudokuUiManager implements ActionListener
 	private final SudokuKeyListener keyListener;
 	private boolean listenersAdded;
 
-	private SudokuUiManager(
+	public SudokuUiManager(
 			JFrame frame,
 			SudokuDisplayComponent sudokuDisplayComponent,
 			SudokuBoard board,
@@ -81,67 +80,13 @@ public class SudokuUiManager implements ActionListener
 				this::setSelectedCellValue,
 				this::moveSelectedCell);
 		this.listenersAdded = false;
+
+		this.init();
 	}
 
-	public static void manage(
-			JFrame frame,
-			SudokuDisplayComponent sudokuDisplayComponent,
-			SudokuBoard board,
-			JLabel messageLabel,
-			CommandHistory<SudokuUndoCellCommand> commandHistory,
-			JMenu fileMenu,
-			JMenuItem restartMenuItem,
-			JMenuItem loadMenuItem,
-			JMenuItem exportMenuItem,
-			JMenuItem exitMenuItem,
-			JMenu actionMenu,
-			JMenuItem undoMenuItem,
-			JMenuItem redoMenuItem,
-			JMenuItem setValueMenuItem,
-			JMenuItem setPossibleValueMenuItem,
-			JMenuItem clearPossibleValuesMenuItem,
-			JMenuItem clearCellsMenuItem,
-			JMenuItem lockCellsMenuItem,
-			JMenuItem unLockCellsMenuItem,
-			JMenuItem solveLogicMenuItem,
-			JMenuItem solveBruteForceMenuItem,
-			JMenu helpMenu,
-			JMenuItem helpMenuItem,
-			JMenuItem aboutMenuItem)
+	private void init()
 	{
-		SudokuUiManager sudokuActionListener
-				= new SudokuUiManager(
-						frame,
-						sudokuDisplayComponent,
-						board,
-						messageLabel,
-						commandHistory,
-						Arrays.asList(
-								setValueMenuItem,
-								setPossibleValueMenuItem));
-
-		sudokuActionListener.initMenu(
-				fileMenu,
-				restartMenuItem,
-				loadMenuItem,
-				exportMenuItem,
-				exitMenuItem,
-				actionMenu,
-				undoMenuItem,
-				redoMenuItem,
-				setValueMenuItem,
-				setPossibleValueMenuItem,
-				clearPossibleValuesMenuItem,
-				clearCellsMenuItem,
-				lockCellsMenuItem,
-				unLockCellsMenuItem,
-				solveLogicMenuItem,
-				solveBruteForceMenuItem,
-				helpMenu,
-				helpMenuItem,
-				aboutMenuItem);
-
-		sudokuActionListener.addListeners();
+		this.addListeners();
 	}
 
 	private Map<String, Runnable> createActionCommands()
@@ -166,7 +111,7 @@ public class SudokuUiManager implements ActionListener
 		return tempActionCommands;
 	}
 
-	private void initMenu(
+	public void initMenu(
 			JMenu fileMenu,
 			JMenuItem restartMenuItem,
 			JMenuItem loadMenuItem,

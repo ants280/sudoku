@@ -6,6 +6,7 @@ import com.github.ants280.sudoku.game.undo.SudokuUndoBoard;
 import com.github.ants280.sudoku.game.undo.SudokuUndoCellCommand;
 import java.awt.BorderLayout;
 import java.awt.event.KeyEvent;
+import java.util.Arrays;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -91,12 +92,17 @@ public class SudokuFrame
 		menuBar.add(actionMenu);
 		menuBar.add(helpMenu);
 
-		SudokuUiManager.manage(
-				frame,
-				sudokuDisplayComponent,
-				board,
-				messageLabel,
-				commandHistory,
+		SudokuUiManager sudokuUiManager
+				= new SudokuUiManager(
+						frame,
+						sudokuDisplayComponent,
+						board,
+						messageLabel,
+						commandHistory,
+						Arrays.asList(
+								setValueMenuItem,
+								setPossibleValueMenuItem));
+		sudokuUiManager.initMenu(
 				fileMenu,
 				restartMenuItem,
 				loadMenuItem,
