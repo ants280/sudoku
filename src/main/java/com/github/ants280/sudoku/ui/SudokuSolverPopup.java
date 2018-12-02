@@ -138,6 +138,8 @@ public class SudokuSolverPopup implements ActionListener, ChangeListener
 			case BUTTON_START:
 				if (resetPossibleValuesWhenStartingCheckBox.isSelected())
 				{
+					resetPossibleValuesWhenStartingCheckBox.setSelected(false);
+
 					commandHistory.reset();
 					sudokuSolver.initialize();
 				}
