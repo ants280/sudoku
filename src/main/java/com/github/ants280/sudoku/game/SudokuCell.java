@@ -110,7 +110,7 @@ public class SudokuCell
 
 		SudokuCell.validateValue(value);
 
-		if (hasPossibleValue(value))
+		if (this.hasPossibleValue(value))
 		{
 			possibleValues.remove(value);
 		}
