@@ -19,7 +19,7 @@ public class SudokuKeyListener
 	static
 	{
 		MOVE_DIRECTIONS.put(KeyEvent.VK_UP, MoveDirection.UP);
-		MOVE_DIRECTIONS.put(KeyEvent.VK_DOWN, MoveDirection.RIGHT);
+		MOVE_DIRECTIONS.put(KeyEvent.VK_DOWN, MoveDirection.DOWN);
 		MOVE_DIRECTIONS.put(KeyEvent.VK_LEFT, MoveDirection.LEFT);
 		MOVE_DIRECTIONS.put(KeyEvent.VK_RIGHT, MoveDirection.RIGHT);
 	}
