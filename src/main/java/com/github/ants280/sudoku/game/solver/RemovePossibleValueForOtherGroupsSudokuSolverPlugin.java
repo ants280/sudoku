@@ -5,7 +5,8 @@ import com.github.ants280.sudoku.game.SudokuBoard;
 public class RemovePossibleValueForOtherGroupsSudokuSolverPlugin
 		extends SudokuSolverPlugin
 {
-	public RemovePossibleValueForOtherGroupsSudokuSolverPlugin(SudokuBoard sudokuBoard)
+	public RemovePossibleValueForOtherGroupsSudokuSolverPlugin(
+			SudokuBoard sudokuBoard)
 	{
 		super(sudokuBoard);
 	}
