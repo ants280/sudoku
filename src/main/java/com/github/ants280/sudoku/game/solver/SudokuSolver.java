@@ -22,6 +22,7 @@ public class SudokuSolver
 		this.solverPlugins = Arrays.asList(
 				new OnlyPossibleValueSudokuSolverPlugin(sudokuBoard, removeNearbyPossibleValuesConsumer),
 				new LastPossibleValueInSectionSudokuSolverPlugin(sudokuBoard, removeNearbyPossibleValuesConsumer),
+				new CullPossibleValuesSudokuSolverPlugin(sudokuBoard),
 				new RemovePossibleValueForOtherGroupsSudokuSolverPlugin(sudokuBoard));
 	}
 
