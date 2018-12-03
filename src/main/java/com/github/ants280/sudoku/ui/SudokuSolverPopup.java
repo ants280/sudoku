@@ -105,7 +105,7 @@ public class SudokuSolverPopup implements ActionListener, ChangeListener
 
 	private Dictionary<Integer, JLabel> createLabelTable()
 	{
-		// Dictionary is required by JSlider.setLabelTable(Dictionary), so Hashtable must be used."
+		// Dictionary is required by JSlider.setLabelTable(Dictionary), so Hashtable must be used.
 		@SuppressWarnings("squid:S1149")
 		Dictionary<Integer, JLabel> labelTable = new Hashtable<>();
 
