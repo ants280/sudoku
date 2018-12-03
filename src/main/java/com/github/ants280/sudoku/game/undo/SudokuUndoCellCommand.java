@@ -1,17 +1,19 @@
 package com.github.ants280.sudoku.game.undo;
 
+import com.github.ants280.sudoku.game.SudokuValue;
+
 public class SudokuUndoCellCommand implements Command
 {
 	private final SudokuUndoCell sudokuCell;
 	private final SudokuCellChangeType sudokuCellChangeType;
-	private final Integer initialValue;
-	private final Integer updatedValue;
+	private final SudokuValue initialValue;
+	private final SudokuValue updatedValue;
 
 	public SudokuUndoCellCommand(
 			SudokuUndoCell sudokuCell,
 			SudokuCellChangeType sudokuCellChangeType,
-			Integer initialValue,
-			Integer updatedValue)
+			SudokuValue initialValue,
+			SudokuValue updatedValue)
 	{
 		this.sudokuCell = sudokuCell;
 		this.sudokuCellChangeType = sudokuCellChangeType;

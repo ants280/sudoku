@@ -1,6 +1,7 @@
 package com.github.ants280.sudoku.game.undo;
 
 import com.github.ants280.sudoku.game.SudokuCell;
+import com.github.ants280.sudoku.game.SudokuValue;
 import java.util.Objects;
 
 public class SudokuUndoCell extends SudokuCell
@@ -11,7 +12,7 @@ public class SudokuUndoCell extends SudokuCell
 			int rowIndex,
 			int columnIndex,
 			int groupIndex,
-			Integer value,
+			SudokuValue value,
 			boolean locked)
 	{
 		super(rowIndex, columnIndex, groupIndex, value, locked);
@@ -30,9 +31,9 @@ public class SudokuUndoCell extends SudokuCell
 	}
 
 	@Override
-	public void setValue(Integer value)
+	public void setValue(SudokuValue value)
 	{
-		Integer oldValue = this.getValue();
+		SudokuValue oldValue = this.getValue();
 
 		super.setValue(value);
 
@@ -44,7 +45,7 @@ public class SudokuUndoCell extends SudokuCell
 	}
 
 	@Override
-	public void togglePossibleValue(int value)
+	public void togglePossibleValue(SudokuValue value)
 	{
 		super.togglePossibleValue(value);
 

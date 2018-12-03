@@ -3,6 +3,7 @@ package com.github.ants280.sudoku.game.solver;
 import com.github.ants280.sudoku.game.SectionType;
 import com.github.ants280.sudoku.game.SudokuBoard;
 import com.github.ants280.sudoku.game.SudokuCell;
+import com.github.ants280.sudoku.game.SudokuValue;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -56,14 +57,14 @@ public class RemovePossibleValueForOtherGroupsSudokuSolverPlugin
 				: cellsInGroupBySectionType.entrySet())
 		{
 			Integer sectionTypeIndex = sectionTypeInGroupEntry.getKey();
-			List<Integer> possibleValuesInSectionTypeIndex
+			List<SudokuValue> possibleValuesInSectionTypeIndex
 					= sectionTypeInGroupEntry.getValue()
 							.stream()
 							.map(SudokuCell::getPossibleValues)
 							.flatMap(Collection::stream)
 							.distinct()
 							.collect(Collectors.toList());
-			for (Integer possibleValue : possibleValuesInSectionTypeIndex)
+			for (SudokuValue possibleValue : possibleValuesInSectionTypeIndex)
 			{
 				boolean possibleValueOnlyInSectionTypeIndex = valuelessGroupCells.stream()
 						.filter(groupCell -> groupCell.getIndex(sectionType) != sectionTypeIndex)

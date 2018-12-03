@@ -1,6 +1,7 @@
 package com.github.ants280.sudoku.ui;
 
 import com.github.ants280.sudoku.game.SudokuCell;
+import com.github.ants280.sudoku.game.SudokuValue;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -17,7 +18,7 @@ import javax.swing.JToggleButton;
 public class SelectSudokuCellDialog implements ActionListener
 {
 	private final JDialog dialog;
-	private final BiConsumer<SudokuCell, Integer> valueClickConsumer;
+	private final BiConsumer<SudokuCell, SudokuValue> valueClickConsumer;
 	private final boolean closeOnDialogOnButtonClick;
 	private final SudokuCell selectedSudokuCell;
 
@@ -25,8 +26,8 @@ public class SelectSudokuCellDialog implements ActionListener
 			JFrame parentFrame,
 			String title,
 			String message,
-			BiPredicate<SudokuCell, Integer> buttonSelectedFunction,
-			BiConsumer<SudokuCell, Integer> valueClickConsumer,
+			BiPredicate<SudokuCell, SudokuValue> buttonSelectedFunction,
+			BiConsumer<SudokuCell, SudokuValue> valueClickConsumer,
 			boolean closeOnDialogOnButtonClick,
 			SudokuCell selectedSudokuCell)
 	{
@@ -40,16 +41,15 @@ public class SelectSudokuCellDialog implements ActionListener
 
 	private void initDialog(
 			String message,
-			BiPredicate<SudokuCell, Integer> buttonSelectedFunction)
+			BiPredicate<SudokuCell, SudokuValue> buttonSelectedFunction)
 	{
 
 		JPanel possibleValueButtonsPanel = new JPanel(new GridLayout(3, 3));
-		for (int i = 1; i <= 9; i++)
+		for (SudokuValue value : SudokuValue.values())
 		{
-			Integer v = i;
 			AbstractButton valueButton = new JToggleButton(
-					String.valueOf(i),
-					buttonSelectedFunction.test(selectedSudokuCell, v));
+					value.getDisplayValue(),
+					buttonSelectedFunction.test(selectedSudokuCell, value));
 
 			valueButton.addActionListener(this);
 
@@ -74,7 +74,8 @@ public class SelectSudokuCellDialog implements ActionListener
 	@Override
 	public void actionPerformed(ActionEvent actionEvent)
 	{
-		int buttonValue = Integer.parseInt(actionEvent.getActionCommand());
+		String actionCommand = actionEvent.getActionCommand();
+		SudokuValue buttonValue = SudokuValue.fromString(actionCommand);
 
 		valueClickConsumer.accept(selectedSudokuCell, buttonValue);
 

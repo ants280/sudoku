@@ -3,6 +3,7 @@ package com.github.ants280.sudoku.game.solver;
 import com.github.ants280.sudoku.game.SectionType;
 import com.github.ants280.sudoku.game.SudokuBoard;
 import com.github.ants280.sudoku.game.SudokuCell;
+import com.github.ants280.sudoku.game.SudokuValue;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -11,7 +12,7 @@ public class SudokuSolver
 {
 	protected final SudokuBoard sudokuBoard;
 	private final List<SudokuSolverPlugin> solverPlugins;
-	private final BiConsumer<SudokuCell, Integer> removeNearbyPossibleValuesConsumer;
+	private final BiConsumer<SudokuCell, SudokuValue> removeNearbyPossibleValuesConsumer;
 
 	public SudokuSolver(SudokuBoard sudokuBoard)
 	{
@@ -54,7 +55,7 @@ public class SudokuSolver
 		}
 	}
 
-	private static BiConsumer<SudokuCell, Integer>
+	private static BiConsumer<SudokuCell, SudokuValue>
 			getClearNearbyPossibleValuesConsumer(SudokuBoard sudokuBoard)
 	{
 		return (sudokuCell, v) -> Arrays.stream(SectionType.values())

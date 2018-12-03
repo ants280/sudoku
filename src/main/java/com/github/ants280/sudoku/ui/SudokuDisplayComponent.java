@@ -3,6 +3,7 @@ package com.github.ants280.sudoku.ui;
 import com.github.ants280.sudoku.game.SectionType;
 import com.github.ants280.sudoku.game.SudokuBoard;
 import com.github.ants280.sudoku.game.SudokuCell;
+import com.github.ants280.sudoku.game.SudokuValue;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -141,14 +142,14 @@ public class SudokuDisplayComponent extends JComponent
 
 	private void paintPossibleCellValue(
 			SudokuCell sudokuCell,
-			Integer possibleValue,
+			SudokuValue possibleValue,
 			Graphics graphics,
 			FontMetrics fontMetrics,
 			int fontHeightPx)
 	{
 		int charWidth = fontMetrics.stringWidth(possibleValue.toString());
-		int possibleValueCol = (possibleValue - 1) % 3;
-		int possibleValueRow = (possibleValue - 1) / 3;
+		int possibleValueCol = (possibleValue.getValue() - 1) % 3;
+		int possibleValueRow = (possibleValue.getValue() - 1) / 3;
 		double colPercentage = sudokuCell.getIndex(SectionType.COLUMN)
 				+ ((1 + (2 * possibleValueCol)) / 6d);
 		double rowPercentage = sudokuCell.getIndex(SectionType.ROW)
@@ -159,7 +160,7 @@ public class SudokuDisplayComponent extends JComponent
 				+ (fontHeightPx / 2d));
 
 		graphics.drawString(
-				possibleValue.toString(), colOffset, rowOffset);
+				possibleValue.getDisplayValue(), colOffset, rowOffset);
 	}
 
 	private void paintLines(Graphics graphics)

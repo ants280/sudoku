@@ -3,6 +3,7 @@ package com.github.ants280.sudoku.game.solver;
 import com.github.ants280.sudoku.game.SectionType;
 import com.github.ants280.sudoku.game.SudokuBoard;
 import com.github.ants280.sudoku.game.SudokuCell;
+import com.github.ants280.sudoku.game.SudokuValue;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -51,8 +52,8 @@ public class SudokuBruteForceSolver extends SudokuSolver
 			return canBruteForceSolve(index + 1);
 		}
 
-		Collection<Integer> possibleValues = sudokuCell.getPossibleValues();
-		for (Integer possibleValue : possibleValues)
+		Collection<SudokuValue> possibleValues = sudokuCell.getPossibleValues();
+		for (SudokuValue possibleValue : possibleValues)
 		{
 			sudokuCell.setValue(possibleValue);
 

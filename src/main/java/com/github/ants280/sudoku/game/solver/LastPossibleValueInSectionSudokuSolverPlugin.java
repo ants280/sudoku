@@ -3,16 +3,17 @@ package com.github.ants280.sudoku.game.solver;
 import com.github.ants280.sudoku.game.SectionType;
 import com.github.ants280.sudoku.game.SudokuBoard;
 import com.github.ants280.sudoku.game.SudokuCell;
+import com.github.ants280.sudoku.game.SudokuValue;
 import java.util.Arrays;
 import java.util.function.BiConsumer;
 
 public class LastPossibleValueInSectionSudokuSolverPlugin extends SudokuSolverPlugin
 {
-	private final BiConsumer<SudokuCell, Integer> removeNearbyPossibleValuesConsumer;
+	private final BiConsumer<SudokuCell, SudokuValue> removeNearbyPossibleValuesConsumer;
 
 	public LastPossibleValueInSectionSudokuSolverPlugin(
 			SudokuBoard sudokuBoard,
-			BiConsumer<SudokuCell, Integer> removeNearbyPossibleValuesConsumer)
+			BiConsumer<SudokuCell, SudokuValue> removeNearbyPossibleValuesConsumer)
 	{
 		super(sudokuBoard);
 
@@ -27,7 +28,7 @@ public class LastPossibleValueInSectionSudokuSolverPlugin extends SudokuSolverPl
 		{
 			if (sudokuCell.getValue() == null)
 			{
-				for (Integer possibleValue : sudokuCell.getPossibleValues())
+				for (SudokuValue possibleValue : sudokuCell.getPossibleValues())
 				{
 					boolean onlyPossibleValueInASection = Arrays.stream(SectionType.values())
 							.map(sectionType -> sudokuBoard.getSudokuCells(sectionType, sudokuCell.getIndex(sectionType)))

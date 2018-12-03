@@ -2,6 +2,7 @@ package com.github.ants280.sudoku.game.undo;
 
 import com.github.ants280.sudoku.game.SudokuBoard;
 import com.github.ants280.sudoku.game.SudokuCell;
+import com.github.ants280.sudoku.game.SudokuValue;
 
 public class SudokuUndoBoard extends SudokuBoard
 {
@@ -26,7 +27,7 @@ public class SudokuUndoBoard extends SudokuBoard
 			int rowIndex,
 			int columnIndex,
 			int groupIndex,
-			Integer cellValue,
+			SudokuValue cellValue,
 			boolean locked)
 	{
 		return new SudokuUndoCell(

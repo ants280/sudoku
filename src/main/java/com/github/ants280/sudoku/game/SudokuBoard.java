@@ -64,8 +64,8 @@ public class SudokuBoard
 		SudokuCell[] allSudokuCellsArray = new SudokuCell[81];
 		for (int i = 0; i < allSudokuCellsArray.length; i++)
 		{
-			String cellValueString = String.valueOf(boardString.charAt(i + 1));
-			int cellValue = Integer.parseInt(cellValueString);
+			String valueText = boardString.substring(i + 1, i + 2);
+			SudokuValue cellValue = SudokuValue.fromString(valueText);
 			int rowIndex = i / 9;
 			int columnIndex = i % 9;
 			int groupIndex = ((rowIndex / 3) * 3) + (columnIndex / 3);
@@ -73,8 +73,8 @@ public class SudokuBoard
 					rowIndex,
 					columnIndex,
 					groupIndex,
-					cellValue == 0 ? null : cellValue,
-					cellValue != 0);
+					cellValue,
+					cellValue != null);
 		}
 		return Arrays.asList(allSudokuCellsArray);
 	}
@@ -83,7 +83,7 @@ public class SudokuBoard
 			int rowIndex,
 			int columnIndex,
 			int groupIndex,
-			Integer cellValue,
+			SudokuValue cellValue,
 			boolean locked)
 	{
 		return new SudokuCell(

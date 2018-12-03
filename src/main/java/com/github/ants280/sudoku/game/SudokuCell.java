@@ -1,31 +1,26 @@
 package com.github.ants280.sudoku.game;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumMap;
-import java.util.HashSet;
+import java.util.EnumSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class SudokuCell
 {
-	private static final Collection<Integer> LEGAL_CELL_VALUES
-			= IntStream.rangeClosed(1, 9)
-					.boxed()
-					.collect(Collectors.toList());
 	private final Map<SectionType, Integer> sectionTypeIndices;
-	private Integer value;
+	private SudokuValue value;
 	private boolean locked;
-	private final Set<Integer> possibleValues;
+	private final Set<SudokuValue> possibleValues;
 
 	public SudokuCell(
 			int rowIndex,
 			int columnIndex,
 			int groupIndex,
-			Integer value,
+			SudokuValue value,
 			boolean locked)
 	{
 		this.sectionTypeIndices = new EnumMap<>(SectionType.class);
@@ -35,7 +30,7 @@ public class SudokuCell
 
 		this.value = value;
 		this.locked = locked;
-		this.possibleValues = new HashSet<>();
+		this.possibleValues = EnumSet.noneOf(SudokuValue.class);
 	}
 
 	public int getIndex(SectionType sectionType)
@@ -43,17 +38,17 @@ public class SudokuCell
 		return sectionTypeIndices.get(sectionType);
 	}
 
-	public Integer getValue()
+	public SudokuValue getValue()
 	{
 		return value;
 	}
 
-	public Collection<Integer> getPossibleValues()
+	public Collection<SudokuValue> getPossibleValues()
 	{
 		return Collections.unmodifiableSet(possibleValues);
 	}
 
-	public boolean hasPossibleValue(int value)
+	public boolean hasPossibleValue(SudokuValue value)
 	{
 		return possibleValues.contains(value);
 	}
@@ -63,15 +58,13 @@ public class SudokuCell
 		return locked;
 	}
 
-	public void setValue(Integer value)
+	public void setValue(SudokuValue value)
 	{
 		if (locked)
 		{
 			throw new IllegalArgumentException(
 					"Cannot set value of locked SudokuCell.");
 		}
-
-		SudokuCell.validateValue(value);
 
 		this.value = value;
 	}
@@ -95,20 +88,18 @@ public class SudokuCell
 					"Restoring possible values of a locked SudokuCell.");
 		}
 
-		LEGAL_CELL_VALUES.stream()
+		Arrays.stream(SudokuValue.values())
 				.filter(v -> !this.hasPossibleValue(v))
 				.forEach(this::togglePossibleValue);
 	}
 
-	public void togglePossibleValue(int value)
+	public void togglePossibleValue(SudokuValue value)
 	{
 		if (locked)
 		{
 			throw new IllegalArgumentException(
 					"Cannot toggle possible values of locked SudokuCell.");
 		}
-
-		SudokuCell.validateValue(value);
 
 		if (this.hasPossibleValue(value))
 		{
@@ -131,14 +122,6 @@ public class SudokuCell
 		this.locked = locked;
 
 		this.possibleValues.clear();
-	}
-
-	private static void validateValue(Integer value)
-	{
-		if (value != null && !LEGAL_CELL_VALUES.contains(value))
-		{
-			throw new IllegalArgumentException("Invalid value: " + value);
-		}
 	}
 
 	public void resetFrom(SudokuCell otherSudokuCell)

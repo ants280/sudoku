@@ -3,6 +3,7 @@ package com.github.ants280.sudoku.game.solver;
 import com.github.ants280.sudoku.game.SectionType;
 import com.github.ants280.sudoku.game.SudokuBoard;
 import com.github.ants280.sudoku.game.SudokuCell;
+import com.github.ants280.sudoku.game.SudokuValue;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -37,12 +38,12 @@ public class CullPossibleValuesSudokuSolverPlugin extends SudokuSolverPlugin
 				List<SudokuCell> sudokuCells
 						= sudokuBoard.getSudokuCells(sectionType, index);
 
-				List<Collection<Integer>> possibleValueGroups
-						= getPossibleValueGroups(sudokuCells);
+				List<Collection<SudokuValue>> possibleValueGroups
+						= this.getPossibleValueGroups(sudokuCells);
 
-				for (Collection<Integer> possibleValues : possibleValueGroups)
+				for (Collection<SudokuValue> possibleValues : possibleValueGroups)
 				{
-					for (int possibleValue : possibleValues)
+					for (SudokuValue possibleValue : possibleValues)
 					{
 						List<SudokuCell> sudokuCellsToCull
 								= this.getCellsToCull(
@@ -66,7 +67,7 @@ public class CullPossibleValuesSudokuSolverPlugin extends SudokuSolverPlugin
 		return false;
 	}
 
-	private List<Collection<Integer>> getPossibleValueGroups(List<SudokuCell> sudokuCells)
+	private List<Collection<SudokuValue>> getPossibleValueGroups(List<SudokuCell> sudokuCells)
 	{
 		return sudokuCells.stream()
 				.map(SudokuCell::getPossibleValues)
@@ -81,8 +82,8 @@ public class CullPossibleValuesSudokuSolverPlugin extends SudokuSolverPlugin
 
 	private List<SudokuCell> getCellsToCull(
 			List<SudokuCell> sudokuCells,
-			Collection<Integer> possibleValues,
-			int possibleValue)
+			Collection<SudokuValue> possibleValues,
+			SudokuValue possibleValue)
 	{
 		return sudokuCells.stream()
 				.filter(sudokuCell -> sudokuCell.getValue() == null

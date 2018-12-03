@@ -3,6 +3,7 @@ package com.github.ants280.sudoku.ui;
 import com.github.ants280.sudoku.game.SectionType;
 import com.github.ants280.sudoku.game.SudokuBoard;
 import com.github.ants280.sudoku.game.SudokuCell;
+import com.github.ants280.sudoku.game.SudokuValue;
 import com.github.ants280.sudoku.game.solver.SudokuBruteForceSolver;
 import com.github.ants280.sudoku.game.solver.SudokuSolver;
 import com.github.ants280.sudoku.game.undo.CommandHistory;
@@ -252,8 +253,8 @@ public class SudokuUiManager implements ActionListener
 			String title,
 			String message,
 			Predicate<SudokuCell> canSetValuePredicate,
-			BiPredicate<SudokuCell, Integer> buttonSelectedFunction,
-			BiConsumer<SudokuCell, Integer> valueClickConsumer,
+			BiPredicate<SudokuCell, SudokuValue> buttonSelectedFunction,
+			BiConsumer<SudokuCell, SudokuValue> valueClickConsumer,
 			boolean closeOnDialogOnButtonClick)
 	{
 		Integer r = sudokuDisplayComponent.getSelectedRow();
@@ -278,7 +279,7 @@ public class SudokuUiManager implements ActionListener
 		}
 	}
 
-	private void setSudokuCellValue(SudokuCell sudokuCell, Integer v)
+	private void setSudokuCellValue(SudokuCell sudokuCell, SudokuValue v)
 	{
 		if (!sudokuCell.isLocked())
 		{
@@ -296,7 +297,7 @@ public class SudokuUiManager implements ActionListener
 
 	private void toggleSudokuCellPossibleValue(
 			SudokuCell sudokuCell,
-			Integer v)
+			SudokuValue v)
 	{
 		if (!sudokuCell.isLocked())
 		{
@@ -306,7 +307,7 @@ public class SudokuUiManager implements ActionListener
 		}
 	}
 
-	private void setSelectedCellValue(Integer cellValue)
+	private void setSelectedCellValue(SudokuValue cellValue)
 	{
 		SudokuCell selectedSudokuCell = board.getSudokuCells(
 				SectionType.ROW,
