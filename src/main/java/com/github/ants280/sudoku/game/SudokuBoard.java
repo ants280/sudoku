@@ -51,8 +51,7 @@ public class SudokuBoard
 		return String.format("{%s}",
 				allSudokuCells.stream()
 						.map(SudokuCell::getValue)
-						.map(v -> v == null ? 0 : v)
-						.map(String::valueOf)
+						.map(v -> v == null ? "0" : v.getDisplayValue())
 						.collect(Collectors.joining()));
 	}
 
