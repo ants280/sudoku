@@ -118,7 +118,9 @@ public class SudokuDisplayComponent extends JComponent
 					+ (cellLength * (cellRow + 0.5d)));
 
 			graphics.drawString(
-					sudokuCell.getValue().toString(), colOffset, rowOffset);
+					sudokuCell.getValue().getDisplayValue(),
+					colOffset,
+					rowOffset);
 		}
 		else
 		{
