@@ -108,7 +108,7 @@ public class SudokuDisplayComponent extends JComponent
 					? Color.DARK_GRAY : Color.BLACK);
 			graphics.setFont(valueFont);
 			int charWidth = graphics.getFontMetrics()
-					.stringWidth(sudokuCell.getValue().toString());
+					.stringWidth(sudokuCell.getValue().getDisplayValue());
 			int fontHeightPx = (int) (valueFont.getSize() * 0.75d);
 			int cellColumn = sudokuCell.getIndex(SectionType.COLUMN);
 			int cellRow = sudokuCell.getIndex(SectionType.ROW);
@@ -149,7 +149,7 @@ public class SudokuDisplayComponent extends JComponent
 			FontMetrics fontMetrics,
 			int fontHeightPx)
 	{
-		int charWidth = fontMetrics.stringWidth(possibleValue.toString());
+		int charWidth = fontMetrics.stringWidth(possibleValue.getDisplayValue());
 		int possibleValueCol = (possibleValue.getValue() - 1) % 3;
 		int possibleValueRow = (possibleValue.getValue() - 1) / 3;
 		double colPercentage = sudokuCell.getIndex(SectionType.COLUMN)
