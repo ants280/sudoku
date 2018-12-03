@@ -79,19 +79,7 @@ public class SudokuSolverPopup implements ActionListener, ChangeListener
 		timerSlider.setMinorTickSpacing(ONE_SECOND_IN_MILLIS / 4);
 		timerSlider.setPaintTicks(true);
 		timerSlider.setPaintLabels(true);
-		//Create the label table
-		Dictionary<Integer, JLabel> labelTable = new Hashtable<>();
-		for (int i = timerSlider.getMinimum();
-				i <= timerSlider.getMaximum();
-				i += ONE_SECOND_IN_MILLIS)
-		{
-			labelTable.put(
-					i,
-					new JLabel(String.format(
-							"%.2f sec/move",
-							Double.valueOf(i) / ONE_SECOND_IN_MILLIS)));
-		}
-		timerSlider.setLabelTable(labelTable);
+		timerSlider.setLabelTable(this.createLabelTable());
 
 		timer.setInitialDelay(timer.getDelay());
 		timer.setActionCommand(ACTION_TIMER);
@@ -113,6 +101,26 @@ public class SudokuSolverPopup implements ActionListener, ChangeListener
 		popupDialog.pack();
 		popupDialog.setLocationRelativeTo(popupDialog.getParent());
 		popupDialog.addWindowListener(new StopTimerWindowListener(timer));
+	}
+
+	private Dictionary<Integer, JLabel> createLabelTable()
+	{
+		// Dictionary is required by JSlider.setLabelTable(Dictionary), so Hashtable must be used."
+		@SuppressWarnings("squid:S1149")
+		Dictionary<Integer, JLabel> labelTable = new Hashtable<>();
+
+		for (int i = timerSlider.getMinimum();
+				i <= timerSlider.getMaximum();
+				i += ONE_SECOND_IN_MILLIS)
+		{
+			labelTable.put(
+					i,
+					new JLabel(String.format(
+							"%.2f sec/move",
+							Double.valueOf(i) / ONE_SECOND_IN_MILLIS)));
+		}
+
+		return labelTable;
 	}
 
 	public void setVisible(boolean visible)
