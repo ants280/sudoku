@@ -3,18 +3,17 @@ package com.github.ants280.sudoku.ui;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.function.BiConsumer;
 
 public class SudokuMouseListener
 		extends MouseAdapter
 		implements MouseListener
 {
-	private final BiConsumer<Integer, Integer> singleClickConsumer;
+	private final MouseXyConsumer singleClickConsumer;
 	private final Runnable doubleClickRunnable;
 	private final Runnable rightClickRunnable;
 
 	public SudokuMouseListener(
-			BiConsumer<Integer, Integer> singleClickConsumer,
+			MouseXyConsumer singleClickConsumer,
 			Runnable doubleClickRunnable,
 			Runnable rightClickRunnable)
 	{
@@ -41,5 +40,10 @@ public class SudokuMouseListener
 			default:
 				break;
 		}
+	}
+
+	public static interface MouseXyConsumer
+	{
+		public void accept(int x, int y);
 	}
 }
