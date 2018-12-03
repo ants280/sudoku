@@ -4,7 +4,9 @@ import com.github.ants280.sudoku.game.SudokuBoard;
 import com.github.ants280.sudoku.game.undo.CommandHistory;
 import com.github.ants280.sudoku.game.undo.SudokuUndoBoard;
 import com.github.ants280.sudoku.game.undo.SudokuUndoCellCommand;
+import static com.github.ants280.sudoku.ui.SudokuUiManager.*;
 import java.awt.BorderLayout;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.Arrays;
 import javax.swing.BorderFactory;
@@ -24,12 +26,16 @@ public class SudokuFrame
 	private final JFrame frame;
 	private final JMenuItem undoMenuItem;
 	private final JMenuItem redoMenuItem;
+	private final JMenuItem setValueMenuItem;
+	private final JMenuItem setPossibleValueMenuItem;
 
 	public SudokuFrame()
 	{
 		this.frame = new JFrame("Sudoku");
 		this.undoMenuItem = new JMenuItem();
 		this.redoMenuItem = new JMenuItem();
+		this.setValueMenuItem = new JMenuItem();
+		this.setPossibleValueMenuItem = new JMenuItem();
 
 		init();
 	}
@@ -49,23 +55,51 @@ public class SudokuFrame
 		SudokuDisplayComponent sudokuDisplayComponent
 				= new SudokuDisplayComponent(board);
 
-		JMenu fileMenu = new JMenu();
-		JMenuItem restartMenuItem = new JMenuItem();
-		JMenuItem loadMenuItem = new JMenuItem();
-		JMenuItem exportMenuItem = new JMenuItem();
-		JMenuItem exitMenuItem = new JMenuItem();
-		JMenu actionMenu = new JMenu();
-		JMenuItem setValueMenuItem = new JMenuItem();
-		JMenuItem setPossibleValueMenuItem = new JMenuItem();
-		JMenuItem clearPossibleValuesMenuItem = new JMenuItem();
-		JMenuItem clearCellsMenuItem = new JMenuItem();
-		JMenuItem lockCellsMenuItem = new JMenuItem();
-		JMenuItem unLockCellsMenuItem = new JMenuItem();
-		JMenuItem solveLogicMenuItem = new JMenuItem();
-		JMenuItem solveBruteForceMenuItem = new JMenuItem();
-		JMenu helpMenu = new JMenu();
-		JMenuItem helpMenuItem = new JMenuItem();
-		JMenuItem aboutMenuItem = new JMenuItem();
+		SudokuUiManager sudokuUiManager
+				= new SudokuUiManager(
+						frame,
+						sudokuDisplayComponent,
+						board,
+						messageLabel,
+						commandHistory,
+						Arrays.asList(
+								setValueMenuItem,
+								setPossibleValueMenuItem));
+
+		this.undoRedoChanged(true, true);
+		undoMenuItem.setAccelerator(
+				KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_DOWN_MASK));
+		redoMenuItem.setAccelerator(
+				KeyStroke.getKeyStroke(KeyEvent.VK_Y, KeyEvent.CTRL_DOWN_MASK));
+
+		frame.setJMenuBar(createMenu(sudokuUiManager));
+		frame.add(topPanel, BorderLayout.NORTH);
+		frame.add(sudokuDisplayComponent);
+		frame.pack();
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+
+	private JMenuBar createMenu(ActionListener actionListener)
+	{
+		JMenu fileMenu = new JMenu(FILE_M);
+		JMenuItem restartMenuItem = new JMenuItem(RESTART_MI);
+		JMenuItem loadMenuItem = new JMenuItem(LOAD_MI);
+		JMenuItem exportMenuItem = new JMenuItem(EXPORT_MI);
+		JMenuItem exitMenuItem = new JMenuItem(EXIT_MI);
+		JMenu actionMenu = new JMenu(ACTION_M);
+		undoMenuItem.setText(UNDO_MI);
+		redoMenuItem.setText(REDO_MI);
+		setValueMenuItem.setText(SET_VALUE_MI);
+		setPossibleValueMenuItem.setText(SET_POSSIBLE_VALUE_MI);
+		JMenuItem clearPossibleValuesMenuItem = new JMenuItem(CLEAR_POSSIBLE_VALUES_MI);
+		JMenuItem clearCellsMenuItem = new JMenuItem(CLEAR_CELLS_MI);
+		JMenuItem lockCellsMenuItem = new JMenuItem(LOCK_CELLS_MI);
+		JMenuItem unLockCellsMenuItem = new JMenuItem(UNLOCK_CELLS_MI);
+		JMenuItem solveLogicMenuItem = new JMenuItem(SOLVE_LOGIC_MI);
+		JMenuItem solveBruteForceMenuItem = new JMenuItem(SOLVE_BRUTE_FORCE_MI);
+		JMenu helpMenu = new JMenu(HELP_M);
+		JMenuItem helpMenuItem = new JMenuItem(HELP_MI);
+		JMenuItem aboutMenuItem = new JMenuItem(ABOUT_MI);
 
 		fileMenu.add(restartMenuItem);
 		fileMenu.add(loadMenuItem);
@@ -88,52 +122,21 @@ public class SudokuFrame
 		helpMenu.add(aboutMenuItem);
 
 		JMenuBar menuBar = new JMenuBar();
+
 		menuBar.add(fileMenu);
 		menuBar.add(actionMenu);
 		menuBar.add(helpMenu);
 
-		SudokuUiManager sudokuUiManager
-				= new SudokuUiManager(
-						frame,
-						sudokuDisplayComponent,
-						board,
-						messageLabel,
-						commandHistory,
-						Arrays.asList(
-								setValueMenuItem,
-								setPossibleValueMenuItem));
-		sudokuUiManager.initMenu(
-				fileMenu,
-				restartMenuItem,
-				loadMenuItem,
-				exportMenuItem,
-				exitMenuItem,
-				actionMenu,
-				undoMenuItem,
-				redoMenuItem,
-				setValueMenuItem,
-				setPossibleValueMenuItem,
-				clearPossibleValuesMenuItem,
-				clearCellsMenuItem,
-				lockCellsMenuItem,
-				unLockCellsMenuItem,
-				solveLogicMenuItem,
-				solveBruteForceMenuItem,
-				helpMenu,
-				helpMenuItem,
-				aboutMenuItem);
+		for (int index = 0; index < menuBar.getMenuCount(); index++)
+		{
+			JMenu menu = menuBar.getMenu(index);
+			Arrays.stream(menu.getMenuComponents())
+					.filter(component -> component instanceof JMenuItem)
+					.forEach(jMenuItem -> ((JMenuItem) jMenuItem)
+					.addActionListener(actionListener));
+		}
 
-		this.undoRedoChanged(true, true);
-		undoMenuItem.setAccelerator(
-				KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_DOWN_MASK));
-		redoMenuItem.setAccelerator(
-				KeyStroke.getKeyStroke(KeyEvent.VK_Y, KeyEvent.CTRL_DOWN_MASK));
-
-		frame.setJMenuBar(menuBar);
-		frame.add(topPanel, BorderLayout.NORTH);
-		frame.add(sudokuDisplayComponent);
-		frame.pack();
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		return menuBar;
 	}
 
 	public JFrame getFrame()

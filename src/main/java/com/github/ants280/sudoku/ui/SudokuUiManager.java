@@ -17,31 +17,30 @@ import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
 public class SudokuUiManager implements ActionListener
 {
-	private static final String FILE_M = "File";
-	private static final String RESTART_MI = "Restart";
-	private static final String LOAD_MI = "Load Game...";
-	private static final String EXPORT_MI = "Export Game...";
-	private static final String EXIT_MI = "Exit";
-	private static final String ACTION_M = "Action";
-	private static final String UNDO_MI = "Undo";
-	private static final String REDO_MI = "Redo";
-	private static final String SET_VALUE_MI = "Set value...";
-	private static final String SET_POSSIBLE_VALUE_MI = "Set possible value...";
-	private static final String CLEAR_POSSIBLE_VALUES_MI = "Clear possible values";
-	private static final String CLEAR_CELLS_MI = "Clear cells...";
-	private static final String LOCK_CELLS_MI = "Lock cells...";
-	private static final String UNLOCK_CELLS_MI = "Unlock cells...";
-	private static final String SOLVE_LOGIC_MI = "Solve with Logic...";
-	private static final String SOLVE_BRUTE_FORCE_MI = "Solve with Brute Force...";
-	private static final String HELP_M = "Help";
-	private static final String HELP_MI = "Help";
-	private static final String ABOUT_MI = "About";
+	public static final String FILE_M = "File";
+	public static final String RESTART_MI = "Restart";
+	public static final String LOAD_MI = "Load Game...";
+	public static final String EXPORT_MI = "Export Game...";
+	public static final String EXIT_MI = "Exit";
+	public static final String ACTION_M = "Action";
+	public static final String UNDO_MI = "Undo";
+	public static final String REDO_MI = "Redo";
+	public static final String SET_VALUE_MI = "Set value...";
+	public static final String SET_POSSIBLE_VALUE_MI = "Set possible value...";
+	public static final String CLEAR_POSSIBLE_VALUES_MI = "Clear possible values";
+	public static final String CLEAR_CELLS_MI = "Clear cells...";
+	public static final String LOCK_CELLS_MI = "Lock cells...";
+	public static final String UNLOCK_CELLS_MI = "Unlock cells...";
+	public static final String SOLVE_LOGIC_MI = "Solve with Logic...";
+	public static final String SOLVE_BRUTE_FORCE_MI = "Solve with Brute Force...";
+	public static final String HELP_M = "Help";
+	public static final String HELP_MI = "Help";
+	public static final String ABOUT_MI = "About";
 
 	private final JFrame frame;
 	private final SudokuDisplayComponent sudokuDisplayComponent;
@@ -109,65 +108,6 @@ public class SudokuUiManager implements ActionListener
 		tempActionCommands.put(HELP_MI, this::help);
 		tempActionCommands.put(ABOUT_MI, this::about);
 		return tempActionCommands;
-	}
-
-	public void initMenu(
-			JMenu fileMenu,
-			JMenuItem restartMenuItem,
-			JMenuItem loadMenuItem,
-			JMenuItem exportMenuItem,
-			JMenuItem exitMenuItem,
-			JMenu actionMenu,
-			JMenuItem undoMenuItem,
-			JMenuItem redoMenuItem,
-			JMenuItem setValueMenuItem,
-			JMenuItem setPossibleValueMenuItem,
-			JMenuItem clearPossibleValuesMenuItem,
-			JMenuItem clearCellsMenuItem,
-			JMenuItem lockCellsMenuItem,
-			JMenuItem unLockCellsMenuItem,
-			JMenuItem solveLogicMenuItem,
-			JMenuItem solveBruteForceMenuItem,
-			JMenu helpMenu,
-			JMenuItem helpMenuItem,
-			JMenuItem aboutMenuItem)
-	{
-		fileMenu.setText(FILE_M);
-		restartMenuItem.setText(RESTART_MI);
-		loadMenuItem.setText(LOAD_MI);
-		exportMenuItem.setText(EXPORT_MI);
-		exitMenuItem.setText(EXIT_MI);
-		actionMenu.setText(ACTION_M);
-		undoMenuItem.setText(UNDO_MI);
-		redoMenuItem.setText(REDO_MI);
-		setValueMenuItem.setText(SET_VALUE_MI);
-		setPossibleValueMenuItem.setText(SET_POSSIBLE_VALUE_MI);
-		clearPossibleValuesMenuItem.setText(CLEAR_POSSIBLE_VALUES_MI);
-		clearCellsMenuItem.setText(CLEAR_CELLS_MI);
-		lockCellsMenuItem.setText(LOCK_CELLS_MI);
-		unLockCellsMenuItem.setText(UNLOCK_CELLS_MI);
-		solveLogicMenuItem.setText(SOLVE_LOGIC_MI);
-		solveBruteForceMenuItem.setText(SOLVE_BRUTE_FORCE_MI);
-		helpMenu.setText(HELP_M);
-		helpMenuItem.setText(HELP_MI);
-		aboutMenuItem.setText(ABOUT_MI);
-
-		restartMenuItem.addActionListener(this);
-		loadMenuItem.addActionListener(this);
-		exportMenuItem.addActionListener(this);
-		exitMenuItem.addActionListener(this);
-		undoMenuItem.addActionListener(this);
-		redoMenuItem.addActionListener(this);
-		setValueMenuItem.addActionListener(this);
-		setPossibleValueMenuItem.addActionListener(this);
-		clearPossibleValuesMenuItem.addActionListener(this);
-		clearCellsMenuItem.addActionListener(this);
-		lockCellsMenuItem.addActionListener(this);
-		unLockCellsMenuItem.addActionListener(this);
-		solveLogicMenuItem.addActionListener(this);
-		solveBruteForceMenuItem.addActionListener(this);
-		helpMenuItem.addActionListener(this);
-		aboutMenuItem.addActionListener(this);
 	}
 
 	private void addListeners()
