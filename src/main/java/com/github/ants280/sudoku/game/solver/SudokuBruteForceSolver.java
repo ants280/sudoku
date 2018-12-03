@@ -6,7 +6,7 @@ import com.github.ants280.sudoku.game.SudokuCell;
 import com.github.ants280.sudoku.game.SudokuValue;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -70,7 +70,8 @@ public class SudokuBruteForceSolver extends SudokuSolver
 
 	private boolean hasDuplicateValues(List<SudokuCell> sudokuCells)
 	{
-		Collection<Integer> usedValuesSet = new HashSet<>();
+		Collection<SudokuValue> usedValuesSet
+				= EnumSet.noneOf(SudokuValue.class);
 
 		return !sudokuCells.stream()
 				.filter(sudokuCell -> sudokuCell.getValue() != null)

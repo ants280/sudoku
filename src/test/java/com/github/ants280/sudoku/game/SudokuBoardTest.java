@@ -59,7 +59,7 @@ public class SudokuBoardTest
 		int c = 6;
 		int group = 2;
 		int groupIndex = 3;
-		Integer value = 4;
+		SudokuValue value = SudokuValue.VALUE_4;
 
 		Assert.assertEquals(
 				value,
@@ -81,10 +81,10 @@ public class SudokuBoardTest
 		SudokuBoard board = new SudokuBoard();
 		int r = 1;
 		int c = 6;
-		Integer value = 4;
+		SudokuValue value = SudokuValue.VALUE_4;
 
 		board.getSudokuCells(ROW, r).get(c).setValue(value);
-		Integer actualValue = board.getSudokuCells(ROW, r).get(c).getValue();
+		SudokuValue actualValue = board.getSudokuCells(ROW, r).get(c).getValue();
 
 		Assert.assertEquals(value, actualValue);
 	}
@@ -242,7 +242,7 @@ public class SudokuBoardTest
 	{
 		return sudokuCells.stream()
 				.map(SudokuCell::getValue)
-				.map(v -> v == null ? 0 : v)
+				.map(v -> v == null ? null : v.getValue())
 				.collect(Collectors.toList());
 	}
 }

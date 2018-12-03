@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -16,13 +17,14 @@ public class SudokuBoard
 {
 	private final List<SudokuCell> allSudokuCells;
 	private final Map<SectionType, Map<Integer, List<SudokuCell>>> sectionTypeCells;
+	private static final Collection<SudokuValue> ALL_SUDOKU_VALUES
+			= EnumSet.allOf(SudokuValue.class);
 	private static final Predicate<List<SudokuCell>> CELL_SECTION_HAS_ALL_VALUES
 			= sudokuCells -> sudokuCells.stream()
 					.map(SudokuCell::getValue)
 					.filter(Objects::nonNull)
-					.mapToInt(Integer::intValue)
-					.map(i -> 1 << i)
-					.sum() == ((1 << 10) - 2);
+					.collect(Collectors.toSet())
+					.equals(ALL_SUDOKU_VALUES);
 
 	public SudokuBoard(String boardString)
 	{
@@ -64,8 +66,8 @@ public class SudokuBoard
 		SudokuCell[] allSudokuCellsArray = new SudokuCell[81];
 		for (int i = 0; i < allSudokuCellsArray.length; i++)
 		{
-			String valueText = boardString.substring(i + 1, i + 2);
-			SudokuValue cellValue = SudokuValue.fromString(valueText);
+			char valueChar = boardString.charAt(i + 1);
+			SudokuValue cellValue = SudokuValue.fromChar(valueChar);
 			int rowIndex = i / 9;
 			int columnIndex = i % 9;
 			int groupIndex = ((rowIndex / 3) * 3) + (columnIndex / 3);

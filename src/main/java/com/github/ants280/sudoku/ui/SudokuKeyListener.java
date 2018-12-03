@@ -1,5 +1,6 @@
 package com.github.ants280.sudoku.ui;
 
+import com.github.ants280.sudoku.game.SudokuValue;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -11,7 +12,7 @@ public class SudokuKeyListener
 		extends KeyAdapter
 		implements KeyListener
 {
-	private final Consumer<Integer> setSelectedCellValueConsumer;
+	private final Consumer<SudokuValue> setSelectedCellValueConsumer;
 	private final Consumer<MoveDirection> moveSelectedCellConsumer;
 	private static final Map<Integer, MoveDirection> MOVE_DIRECTIONS
 			= new HashMap<>();
@@ -25,7 +26,7 @@ public class SudokuKeyListener
 	}
 
 	public SudokuKeyListener(
-			Consumer<Integer> setSelectedCellValueConsumer,
+			Consumer<SudokuValue> setSelectedCellValueConsumer,
 			Consumer<MoveDirection> moveSelectedCellConsumer)
 	{
 		this.setSelectedCellValueConsumer = setSelectedCellValueConsumer;
@@ -57,10 +58,8 @@ public class SudokuKeyListener
 			case KeyEvent.VK_NUMPAD7:
 			case KeyEvent.VK_NUMPAD8:
 			case KeyEvent.VK_NUMPAD9:
-				Integer cellValue = Integer.parseInt(
-						Character.toString(event.getKeyChar()));
 				setSelectedCellValueConsumer
-						.accept(cellValue == 0 ? null : cellValue);
+						.accept(SudokuValue.fromChar(event.getKeyChar()));
 				break;
 			case KeyEvent.VK_UP:
 			case KeyEvent.VK_DOWN:

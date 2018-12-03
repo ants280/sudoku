@@ -75,7 +75,13 @@ public class SelectSudokuCellDialog implements ActionListener
 	public void actionPerformed(ActionEvent actionEvent)
 	{
 		String actionCommand = actionEvent.getActionCommand();
-		SudokuValue buttonValue = SudokuValue.fromString(actionCommand);
+		if (actionCommand == null || actionCommand.length() > 1)
+		{
+			throw new IllegalArgumentException(
+					"Invalid action : " + actionEvent);
+		}
+
+		SudokuValue buttonValue = SudokuValue.fromChar(actionCommand.charAt(0));
 
 		valueClickConsumer.accept(selectedSudokuCell, buttonValue);
 

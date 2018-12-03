@@ -31,14 +31,9 @@ public enum SudokuValue
 		return displayValue;
 	}
 
-	public static SudokuValue fromString(String text)
+	public static SudokuValue fromChar(char ch)
 	{
-		if (text == null || text.length() > 1)
-		{
-			throw new IllegalArgumentException("Invalid SudokuValue : " + text);
-		}
-
-		int chValue = text.charAt(0) - '0';
+		int chValue = ch - '0';
 
 		for (SudokuValue sudokuValue : SudokuValue.values())
 		{
