@@ -242,7 +242,7 @@ public class SudokuBoardTest
 	{
 		return sudokuCells.stream()
 				.map(SudokuCell::getValue)
-				.map(v -> v == null ? null : v.getValue())
+				.map(v -> v == null ? 0 : v.getValue())
 				.collect(Collectors.toList());
 	}
 }
