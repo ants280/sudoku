@@ -1,6 +1,7 @@
 package com.github.ants280.sudoku.game.undo;
 
 import com.github.ants280.sudoku.game.SudokuValue;
+import java.util.Objects;
 
 public class SudokuUndoCellCommand implements Command
 {
@@ -35,5 +36,35 @@ public class SudokuUndoCellCommand implements Command
 		sudokuCell.getCommandHistory().setEnabled(false);
 		sudokuCellChangeType.applyChange(sudokuCell, updatedValue);
 		sudokuCell.getCommandHistory().setEnabled(true);
+	}
+
+	@Override
+	public int hashCode()
+	{
+		int hash = 5;
+		hash = 71 * hash + Objects.hashCode(this.sudokuCell);
+		hash = 71 * hash + Objects.hashCode(this.sudokuCellChangeType);
+		hash = 71 * hash + Objects.hashCode(this.initialValue);
+		hash = 71 * hash + Objects.hashCode(this.updatedValue);
+		return hash;
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (this == obj)
+		{
+			return true;
+		}
+		if (obj == null || getClass() != obj.getClass())
+		{
+			return false;
+		}
+
+		final SudokuUndoCellCommand other = (SudokuUndoCellCommand) obj;
+		return Objects.equals(this.sudokuCell, other.sudokuCell)
+				&& this.sudokuCellChangeType != other.sudokuCellChangeType
+				&& this.initialValue != other.initialValue
+				&& this.updatedValue != other.updatedValue;
 	}
 }
