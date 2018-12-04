@@ -1,14 +1,19 @@
 package com.github.ants280.sudoku.game.solver;
 
 import com.github.ants280.sudoku.game.SudokuBoard;
+import java.util.function.Consumer;
 
 public abstract class SudokuSolverPlugin
 {
 	protected final SudokuBoard sudokuBoard;
+	protected final Consumer<String> moveDescriptionConsumer;
 
-	public SudokuSolverPlugin(SudokuBoard sudokuBoard)
+	public SudokuSolverPlugin(
+			SudokuBoard sudokuBoard,
+			Consumer<String> moveDescriptionConsumer)
 	{
 		this.sudokuBoard = sudokuBoard;
+		this.moveDescriptionConsumer = moveDescriptionConsumer;
 	}
 
 	/**

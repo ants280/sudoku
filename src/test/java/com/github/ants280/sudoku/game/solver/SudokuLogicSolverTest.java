@@ -2,6 +2,8 @@ package com.github.ants280.sudoku.game.solver;
 
 import com.github.ants280.sudoku.game.SudokuBoard;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -57,7 +59,12 @@ public class SudokuLogicSolverTest
 	public void test()
 	{
 		SudokuBoard sudokuBoard = new SudokuBoard(boardString);
-		SudokuSolver sudokuSolver = new SudokuLogicSolver(sudokuBoard);
+		Collection<String> moveDescriptions = new HashSet<>();
+		SudokuSolver sudokuSolver = new SudokuLogicSolver(
+				sudokuBoard,
+				moveDescription -> Assert.assertTrue(
+						"Solver made move with publicate description",
+						moveDescriptions.add(moveDescription)));
 
 		sudokuSolver.initialize();
 		sudokuSolver.solveFast();

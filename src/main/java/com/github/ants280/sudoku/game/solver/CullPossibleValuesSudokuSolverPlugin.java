@@ -7,6 +7,7 @@ import com.github.ants280.sudoku.game.SudokuValue;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -23,9 +24,11 @@ import java.util.stream.Collectors;
  */
 public class CullPossibleValuesSudokuSolverPlugin extends SudokuSolverPlugin
 {
-	public CullPossibleValuesSudokuSolverPlugin(SudokuBoard sudokuBoard)
+	public CullPossibleValuesSudokuSolverPlugin(
+			SudokuBoard sudokuBoard,
+			Consumer<String> moveDescriptionConsumer)
 	{
-		super(sudokuBoard);
+		super(sudokuBoard, moveDescriptionConsumer);
 	}
 
 	@Override
@@ -55,6 +58,20 @@ public class CullPossibleValuesSudokuSolverPlugin extends SudokuSolverPlugin
 						{
 							sudokuCellsToCull.forEach(sudokuCell
 									-> sudokuCell.togglePossibleValue(possibleValue));
+
+							String moveDescription = String.format(
+									"Removed possible value of %s "
+									+ "from some cells in %s %d "
+									+ "because other cells in the %s "
+									+ "must have possible values of %s",
+									possibleValue,
+									sectionType.getDisplayValue(),
+									index + 1,
+									sectionType.getDisplayValue(),
+									possibleValues.stream()
+											.map(SudokuValue::getDisplayValue)
+											.collect(Collectors.toList()));
+							moveDescriptionConsumer.accept(moveDescription);
 
 							return true;
 						}

@@ -2,5 +2,19 @@ package com.github.ants280.sudoku.game;
 
 public enum SectionType
 {
-	ROW, COLUMN, GROUP
+	ROW("row"),
+	COLUMN("column"),
+	GROUP("group");
+
+	private final String displayValue;
+
+	private SectionType(String displayValue)
+	{
+		this.displayValue = displayValue;
+	}
+
+	public String getDisplayValue()
+	{
+		return displayValue;
+	}
 }

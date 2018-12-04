@@ -7,15 +7,17 @@ import com.github.ants280.sudoku.game.SudokuValue;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class RemovePossibleValueForOtherGroupsSudokuSolverPlugin
 		extends SudokuSolverPlugin
 {
 	public RemovePossibleValueForOtherGroupsSudokuSolverPlugin(
-			SudokuBoard sudokuBoard)
+			SudokuBoard sudokuBoard,
+			Consumer<String> moveDescriptionConsumer)
 	{
-		super(sudokuBoard);
+		super(sudokuBoard, moveDescriptionConsumer);
 	}
 
 	@Override
@@ -31,6 +33,7 @@ public class RemovePossibleValueForOtherGroupsSudokuSolverPlugin
 			if (this.tryToRemovePossibleValuesForOtherGroups(groupCells, groupIndex, SectionType.COLUMN)
 					|| this.tryToRemovePossibleValuesForOtherGroups(groupCells, groupIndex, SectionType.ROW))
 			{
+				moveDescriptionConsumer.accept("TODO: RemovePossibleValueForOtherGroupsSudokuSolverPlugin"); // TODO add move descriptive
 				return true;
 			}
 		}

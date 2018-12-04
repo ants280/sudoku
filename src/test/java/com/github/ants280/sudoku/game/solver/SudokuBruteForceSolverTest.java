@@ -64,7 +64,12 @@ public class SudokuBruteForceSolverTest
 		if (expectedValue && !testName.startsWith("X"))
 		{
 			SudokuBoard sudokuBoard = new SudokuBoard(boardString);
-			SudokuSolver logicSudokuSolver = new SudokuSolver(sudokuBoard);
+			SudokuSolver logicSudokuSolver = new SudokuLogicSolver(
+					sudokuBoard,
+					moveDescription ->
+			{
+				// no need to consume move description in test
+			});
 
 			logicSudokuSolver.initialize();
 			logicSudokuSolver.solveFast();

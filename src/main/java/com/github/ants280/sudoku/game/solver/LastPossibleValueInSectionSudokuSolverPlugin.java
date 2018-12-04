@@ -6,6 +6,7 @@ import com.github.ants280.sudoku.game.SudokuCell;
 import com.github.ants280.sudoku.game.SudokuValue;
 import java.util.Arrays;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public class LastPossibleValueInSectionSudokuSolverPlugin extends SudokuSolverPlugin
 {
@@ -13,9 +14,10 @@ public class LastPossibleValueInSectionSudokuSolverPlugin extends SudokuSolverPl
 
 	public LastPossibleValueInSectionSudokuSolverPlugin(
 			SudokuBoard sudokuBoard,
+			Consumer<String> moveDescriptionConsumer,
 			BiConsumer<SudokuCell, SudokuValue> removeNearbyPossibleValuesConsumer)
 	{
-		super(sudokuBoard);
+		super(sudokuBoard, moveDescriptionConsumer);
 
 		this.removeNearbyPossibleValuesConsumer
 				= removeNearbyPossibleValuesConsumer;
@@ -43,6 +45,16 @@ public class LastPossibleValueInSectionSudokuSolverPlugin extends SudokuSolverPl
 
 						removeNearbyPossibleValuesConsumer.accept(sudokuCell, possibleValue);
 
+						String moveDescription = String.format(
+								"Setting value of cell at [r,c]=[%d,%d] to %s "
+								+ "because it is the last place "
+								+ "in one of the sections the cell is in "
+								+ "that a %s can go.",
+								sudokuCell.getIndex(SectionType.ROW) + 1,
+								sudokuCell.getIndex(SectionType.COLUMN) + 1,
+								possibleValue.getDisplayValue(),
+								possibleValue.getDisplayValue());
+						moveDescriptionConsumer.accept(moveDescription);
 						return true;
 					}
 				}

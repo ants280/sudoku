@@ -57,8 +57,11 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 		this.sudokuBoard = sudokuBoard;
 		this.commandHistory = commandHistory;
 		this.repaintCanvasCallback = repaintCanvasCallback;
-		this.sudokuSolver = new SudokuLogicSolver(sudokuBoard);
-		this.popupDialog = new JDialog(popupOwner, "Solver", true);
+		this.sudokuSolver = new SudokuLogicSolver(sudokuBoard, moveDescription ->
+		{
+			// TODO: Consume move description
+		});
+		this.popupDialog = new JDialog(popupOwner, "Solver", false);
 		this.timerSlider = new JSlider(
 				SwingConstants.VERTICAL, // orientation
 				0, // min

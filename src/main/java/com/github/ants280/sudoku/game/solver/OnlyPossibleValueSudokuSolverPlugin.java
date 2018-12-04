@@ -1,10 +1,12 @@
 package com.github.ants280.sudoku.game.solver;
 
+import com.github.ants280.sudoku.game.SectionType;
 import com.github.ants280.sudoku.game.SudokuBoard;
 import com.github.ants280.sudoku.game.SudokuCell;
 import com.github.ants280.sudoku.game.SudokuValue;
 import java.util.Optional;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public class OnlyPossibleValueSudokuSolverPlugin extends SudokuSolverPlugin
 {
@@ -12,9 +14,10 @@ public class OnlyPossibleValueSudokuSolverPlugin extends SudokuSolverPlugin
 
 	public OnlyPossibleValueSudokuSolverPlugin(
 			SudokuBoard sudokuBoard,
+			Consumer<String> moveDescriptionConsumer,
 			BiConsumer<SudokuCell, SudokuValue> removeNearbyPossibleValuesConsumer)
 	{
-		super(sudokuBoard);
+		super(sudokuBoard, moveDescriptionConsumer);
 
 		this.removeNearbyPossibleValuesConsumer
 				= removeNearbyPossibleValuesConsumer;
@@ -38,6 +41,15 @@ public class OnlyPossibleValueSudokuSolverPlugin extends SudokuSolverPlugin
 			sudokuCell.setValue(value);
 
 			removeNearbyPossibleValuesConsumer.accept(sudokuCell, value);
+
+			String moveDescription = String.format(
+					"Setting value of cell at [r,c]=[%d,%d] to %s "
+					+ "because it is the only possible value "
+					+ "in one of its sections.",
+					sudokuCell.getIndex(SectionType.ROW) + 1,
+					sudokuCell.getIndex(SectionType.COLUMN) + 1,
+					value.getDisplayValue());
+			moveDescriptionConsumer.accept(moveDescription);
 		}
 
 		return onePossibleValueSudoukCellOptional.isPresent();

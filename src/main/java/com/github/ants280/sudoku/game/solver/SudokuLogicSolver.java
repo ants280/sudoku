@@ -3,20 +3,33 @@ package com.github.ants280.sudoku.game.solver;
 import com.github.ants280.sudoku.game.SudokuBoard;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class SudokuLogicSolver extends SudokuSolver
 {
 	private final List<SudokuSolverPlugin> solverPlugins;
 
-	public SudokuLogicSolver(SudokuBoard sudokuBoard)
+	public SudokuLogicSolver(
+			SudokuBoard sudokuBoard,
+			Consumer<String> moveDescriptionConsumer)
 	{
 		super(sudokuBoard);
 
 		this.solverPlugins = Arrays.asList(
-				new OnlyPossibleValueSudokuSolverPlugin(sudokuBoard, removeNearbyPossibleValuesConsumer),
-				new LastPossibleValueInSectionSudokuSolverPlugin(sudokuBoard, removeNearbyPossibleValuesConsumer),
-				new CullPossibleValuesSudokuSolverPlugin(sudokuBoard),
-				new RemovePossibleValueForOtherGroupsSudokuSolverPlugin(sudokuBoard));
+				new OnlyPossibleValueSudokuSolverPlugin(
+						sudokuBoard,
+						moveDescriptionConsumer,
+						removeNearbyPossibleValuesConsumer),
+				new LastPossibleValueInSectionSudokuSolverPlugin(
+						sudokuBoard,
+						moveDescriptionConsumer,
+						removeNearbyPossibleValuesConsumer),
+				new CullPossibleValuesSudokuSolverPlugin(
+						sudokuBoard,
+						moveDescriptionConsumer),
+				new RemovePossibleValueForOtherGroupsSudokuSolverPlugin(
+						sudokuBoard,
+						moveDescriptionConsumer));
 	}
 
 	@Override
