@@ -33,7 +33,6 @@ public class RemovePossibleValueForOtherGroupsSudokuSolverPlugin
 			if (this.tryToRemovePossibleValuesForOtherGroups(groupCells, groupIndex, SectionType.COLUMN)
 					|| this.tryToRemovePossibleValuesForOtherGroups(groupCells, groupIndex, SectionType.ROW))
 			{
-				moveDescriptionConsumer.accept("TODO: RemovePossibleValueForOtherGroupsSudokuSolverPlugin"); // TODO add move descriptive
 				return true;
 			}
 		}
@@ -87,6 +86,19 @@ public class RemovePossibleValueForOtherGroupsSudokuSolverPlugin
 					{
 						otherCellsInSectionType
 								.forEach(sudokuCell -> sudokuCell.togglePossibleValue(possibleValue));
+
+						String moveDescription = String.format(
+								"Removed possible value of %s from cells "
+								+ "in %s %d, but not in group %d "
+								+ "because the possible value must be "
+								+ "in group %d for that %s.",
+								possibleValue.getDisplayValue(),
+								sectionType.getDisplayValue(),
+								sectionTypeIndex,
+								groupIndex,
+								groupIndex,
+								sectionType.getDisplayValue());
+						moveDescriptionConsumer.accept(moveDescription);
 
 						return true;
 					}
