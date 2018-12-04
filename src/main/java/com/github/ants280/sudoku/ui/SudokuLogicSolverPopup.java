@@ -41,10 +41,13 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 	private final Timer timer;
 	private final JProgressBar progressBar;
 	private final JCheckBox resetPossibleValuesWhenStartingCheckBox;
+	private final JCheckBox closePopupOnSolveCheckBox;
 	private final JButton startStopButton;
 	private static final String ACTION_TIMER = "timer";
 	private static final String BUTTON_RESET_POSSIBLE_VALUES
 			= "Reset possible values";
+	private static final String BUTTON_CLOSE_SOLVER_WHEN_SOLVED
+			= "Close solver when solved";
 	private static final String BUTTON_START = "Start";
 	private static final String BUTTON_STOP = "Stop";
 	private static final int ONE_SECOND_IN_MILLIS
@@ -63,8 +66,7 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 		this.sudokuSolver = new SudokuLogicSolver(
 				sudokuBoard,
 				moveDescription -> solverTable.addRow(moveDescription));
-		// TODO: Bug: if the dialog is not modal, multiple popups can be opened, but it needs to be non-modal for undos to work! (catch-22)
-		this.popupDialog = new JDialog(popupOwner, "Solver", false);
+		this.popupDialog = new JDialog(popupOwner, "Solver", true);
 		this.timerSlider = new JSlider(
 				SwingConstants.VERTICAL, // orientation
 				0, // min
@@ -74,6 +76,8 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 		this.progressBar = new JProgressBar();
 		this.resetPossibleValuesWhenStartingCheckBox
 				= new JCheckBox(BUTTON_RESET_POSSIBLE_VALUES, true);
+		this.closePopupOnSolveCheckBox
+				= new JCheckBox(BUTTON_CLOSE_SOLVER_WHEN_SOLVED, false);
 		this.startStopButton = new JButton(BUTTON_START);
 
 		this.init();
@@ -99,11 +103,16 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 		JScrollPane solverTableScrollPane
 				= new JScrollPane(solverTable.getDisplayComponent());
 
+		JPanel checkBoxPanel = new JPanel();
+		checkBoxPanel.setLayout(new BoxLayout(checkBoxPanel, BoxLayout.X_AXIS));
+		checkBoxPanel.add(resetPossibleValuesWhenStartingCheckBox);
+		checkBoxPanel.add(closePopupOnSolveCheckBox);
+
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		panel.add(timerSlider);
 		panel.add(progressBar);
-		panel.add(resetPossibleValuesWhenStartingCheckBox);
+		panel.add(checkBoxPanel);
 		panel.add(startStopButton);
 		panel.add(solverTableScrollPane);
 		panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -166,7 +175,7 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 				if (timerSlider.getValue() == 0)
 				{
 					sudokuSolver.solveFast();
-					popupDialog.setVisible(false);
+					this.closePopupIfSolvedAndDesired();
 				}
 				else
 				{
@@ -187,8 +196,7 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 				if (!moveMade || sudokuBoard.isSolved())
 				{
 					timer.stop();
-					// TODO: Add (and initiall unselect) "close if solved" checkbox,  Chcek to see if it is selected here before closing.
-					popupDialog.setVisible(false);
+					this.closePopupIfSolvedAndDesired();
 				}
 
 				if (moveMade)
@@ -198,6 +206,15 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 				break;
 			default:
 				throw new IllegalArgumentException(actionEvent.paramString());
+		}
+	}
+
+	private void closePopupIfSolvedAndDesired()
+	{
+		if (sudokuBoard.isSolved()
+				&& closePopupOnSolveCheckBox.isSelected())
+		{
+			popupDialog.setVisible(false);
 		}
 	}
 
