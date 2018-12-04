@@ -63,6 +63,7 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 		this.sudokuSolver = new SudokuLogicSolver(
 				sudokuBoard,
 				moveDescription -> solverTable.addRow(moveDescription));
+		// TODO: Bug: if the dialog is not modal, multiple popups can be opened, but it needs to be non-modal for undos to work! (catch-22)
 		this.popupDialog = new JDialog(popupOwner, "Solver", false);
 		this.timerSlider = new JSlider(
 				SwingConstants.VERTICAL, // orientation
