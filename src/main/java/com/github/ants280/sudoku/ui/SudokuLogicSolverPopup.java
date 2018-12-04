@@ -70,7 +70,7 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 				= new JCheckBox(BUTTON_RESET_POSSIBLE_VALUES, true);
 		this.startStopButton = new JButton(BUTTON_START);
 
-		init();
+		this.init();
 	}
 
 	private void init()
