@@ -76,6 +76,7 @@ public class SudokuUndoCell extends SudokuCell
 		{
 			return false;
 		}
+
 		final SudokuUndoCell other = (SudokuUndoCell) obj;
 		return Objects.equals(this.commandHistory, other.commandHistory)
 				&& super.equals(obj);
