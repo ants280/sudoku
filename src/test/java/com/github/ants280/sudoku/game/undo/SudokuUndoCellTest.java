@@ -23,10 +23,8 @@ public class SudokuUndoCellTest
 				= new SudokuUndoCell(1, 2, 3, SudokuValue.VALUE_4, true);
 		SudokuUndoCell sudokuCell2
 				= new SudokuUndoCell(1, 2, 3, SudokuValue.VALUE_4, true);
-
 		CommandHistory<SudokuUndoCellCommand> commandHistory
 				= new CommandHistory<>(null);
-
 		sudokuCell1.setCommandHistory(commandHistory);
 		sudokuCell2.setCommandHistory(commandHistory);
 
@@ -46,5 +44,37 @@ public class SudokuUndoCellTest
 		boolean equals = sudokuCell1.equals(sudokuCell2);
 
 		Assert.assertFalse(equals);
+	}
+
+	@Test
+	public void testHashCode_sameDataAndCommandHistory()
+	{
+		SudokuUndoCell sudokuCell1
+				= new SudokuUndoCell(1, 2, 3, SudokuValue.VALUE_4, true);
+		SudokuUndoCell sudokuCell2
+				= new SudokuUndoCell(1, 2, 3, SudokuValue.VALUE_4, true);
+		CommandHistory<SudokuUndoCellCommand> commandHistory
+				= new CommandHistory<>(null);
+		sudokuCell1.setCommandHistory(commandHistory);
+		sudokuCell2.setCommandHistory(commandHistory);
+
+		int hashCode1 = sudokuCell1.hashCode();
+		int hashCode2 = sudokuCell2.hashCode();
+
+		Assert.assertEquals(hashCode2, hashCode1);
+	}
+
+	@Test
+	public void testHashCode_differentData()
+	{
+		SudokuUndoCell sudokuCell1
+				= new SudokuUndoCell(1, 2, 3, SudokuValue.VALUE_4, true);
+		SudokuUndoCell sudokuCell2
+				= new SudokuUndoCell(5, 6, 7, SudokuValue.VALUE_8, true);
+
+		int hashCode1 = sudokuCell1.hashCode();
+		int hashCode2 = sudokuCell2.hashCode();
+
+		Assert.assertNotEquals(hashCode2, hashCode1);
 	}
 }

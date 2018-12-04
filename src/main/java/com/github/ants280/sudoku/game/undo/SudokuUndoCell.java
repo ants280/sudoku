@@ -61,6 +61,7 @@ public class SudokuUndoCell extends SudokuCell
 	{
 		int hash = 3;
 		hash = 31 * hash + Objects.hashCode(this.commandHistory);
+		hash = 31 * hash + super.hashCode();
 		return hash;
 	}
 
