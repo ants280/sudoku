@@ -27,6 +27,7 @@ public class SudokuBruteForceSolver extends SudokuSolver
 	@Override
 	public boolean makeMove()
 	{
+		// The brute force solver cannot make a single move.
 		return false;
 	}
 
@@ -35,7 +36,7 @@ public class SudokuBruteForceSolver extends SudokuSolver
 	{
 		super.initialize();
 
-		canBruteForceSolve(0);
+		this.canBruteForceSolve(0);
 	}
 
 	private boolean canBruteForceSolve(int index)
