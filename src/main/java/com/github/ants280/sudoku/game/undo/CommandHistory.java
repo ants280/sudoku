@@ -81,4 +81,9 @@ public class CommandHistory<T extends Command> implements Command
 	{
 		this.enabled = enabled;
 	}
+
+	public T getMostRecentUndo()
+	{
+		return undoHistory.peek();
+	}
 }

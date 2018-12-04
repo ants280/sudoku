@@ -52,6 +52,7 @@ public class SudokuFrame
 		CommandHistory<SudokuUndoCellCommand> commandHistory
 				= new CommandHistory<>(this::undoRedoChanged);
 		SudokuBoard board = new SudokuUndoBoard(commandHistory);
+		board.resetFrom(new SudokuBoard("{000086200000000069060039071140060920020070040037040015290610080680000000001520000}"));
 		SudokuDisplayComponent sudokuDisplayComponent
 				= new SudokuDisplayComponent(board);
 

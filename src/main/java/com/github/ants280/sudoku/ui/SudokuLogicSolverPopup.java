@@ -22,6 +22,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
@@ -34,6 +35,7 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 	private final CommandHistory<SudokuUndoCellCommand> commandHistory;
 	private final Runnable repaintCanvasCallback;
 	private final SudokuSolver sudokuSolver;
+	private final SudokuLogicSolverTable solverTable;
 	private final JDialog popupDialog;
 	private final JSlider timerSlider;
 	private final Timer timer;
@@ -57,10 +59,10 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 		this.sudokuBoard = sudokuBoard;
 		this.commandHistory = commandHistory;
 		this.repaintCanvasCallback = repaintCanvasCallback;
-		this.sudokuSolver = new SudokuLogicSolver(sudokuBoard, moveDescription ->
-		{
-			// TODO: Consume move description
-		});
+		this.solverTable = new SudokuLogicSolverTable(commandHistory);
+		this.sudokuSolver = new SudokuLogicSolver(
+				sudokuBoard,
+				moveDescription -> solverTable.addRow(moveDescription));
 		this.popupDialog = new JDialog(popupOwner, "Solver", false);
 		this.timerSlider = new JSlider(
 				SwingConstants.VERTICAL, // orientation
@@ -93,12 +95,16 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 
 		startStopButton.addActionListener(this);
 
+		JScrollPane solverTableScrollPane
+				= new JScrollPane(solverTable.getDisplayComponent());
+
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		panel.add(timerSlider);
 		panel.add(progressBar);
 		panel.add(resetPossibleValuesWhenStartingCheckBox);
 		panel.add(startStopButton);
+		panel.add(solverTableScrollPane);
 		panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
 		popupDialog.add(panel);
@@ -180,6 +186,7 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 				if (!moveMade || sudokuBoard.isSolved())
 				{
 					timer.stop();
+					// TODO: Add (and initiall unselect) "close if solved" checkbox,  Chcek to see if it is selected here before closing.
 					popupDialog.setVisible(false);
 				}
 
