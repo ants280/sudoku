@@ -57,7 +57,7 @@ public class SudokuSolverTest
 	public void test()
 	{
 		SudokuBoard sudokuBoard = new SudokuBoard(boardString);
-		SudokuSolver sudokuSolver = new SudokuSolver(sudokuBoard);
+		SudokuSolver sudokuSolver = new SudokuLogicSolver(sudokuBoard);
 
 		sudokuSolver.initialize();
 		sudokuSolver.solveFast();

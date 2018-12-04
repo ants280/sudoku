@@ -1,6 +1,7 @@
 package com.github.ants280.sudoku.ui;
 
 import com.github.ants280.sudoku.game.SudokuBoard;
+import com.github.ants280.sudoku.game.solver.SudokuLogicSolver;
 import com.github.ants280.sudoku.game.solver.SudokuSolver;
 import com.github.ants280.sudoku.game.undo.CommandHistory;
 import com.github.ants280.sudoku.game.undo.SudokuUndoCellCommand;
@@ -56,7 +57,7 @@ public class SudokuSolverPopup implements ActionListener, ChangeListener
 		this.sudokuBoard = sudokuBoard;
 		this.commandHistory = commandHistory;
 		this.repaintCanvasCallback = repaintCanvasCallback;
-		this.sudokuSolver = new SudokuSolver(sudokuBoard);
+		this.sudokuSolver = new SudokuLogicSolver(sudokuBoard);
 		this.popupDialog = new JDialog(popupOwner, "Solver", true);
 		this.timerSlider = new JSlider(
 				SwingConstants.VERTICAL, // orientation
