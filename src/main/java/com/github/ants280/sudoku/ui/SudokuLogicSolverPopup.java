@@ -28,7 +28,7 @@ import javax.swing.Timer;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-public class SudokuSolverPopup implements ActionListener, ChangeListener
+public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 {
 	private final SudokuBoard sudokuBoard;
 	private final CommandHistory<SudokuUndoCellCommand> commandHistory;
@@ -48,7 +48,7 @@ public class SudokuSolverPopup implements ActionListener, ChangeListener
 	private static final int ONE_SECOND_IN_MILLIS
 			= (int) TimeUnit.MILLISECONDS.convert(1, TimeUnit.SECONDS);
 
-	public SudokuSolverPopup(
+	public SudokuLogicSolverPopup(
 			JFrame popupOwner,
 			SudokuBoard sudokuBoard,
 			CommandHistory<SudokuUndoCellCommand> commandHistory,

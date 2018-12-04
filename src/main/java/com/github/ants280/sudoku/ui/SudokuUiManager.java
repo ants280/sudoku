@@ -319,8 +319,8 @@ public class SudokuUiManager implements ActionListener
 
 	private void solveLogic()
 	{
-		SudokuSolverPopup sudokuSolverPopup
-				= new SudokuSolverPopup(
+		SudokuLogicSolverPopup sudokuSolverPopup
+				= new SudokuLogicSolverPopup(
 						frame,
 						board,
 						commandHistory,
