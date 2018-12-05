@@ -2,12 +2,14 @@ package com.github.ants280.sudoku.ui;
 
 import com.github.ants280.sudoku.game.undo.CommandHistory;
 import com.github.ants280.sudoku.game.undo.SudokuUndoCellCommand;
+import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.stream.IntStream;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 public class SudokuLogicSolverTable
@@ -40,10 +42,14 @@ public class SudokuLogicSolverTable
 		this.table = new JTable(tableModel);
 
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		table.getColumn(moveDescriptionColumnHeader)
+				.setCellRenderer(new ValueToolipTableCellRenderer());
+
 		// must be before next statement:
 		int undoxIndexColumnIndex = table.getColumnModel()
 				.getColumnIndex(undoIndexColumnHeader);
 		table.removeColumn(table.getColumn(undoIndexColumnHeader));
+
 		table.addMouseListener(new SudokuLogicTableMouseListener(
 				table,
 				undoxIndexColumnIndex,
@@ -125,6 +131,33 @@ public class SudokuLogicSolverTable
 
 				repaintCanvasCallback.run();
 			}
+		}
+	}
+
+	private static class ValueToolipTableCellRenderer
+			extends DefaultTableCellRenderer
+	{
+		@Override
+		public Component getTableCellRendererComponent(
+				JTable table,
+				Object value,
+				boolean isSelected,
+				boolean hasFocus,
+				int row,
+				int column)
+		{
+			if (value != null)
+			{
+				this.setToolTipText(value.toString());
+			}
+
+			return super.getTableCellRendererComponent(
+					table,
+					value,
+					isSelected,
+					hasFocus,
+					row,
+					column);
 		}
 	}
 }
