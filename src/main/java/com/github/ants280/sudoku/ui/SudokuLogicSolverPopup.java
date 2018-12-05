@@ -6,6 +6,7 @@ import com.github.ants280.sudoku.game.solver.SudokuSolver;
 import com.github.ants280.sudoku.game.undo.CommandHistory;
 import com.github.ants280.sudoku.game.undo.SudokuUndoCellCommand;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -109,6 +110,7 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 		checkBoxPanel.add(closePopupOnSolveCheckBox);
 
 		JPanel solverTablePanel = new JPanel();
+		solverTablePanel.setPreferredSize(new Dimension(100, 200));
 		solverTablePanel.setLayout(
 				new BoxLayout(solverTablePanel, BoxLayout.Y_AXIS));
 		solverTablePanel.add(new JLabel(

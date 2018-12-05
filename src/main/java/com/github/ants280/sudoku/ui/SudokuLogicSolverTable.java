@@ -2,7 +2,6 @@ package com.github.ants280.sudoku.ui;
 
 import com.github.ants280.sudoku.game.undo.CommandHistory;
 import com.github.ants280.sudoku.game.undo.SudokuUndoCellCommand;
-import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -40,9 +39,8 @@ public class SudokuLogicSolverTable
 		};
 		this.table = new JTable(tableModel);
 
-		table.setPreferredScrollableViewportSize(new Dimension(80, 50));
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		// must be befor next statement:
+		// must be before next statement:
 		int undoxIndexColumnIndex = table.getColumnModel()
 				.getColumnIndex(undoIndexColumnHeader);
 		table.removeColumn(table.getColumn(undoIndexColumnHeader));
