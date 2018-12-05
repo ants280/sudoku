@@ -185,7 +185,7 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 				if (timerSlider.getValue() == 0)
 				{
 					sudokuSolver.solveFast();
-					this.closePopupIfSolvedAndDesired();
+					this.handleBoardSolved();
 					solverTable.setEnabled(true);
 				}
 				else
@@ -209,7 +209,7 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 				if (!moveMade || sudokuBoard.isSolved())
 				{
 					timer.stop();
-					this.closePopupIfSolvedAndDesired();
+					this.handleBoardSolved();
 					solverTable.setEnabled(true);
 				}
 
@@ -223,12 +223,18 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 		}
 	}
 
-	private void closePopupIfSolvedAndDesired()
+	private void handleBoardSolved()
 	{
-		if (sudokuBoard.isSolved()
-				&& closePopupOnSolveCheckBox.isSelected())
+		if (sudokuBoard.isSolved())
 		{
-			popupDialog.setVisible(false);
+			if (closePopupOnSolveCheckBox.isSelected())
+			{
+				popupDialog.setVisible(false);
+			}
+			else
+			{
+				solverTable.addRow("Board Solved");
+			}
 		}
 	}
 
