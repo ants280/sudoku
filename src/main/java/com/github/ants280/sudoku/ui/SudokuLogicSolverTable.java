@@ -103,7 +103,7 @@ public class SudokuLogicSolverTable
 			{
 				int rowAtPoint = table.rowAtPoint(
 						mouseEvent.getPoint());
-				undoToRow(rowAtPoint);
+				this.undoToRow(rowAtPoint);
 			}
 		}
 
