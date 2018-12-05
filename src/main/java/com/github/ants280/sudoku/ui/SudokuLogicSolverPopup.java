@@ -38,6 +38,7 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 	private final Runnable repaintCanvasCallback;
 	private final SudokuSolver sudokuSolver;
 	private final SudokuLogicSolverTable solverTable;
+	private final JPanel solverTablePanel;
 	private final JDialog popupDialog;
 	private final JSlider timerSlider;
 	private final Timer timer;
@@ -67,6 +68,7 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 		this.solverTable = new SudokuLogicSolverTable(
 				commandHistory,
 				repaintCanvasCallback);
+		this.solverTablePanel = new JPanel();
 		this.sudokuSolver = new SudokuLogicSolver(
 				sudokuBoard,
 				solverTable::addRow);
@@ -104,8 +106,7 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 
 		startStopButton.addActionListener(this);
 
-		JPanel solverTablePanel = new JPanel();
-		solverTablePanel.setPreferredSize(new Dimension(200, 200));
+		solverTablePanel.setPreferredSize(new Dimension(300, 200));
 		solverTablePanel.setLayout(
 				new BoxLayout(solverTablePanel, BoxLayout.Y_AXIS));
 		solverTablePanel.add(new JLabel(toHtml(
@@ -114,6 +115,7 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 		solverTablePanel.add(
 				new JScrollPane(solverTable.getDisplayComponent()));
 		solverTablePanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+		solverTablePanel.setVisible(false);
 
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -214,6 +216,11 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 
 				if (moveMade)
 				{
+					if (!solverTablePanel.isVisible())
+					{
+						solverTablePanel.setVisible(true);
+						popupDialog.pack();
+					}
 					repaintCanvasCallback.run();
 				}
 				break;
