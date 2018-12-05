@@ -63,8 +63,8 @@ public class SudokuUndoCellCommand implements Command
 
 		final SudokuUndoCellCommand other = (SudokuUndoCellCommand) obj;
 		return Objects.equals(this.sudokuCell, other.sudokuCell)
-				&& this.sudokuCellChangeType != other.sudokuCellChangeType
-				&& this.initialValue != other.initialValue
-				&& this.updatedValue != other.updatedValue;
+				&& this.sudokuCellChangeType == other.sudokuCellChangeType
+				&& this.initialValue == other.initialValue
+				&& this.updatedValue == other.updatedValue;
 	}
 }
