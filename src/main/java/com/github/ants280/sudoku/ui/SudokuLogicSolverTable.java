@@ -43,7 +43,7 @@ public class SudokuLogicSolverTable
 
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.getColumn(moveDescriptionColumnHeader)
-				.setCellRenderer(new ValueToolipTableCellRenderer());
+				.setCellRenderer(new ValueToolTipTableCellRenderer());
 
 		// must be before next statement:
 		int undoxIndexColumnIndex = table.getColumnModel()
@@ -134,7 +134,7 @@ public class SudokuLogicSolverTable
 		}
 	}
 
-	private static class ValueToolipTableCellRenderer
+	private static class ValueToolTipTableCellRenderer
 			extends DefaultTableCellRenderer
 	{
 		private static final long serialVersionUID = 1L;
