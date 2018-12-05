@@ -143,6 +143,8 @@ public class SudokuLogicSolverTable
 		}
 	}
 
+	// Have to add tooltip somehow, even if the inheritance depth = 6.
+	@SuppressWarnings("squid:MaximumInheritanceDepth")
 	private static class ValueToolTipTableCellRenderer
 			extends DefaultTableCellRenderer
 	{
