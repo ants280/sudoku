@@ -61,7 +61,7 @@ public class CullPossibleValuesSudokuSolverPlugin extends SudokuSolverPlugin
 									+ "from some cells in %s %d "
 									+ "because other cells in the %s "
 									+ "must have possible values of %s",
-									possibleValue,
+									possibleValue.getDisplayValue(),
 									sectionType.getDisplayValue(),
 									index + 1,
 									sectionType.getDisplayValue(),
