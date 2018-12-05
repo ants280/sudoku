@@ -98,18 +98,12 @@ public class SudokuLogicSolverTable
 		@Override
 		public void mouseReleased(MouseEvent mouseEvent)
 		{
-			switch (mouseEvent.getButton())
+			if (mouseEvent.getButton() == MouseEvent.BUTTON1
+					&& mouseEvent.getClickCount() == 2)
 			{
-				case MouseEvent.BUTTON1: // left mouse button
-					if (mouseEvent.getClickCount() == 2)
-					{
-						int rowAtPoint = table.rowAtPoint(
-								mouseEvent.getPoint());
-						undoToRow(rowAtPoint);
-					}
-					break;
-				default:
-					break;
+				int rowAtPoint = table.rowAtPoint(
+						mouseEvent.getPoint());
+				undoToRow(rowAtPoint);
 			}
 		}
 
