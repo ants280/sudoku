@@ -5,6 +5,7 @@ import com.github.ants280.sudoku.game.solver.SudokuLogicSolver;
 import com.github.ants280.sudoku.game.solver.SudokuSolver;
 import com.github.ants280.sudoku.game.undo.CommandHistory;
 import com.github.ants280.sudoku.game.undo.SudokuUndoCellCommand;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -100,13 +101,20 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 
 		startStopButton.addActionListener(this);
 
-		JScrollPane solverTableScrollPane
-				= new JScrollPane(solverTable.getDisplayComponent());
-
 		JPanel checkBoxPanel = new JPanel();
 		checkBoxPanel.setLayout(new BoxLayout(checkBoxPanel, BoxLayout.X_AXIS));
 		checkBoxPanel.add(resetPossibleValuesWhenStartingCheckBox);
 		checkBoxPanel.add(closePopupOnSolveCheckBox);
+
+		JPanel solverTablePanel = new JPanel();
+		solverTablePanel.setLayout(
+				new BoxLayout(solverTablePanel, BoxLayout.Y_AXIS));
+		solverTablePanel.add(new JLabel(
+				"Double click an entry to jump to the state of the board\n"
+				+ "right before the solver made the move(s)."));
+		solverTablePanel.add(
+				new JScrollPane(solverTable.getDisplayComponent()));
+		solverTablePanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -114,7 +122,7 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 		panel.add(progressBar);
 		panel.add(checkBoxPanel);
 		panel.add(startStopButton);
-		panel.add(solverTableScrollPane);
+		panel.add(solverTablePanel);
 		panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
 		popupDialog.add(panel);

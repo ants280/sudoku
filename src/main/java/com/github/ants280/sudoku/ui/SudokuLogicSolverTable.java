@@ -2,17 +2,13 @@ package com.github.ants280.sudoku.ui;
 
 import com.github.ants280.sudoku.game.undo.CommandHistory;
 import com.github.ants280.sudoku.game.undo.SudokuUndoCellCommand;
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.AbstractCellEditor;
-import javax.swing.JButton;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellEditor;
-import javax.swing.table.TableCellRenderer;
 
 public class SudokuLogicSolverTable
 {
@@ -26,7 +22,6 @@ public class SudokuLogicSolverTable
 
 		Object[] columnNames = new Object[]
 		{
-			"Jump",
 			"Move Description"
 		};
 		this.tableModel = new DefaultTableModel(columnNames, 0)
@@ -39,18 +34,17 @@ public class SudokuLogicSolverTable
 		};
 		this.table = new JTable(tableModel);
 
-		table.setPreferredScrollableViewportSize(new Dimension(500, 150));
+		table.setPreferredScrollableViewportSize(new Dimension(80, 50));
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		table.getColumn(columnNames[0])
-				.setCellRenderer(new ButtonCellRenderer(table));
+		table.addMouseListener(new SudokuLogicTableMouseListener(table));
 	}
 
 	public void addRow(String moveDescription)
 	{
 		Object[] rowData = new Object[]
 		{
-			commandHistory.getMostRecentUndo(),
-			moveDescription
+			moveDescription,
+			commandHistory.getUndoCount()
 		};
 
 		tableModel.addRow(rowData);
@@ -61,55 +55,30 @@ public class SudokuLogicSolverTable
 		return table;
 	}
 
-	private static class ButtonCellRenderer
-			extends AbstractCellEditor
-			implements TableCellEditor, TableCellRenderer, ActionListener
+	private static class SudokuLogicTableMouseListener
+			extends MouseAdapter
+			implements MouseListener
 	{
 		private final JTable table;
-		private final JButton button;
 
-		private ButtonCellRenderer(JTable table)
+		public SudokuLogicTableMouseListener(JTable table)
 		{
 			this.table = table;
-			this.button = new JButton("Jump here");
-
-			button.addActionListener(this);
-			button.setBorderPainted(false);
 		}
 
 		@Override
-		public Object getCellEditorValue()
+		public void mouseReleased(MouseEvent mouseEvent)
 		{
-			return button;
-		}
-
-		@Override
-		public Component getTableCellRendererComponent(
-				JTable table,
-				Object value,
-				boolean isSelected,
-				boolean hasFocus,
-				int row,
-				int column)
-		{
-			return button;
-		}
-
-		@Override
-		public Component getTableCellEditorComponent(
-				JTable table,
-				Object value,
-				boolean isSelected,
-				int row,
-				int column)
-		{
-			return button;
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent actionEvent)
-		{
-			System.out.println("Button clicked");
+			switch (mouseEvent.getButton())
+			{
+				case MouseEvent.BUTTON1: // left mouse button
+					if (mouseEvent.getClickCount() == 2)
+					{
+						int rowAtPoint = table.rowAtPoint(mouseEvent.getPoint());
+						System.out.println("Double click at row " + rowAtPoint); // TODO undo/redo to index
+					}
+					break;
+			}
 		}
 	}
 }
