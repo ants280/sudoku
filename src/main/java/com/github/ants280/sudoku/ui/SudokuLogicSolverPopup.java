@@ -68,7 +68,7 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 				repaintCanvasCallback);
 		this.sudokuSolver = new SudokuLogicSolver(
 				sudokuBoard,
-				moveDescription -> solverTable.addRow(moveDescription));
+				solverTable::addRow);
 		this.popupDialog = new JDialog(popupOwner, "Solver", true);
 		this.timerSlider = new JSlider(
 				SwingConstants.VERTICAL, // orientation
