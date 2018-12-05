@@ -55,6 +55,11 @@ public class SudokuLogicSolverTable
 		return table;
 	}
 
+	public void setEnabled(boolean enabled)
+	{
+		table.setEnabled(enabled);
+	}
+
 	private static class SudokuLogicTableMouseListener
 			extends MouseAdapter
 			implements MouseListener

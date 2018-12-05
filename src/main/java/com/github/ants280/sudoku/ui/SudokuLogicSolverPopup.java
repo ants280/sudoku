@@ -184,14 +184,14 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 				{
 					sudokuSolver.solveFast();
 					this.closePopupIfSolvedAndDesired();
-					solverTable.getDisplayComponent().setEnabled(true);
+					solverTable.setEnabled(true);
 				}
 				else
 				{
 					timer.start();
 					startStopButton.setText(BUTTON_STOP);
 					resetPossibleValuesWhenStartingCheckBox.setEnabled(false);
-					solverTable.getDisplayComponent().setEnabled(false);
+					solverTable.setEnabled(false);
 				}
 				repaintCanvasCallback.run();
 				break;
@@ -199,7 +199,7 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 				timer.stop();
 				startStopButton.setText(BUTTON_START);
 				resetPossibleValuesWhenStartingCheckBox.setEnabled(true);
-				solverTable.getDisplayComponent().setEnabled(true);
+				solverTable.setEnabled(true);
 				break;
 			case ACTION_TIMER:
 				boolean moveMade = sudokuSolver.makeMove();
@@ -208,7 +208,7 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 				{
 					timer.stop();
 					this.closePopupIfSolvedAndDesired();
-					solverTable.getDisplayComponent().setEnabled(true);
+					solverTable.setEnabled(true);
 				}
 
 				if (moveMade)
