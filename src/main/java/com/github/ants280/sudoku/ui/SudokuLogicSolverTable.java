@@ -127,18 +127,11 @@ public class SudokuLogicSolverTable
 			System.out.printf("%sing next %d commands%n", (delta < 0 ? "undo" : "redo"), Math.abs(delta));
 			if (delta != 0)
 			{
+				Runnable action = delta < 0
+						? commandHistory::undo
+						: commandHistory::redo;
 				IntStream.range(0, Math.abs(delta))
-						.forEach(i ->
-						{
-							if (delta < 0)
-							{
-								commandHistory.undo();
-							}
-							else
-							{
-								commandHistory.redo();
-							}
-						});
+						.forEach(i -> action.run());
 
 				repaintCanvasCallback.run();
 			}
