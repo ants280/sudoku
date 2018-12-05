@@ -41,10 +41,6 @@ public class LastPossibleValueInSectionSudokuSolverPlugin extends SudokuSolverPl
 
 					if (onlyPossibleValueInASection)
 					{
-						sudokuCell.setValue(possibleValue);
-
-						removeNearbyPossibleValuesConsumer.accept(sudokuCell, possibleValue);
-
 						String moveDescription = String.format(
 								"Setting value of cell at [r,c]=[%d,%d] to %s "
 								+ "because it is the last place "
@@ -55,6 +51,11 @@ public class LastPossibleValueInSectionSudokuSolverPlugin extends SudokuSolverPl
 								possibleValue.getDisplayValue(),
 								possibleValue.getDisplayValue());
 						moveDescriptionConsumer.accept(moveDescription);
+
+						sudokuCell.setValue(possibleValue);
+
+						removeNearbyPossibleValuesConsumer.accept(sudokuCell, possibleValue);
+
 						return true;
 					}
 				}

@@ -84,9 +84,6 @@ public class RemovePossibleValueForOtherGroupsSudokuSolverPlugin
 
 					if (!otherCellsInSectionType.isEmpty())
 					{
-						otherCellsInSectionType
-								.forEach(sudokuCell -> sudokuCell.togglePossibleValue(possibleValue));
-
 						String moveDescription = String.format(
 								"Removed possible value of %s from cells "
 								+ "in %s %d, but not in group %d "
@@ -99,6 +96,10 @@ public class RemovePossibleValueForOtherGroupsSudokuSolverPlugin
 								groupIndex,
 								sectionType.getDisplayValue());
 						moveDescriptionConsumer.accept(moveDescription);
+
+						otherCellsInSectionType
+								.forEach(sudokuCell -> sudokuCell.togglePossibleValue(possibleValue));
+
 
 						return true;
 					}

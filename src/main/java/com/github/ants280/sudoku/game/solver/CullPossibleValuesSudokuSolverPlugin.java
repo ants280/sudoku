@@ -56,9 +56,6 @@ public class CullPossibleValuesSudokuSolverPlugin extends SudokuSolverPlugin
 
 						if (!sudokuCellsToCull.isEmpty())
 						{
-							sudokuCellsToCull.forEach(sudokuCell
-									-> sudokuCell.togglePossibleValue(possibleValue));
-
 							String moveDescription = String.format(
 									"Removed possible value of %s "
 									+ "from some cells in %s %d "
@@ -72,6 +69,9 @@ public class CullPossibleValuesSudokuSolverPlugin extends SudokuSolverPlugin
 											.map(SudokuValue::getDisplayValue)
 											.collect(Collectors.toList()));
 							moveDescriptionConsumer.accept(moveDescription);
+
+							sudokuCellsToCull.forEach(sudokuCell
+									-> sudokuCell.togglePossibleValue(possibleValue));
 
 							return true;
 						}

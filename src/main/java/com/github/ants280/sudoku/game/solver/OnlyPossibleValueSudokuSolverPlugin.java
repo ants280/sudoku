@@ -38,10 +38,6 @@ public class OnlyPossibleValueSudokuSolverPlugin extends SudokuSolverPlugin
 			SudokuCell sudokuCell = onePossibleValueSudoukCellOptional.get();
 			SudokuValue value = sudokuCell.getPossibleValues().iterator().next();
 
-			sudokuCell.setValue(value);
-
-			removeNearbyPossibleValuesConsumer.accept(sudokuCell, value);
-
 			String moveDescription = String.format(
 					"Setting value of cell at [r,c]=[%d,%d] to %s "
 					+ "because it is the only possible value "
@@ -50,6 +46,10 @@ public class OnlyPossibleValueSudokuSolverPlugin extends SudokuSolverPlugin
 					sudokuCell.getIndex(SectionType.COLUMN) + 1,
 					value.getDisplayValue());
 			moveDescriptionConsumer.accept(moveDescription);
+
+			sudokuCell.setValue(value);
+
+			removeNearbyPossibleValuesConsumer.accept(sudokuCell, value);
 		}
 
 		return onePossibleValueSudoukCellOptional.isPresent();
