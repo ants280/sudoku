@@ -20,9 +20,12 @@ public class SudokuLogicSolverTable
 	{
 		this.commandHistory = commandHistory;
 
+		String moveDescriptionColumnHeader = "Move Description";
+		String undoIndexColumnHeader = "Undo Index";
 		Object[] columnNames = new Object[]
 		{
-			"Move Description"
+			moveDescriptionColumnHeader,
+			undoIndexColumnHeader
 		};
 		this.tableModel = new DefaultTableModel(columnNames, 0)
 		{
@@ -36,7 +39,12 @@ public class SudokuLogicSolverTable
 
 		table.setPreferredScrollableViewportSize(new Dimension(80, 50));
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		table.addMouseListener(new SudokuLogicTableMouseListener(table));
+		// must be befor next statement:
+		int undoxIndexColumnIndex = table.getColumnModel()
+				.getColumnIndex(undoIndexColumnHeader);
+		table.removeColumn(table.getColumn(undoIndexColumnHeader));
+		table.addMouseListener(new SudokuLogicTableMouseListener(
+				table, undoxIndexColumnIndex));
 	}
 
 	public void addRow(String moveDescription)
@@ -65,10 +73,14 @@ public class SudokuLogicSolverTable
 			implements MouseListener
 	{
 		private final JTable table;
+		private final int undoIndexColumnIndex;
 
-		public SudokuLogicTableMouseListener(JTable table)
+		public SudokuLogicTableMouseListener(
+				JTable table,
+				int undoIndexColumnIndex)
 		{
 			this.table = table;
+			this.undoIndexColumnIndex = undoIndexColumnIndex;
 		}
 
 		@Override
@@ -79,11 +91,22 @@ public class SudokuLogicSolverTable
 				case MouseEvent.BUTTON1: // left mouse button
 					if (mouseEvent.getClickCount() == 2)
 					{
-						int rowAtPoint = table.rowAtPoint(mouseEvent.getPoint());
-						System.out.println("Double click at row " + rowAtPoint); // TODO undo/redo to index
+						int rowAtPoint = table.rowAtPoint(
+								mouseEvent.getPoint());
+						undoToRow(rowAtPoint);
 					}
 					break;
+				default:
+					break;
 			}
+		}
+
+		private void undoToRow(int rowNumber)
+		{
+			Object valueAt = table.getModel().getValueAt(
+					rowNumber,
+					undoIndexColumnIndex);
+			System.out.println("Double click at row " + rowNumber + "Undo number = " + valueAt); // TODO
 		}
 	}
 }
