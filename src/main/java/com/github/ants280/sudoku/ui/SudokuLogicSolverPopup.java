@@ -182,6 +182,7 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 					timer.start();
 					startStopButton.setText(BUTTON_STOP);
 					resetPossibleValuesWhenStartingCheckBox.setEnabled(false);
+					solverTable.getDisplayComponent().setEnabled(false);
 				}
 				repaintCanvasCallback.run();
 				break;
@@ -189,6 +190,7 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 				timer.stop();
 				startStopButton.setText(BUTTON_START);
 				resetPossibleValuesWhenStartingCheckBox.setEnabled(true);
+				solverTable.getDisplayComponent().setEnabled(true);
 				break;
 			case ACTION_TIMER:
 				boolean moveMade = sudokuSolver.makeMove();
