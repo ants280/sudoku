@@ -113,12 +113,10 @@ public class SudokuLogicSolverTable
 					rowNumber,
 					undoIndexColumnIndex);
 			int undoIndex = Integer.parseInt(undoIndexColumnValue.toString());
-			System.out.println("Double click at row " + rowNumber + "Undo number = " + undoIndex); // TODO
 
 			int currentUndoCount = commandHistory.getUndoCount();
 			int delta = undoIndex - currentUndoCount;
 
-			System.out.printf("%sing next %d commands%n", (delta < 0 ? "undo" : "redo"), Math.abs(delta));
 			if (delta != 0)
 			{
 				Runnable action = delta < 0
