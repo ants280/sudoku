@@ -47,9 +47,9 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 	private final JButton startStopButton;
 	private static final String ACTION_TIMER = "timer";
 	private static final String BUTTON_RESET_POSSIBLE_VALUES
-			= "Reset possible values";
+			= toHtml("Reset possible values");
 	private static final String BUTTON_CLOSE_SOLVER_WHEN_SOLVED
-			= "Close solver when solved";
+			= toHtml("Close solver when solved");
 	private static final String BUTTON_START = "Start";
 	private static final String BUTTON_STOP = "Stop";
 	private static final int ONE_SECOND_IN_MILLIS
@@ -104,18 +104,13 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 
 		startStopButton.addActionListener(this);
 
-		JPanel checkBoxPanel = new JPanel();
-		checkBoxPanel.setLayout(new BoxLayout(checkBoxPanel, BoxLayout.X_AXIS));
-		checkBoxPanel.add(resetPossibleValuesWhenStartingCheckBox);
-		checkBoxPanel.add(closePopupOnSolveCheckBox);
-
 		JPanel solverTablePanel = new JPanel();
-		solverTablePanel.setPreferredSize(new Dimension(100, 200));
+		solverTablePanel.setPreferredSize(new Dimension(200, 200));
 		solverTablePanel.setLayout(
 				new BoxLayout(solverTablePanel, BoxLayout.Y_AXIS));
-		solverTablePanel.add(new JLabel(
-				"Double click an entry to jump to the state of the board\n"
-				+ "right before the solver made the move(s)."));
+		solverTablePanel.add(new JLabel(toHtml(
+				"Double click an entry below to jump to the state of the "
+				+ "board right before the solver made the move(s).")));
 		solverTablePanel.add(
 				new JScrollPane(solverTable.getDisplayComponent()));
 		solverTablePanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
@@ -124,7 +119,8 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		panel.add(timerSlider);
 		panel.add(progressBar);
-		panel.add(checkBoxPanel);
+		panel.add(resetPossibleValuesWhenStartingCheckBox);
+		panel.add(closePopupOnSolveCheckBox);
 		panel.add(startStopButton);
 		panel.add(solverTablePanel);
 		panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -245,6 +241,11 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 	public void stateChanged(ChangeEvent changeEvent)
 	{
 		timer.setDelay(timerSlider.getValue());
+	}
+
+	private static String toHtml(String text)
+	{
+		return String.format("<html>%s</html>", text);
 	}
 
 	private static class StopTimerWindowListener
