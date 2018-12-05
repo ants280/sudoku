@@ -31,14 +31,7 @@ public class SudokuLogicSolverTable
 			moveDescriptionColumnHeader,
 			undoIndexColumnHeader
 		};
-		this.tableModel = new DefaultTableModel(columnNames, 0)
-		{
-			@Override
-			public boolean isCellEditable(int row, int column)
-			{
-				return false;
-			}
-		};
+		this.tableModel = new UneditableTableModel(columnNames);
 		this.table = new JTable(tableModel);
 
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -131,6 +124,22 @@ public class SudokuLogicSolverTable
 
 				repaintCanvasCallback.run();
 			}
+		}
+	}
+
+	private static class UneditableTableModel extends DefaultTableModel
+	{
+		private static final long serialVersionUID = 1L;
+
+		public UneditableTableModel(Object[] columnNames)
+		{
+			super(columnNames, 0);
+		}
+
+		@Override
+		public boolean isCellEditable(int row, int column)
+		{
+			return false;
 		}
 	}
 
