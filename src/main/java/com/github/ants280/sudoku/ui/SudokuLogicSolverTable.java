@@ -137,6 +137,8 @@ public class SudokuLogicSolverTable
 	private static class ValueToolipTableCellRenderer
 			extends DefaultTableCellRenderer
 	{
+		private static final long serialVersionUID = 1L;
+
 		@Override
 		public Component getTableCellRendererComponent(
 				JTable table,
