@@ -133,6 +133,7 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 		popupDialog.pack();
 		popupDialog.setLocationRelativeTo(popupDialog.getParent());
 		popupDialog.addWindowListener(new StopTimerWindowListener(timer));
+		popupDialog.setResizable(true);
 	}
 
 	private Dictionary<Integer, JLabel> createLabelTable()
