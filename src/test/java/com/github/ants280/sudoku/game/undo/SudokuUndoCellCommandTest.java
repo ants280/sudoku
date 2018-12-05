@@ -9,13 +9,30 @@ public class SudokuUndoCellCommandTest
 	@Test
 	public void testUndo_notLoggedToCommandHistory()
 	{
-		// TODO
+		CommandHistory<SudokuUndoCellCommand> commandHistory = new CommandHistory<>(null);
+		SudokuUndoCell sudokuUndoCell = new SudokuUndoCell(1, 2, 3, SudokuValue.VALUE_3, false);
+		sudokuUndoCell.setCommandHistory(commandHistory);
+		SudokuUndoCellCommand command = new SudokuUndoCellCommand(sudokuUndoCell, SudokuCellChangeType.SET_VALUE, SudokuValue.VALUE_1, SudokuValue.VALUE_2);
+
+		command.undo();
+
+		Assert.assertEquals(0, commandHistory.getUndoCount());
+		Assert.assertEquals(SudokuValue.VALUE_1, sudokuUndoCell.getValue());
 	}
 
 	@Test
 	public void testRedo_notLoggedToCommandHistory()
 	{
-		// TODO
+		CommandHistory<SudokuUndoCellCommand> commandHistory = new CommandHistory<>(null);
+		SudokuUndoCell sudokuUndoCell = new SudokuUndoCell(1, 2, 3, SudokuValue.VALUE_3, false);
+		sudokuUndoCell.setCommandHistory(commandHistory);
+		SudokuUndoCellCommand command = new SudokuUndoCellCommand(sudokuUndoCell, SudokuCellChangeType.SET_VALUE, SudokuValue.VALUE_1, SudokuValue.VALUE_2);
+
+		command.undo();
+		command.redo();
+
+		Assert.assertEquals(0, commandHistory.getUndoCount());
+		Assert.assertEquals(SudokuValue.VALUE_2, sudokuUndoCell.getValue());
 	}
 
 	@Test
