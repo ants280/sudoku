@@ -184,6 +184,7 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 				{
 					sudokuSolver.solveFast();
 					this.closePopupIfSolvedAndDesired();
+					solverTable.getDisplayComponent().setEnabled(true);
 				}
 				else
 				{
@@ -207,6 +208,7 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 				{
 					timer.stop();
 					this.closePopupIfSolvedAndDesired();
+					solverTable.getDisplayComponent().setEnabled(true);
 				}
 
 				if (moveMade)
