@@ -63,7 +63,9 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 		this.sudokuBoard = sudokuBoard;
 		this.commandHistory = commandHistory;
 		this.repaintCanvasCallback = repaintCanvasCallback;
-		this.solverTable = new SudokuLogicSolverTable(commandHistory);
+		this.solverTable = new SudokuLogicSolverTable(
+				commandHistory,
+				repaintCanvasCallback);
 		this.sudokuSolver = new SudokuLogicSolver(
 				sudokuBoard,
 				moveDescription -> solverTable.addRow(moveDescription));

@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.stream.IntStream;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
@@ -16,7 +17,9 @@ public class SudokuLogicSolverTable
 	private final CommandHistory<SudokuUndoCellCommand> commandHistory;
 	private final JTable table;
 
-	public SudokuLogicSolverTable(CommandHistory<SudokuUndoCellCommand> commandHistory)
+	public SudokuLogicSolverTable(
+			CommandHistory<SudokuUndoCellCommand> commandHistory,
+			Runnable repaintCanvasCallback)
 	{
 		this.commandHistory = commandHistory;
 
@@ -44,7 +47,10 @@ public class SudokuLogicSolverTable
 				.getColumnIndex(undoIndexColumnHeader);
 		table.removeColumn(table.getColumn(undoIndexColumnHeader));
 		table.addMouseListener(new SudokuLogicTableMouseListener(
-				table, undoxIndexColumnIndex));
+				table,
+				undoxIndexColumnIndex,
+				commandHistory,
+				repaintCanvasCallback));
 	}
 
 	public void addRow(String moveDescription)
@@ -74,13 +80,19 @@ public class SudokuLogicSolverTable
 	{
 		private final JTable table;
 		private final int undoIndexColumnIndex;
+		private final CommandHistory<SudokuUndoCellCommand> commandHistory;
+		private final Runnable repaintCanvasCallback;
 
 		public SudokuLogicTableMouseListener(
 				JTable table,
-				int undoIndexColumnIndex)
+				int undoIndexColumnIndex,
+				CommandHistory<SudokuUndoCellCommand> commandHistory,
+				Runnable repaintCanvasCallback)
 		{
 			this.table = table;
 			this.undoIndexColumnIndex = undoIndexColumnIndex;
+			this.commandHistory = commandHistory;
+			this.repaintCanvasCallback = repaintCanvasCallback;
 		}
 
 		@Override
@@ -103,10 +115,33 @@ public class SudokuLogicSolverTable
 
 		private void undoToRow(int rowNumber)
 		{
-			Object valueAt = table.getModel().getValueAt(
+			Object undoIndexColumnValue = table.getModel().getValueAt(
 					rowNumber,
 					undoIndexColumnIndex);
-			System.out.println("Double click at row " + rowNumber + "Undo number = " + valueAt); // TODO
+			int undoIndex = Integer.parseInt(undoIndexColumnValue.toString());
+			System.out.println("Double click at row " + rowNumber + "Undo number = " + undoIndex); // TODO
+
+			int currentUndoCount = commandHistory.getUndoCount();
+			int delta = undoIndex - currentUndoCount;
+
+			System.out.printf("%sing next %d commands%n", (delta < 0 ? "undo" : "redo"), Math.abs(delta));
+			if (delta != 0)
+			{
+				IntStream.range(0, Math.abs(delta))
+						.forEach(i ->
+						{
+							if (delta < 0)
+							{
+								commandHistory.undo();
+							}
+							else
+							{
+								commandHistory.redo();
+							}
+						});
+
+				repaintCanvasCallback.run();
+			}
 		}
 	}
 }
