@@ -233,7 +233,7 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 			}
 			else
 			{
-				solverTable.addRow("Board Solved");
+				solverTable.addRow(SudokuUiManager.BOARD_SOLVED_MESSAGE);
 			}
 		}
 	}

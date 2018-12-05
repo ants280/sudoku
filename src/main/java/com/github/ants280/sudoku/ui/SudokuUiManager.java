@@ -42,6 +42,7 @@ public class SudokuUiManager implements ActionListener
 	public static final String HELP_M = "Help";
 	public static final String HELP_MI = "Help";
 	public static final String ABOUT_MI = "About";
+	public static final String BOARD_SOLVED_MESSAGE = "Board Solved";
 
 	private final JFrame frame;
 	private final SudokuDisplayComponent sudokuDisplayComponent;
@@ -490,7 +491,7 @@ public class SudokuUiManager implements ActionListener
 
 	private void updateMessageLabel()
 	{
-		messageLabel.setText(board.isSolved() ? "Board Solved" : "");
+		messageLabel.setText(board.isSolved() ? BOARD_SOLVED_MESSAGE : "");
 		frame.pack(); // keep the board canvas the same size
 	}
 
