@@ -83,5 +83,4 @@ public class SudokuUndoCellCommandTest
 
 		Assert.assertFalse(equals);
 	}
-
 }
