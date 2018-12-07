@@ -248,6 +248,13 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 				solverTable.addRow(SudokuUiManager.BOARD_SOLVED_MESSAGE);
 			}
 		}
+		else
+		{
+			solverTable.addRow("Solver stuck");
+		}
+
+		startStopButton.setEnabled(false);
+		startStopButton.setText(BUTTON_STOP);
 	}
 
 	@Override
