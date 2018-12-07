@@ -39,13 +39,13 @@ public class SudokuLogicSolverTable
 				.setCellRenderer(new ValueToolTipTableCellRenderer());
 
 		// must be before next statement:
-		int undoxIndexColumnIndex = table.getColumnModel()
+		int undoIndexColumnIndex = table.getColumnModel()
 				.getColumnIndex(undoIndexColumnHeader);
 		table.removeColumn(table.getColumn(undoIndexColumnHeader));
 
 		table.addMouseListener(new SudokuLogicTableMouseListener(
 				table,
-				undoxIndexColumnIndex,
+				undoIndexColumnIndex,
 				commandHistory,
 				repaintCanvasCallback));
 	}
