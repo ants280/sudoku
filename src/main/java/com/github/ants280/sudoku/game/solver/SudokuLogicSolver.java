@@ -29,6 +29,9 @@ public class SudokuLogicSolver extends SudokuSolver
 						moveDescriptionConsumer),
 				new RemovePossibleValueForOtherGroupsSudokuSolverPlugin(
 						sudokuBoard,
+						moveDescriptionConsumer),
+				new SetPossibleValuesSudokuSolverPlugin(
+						sudokuBoard,
 						moveDescriptionConsumer));
 	}
 
