@@ -188,7 +188,7 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 					sudokuSolver.solveFast();
 					this.handleBoardSolved();
 					solverTable.setEnabled(true);
-					this.showTolverTablePopup();
+					this.showSolverTablePopup();
 				}
 				else
 				{
@@ -217,7 +217,7 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 
 				if (moveMade)
 				{
-					this.showTolverTablePopup();
+					this.showSolverTablePopup();
 					repaintCanvasCallback.run();
 				}
 				break;
@@ -226,7 +226,7 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 		}
 	}
 
-	private void showTolverTablePopup()
+	private void showSolverTablePopup()
 	{
 		if (!solverTablePanel.isVisible())
 		{
