@@ -188,6 +188,7 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 					sudokuSolver.solveFast();
 					this.handleBoardSolved();
 					solverTable.setEnabled(true);
+					this.showTolverTablePopup();
 				}
 				else
 				{
@@ -216,16 +217,21 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 
 				if (moveMade)
 				{
-					if (!solverTablePanel.isVisible())
-					{
-						solverTablePanel.setVisible(true);
-						popupDialog.pack();
-					}
+					this.showTolverTablePopup();
 					repaintCanvasCallback.run();
 				}
 				break;
 			default:
 				throw new IllegalArgumentException(actionEvent.paramString());
+		}
+	}
+
+	private void showTolverTablePopup()
+	{
+		if (!solverTablePanel.isVisible())
+		{
+			solverTablePanel.setVisible(true);
+			popupDialog.pack();
 		}
 	}
 
