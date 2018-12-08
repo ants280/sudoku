@@ -5,7 +5,6 @@ import com.github.ants280.sudoku.game.SudokuBoard;
 import com.github.ants280.sudoku.game.SudokuCell;
 import com.github.ants280.sudoku.game.SudokuValue;
 import java.util.Collection;
-import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -73,25 +72,25 @@ public class SetPossibleValuesSudokuSolverPlugin extends SudokuSolverPlugin
 		}
 
 		// test groups of possible values
-		Iterator<Collection<SudokuValue>> possibleValueGroups
-				= new PossibleValuesGroupIterator(possibleValuesInSection);
+		Iterator<Collection<SudokuValue>> possibleValuesIterator
+				= new PossibleValuesIterator(possibleValuesInSection);
 
-		while (possibleValueGroups.hasNext())
+		while (possibleValuesIterator.hasNext())
 		{
-			Collection<SudokuValue> possibleValueGroup
-					= possibleValueGroups.next();
+			Collection<SudokuValue> possibleValues
+					= possibleValuesIterator.next();
 
 			List<Map.Entry<SudokuCell, Collection<SudokuValue>>> targetCells
 					= cellPossibleValues.entrySet()
 							.stream()
-							.filter(possibleCellValuesEntry -> possibleCellValuesEntry.getValue().containsAll(possibleValueGroup))
+							.filter(possibleCellValuesEntry -> possibleCellValuesEntry.getValue().containsAll(possibleValues))
 							.collect(Collectors.toList());
 
-			if (possibleValueGroup.size() == targetCells.size())
+			if (possibleValues.size() == targetCells.size())
 			{
 				List<Map.Entry<SudokuCell, Collection<SudokuValue>>> cellsToTrim
 						= targetCells.stream()
-								.filter(possibleCellValuesEntry -> !possibleValueGroup.equals(possibleCellValuesEntry.getValue()))
+								.filter(possibleCellValuesEntry -> !possibleValues.equals(possibleCellValuesEntry.getValue()))
 								.collect(Collectors.toList());
 
 				if (!cellsToTrim.isEmpty())
@@ -102,16 +101,16 @@ public class SetPossibleValuesSudokuSolverPlugin extends SudokuSolverPlugin
 							+ "must occupy the %d cells.",
 							sectionType.getDisplayValue(),
 							index + 1,
-							possibleValueGroup.stream()
+							possibleValues.stream()
 									.map(SudokuValue::getDisplayValue)
 									.collect(Collectors.toList()),
-							possibleValueGroup.size());
+							possibleValues.size());
 					moveDescriptionConsumer.accept(moveDescription);
 
 					cellsToTrim.forEach(cellToTrimEntry -> cellToTrimEntry.getValue()
 							.forEach(possibleValue ->
 							{
-								if (!possibleValueGroup.contains(possibleValue))
+								if (!possibleValues.contains(possibleValue))
 								{
 									cellToTrimEntry.getKey().togglePossibleValue(possibleValue);
 								}
@@ -125,40 +124,4 @@ public class SetPossibleValuesSudokuSolverPlugin extends SudokuSolverPlugin
 		return false;
 	}
 
-	private static class PossibleValuesGroupIterator
-			implements Iterator<Collection<SudokuValue>>
-	{
-		private final List<SudokuValue> possibleValues;
-		private final EnumSet<SudokuValue> possibleValuesGroup;
-		private final int max;
-		private int index;
-
-		public PossibleValuesGroupIterator(List<SudokuValue> possibleValues)
-		{
-			this.possibleValues = possibleValues;
-			this.possibleValuesGroup = EnumSet.noneOf(SudokuValue.class);
-			this.max = 1 << this.possibleValues.size();
-			this.index = 1;
-		}
-
-		@Override
-		public boolean hasNext()
-		{
-			return index < max;
-		}
-
-		@Override
-		public Collection<SudokuValue> next()
-		{
-			possibleValuesGroup.clear();
-
-			possibleValues.stream()
-					.filter(sudokuValue -> ((1 << sudokuValue.ordinal()) & index) != 0)
-					.forEach(possibleValuesGroup::add);
-
-			index++;
-
-			return possibleValuesGroup.clone();
-		}
-	}
 }
