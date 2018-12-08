@@ -50,11 +50,13 @@ public class SetPossibleValuesSudokuSolverPlugin extends SudokuSolverPlugin
 	private boolean didSetPossibleValues(SectionType sectionType, int index)
 	{
 		List<SudokuCell> sudokuCells
-				= sudokuBoard.getSudokuCells(sectionType, index);
+				= sudokuBoard.getSudokuCells(sectionType, index)
+						.stream()
+						.filter(sudokuCell -> sudokuCell.getValue() == null)
+						.collect(Collectors.toList());
 
 		Map<SudokuCell, Collection<SudokuValue>> cellPossibleValues
 				= sudokuCells.stream()
-						.filter(sudokuCell -> sudokuCell.getValue() == null)
 						.collect(Collectors.toMap(
 								Function.identity(),
 								SudokuCell::getPossibleValues));
@@ -80,44 +82,51 @@ public class SetPossibleValuesSudokuSolverPlugin extends SudokuSolverPlugin
 			Collection<SudokuValue> possibleValues
 					= possibleValuesIterator.next();
 
-			List<Map.Entry<SudokuCell, Collection<SudokuValue>>> targetCells
+			Map<SudokuCell, Collection<SudokuValue>> targetCells
 					= cellPossibleValues.entrySet()
 							.stream()
 							.filter(possibleCellValuesEntry -> possibleCellValuesEntry.getValue().containsAll(possibleValues))
+							.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+			if (possibleValues.size() != targetCells.size()
+					|| cellPossibleValues.entrySet()
+							.stream()
+							.anyMatch(cellPossibleValueEntry -> !targetCells.containsKey(cellPossibleValueEntry.getKey())
+							&& cellPossibleValueEntry.getValue().stream().anyMatch(possibleValues::contains)))
+			{
+				continue;
+			}
+
+			List<Map.Entry<SudokuCell, Collection<SudokuValue>>> cellsToTrim
+					= targetCells.entrySet()
+							.stream()
+							.filter(possibleCellValuesEntry -> !possibleValues.equals(possibleCellValuesEntry.getValue()))
 							.collect(Collectors.toList());
 
-			if (possibleValues.size() == targetCells.size())
+			if (!cellsToTrim.isEmpty())
 			{
-				List<Map.Entry<SudokuCell, Collection<SudokuValue>>> cellsToTrim
-						= targetCells.stream()
-								.filter(possibleCellValuesEntry -> !possibleValues.equals(possibleCellValuesEntry.getValue()))
-								.collect(Collectors.toList());
+				String moveDescription = String.format(
+						"Trimming the possible values of some cells "
+						+ "in %s %d to %s because those possible values "
+						+ "must occupy the %d cells.",
+						sectionType.getDisplayValue(),
+						index + 1,
+						possibleValues.stream()
+								.map(SudokuValue::getDisplayValue)
+								.collect(Collectors.toList()),
+						possibleValues.size());
+				moveDescriptionConsumer.accept(moveDescription);
 
-				if (!cellsToTrim.isEmpty())
-				{
-					String moveDescription = String.format(
-							"Trimming the possible values of some cells "
-							+ "in %s %d to %s because those possible values "
-							+ "must occupy the %d cells.",
-							sectionType.getDisplayValue(),
-							index + 1,
-							possibleValues.stream()
-									.map(SudokuValue::getDisplayValue)
-									.collect(Collectors.toList()),
-							possibleValues.size());
-					moveDescriptionConsumer.accept(moveDescription);
-
-					cellsToTrim.forEach(cellToTrimEntry -> cellToTrimEntry.getValue()
-							.forEach(possibleValue ->
+				cellsToTrim.forEach(cellToTrimEntry -> cellToTrimEntry.getValue()
+						.forEach(possibleValue ->
+						{
+							if (!possibleValues.contains(possibleValue))
 							{
-								if (!possibleValues.contains(possibleValue))
-								{
-									cellToTrimEntry.getKey().togglePossibleValue(possibleValue);
-								}
-							}));
+								cellToTrimEntry.getKey().togglePossibleValue(possibleValue);
+							}
+						}));
 
-					return true;
-				}
+				return true;
 			}
 		}
 

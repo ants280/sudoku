@@ -41,6 +41,7 @@ public class SudokuLogicSolverTest
 				createTestCase("{000062507006000001010070008095400002600090005100005970700040050200000800401580000}", true, "5/5 stars 2017-11-17, requires RemovePossibleValueForOtherGroupsSudokuSolverPlugin"),
 				createTestCase("{679810004410569087000070916104080090097020000050930701701040009040098170900050430}", true, "?, requires RemovePossibleValueForOtherGroupsSudokuSolverPlugin"),
 				createTestCase("{370095000600080090008300007000010050160000034040060000700002900020030008000950042}", true, "6/5 stars 20170218, requires CullPossibleValuesSudokuSolverPlugin (and RemovePossibleValueForOtherGroupsSudokuSolverPlugin)"),
+				createTestCase("{605040902001090003020015600900004800000060000008100009006430080500080200807020306}", true, "4/5 stars 2017-11-16, requires SetPossibleValuesSudokuSolverPlugin"),
 				createTestCase("{000000000000000000000000000000000000000000000000000000000000000000000000000000000}", false, "empty board"));
 	}
 
