@@ -3,7 +3,9 @@ package com.github.ants280.sudoku.game.solver;
 import com.github.ants280.sudoku.game.SudokuValue;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.junit.Assert;
@@ -61,5 +63,29 @@ public class PossibleValuesGroupIteratorTest
 		}
 
 		Assert.assertEquals(expectedCount, actualCount);
+	}
+
+	@Test
+	public void testHasNext_empty()
+	{
+		List<SudokuValue> possibleValues = Collections.emptyList();
+		PossibleValuesIterator possibleValuesIterator
+				= new PossibleValuesIterator(possibleValues);
+
+		boolean hasNext = possibleValuesIterator.hasNext();
+
+		Assert.assertFalse(hasNext);
+	}
+
+	@Test(expected = NoSuchElementException.class)
+	public void testNoSuchElementException()
+	{
+		List<SudokuValue> possibleValues = Collections.emptyList();
+		PossibleValuesIterator possibleValuesIterator
+				= new PossibleValuesIterator(possibleValues);
+
+		possibleValuesIterator.next();
+
+		Assert.fail("Expected exception to be thrown.");
 	}
 }

@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.IntStream;
 
 /**
@@ -36,6 +37,11 @@ public class PossibleValuesIterator implements Iterator<Collection<SudokuValue>>
 	@Override
 	public Collection<SudokuValue> next()
 	{
+		if (!this.hasNext())
+		{
+			throw new NoSuchElementException();
+		}
+
 		possibleValuesGroup.clear();
 		IntStream.range(0, possibleValues.size())
 				.filter(i -> ((1 << i) & index) != 0)
