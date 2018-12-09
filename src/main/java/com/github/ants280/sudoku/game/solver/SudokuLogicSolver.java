@@ -45,9 +45,12 @@ public class SudokuLogicSolver extends SudokuSolver
 	@Override
 	public void solveFast()
 	{
-		while (this.makeMove())
+		boolean moveMade;
+
+		do
 		{
-			// Run the plugin!
+			moveMade = this.makeMove();
 		}
+		while (moveMade);
 	}
 }
