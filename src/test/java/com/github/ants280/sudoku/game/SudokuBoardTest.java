@@ -238,6 +238,37 @@ public class SudokuBoardTest
 		Assert.assertFalse("8 is missing from the last cell", board.isSolved());
 	}
 
+	@Test
+	public void testResetFrom()
+	{
+		String boardStringA
+				= "{000000000"
+				+ "000000000"
+				+ "000000000"
+				+ "000000000"
+				+ "000000000"
+				+ "000000000"
+				+ "000000000"
+				+ "000000000"
+				+ "000000000}";
+		String boardStringB
+				= "{123456789"
+				+ "456789123"
+				+ "789123456"
+				+ "234567891"
+				+ "567891234"
+				+ "891234567"
+				+ "345678912"
+				+ "678912345"
+				+ "912345678}";
+		SudokuBoard boardA = new SudokuBoard(boardStringA);
+		SudokuBoard boardB = new SudokuBoard(boardStringB);
+
+		boardA.resetFrom(boardB);
+
+		Assert.assertTrue(boardA.isSolved());
+	}
+
 	private static List<Integer> getValues(List<SudokuCell> sudokuCells)
 	{
 		return sudokuCells.stream()
