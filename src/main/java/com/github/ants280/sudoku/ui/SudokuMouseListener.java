@@ -42,8 +42,4 @@ public class SudokuMouseListener
 		}
 	}
 
-	public static interface MouseXyConsumer
-	{
-		public void accept(int x, int y);
-	}
 }

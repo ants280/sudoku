@@ -69,7 +69,7 @@ public class SudokuBoard
 			SudokuValue cellValue = SudokuValue.fromChar(valueChar);
 			int rowIndex = i / 9;
 			int columnIndex = i % 9;
-			int groupIndex = ((rowIndex / 3) * 3) + (columnIndex / 3);
+			int groupIndex = (rowIndex / 3) * 3 + columnIndex / 3;
 			allSudokuCellsArray[i] = createSudokuCell(
 					rowIndex,
 					columnIndex,

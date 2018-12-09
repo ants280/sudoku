@@ -15,7 +15,7 @@ public enum SudokuValue
 	private final int value;
 	private final String displayValue;
 
-	private SudokuValue(int value)
+	SudokuValue(int value)
 	{
 		this.value = value;
 		this.displayValue = Integer.toString(value);

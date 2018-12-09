@@ -8,7 +8,7 @@ public enum SectionType
 
 	private final String displayValue;
 
-	private SectionType(String displayValue)
+	SectionType(String displayValue)
 	{
 		this.displayValue = displayValue;
 	}
