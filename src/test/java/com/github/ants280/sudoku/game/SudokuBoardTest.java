@@ -163,6 +163,26 @@ public class SudokuBoardTest
 		Assert.assertEquals(expectedValues, actualValues);
 	}
 
+	@Test(expected = IllegalArgumentException.class)
+	public void testGetSudokuCells_invalidIndex_low()
+	{
+		SudokuBoard board = new SudokuBoard();
+
+		board.getSudokuCells(SectionType.COLUMN, -1);
+
+		Assert.fail("Expected exception to be thrown.");
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testGetSudokuCells_invalidIndex_high()
+	{
+		SudokuBoard board = new SudokuBoard();
+
+		board.getSudokuCells(SectionType.COLUMN, 9);
+
+		Assert.fail("Expected exception to be thrown.");
+	}
+
 	@Test
 	public void testGetSudokuCells_col()
 	{
