@@ -64,8 +64,8 @@ public class SudokuDisplayComponent extends JComponent
 		if (cellLength != newCellLength)
 		{
 			cellLength = newCellLength;
-			xOffset = (this.getWidth() - (cellLength * 9)) / 2;
-			yOffset = (this.getHeight() - (cellLength * 9)) / 2;
+			xOffset = (this.getWidth() - ((cellLength * 9)) / 2);
+			yOffset = (this.getHeight() - ((cellLength * 9)) / 2);
 
 			valueFont = valueFont.deriveFont((float) cellLength);
 			possibleValueFont = possibleValueFont

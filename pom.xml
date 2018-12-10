@@ -125,8 +125,8 @@
 					</execution>  
 				</executions>  
 			</plugin>
-			<plugin>
-				<!-- analyze source code -->
+<!--			<plugin>
+				 analyze source code 
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-pmd-plugin</artifactId>
 				<version>3.11.0</version>
@@ -141,7 +141,7 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin>
+			</plugin>-->
 		</plugins>
 	</build>
 	<dependencies>
