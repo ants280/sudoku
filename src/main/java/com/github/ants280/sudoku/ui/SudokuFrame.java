@@ -37,7 +37,7 @@ public class SudokuFrame
 		this.setValueMenu = new JMenu();
 		this.setPossibleValueMenu = new JMenu();
 
-		init();
+		this.init();
 	}
 
 	private void init()
