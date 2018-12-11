@@ -9,37 +9,43 @@ public class SudokuMouseListener
 		implements MouseListener
 {
 	private final MouseXyConsumer singleClickConsumer;
-	private final Runnable doubleClickRunnable;
-	private final Runnable rightClickRunnable;
+	private final MouseXyConsumer doubleClickConsumer;
+	private final MouseXyConsumer rightClickConsumer;
 
 	public SudokuMouseListener(
 			MouseXyConsumer singleClickConsumer,
-			Runnable doubleClickRunnable,
-			Runnable rightClickRunnable)
+			MouseXyConsumer doubleClickConsumer,
+			MouseXyConsumer rightClickConsumer)
 	{
 		this.singleClickConsumer = singleClickConsumer;
-		this.doubleClickRunnable = doubleClickRunnable;
-		this.rightClickRunnable = rightClickRunnable;
+		this.doubleClickConsumer = doubleClickConsumer;
+		this.rightClickConsumer = rightClickConsumer;
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent mouseEvent)
 	{
-		singleClickConsumer.accept(mouseEvent.getX(), mouseEvent.getY());
+		singleClickConsumer.accept(
+				mouseEvent.getX(),
+				mouseEvent.getY());
+
 		switch (mouseEvent.getButton())
 		{
 			case MouseEvent.BUTTON1: // left mouse button
 				if (mouseEvent.getClickCount() == 2)
 				{
-					doubleClickRunnable.run();
+					doubleClickConsumer.accept(
+							mouseEvent.getX(),
+							mouseEvent.getY());
 				}
 				break;
 			case MouseEvent.BUTTON3: // right mouse button
-				rightClickRunnable.run();
+				rightClickConsumer.accept(
+						mouseEvent.getX(),
+						mouseEvent.getY());
 				break;
 			default:
 				break;
 		}
 	}
-
 }

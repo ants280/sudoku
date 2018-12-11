@@ -26,16 +26,16 @@ public class SudokuFrame
 	private final JFrame frame;
 	private final JMenuItem undoMenuItem;
 	private final JMenuItem redoMenuItem;
-	private final JMenuItem setValueMenuItem;
-	private final JMenuItem setPossibleValueMenuItem;
+	private final JMenu setValueMenu;
+	private final JMenu setPossibleValueMenu;
 
 	public SudokuFrame()
 	{
 		this.frame = new JFrame("Sudoku");
 		this.undoMenuItem = new JMenuItem();
 		this.redoMenuItem = new JMenuItem();
-		this.setValueMenuItem = new JMenuItem();
-		this.setPossibleValueMenuItem = new JMenuItem();
+		this.setValueMenu = new JMenu();
+		this.setPossibleValueMenu = new JMenu();
 
 		init();
 	}
@@ -62,9 +62,8 @@ public class SudokuFrame
 						board,
 						messageLabel,
 						commandHistory,
-						Arrays.asList(
-								setValueMenuItem,
-								setPossibleValueMenuItem));
+						setValueMenu,
+						setPossibleValueMenu);
 
 		this.undoRedoChanged(true, true);
 		undoMenuItem.setAccelerator(
@@ -89,8 +88,8 @@ public class SudokuFrame
 		JMenu actionMenu = new JMenu(ACTION_M);
 		undoMenuItem.setText(UNDO_MI);
 		redoMenuItem.setText(REDO_MI);
-		setValueMenuItem.setText(SET_VALUE_MI);
-		setPossibleValueMenuItem.setText(SET_POSSIBLE_VALUE_MI);
+		setValueMenu.setText(SET_VALUE_MI);
+		setPossibleValueMenu.setText(SET_POSSIBLE_VALUE_MI);
 		JMenuItem clearPossibleValuesMenuItem = new JMenuItem(CLEAR_POSSIBLE_VALUES_MI);
 		JMenuItem clearCellsMenuItem = new JMenuItem(CLEAR_CELLS_MI);
 		JMenuItem lockCellsMenuItem = new JMenuItem(LOCK_CELLS_MI);
@@ -108,8 +107,8 @@ public class SudokuFrame
 		fileMenu.add(exitMenuItem);
 		actionMenu.add(undoMenuItem);
 		actionMenu.add(redoMenuItem);
-		actionMenu.add(setValueMenuItem);
-		actionMenu.add(setPossibleValueMenuItem);
+		actionMenu.add(setValueMenu);
+		actionMenu.add(setPossibleValueMenu);
 		actionMenu.add(clearPossibleValuesMenuItem);
 		actionMenu.addSeparator();
 		actionMenu.add(clearCellsMenuItem);
