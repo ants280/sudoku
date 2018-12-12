@@ -43,7 +43,7 @@ public class SudokuDisplayComponent extends JComponent
 		this.selectedRow = null;
 		this.selectedCol = null;
 
-		init();
+		this.init();
 	}
 
 	private void init()
