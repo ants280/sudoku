@@ -49,8 +49,7 @@ public class SudokuDisplayComponent extends JComponent
 	private void init()
 	{
 		int boardLength = cellLength * 9;
-		Dimension preferredSize = new Dimension(boardLength, boardLength);
-		this.setPreferredSize(preferredSize);
+		this.setPreferredSize(new Dimension(boardLength, boardLength));
 
 		this.addComponentListener(
 				new SudokuComponentListener(this::componentResized));
