@@ -315,8 +315,9 @@ public class SudokuUiManager implements ActionListener
 	{
 		if (!sudokuCell.isLocked())
 		{
-			sudokuCell.setValue(value);
-			setPossibleValueMenu.setEnabled(value == null);
+			SudokuValue oldValue = sudokuCell.getValue();
+			sudokuCell.setValue(value == oldValue ? null : value);
+			setPossibleValueMenu.setEnabled(value != null && value == oldValue);
 
 			sudokuDisplayComponent.repaint();
 			this.updateMessageLabel();
