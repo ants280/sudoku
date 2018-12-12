@@ -15,7 +15,7 @@
 		<sonar.java.libraries>target/classes</sonar.java.libraries>
 	</properties>
 	<build>
-		<!-- mvn -DremoveSnapshot versions:set clean package && mvn versions:set -DnextSnapshot=true -->
+		<!-- mvn -DremoveSnapshot versions:set && mvn clean package && mvn versions:set -DnextSnapshot=true -->
 		<plugins>
 			<plugin>
 				<!-- mvn versions:display-plugin-updates -->
