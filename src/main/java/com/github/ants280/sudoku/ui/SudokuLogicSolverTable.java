@@ -3,6 +3,7 @@ package com.github.ants280.sudoku.ui;
 import com.github.ants280.sudoku.game.undo.CommandHistory;
 import com.github.ants280.sudoku.game.undo.SudokuUndoCellCommand;
 import java.awt.Component;
+import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -59,6 +60,9 @@ public class SudokuLogicSolverTable
 		};
 
 		tableModel.addRow(rowData);
+
+		// "scroll" to bottom of table (where added row is)
+		table.scrollRectToVisible(new Rectangle(0, Integer.MAX_VALUE, 0, 0));
 	}
 
 	public JTable getDisplayComponent()
