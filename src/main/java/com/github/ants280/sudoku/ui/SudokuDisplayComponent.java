@@ -250,21 +250,28 @@ public class SudokuDisplayComponent extends JComponent
 						.get(selectedCol);
 	}
 
-	public void incrementSelectedRow(int i)
+	public void moveSelectedCell(MoveDirection moveDirection)
 	{
-		if (selectedRow != null)
+		if (selectedRow != null && selectedCol != null)
 		{
-			this.setSelectedRow(selectedRow + i);
-
-			this.repaint();
-		}
-	}
-
-	public void incrementSelectedCol(int i)
-	{
-		if (selectedCol != null)
-		{
-			this.setSelectedCol(selectedCol + i);
+			switch (moveDirection)
+			{
+				case UP:
+					this.setSelectedRow(selectedRow - 1);
+					break;
+				case DOWN:
+					this.setSelectedRow(selectedRow + 1);
+					break;
+				case LEFT:
+					this.setSelectedCol(selectedCol - 1);
+					break;
+				case RIGHT:
+					this.setSelectedCol(selectedCol + 1);
+					break;
+				default:
+					throw new IllegalArgumentException(
+							"Unknown moveDirection: " + moveDirection);
+			}
 
 			this.repaint();
 		}

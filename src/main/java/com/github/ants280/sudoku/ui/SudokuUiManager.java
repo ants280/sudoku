@@ -86,7 +86,7 @@ public class SudokuUiManager implements ActionListener
 				sudokuValue -> this.setSudokuCellValue(
 						sudokuDisplayComponent.getSelectedCell(),
 						sudokuValue),
-				this::moveSelectedCell);
+				this.sudokuDisplayComponent::moveSelectedCell);
 		this.listenersAdded = false;
 
 		this.init();
@@ -218,28 +218,6 @@ public class SudokuUiManager implements ActionListener
 	{
 		setValueMenu.setEnabled(false);
 		setPossibleValueMenu.setEnabled(false);
-	}
-
-	private void moveSelectedCell(MoveDirection moveDirection)
-	{
-		switch (moveDirection)
-		{
-			case UP:
-				sudokuDisplayComponent.incrementSelectedRow(-1);
-				break;
-			case DOWN:
-				sudokuDisplayComponent.incrementSelectedRow(1);
-				break;
-			case LEFT:
-				sudokuDisplayComponent.incrementSelectedCol(-1);
-				break;
-			case RIGHT:
-				sudokuDisplayComponent.incrementSelectedCol(1);
-				break;
-			default:
-				throw new IllegalArgumentException(
-						"Unknown moveDirection: " + moveDirection);
-		}
 	}
 
 	private void setValue(int x, int y)
