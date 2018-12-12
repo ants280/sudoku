@@ -282,11 +282,11 @@ public class SudokuUiManager implements ActionListener
 			BiConsumer<SudokuCell, SudokuValue> valueClickConsumer)
 	{
 		return Stream.of(SudokuValue.values())
-				.map(sudokuValue -> this.createvalueMenuItem(sudokuValue, valueClickConsumer))
+				.map(sudokuValue -> this.createValueMenuItem(sudokuValue, valueClickConsumer))
 				.collect(Collectors.toList());
 	}
 
-	private JMenuItem createvalueMenuItem(
+	private JMenuItem createValueMenuItem(
 			SudokuValue sudokuValue,
 			BiConsumer<SudokuCell, SudokuValue> valueClickConsumer)
 	{
