@@ -83,7 +83,9 @@ public class SudokuUiManager implements ActionListener
 				this::setValue,
 				this::setPossibleValue);
 		this.keyListener = new SudokuKeyListener(
-				this::setSelectedCellValue,
+				sudokuValue -> this.setSudokuCellValue(
+						sudokuDisplayComponent.getSelectedCell(),
+						sudokuValue),
 				this::moveSelectedCell);
 		this.listenersAdded = false;
 
@@ -339,13 +341,6 @@ public class SudokuUiManager implements ActionListener
 
 			sudokuDisplayComponent.repaint();
 		}
-	}
-
-	private void setSelectedCellValue(SudokuValue cellValue)
-	{
-		this.setSudokuCellValue(
-				sudokuDisplayComponent.getSelectedCell(),
-				cellValue);
 	}
 
 	private void solveLogic()
