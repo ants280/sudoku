@@ -1,6 +1,5 @@
 package com.github.ants280.sudoku.ui;
 
-import com.github.ants280.sudoku.game.SectionType;
 import com.github.ants280.sudoku.game.SudokuBoard;
 import com.github.ants280.sudoku.game.SudokuCell;
 import com.github.ants280.sudoku.game.SudokuValue;
@@ -128,7 +127,7 @@ public class SudokuUiManager implements ActionListener
 			listenersAdded = true;
 			frame.addKeyListener(keyListener);
 			sudokuDisplayComponent.addMouseListener(mouseListener);
-			this.enableSelectedCellMenus(false);
+			this.disableSelectedCellMenus();
 		}
 	}
 
@@ -146,7 +145,7 @@ public class SudokuUiManager implements ActionListener
 	{
 		this.addListeners();
 		this.updateMessageLabel();
-		this.enableSelectedCellMenus(false);
+		this.disableSelectedCellMenus();
 		sudokuDisplayComponent.removeSelectedCell();
 		commandHistory.reset();
 	}
@@ -155,7 +154,7 @@ public class SudokuUiManager implements ActionListener
 	{
 		this.removeListeners();
 		this.updateMessageLabel();
-		this.enableSelectedCellMenus(false);
+		this.disableSelectedCellMenus();
 		sudokuDisplayComponent.removeSelectedCell();
 	}
 
@@ -207,13 +206,16 @@ public class SudokuUiManager implements ActionListener
 	private void selectCell(int x, int y)
 	{
 		sudokuDisplayComponent.selectCellFromCoordinates(x, y);
-		this.enableSelectedCellMenus(false);
+		SudokuCell selectedCell = sudokuDisplayComponent.getSelectedCell();
+		setValueMenu.setEnabled(selectedCell != null);
+		setPossibleValueMenu.setEnabled(
+				selectedCell != null && selectedCell.getValue() == null);
 	}
 
-	private void enableSelectedCellMenus(boolean enabled)
+	private void disableSelectedCellMenus()
 	{
-		setValueMenu.setEnabled(enabled);
-		setPossibleValueMenu.setEnabled(enabled);
+		setValueMenu.setEnabled(false);
+		setPossibleValueMenu.setEnabled(false);
 	}
 
 	private void moveSelectedCell(MoveDirection moveDirection)
@@ -240,20 +242,28 @@ public class SudokuUiManager implements ActionListener
 
 	private void setValue(int x, int y)
 	{
-		this.showValuePopupMenu(
-				x,
-				y,
-				"Select cell value",
-				this::setSudokuCellValue);
+		if (sudokuDisplayComponent.getSelectedCell() != null)
+		{
+			this.showValuePopupMenu(
+					x,
+					y,
+					"Select cell value",
+					this::setSudokuCellValue);
+		}
 	}
 
 	private void setPossibleValue(int x, int y)
 	{
-		this.showValuePopupMenu(
-				x,
-				y,
-				"Select possible cell values",
-				this::toggleSudokuCellPossibleValue);
+		SudokuCell selectedCell = sudokuDisplayComponent.getSelectedCell();
+		if (selectedCell != null
+				&& selectedCell.getValue() == null)
+		{
+			this.showValuePopupMenu(
+					x,
+					y,
+					"Select possible cell values",
+					this::toggleSudokuCellPossibleValue);
+		}
 	}
 
 	private void showValuePopupMenu(
@@ -262,12 +272,10 @@ public class SudokuUiManager implements ActionListener
 			String title,
 			BiConsumer<SudokuCell, SudokuValue> valueClickConsumer)
 	{
-		Integer r = sudokuDisplayComponent.getSelectedRow();
-		Integer c = sudokuDisplayComponent.getSelectedCol();
+		SudokuCell selectedCell = sudokuDisplayComponent.getSelectedCell();
 		Predicate<SudokuCell> lockedSudokuCellPredicate = SudokuCell::isLocked;
-		if (r != null && c != null
-				&& lockedSudokuCellPredicate.negate()
-						.test(board.getSudokuCells(SectionType.ROW, r).get(c)))
+		if (selectedCell != null
+				&& lockedSudokuCellPredicate.negate().test(selectedCell))
 		{
 			JPopupMenu popupMenu = new JPopupMenu(title);
 
@@ -282,7 +290,9 @@ public class SudokuUiManager implements ActionListener
 			BiConsumer<SudokuCell, SudokuValue> valueClickConsumer)
 	{
 		return Stream.of(SudokuValue.values())
-				.map(sudokuValue -> this.createValueMenuItem(sudokuValue, valueClickConsumer))
+				.map(sudokuValue -> this.createValueMenuItem(
+				sudokuValue,
+				valueClickConsumer))
 				.collect(Collectors.toList());
 	}
 
@@ -293,10 +303,7 @@ public class SudokuUiManager implements ActionListener
 		JMenuItem menuItem = new JMenuItem(sudokuValue.getDisplayValue());
 
 		menuItem.addActionListener(actionEvent -> valueClickConsumer.accept(
-				board.getSudokuCells(
-						SectionType.ROW,
-						sudokuDisplayComponent.getSelectedRow())
-						.get(sudokuDisplayComponent.getSelectedCol()),
+				sudokuDisplayComponent.getSelectedCell(),
 				sudokuValue));
 
 		return menuItem;
@@ -304,11 +311,12 @@ public class SudokuUiManager implements ActionListener
 
 	private void setSudokuCellValue(
 			SudokuCell sudokuCell,
-			SudokuValue v)
+			SudokuValue value)
 	{
 		if (!sudokuCell.isLocked())
 		{
-			sudokuCell.setValue(v);
+			sudokuCell.setValue(value);
+			setPossibleValueMenu.setEnabled(value == null);
 
 			sudokuDisplayComponent.repaint();
 			this.updateMessageLabel();
@@ -334,12 +342,9 @@ public class SudokuUiManager implements ActionListener
 
 	private void setSelectedCellValue(SudokuValue cellValue)
 	{
-		SudokuCell selectedSudokuCell = board.getSudokuCells(
-				SectionType.ROW,
-				sudokuDisplayComponent.getSelectedRow())
-				.get(sudokuDisplayComponent.getSelectedCol());
-
-		this.setSudokuCellValue(selectedSudokuCell, cellValue);
+		this.setSudokuCellValue(
+				sudokuDisplayComponent.getSelectedCell(),
+				cellValue);
 	}
 
 	private void solveLogic()

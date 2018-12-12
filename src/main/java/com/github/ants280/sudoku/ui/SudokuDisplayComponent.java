@@ -242,14 +242,12 @@ public class SudokuDisplayComponent extends JComponent
 		selectedCol = null;
 	}
 
-	public Integer getSelectedRow()
+	public SudokuCell getSelectedCell()
 	{
-		return selectedRow;
-	}
-
-	public Integer getSelectedCol()
-	{
-		return selectedCol;
+		return selectedRow == null && selectedCol == null
+				? null
+				: board.getSudokuCells(SectionType.ROW, selectedRow)
+						.get(selectedCol);
 	}
 
 	public void incrementSelectedRow(int i)
