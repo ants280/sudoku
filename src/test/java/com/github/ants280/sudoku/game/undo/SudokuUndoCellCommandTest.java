@@ -99,6 +99,17 @@ public class SudokuUndoCellCommandTest
 	}
 
 	@Test
+	public void testEquals_nullSudokuCells()
+	{
+		SudokuUndoCellCommand command1 = new SudokuUndoCellCommand(null, SudokuCellChangeType.SET_VALUE, SudokuValue.VALUE_1, SudokuValue.VALUE_2);
+		SudokuUndoCellCommand command2 = new SudokuUndoCellCommand(null, SudokuCellChangeType.SET_VALUE, SudokuValue.VALUE_1, SudokuValue.VALUE_2);
+
+		boolean equals = command1.equals(command2);
+
+		Assert.assertTrue(equals);
+	}
+
+	@Test
 	public void testEquals_differentUpdatedValue()
 	{
 		SudokuUndoCell sudokuUndoCell = new SudokuUndoCell(1, 2, 3, SudokuValue.VALUE_3, false);
