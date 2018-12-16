@@ -448,12 +448,22 @@ public class SudokuCellTest
 		SudokuCell sudokuCell2 = new SudokuCell(1, 2, 3, null, false);
 		sudokuCell.togglePossibleValue(SudokuValue.VALUE_1);
 		sudokuCell2.togglePossibleValue(SudokuValue.VALUE_1);
-		sudokuCell2.setValue(SudokuValue.VALUE_1);
+		sudokuCell2.togglePossibleValue(SudokuValue.VALUE_5);
 
 		String toString = sudokuCell.toString();
 		String toString2 = sudokuCell2.toString();
 
 		Assert.assertNotEquals(toString, toString2);
-		Assert.assertTrue(toString2.contains("[1]"));
+		Assert.assertTrue(toString2.contains("[15]"));
+	}
+
+	@Test
+	public void testToString_noValue()
+	{
+		sudokuCell = new SudokuCell(1, 2, 3, null, false);
+
+		String toString = sudokuCell.toString();
+
+		Assert.assertTrue(toString.contains("0"));
 	}
 }
