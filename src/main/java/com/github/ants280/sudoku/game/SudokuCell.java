@@ -23,6 +23,12 @@ public class SudokuCell
 			SudokuValue value,
 			boolean locked)
 	{
+		if (locked && value == null)
+		{
+			throw new IllegalArgumentException(
+					"Cannot lock an empty SudokuCell.");
+		}
+
 		this.sectionTypeIndices = new EnumMap<>(SectionType.class);
 		sectionTypeIndices.put(SectionType.ROW, rowIndex);
 		sectionTypeIndices.put(SectionType.COLUMN, columnIndex);
