@@ -2,7 +2,6 @@ package com.github.ants280.sudoku.game;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.Map;
@@ -45,7 +44,7 @@ public class SudokuCell
 
 	public Collection<SudokuValue> getPossibleValues()
 	{
-		return Collections.unmodifiableSet(possibleValues);
+		return EnumSet.copyOf(possibleValues);
 	}
 
 	public boolean hasPossibleValue(SudokuValue value)
