@@ -104,6 +104,21 @@ public class CommandHistoryTest
 	}
 
 	@Test
+	public void testReset_enabled_false()
+	{
+		Command mockCommand = Mockito.mock(Command.class);
+		commandHistory.addCommand(mockCommand);
+		commandHistory.setEnabled(false);
+		commandHistory.reset();
+		commandHistory.undo();
+
+		Mockito.verify(
+				mockCommand,
+				Mockito.times(0))
+				.undo();
+	}
+
+	@Test
 	public void testIsEnabled_defaultTrue()
 	{
 		Assert.assertTrue(commandHistory.isEnabled());
