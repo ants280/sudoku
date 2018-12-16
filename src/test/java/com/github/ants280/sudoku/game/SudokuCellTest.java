@@ -440,4 +440,20 @@ public class SudokuCellTest
 
 		Assert.assertTrue(equals);
 	}
+
+	@Test
+	public void testToString_different()
+	{
+		sudokuCell = new SudokuCell(1, 2, 3, null, false);
+		SudokuCell sudokuCell2 = new SudokuCell(1, 2, 3, null, false);
+		sudokuCell.togglePossibleValue(SudokuValue.VALUE_1);
+		sudokuCell2.togglePossibleValue(SudokuValue.VALUE_1);
+		sudokuCell2.setValue(SudokuValue.VALUE_1);
+
+		String toString = sudokuCell.toString();
+		String toString2 = sudokuCell2.toString();
+
+		Assert.assertNotEquals(toString, toString2);
+		Assert.assertTrue(toString2.contains("[1]"));
+	}
 }
