@@ -456,6 +456,19 @@ public class SudokuCellTest
 		Assert.assertNotEquals(toString, toString2);
 		Assert.assertTrue(toString2.contains("[15]"));
 	}
+	@Test
+	public void testToString_lockedDifferent()
+	{
+		sudokuCell = new SudokuCell(1, 2, 3, SudokuValue.VALUE_1, false);
+		SudokuCell sudokuCell2 = new SudokuCell(1, 2, 3, SudokuValue.VALUE_1, true);
+
+		String toString = sudokuCell.toString();
+		String toString2 = sudokuCell2.toString();
+
+		Assert.assertNotEquals(toString, toString2);
+		Assert.assertTrue(toString.endsWith("N}"));
+		Assert.assertTrue(toString2.endsWith("Y}"));
+	}
 
 	@Test
 	public void testToString_noValue()
