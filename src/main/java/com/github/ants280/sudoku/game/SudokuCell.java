@@ -106,6 +106,11 @@ public class SudokuCell
 			throw new IllegalArgumentException(
 					"Cannot toggle possible values of locked SudokuCell.");
 		}
+		if (value == null)
+		{
+			throw new IllegalArgumentException(
+					"Cannot toggle null possible value on SudokuCell.");
+		}
 
 		if (this.hasPossibleValue(value))
 		{
