@@ -27,7 +27,6 @@ public class SudokuBruteForceSolver extends SudokuSolver
 	@Override
 	public boolean makeMove()
 	{
-		// The brute force solver cannot make a single move.
 		return false;
 	}
 
