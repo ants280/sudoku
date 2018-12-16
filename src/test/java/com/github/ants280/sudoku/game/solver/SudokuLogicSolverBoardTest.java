@@ -10,13 +10,13 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 @RunWith(Parameterized.class)
-public class SudokuLogicSolverTest
+public class SudokuLogicSolverBoardTest
 {
 	private final String boardString;
 	private final boolean expectedValue;
 	private final String testName; // useful for test run message
 
-	public SudokuLogicSolverTest(
+	public SudokuLogicSolverBoardTest(
 			String boardString,
 			boolean expectedValue,
 			String testName)
