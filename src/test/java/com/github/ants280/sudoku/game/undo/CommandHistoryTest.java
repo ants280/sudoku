@@ -226,11 +226,8 @@ public class CommandHistoryTest
 	@Test
 	public void testEquals_diffeentUndo()
 	{
-		BiConsumer<Boolean, Boolean> undoRedoEmptyConsumer = (a, b) ->
-		{
-		};
-		CommandHistory<Command> commandHistory1 = new CommandHistory<>(undoRedoEmptyConsumer);
-		CommandHistory<Command> commandHistory2 = new CommandHistory<>(undoRedoEmptyConsumer);
+		CommandHistory<Command> commandHistory1 = new CommandHistory<>(mockUndoRedoEmptyConsumer);
+		CommandHistory<Command> commandHistory2 = new CommandHistory<>(mockUndoRedoEmptyConsumer);
 		Command mockCommand = Mockito.mock(Command.class);
 		commandHistory1.addCommand(mockCommand);
 
@@ -242,11 +239,8 @@ public class CommandHistoryTest
 	@Test
 	public void testEquals_diffeentRedo()
 	{
-		BiConsumer<Boolean, Boolean> undoRedoEmptyConsumer = (a, b) ->
-		{
-		};
-		CommandHistory<Command> commandHistory1 = new CommandHistory<>(undoRedoEmptyConsumer);
-		CommandHistory<Command> commandHistory2 = new CommandHistory<>(undoRedoEmptyConsumer);
+		CommandHistory<Command> commandHistory1 = new CommandHistory<>(mockUndoRedoEmptyConsumer);
+		CommandHistory<Command> commandHistory2 = new CommandHistory<>(mockUndoRedoEmptyConsumer);
 		Command mockCommand = Mockito.mock(Command.class);
 		commandHistory1.addCommand(mockCommand);
 		commandHistory1.addCommand(mockCommand);
