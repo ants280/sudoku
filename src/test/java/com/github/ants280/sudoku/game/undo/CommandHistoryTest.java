@@ -148,4 +148,18 @@ public class CommandHistoryTest
 
 		Assert.assertEquals(expectedUndoCount, actualUndoCount);
 	}
+
+	@Test
+	public void testHashCode_notEnabled()
+	{
+		CommandHistory<Command> commandHistory1 = new CommandHistory<>(null);
+		CommandHistory<Command> commandHistory2 = new CommandHistory<>(null);
+		commandHistory1.setEnabled(true);
+		commandHistory2.setEnabled(false);
+
+		int hashCode1 = commandHistory1.hashCode();
+		int hashCode2 = commandHistory2.hashCode();
+
+		Assert.assertNotEquals(hashCode1, hashCode2);
+	}
 }
