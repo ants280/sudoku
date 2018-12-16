@@ -156,25 +156,18 @@ public class SudokuCell
 	@Override
 	public boolean equals(Object obj)
 	{
-		if (this == obj)
-		{
-			return true;
-		}
-		if (obj == null || this.getClass() != obj.getClass())
-		{
-			return false;
-		}
-
-		final SudokuCell other = (SudokuCell) obj;
-		return this.locked == other.isLocked()
+		return this == obj
+				|| obj != null
+				&& this.getClass() == obj.getClass()
+				&& this.locked == ((SudokuCell) obj).locked
 				&& Objects.equals(
 						this.sectionTypeIndices,
-						other.sectionTypeIndices)
+						((SudokuCell) obj).sectionTypeIndices)
 				&& Objects.equals(
 						this.value,
-						other.value)
+						((SudokuCell) obj).value)
 				&& Objects.equals(
 						this.possibleValues,
-						other.possibleValues);
+						((SudokuCell) obj).possibleValues);
 	}
 }

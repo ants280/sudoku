@@ -68,17 +68,12 @@ public class SudokuUndoCell extends SudokuCell
 	@Override
 	public boolean equals(Object obj)
 	{
-		if (this == obj)
-		{
-			return true;
-		}
-		if (obj == null || getClass() != obj.getClass())
-		{
-			return false;
-		}
-
-		final SudokuUndoCell other = (SudokuUndoCell) obj;
-		return Objects.equals(this.commandHistory, other.commandHistory)
+		return this == obj
+				|| obj != null
+				&& this.getClass() == obj.getClass()
+				&& Objects.equals(
+						this.commandHistory,
+						((SudokuUndoCell) obj).commandHistory)
 				&& super.equals(obj);
 	}
 }
