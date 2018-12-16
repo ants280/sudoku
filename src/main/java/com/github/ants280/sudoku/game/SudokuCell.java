@@ -7,6 +7,7 @@ import java.util.EnumSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class SudokuCell
 {
@@ -136,9 +137,16 @@ public class SudokuCell
 	@Override
 	public String toString()
 	{
-		return value == null
-				? getPossibleValues().toString()
-				: value.toString();
+		return String.format("SudokuCell{r%d,c%d,g%d,v=%d,possibleValues=[%s],locked=%s}",
+				this.getIndex(SectionType.ROW),
+				this.getIndex(SectionType.COLUMN),
+				this.getIndex(SectionType.GROUP),
+				value == null ? 0 : value.getValue(),
+				possibleValues.stream()
+						.mapToInt(SudokuValue::getValue)
+						.mapToObj(String::valueOf)
+						.collect(Collectors.joining()),
+				locked ? "Y" : "N");
 	}
 
 	@Override
