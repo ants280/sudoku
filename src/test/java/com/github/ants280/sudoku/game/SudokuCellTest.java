@@ -103,7 +103,9 @@ public class SudokuCellTest
 		sudokuCell.getPossibleValues()
 				.add(SudokuValue.VALUE_6);
 
-		Assert.assertFalse(sudokuCell.getPossibleValues().isEmpty());
+		Assert.assertTrue(
+				"The object's collection should not be mutated even though the copy was.",
+				sudokuCell.getPossibleValues().isEmpty());
 	}
 
 	@Test
@@ -152,7 +154,7 @@ public class SudokuCellTest
 		sudokuCell = new SudokuCell(0, 0, 0, SudokuValue.VALUE_1, true);
 
 		boolean actualLocked = sudokuCell.isLocked();
-		boolean expectedLocked = false;
+		boolean expectedLocked = true;
 
 		Assert.assertEquals(expectedLocked, actualLocked);
 	}
@@ -180,7 +182,7 @@ public class SudokuCellTest
 	@Test
 	public void testIsLocked_set_true()
 	{
-		sudokuCell = new SudokuCell(0, 0, 0, null, false);
+		sudokuCell = new SudokuCell(0, 0, 0, SudokuValue.VALUE_3, false);
 		sudokuCell.setLocked(true);
 
 		boolean actualLocked = sudokuCell.isLocked();
@@ -189,7 +191,7 @@ public class SudokuCellTest
 		Assert.assertEquals(expectedLocked, actualLocked);
 	}
 
-	@Test
+	@Test(expected = IllegalArgumentException.class)
 	public void testIsLocked_set_true_noValue()
 	{
 		sudokuCell = new SudokuCell(0, 0, 0, null, false);
@@ -199,11 +201,11 @@ public class SudokuCellTest
 	}
 
 	@Test
-	public void testIsLocked_set_possibleValuesCleared()
+	public void testIsLocked_set_t_possibleValuesCleared()
 	{
 		sudokuCell = new SudokuCell(0, 0, 0, SudokuValue.VALUE_7, false);
-		sudokuCell.setLocked(true);
 		sudokuCell.togglePossibleValue(SudokuValue.VALUE_1);
+		sudokuCell.setLocked(true);
 
 		Collection<SudokuValue> possibleValues = sudokuCell.getPossibleValues();
 
@@ -268,6 +270,8 @@ public class SudokuCellTest
 	@Test(expected = IllegalArgumentException.class)
 	public void testRestoreAllPossibleValues_locked()
 	{
+		sudokuCell = new SudokuCell(0, 0, 0, SudokuValue.VALUE_1, true);
+
 		sudokuCell.restoreAllPossibleValues();
 
 		Assert.fail("expected exception");
@@ -297,7 +301,6 @@ public class SudokuCellTest
 	{
 		sudokuCell = new SudokuCell(1, 2, 3, SudokuValue.VALUE_4, true);
 		SudokuCell sudokuCell2 = new SudokuCell(5, 6, 7, SudokuValue.VALUE_8, false);
-		sudokuCell.togglePossibleValue(SudokuValue.VALUE_9);
 		sudokuCell2.togglePossibleValue(SudokuValue.VALUE_1);
 		sudokuCell2.togglePossibleValue(SudokuValue.VALUE_2);
 
@@ -311,19 +314,6 @@ public class SudokuCellTest
 		Assert.assertEquals(2, sudokuCell.getPossibleValues().size());
 		Assert.assertTrue(sudokuCell.hasPossibleValue(SudokuValue.VALUE_1));
 		Assert.assertTrue(sudokuCell.hasPossibleValue(SudokuValue.VALUE_2));
-	}
-
-	@Test
-	// TODO: ensure all data is present.
-	public void testToString()
-	{
-		Assert.fail("The test case is a prototype.");
-	}
-
-	@Test
-	public void testHashCode()
-	{
-		Assert.fail("The test case is a prototype.");
 	}
 
 	@Test
@@ -440,7 +430,7 @@ public class SudokuCellTest
 	@Test
 	public void testEquals_samePossibleValues()
 	{
-		sudokuCell = new SudokuCell(1, 2, 2, null, false);
+		sudokuCell = new SudokuCell(1, 2, 3, null, false);
 		SudokuCell sudokuCell2 = new SudokuCell(1, 2, 3, null, false);
 
 		sudokuCell.togglePossibleValue(SudokuValue.VALUE_1);
