@@ -1,5 +1,6 @@
 package com.github.ants280.sudoku.game.undo;
 
+import com.github.ants280.sudoku.game.SudokuCell;
 import com.github.ants280.sudoku.game.SudokuValue;
 import java.util.function.BiConsumer;
 import org.junit.Assert;
@@ -16,6 +17,17 @@ public class SudokuUndoCellTest
 		boolean equals = sudokuCell1.equals(sudokuCell2);
 
 		Assert.assertTrue(equals);
+	}
+
+	@Test
+	public void testEquals_wrongObjectClass()
+	{
+		SudokuCell sudokuCell1 = new SudokuUndoCell(1, 2, 3, SudokuValue.VALUE_4, true);
+		SudokuCell sudokuCell2 = new SudokuCell(1, 2, 3, SudokuValue.VALUE_4, true);
+
+		boolean equals = sudokuCell1.equals(sudokuCell2);
+
+		Assert.assertFalse(equals);
 	}
 
 	@Test
