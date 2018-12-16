@@ -116,4 +116,19 @@ public class SudokuUndoCellTest
 
 		Assert.assertNotEquals(hashCode2, hashCode1);
 	}
+
+	@Test
+	public void testTogglePossibleValue()
+	{
+		SudokuUndoCell sudokuCell = new SudokuUndoCell(0, 0, 0, null, false);
+		CommandHistory<SudokuUndoCellCommand> commandHistory
+				= new CommandHistory<>((a, b) ->
+				{
+				});
+		sudokuCell.setCommandHistory(commandHistory);
+		sudokuCell.togglePossibleValue(SudokuValue.VALUE_1);
+
+		Assert.assertTrue(sudokuCell.hasPossibleValue(SudokuValue.VALUE_1));
+		Assert.assertSame(1, commandHistory.getUndoCount());
+	}
 }
