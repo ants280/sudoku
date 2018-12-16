@@ -55,9 +55,9 @@ public class SudokuUndoCellCommand implements Command
 		return this == obj
 				|| obj != null
 				&& this.getClass() == obj.getClass()
-				&& Objects.equals(this.sudokuCell, ((SudokuUndoCellCommand) obj).sudokuCell)
 				&& this.sudokuCellChangeType == ((SudokuUndoCellCommand) obj).sudokuCellChangeType
 				&& this.initialValue == ((SudokuUndoCellCommand) obj).initialValue
-				&& this.updatedValue == ((SudokuUndoCellCommand) obj).updatedValue;
+				&& this.updatedValue == ((SudokuUndoCellCommand) obj).updatedValue
+				&& Objects.equals(this.sudokuCell, ((SudokuUndoCellCommand) obj).sudokuCell);
 	}
 }
