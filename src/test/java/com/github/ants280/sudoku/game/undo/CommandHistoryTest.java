@@ -251,4 +251,16 @@ public class CommandHistoryTest
 
 		Assert.assertFalse(equals);
 	}
+
+	@Test
+	public void testRedo_empty_not_enabled()
+	{
+		commandHistory.setEnabled(false);
+		commandHistory.redo();
+
+		Mockito.verify(
+				mockUndoRedoEmptyConsumer,
+				Mockito.times(0))
+				.accept(Mockito.anyBoolean(), Mockito.anyBoolean());
+	}
 }
