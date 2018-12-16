@@ -64,7 +64,7 @@ public class SudokuUndoCellCommandTest
 	public void testEquals_same()
 	{
 		SudokuUndoCell sudokuUndoCell = new SudokuUndoCell(1, 2, 3, SudokuValue.VALUE_2, false);
-		SudokuUndoCellCommand command1 = new SudokuUndoCellCommand(sudokuUndoCell, SudokuCellChangeType.SET_VALUE, SudokuValue.VALUE_1, SudokuValue.VALUE_2);
+		SudokuUndoCellCommand command1 = new SudokuUndoCellCommand(sudokuUndoCell, SudokuCellChangeType.SET_VALUE, SudokuValue.VALUE_2, SudokuValue.VALUE_1);
 		SudokuUndoCellCommand command2 = command1;
 
 		boolean equals = command1.equals(command2);
@@ -77,12 +77,36 @@ public class SudokuUndoCellCommandTest
 	{
 		SudokuUndoCell sudokuUndoCell1 = new SudokuUndoCell(1, 2, 3, SudokuValue.VALUE_2, false);
 		SudokuUndoCell sudokuUndoCell2 = new SudokuUndoCell(1, 2, 3, SudokuValue.VALUE_2, false);
-		SudokuUndoCellCommand command1 = new SudokuUndoCellCommand(sudokuUndoCell1, SudokuCellChangeType.SET_VALUE, SudokuValue.VALUE_1, SudokuValue.VALUE_2);
-		SudokuUndoCellCommand command2 = new SudokuUndoCellCommand(sudokuUndoCell2, SudokuCellChangeType.SET_VALUE, SudokuValue.VALUE_1, SudokuValue.VALUE_2);
+		SudokuUndoCellCommand command1 = new SudokuUndoCellCommand(sudokuUndoCell1, SudokuCellChangeType.SET_VALUE, SudokuValue.VALUE_2, SudokuValue.VALUE_1);
+		SudokuUndoCellCommand command2 = new SudokuUndoCellCommand(sudokuUndoCell2, SudokuCellChangeType.SET_VALUE, SudokuValue.VALUE_2, SudokuValue.VALUE_1);
 
 		boolean equals = command1.equals(command2);
 
 		Assert.assertTrue(equals);
+	}
+
+	@Test
+	public void testEquals_null()
+	{
+		SudokuUndoCell sudokuUndoCell1 = new SudokuUndoCell(1, 2, 3, SudokuValue.VALUE_2, false);
+		SudokuUndoCellCommand command1 = new SudokuUndoCellCommand(sudokuUndoCell1, SudokuCellChangeType.SET_VALUE, SudokuValue.VALUE_2, SudokuValue.VALUE_1);
+		SudokuUndoCellCommand command2 = null;
+
+		boolean equals = command1.equals(command2);
+
+		Assert.assertFalse(equals);
+	}
+
+	@Test
+	public void testEquals_wrongClass()
+	{
+		SudokuUndoCell sudokuUndoCell1 = new SudokuUndoCell(1, 2, 3, SudokuValue.VALUE_2, false);
+		SudokuUndoCellCommand command1 = new SudokuUndoCellCommand(sudokuUndoCell1, SudokuCellChangeType.SET_VALUE, SudokuValue.VALUE_2, SudokuValue.VALUE_1);
+		Object command2 = 1L;
+
+		boolean equals = command1.equals(command2);
+
+		Assert.assertFalse(equals);
 	}
 
 	@Test
