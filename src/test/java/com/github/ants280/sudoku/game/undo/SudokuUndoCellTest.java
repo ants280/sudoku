@@ -48,7 +48,9 @@ public class SudokuUndoCellTest
 				= new SudokuUndoCell(1, 2, 3, SudokuValue.VALUE_4, true);
 		SudokuUndoCell sudokuCell2
 				= new SudokuUndoCell(1, 2, 3, SudokuValue.VALUE_4, true);
-		BiConsumer<Boolean, Boolean> undoRedoEmptyConsumer = (a, b) -> System.out.print(a + "" + b);
+		BiConsumer<Boolean, Boolean> undoRedoEmptyConsumer = (a, b) ->
+		{
+		};
 		sudokuCell1.setCommandHistory(new CommandHistory<>(undoRedoEmptyConsumer));
 		sudokuCell2.setCommandHistory(new CommandHistory<>(undoRedoEmptyConsumer));
 
@@ -64,12 +66,19 @@ public class SudokuUndoCellTest
 				= new SudokuUndoCell(1, 2, 3, SudokuValue.VALUE_4, true);
 		SudokuUndoCell sudokuCell2
 				= new SudokuUndoCell(1, 2, 3, SudokuValue.VALUE_4, true);
-		sudokuCell1.setCommandHistory(new CommandHistory<>((a, b) -> System.out.print(a + "" + b)));
-		sudokuCell2.setCommandHistory(new CommandHistory<>((a, b) -> System.out.println(a + "" + b)));
+		BiConsumer<Boolean, Boolean> undoRedoEmptyConsumer1 = (a, b) ->
+		{
+		};
+		BiConsumer<Boolean, Boolean> undoRedoEmptyConsumer2 = (a, b) ->
+		{
+		};
+		sudokuCell1.setCommandHistory(new CommandHistory<>(undoRedoEmptyConsumer1));
+		sudokuCell2.setCommandHistory(new CommandHistory<>(undoRedoEmptyConsumer2));
 
 		boolean equals = sudokuCell1.equals(sudokuCell2);
 
 		Assert.assertFalse(equals);
+		Assert.assertNotEquals(undoRedoEmptyConsumer1, undoRedoEmptyConsumer2);
 	}
 
 	@Test
