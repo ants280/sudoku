@@ -177,4 +177,84 @@ public class CommandHistoryTest
 
 		Assert.assertNotEquals(hashCode1, hashCode2);
 	}
+
+	@Test
+	public void testEquals_same()
+	{
+		CommandHistory<Command> commandHistory1 = new CommandHistory<>(null);
+		CommandHistory<Command> commandHistory2 = commandHistory1;
+
+		boolean equals = commandHistory1.equals(commandHistory2);
+
+		Assert.assertTrue(equals);
+	}
+
+	@Test
+	public void testEquals_null()
+	{
+		CommandHistory<Command> commandHistory1 = new CommandHistory<>(null);
+		CommandHistory<Command> commandHistory2 = null;
+
+		boolean equals = commandHistory1.equals(commandHistory2);
+
+		Assert.assertFalse(equals);
+	}
+
+	@Test
+	public void testEquals_wrongObject()
+	{
+		CommandHistory<Command> commandHistory1 = new CommandHistory<>(null);
+		Object commandHistory2 = 1L;
+
+		boolean equals = commandHistory1.equals(commandHistory2);
+
+		Assert.assertFalse(equals);
+	}
+
+	@Test
+	public void testEquals_notEnabled()
+	{
+		CommandHistory<Command> commandHistory1 = new CommandHistory<>(null);
+		CommandHistory<Command> commandHistory2 = new CommandHistory<>(null);
+		commandHistory1.setEnabled(false);
+
+		boolean equals = commandHistory1.equals(commandHistory2);
+
+		Assert.assertFalse(equals);
+	}
+
+	@Test
+	public void testEquals_diffeentUndo()
+	{
+		BiConsumer<Boolean, Boolean> undoRedoEmptyConsumer = (a, b) ->
+		{
+		};
+		CommandHistory<Command> commandHistory1 = new CommandHistory<>(undoRedoEmptyConsumer);
+		CommandHistory<Command> commandHistory2 = new CommandHistory<>(undoRedoEmptyConsumer);
+		Command mockCommand = Mockito.mock(Command.class);
+		commandHistory1.addCommand(mockCommand);
+
+		boolean equals = commandHistory1.equals(commandHistory2);
+
+		Assert.assertFalse(equals);
+	}
+
+	@Test
+	public void testEquals_diffeentRedo()
+	{
+		BiConsumer<Boolean, Boolean> undoRedoEmptyConsumer = (a, b) ->
+		{
+		};
+		CommandHistory<Command> commandHistory1 = new CommandHistory<>(undoRedoEmptyConsumer);
+		CommandHistory<Command> commandHistory2 = new CommandHistory<>(undoRedoEmptyConsumer);
+		Command mockCommand = Mockito.mock(Command.class);
+		commandHistory1.addCommand(mockCommand);
+		commandHistory1.addCommand(mockCommand);
+		commandHistory2.addCommand(mockCommand);
+		commandHistory1.undo();
+
+		boolean equals = commandHistory1.equals(commandHistory2);
+
+		Assert.assertFalse(equals);
+	}
 }
