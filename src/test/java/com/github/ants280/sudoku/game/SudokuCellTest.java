@@ -416,7 +416,7 @@ public class SudokuCellTest
 	@Test
 	public void testEquals_differentPossibleValues()
 	{
-		sudokuCell = new SudokuCell(1, 2, 2, null, false);
+		sudokuCell = new SudokuCell(1, 2, 3, null, false);
 		SudokuCell sudokuCell2 = new SudokuCell(1, 2, 3, null, false);
 
 		sudokuCell.togglePossibleValue(SudokuValue.VALUE_1);
