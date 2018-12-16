@@ -31,6 +31,17 @@ public class SudokuUndoCellTest
 	}
 
 	@Test
+	public void testEquals_null()
+	{
+		SudokuUndoCell sudokuCell1 = new SudokuUndoCell(1, 2, 3, SudokuValue.VALUE_4, true);
+		SudokuUndoCell sudokuCell2 = null;
+
+		boolean equals = sudokuCell1.equals(sudokuCell2);
+
+		Assert.assertFalse(equals);
+	}
+
+	@Test
 	public void testEquals_eq()
 	{
 		SudokuUndoCell sudokuCell1
