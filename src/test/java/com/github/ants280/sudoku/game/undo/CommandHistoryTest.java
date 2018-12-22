@@ -1,5 +1,6 @@
 package com.github.ants280.sudoku.game.undo;
 
+import com.github.ants280.sudoku.game.SudokuValue;
 import java.util.function.BiConsumer;
 import org.junit.Assert;
 import org.junit.Before;
@@ -165,12 +166,54 @@ public class CommandHistoryTest
 	}
 
 	@Test
+	public void testHashCode_same()
+	{
+		CommandHistory<Command> commandHistory1 = new CommandHistory<>(null);
+		CommandHistory<Command> commandHistory2 = commandHistory1;
+
+		int hashCode1 = commandHistory1.hashCode();
+		int hashCode2 = commandHistory2.hashCode();
+
+		Assert.assertEquals(hashCode1, hashCode2);
+	}
+
+	@Test
+	public void testHashCode_equalButNotSame()
+	{
+		CommandHistory<Command> commandHistory1 = new CommandHistory<>(null);
+		CommandHistory<Command> commandHistory2 = new CommandHistory<>(null);
+
+		int hashCode1 = commandHistory1.hashCode();
+		int hashCode2 = commandHistory2.hashCode();
+
+		Assert.assertNotEquals("Object reference/address should be hashCode", hashCode1, hashCode2);
+	}
+
+	@Test
 	public void testHashCode_notEnabled()
 	{
 		CommandHistory<Command> commandHistory1 = new CommandHistory<>(null);
 		CommandHistory<Command> commandHistory2 = new CommandHistory<>(null);
 		commandHistory1.setEnabled(true);
 		commandHistory2.setEnabled(false);
+
+		int hashCode1 = commandHistory1.hashCode();
+		int hashCode2 = commandHistory2.hashCode();
+
+		Assert.assertNotEquals(hashCode1, hashCode2);
+	}
+
+	@Test
+	public void testHashCode_withHistory_circularReference()
+	{
+		CommandHistory<SudokuUndoCellCommand> commandHistory1 = new CommandHistory<>(mockUndoRedoEmptyConsumer);
+		CommandHistory<SudokuUndoCellCommand> commandHistory2 = new CommandHistory<>(mockUndoRedoEmptyConsumer);
+
+		SudokuUndoCell sudokuUndoCell = new SudokuUndoCell(0, 0, 0, SudokuValue.VALUE_2, false);
+		sudokuUndoCell.setCommandHistory(commandHistory1);
+		SudokuUndoCellCommand sudokuUndoCellCommand
+				= new SudokuUndoCellCommand(sudokuUndoCell, SudokuCellChangeType.SET_VALUE, SudokuValue.VALUE_2, SudokuValue.VALUE_1);
+		commandHistory1.addCommand(sudokuUndoCellCommand);
 
 		int hashCode1 = commandHistory1.hashCode();
 		int hashCode2 = commandHistory2.hashCode();
@@ -187,6 +230,17 @@ public class CommandHistoryTest
 		boolean equals = commandHistory1.equals(commandHistory2);
 
 		Assert.assertTrue(equals);
+	}
+
+	@Test
+	public void testEquals_equalButDifferencReferences()
+	{
+		CommandHistory<Command> commandHistory1 = new CommandHistory<>(null);
+		CommandHistory<Command> commandHistory2 = new CommandHistory<>(null);
+
+		boolean equals = commandHistory1.equals(commandHistory2);
+
+		Assert.assertFalse("Even if both histories are empty, they use different maps, so they cannot be equal.", equals);
 	}
 
 	@Test

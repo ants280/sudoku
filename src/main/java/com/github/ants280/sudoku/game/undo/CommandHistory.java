@@ -2,7 +2,6 @@ package com.github.ants280.sudoku.game.undo;
 
 import java.util.Deque;
 import java.util.LinkedList;
-import java.util.Objects;
 import java.util.function.BiConsumer;
 
 public class CommandHistory<T extends Command> implements Command
@@ -87,34 +86,4 @@ public class CommandHistory<T extends Command> implements Command
 	{
 		return undoHistory.size();
 	}
-
-	@Override
-	public int hashCode()
-	{
-		int hash = 7;
-		hash = 31 * hash + Objects.hashCode(this.undoHistory);
-		hash = 31 * hash + Objects.hashCode(this.redoHistory);
-		hash = 31 * hash + Objects.hashCode(this.undoRedoEmptyConsumer);
-		hash = 31 * hash + (this.enabled ? 1 : 0);
-		return hash;
-	}
-
-	@Override
-	public boolean equals(Object obj)
-	{
-		return this == obj
-				|| obj != null
-				&& this.getClass() == obj.getClass()
-				&& this.enabled == ((CommandHistory) obj).enabled
-				&& Objects.equals(
-						this.undoHistory,
-						((CommandHistory) obj).undoHistory)
-				&& Objects.equals(
-						this.redoHistory,
-						((CommandHistory) obj).redoHistory)
-				&& Objects.equals(
-						this.undoRedoEmptyConsumer,
-						((CommandHistory) obj).undoRedoEmptyConsumer);
-	}
-
 }

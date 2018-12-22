@@ -51,8 +51,9 @@ public class SudokuUndoCellTest
 		BiConsumer<Boolean, Boolean> undoRedoEmptyConsumer = (a, b) ->
 		{
 		};
-		sudokuCell1.setCommandHistory(new CommandHistory<>(undoRedoEmptyConsumer));
-		sudokuCell2.setCommandHistory(new CommandHistory<>(undoRedoEmptyConsumer));
+		CommandHistory<SudokuUndoCellCommand> commandHistory = new CommandHistory<>(undoRedoEmptyConsumer);
+		sudokuCell1.setCommandHistory(commandHistory);
+		sudokuCell2.setCommandHistory(commandHistory);
 
 		boolean equals = sudokuCell1.equals(sudokuCell2);
 
