@@ -90,6 +90,7 @@ public class SudokuFrame
 		redoMenuItem.setText(REDO_MI);
 		setValueMenu.setText(SET_VALUE_MI);
 		setPossibleValueMenu.setText(SET_POSSIBLE_VALUE_MI);
+		JMenuItem hintMenuItem = new JMenuItem(HINT_MI);
 		JMenuItem clearPossibleValuesMenuItem = new JMenuItem(CLEAR_POSSIBLE_VALUES_MI);
 		JMenuItem clearCellsMenuItem = new JMenuItem(CLEAR_CELLS_MI);
 		JMenuItem lockCellsMenuItem = new JMenuItem(LOCK_CELLS_MI);
@@ -110,6 +111,8 @@ public class SudokuFrame
 		actionMenu.add(setValueMenu);
 		actionMenu.add(setPossibleValueMenu);
 		actionMenu.add(clearPossibleValuesMenuItem);
+		actionMenu.addSeparator();
+		actionMenu.add(hintMenuItem);
 		actionMenu.addSeparator();
 		actionMenu.add(clearCellsMenuItem);
 		actionMenu.add(lockCellsMenuItem);

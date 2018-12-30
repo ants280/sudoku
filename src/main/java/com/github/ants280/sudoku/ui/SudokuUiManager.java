@@ -33,6 +33,7 @@ public class SudokuUiManager implements ActionListener
 	public static final String ACTION_M = "Action";
 	public static final String UNDO_MI = "Undo";
 	public static final String REDO_MI = "Redo";
+	public static final String HINT_MI = "Hint";
 	public static final String SET_VALUE_MI = "Set value...";
 	public static final String SET_POSSIBLE_VALUE_MI = "Set possible value...";
 	public static final String CLEAR_POSSIBLE_VALUES_MI = "Clear possible values";
@@ -111,6 +112,7 @@ public class SudokuUiManager implements ActionListener
 		tempActionCommands.put(EXIT_MI, this::exit);
 		tempActionCommands.put(UNDO_MI, this::undo);
 		tempActionCommands.put(REDO_MI, this::redo);
+		tempActionCommands.put(HINT_MI, this::getHint);
 		tempActionCommands.put(CLEAR_POSSIBLE_VALUES_MI, this::clearPossibleValues);
 		tempActionCommands.put(CLEAR_CELLS_MI, this::clearCells);
 		tempActionCommands.put(LOCK_CELLS_MI, () -> this.lockCells(true));
@@ -512,5 +514,11 @@ public class SudokuUiManager implements ActionListener
 
 		sudokuDisplayComponent.repaint();
 		this.updateMessageLabel();
+	}
+
+	private void getHint()
+	{
+		// TODO : get hint
+		// TODO: disable menu item when board is solved...
 	}
 }
