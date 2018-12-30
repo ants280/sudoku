@@ -535,7 +535,7 @@ public class SudokuUiManager implements ActionListener
 		};
 		CommandHistory<SudokuUndoCellCommand> hintCommandHistory = new CommandHistory<>(undoRedoEmptyConsumer);
 		SudokuUndoBoard hintBoard = new SudokuUndoBoard(hintCommandHistory);
-		hintBoard.resetFrom(board);
+		hintBoard.resetFrom(board); // TODO: it would be nice to have a SudokuBoard(copyConstructor) that calls resetFrom().
 		Consumer<String> moveDescriptionConsumer = moveDescription ->
 		{
 		};
