@@ -22,6 +22,11 @@ public class SudokuUndoCellCommand implements Command
 		this.updatedValue = updatedValue;
 	}
 
+	public SudokuUndoCell getSudokuCell()
+	{
+		return sudokuCell;
+	}
+
 	@Override
 	public void undo()
 	{

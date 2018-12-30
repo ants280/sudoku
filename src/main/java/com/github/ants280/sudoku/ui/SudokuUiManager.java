@@ -4,8 +4,10 @@ import com.github.ants280.sudoku.game.SudokuBoard;
 import com.github.ants280.sudoku.game.SudokuCell;
 import com.github.ants280.sudoku.game.SudokuValue;
 import com.github.ants280.sudoku.game.solver.SudokuBruteForceSolver;
+import com.github.ants280.sudoku.game.solver.SudokuLogicSolver;
 import com.github.ants280.sudoku.game.solver.SudokuSolver;
 import com.github.ants280.sudoku.game.undo.CommandHistory;
+import com.github.ants280.sudoku.game.undo.SudokuUndoBoard;
 import com.github.ants280.sudoku.game.undo.SudokuUndoCellCommand;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -518,7 +521,41 @@ public class SudokuUiManager implements ActionListener
 
 	private void getHint()
 	{
-		// TODO : get hint
-		// TODO: disable menu item when board is solved...
+		// TODO: disable menu item when board is solved.
+		if (board.isSolved())
+		{
+			return;
+		}
+
+		sudokuDisplayComponent.removeSelectedCell();
+		sudokuDisplayComponent.repaint();
+
+		BiConsumer<Boolean, Boolean> undoRedoEmptyConsumer = (undoEmpty, redoEmpty) ->
+		{
+		};
+		CommandHistory<SudokuUndoCellCommand> hintCommandHistory = new CommandHistory<>(undoRedoEmptyConsumer);
+		SudokuUndoBoard hintBoard = new SudokuUndoBoard(hintCommandHistory);
+		hintBoard.resetFrom(board);
+		Consumer<String> moveDescriptionConsumer = moveDescription ->
+		{
+		};
+		SudokuSolver hintSolver
+				= new SudokuLogicSolver(hintBoard, moveDescriptionConsumer);
+
+		hintCommandHistory.setEnabled(false);
+		hintSolver.initialize();
+		hintCommandHistory.setEnabled(true);
+		boolean moveMade = hintSolver.makeMove();
+
+		if (moveMade)
+		{
+			SudokuUndoCellCommand lastCommand = hintCommandHistory.undo();
+			if (lastCommand != null)
+			{
+				SudokuCell cellThatMoveWasMadeTo = lastCommand.getSudokuCell();
+				sudokuDisplayComponent.selectCell(cellThatMoveWasMadeTo);
+				sudokuDisplayComponent.repaint();
+			}
+		}
 	}
 }

@@ -236,6 +236,14 @@ public class SudokuDisplayComponent extends JComponent
 		this.repaint();
 	}
 
+	public void selectCell(SudokuCell sudokuCell)
+	{
+		this.removeSelectedCell(); // in case the selection fails.
+
+		this.setSelectedRow(sudokuCell.getIndex(SectionType.ROW));
+		this.setSelectedCol(sudokuCell.getIndex(SectionType.COLUMN));
+	}
+
 	public void removeSelectedCell()
 	{
 		selectedRow = null;

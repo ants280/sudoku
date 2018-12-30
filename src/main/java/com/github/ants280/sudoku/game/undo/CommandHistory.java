@@ -4,7 +4,7 @@ import java.util.Deque;
 import java.util.LinkedList;
 import java.util.function.BiConsumer;
 
-public class CommandHistory<T extends Command> implements Command
+public class CommandHistory<T extends Command>
 {
 	private final Deque<T> undoHistory;
 	private final Deque<T> redoHistory;
@@ -31,8 +31,7 @@ public class CommandHistory<T extends Command> implements Command
 		}
 	}
 
-	@Override
-	public void undo()
+	public T undo()
 	{
 		if (enabled && !undoHistory.isEmpty())
 		{
@@ -43,11 +42,14 @@ public class CommandHistory<T extends Command> implements Command
 			redoHistory.push(command);
 
 			undoRedoEmptyConsumer.accept(undoHistory.isEmpty(), false);
+
+			return command;
 		}
+
+		return null;
 	}
 
-	@Override
-	public void redo()
+	public T redo()
 	{
 		if (enabled && !redoHistory.isEmpty())
 		{
@@ -58,7 +60,11 @@ public class CommandHistory<T extends Command> implements Command
 			undoHistory.push(command);
 
 			undoRedoEmptyConsumer.accept(false, redoHistory.isEmpty());
+
+			return command;
 		}
+
+		return null;
 	}
 
 	public void reset()
