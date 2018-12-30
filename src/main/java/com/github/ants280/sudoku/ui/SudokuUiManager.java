@@ -549,11 +549,17 @@ public class SudokuUiManager implements ActionListener
 
 		if (moveMade)
 		{
-			SudokuUndoCellCommand lastCommand = hintCommandHistory.undo();
-			if (lastCommand != null)
+			// TODO: It should be possible to specify to the solver not to remove possible values after the move is made. (or to do so in separate moves)
+			while (hintCommandHistory.getUndoCount() > 1)
 			{
-				SudokuCell cellThatMoveWasMadeTo = lastCommand.getSudokuCell();
-				sudokuDisplayComponent.selectCell(cellThatMoveWasMadeTo);
+				hintCommandHistory.undo();
+			}
+
+			SudokuUndoCellCommand firstCommand = hintCommandHistory.undo();
+			if (firstCommand != null)
+			{
+				SudokuCell hintCell = firstCommand.getSudokuCell();
+				sudokuDisplayComponent.selectCell(hintCell);
 				sudokuDisplayComponent.repaint();
 			}
 		}
