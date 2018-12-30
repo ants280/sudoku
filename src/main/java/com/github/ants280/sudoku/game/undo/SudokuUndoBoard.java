@@ -6,15 +6,17 @@ import com.github.ants280.sudoku.game.SudokuValue;
 
 public class SudokuUndoBoard extends SudokuBoard
 {
+	private final CommandHistory<SudokuUndoCellCommand> commandHistory;
+
 	public SudokuUndoBoard(CommandHistory<SudokuUndoCellCommand> commandHistory)
 	{
 		super();
+		this.commandHistory = commandHistory;
 
-		this.initCommandHistoryForSudokuCells(commandHistory);
+		this.initCommandHistoryForSudokuCells();
 	}
 
-	private void initCommandHistoryForSudokuCells(
-			CommandHistory<SudokuUndoCellCommand> commandHistory)
+	private void initCommandHistoryForSudokuCells()
 	{
 		this.getAllSudokuCells()
 				.stream()
@@ -36,5 +38,13 @@ public class SudokuUndoBoard extends SudokuBoard
 				groupIndex,
 				cellValue,
 				locked);
+	}
+
+	@Override
+	public void resetFrom(SudokuBoard other)
+	{
+		super.resetFrom(other);
+
+		commandHistory.reset();
 	}
 }
