@@ -7,6 +7,7 @@ import com.github.ants280.sudoku.game.solver.SudokuBruteForceSolver;
 import com.github.ants280.sudoku.game.solver.SudokuLogicSolver;
 import com.github.ants280.sudoku.game.solver.SudokuSolver;
 import com.github.ants280.sudoku.game.undo.CommandHistory;
+import com.github.ants280.sudoku.game.undo.SudokuCellChangeType;
 import com.github.ants280.sudoku.game.undo.SudokuUndoBoard;
 import com.github.ants280.sudoku.game.undo.SudokuUndoCellCommand;
 import java.awt.event.ActionEvent;
@@ -556,7 +557,8 @@ public class SudokuUiManager implements ActionListener
 			}
 
 			SudokuUndoCellCommand firstCommand = hintCommandHistory.undo();
-			if (firstCommand != null)
+			if (firstCommand != null
+					&& firstCommand.getSudokuCellChangeType() == SudokuCellChangeType.SET_VALUE)
 			{
 				SudokuCell hintCell = firstCommand.getSudokuCell();
 				sudokuDisplayComponent.selectCell(hintCell);

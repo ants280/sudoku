@@ -27,6 +27,11 @@ public class SudokuUndoCellCommand implements Command
 		return sudokuCell;
 	}
 
+	public SudokuCellChangeType getSudokuCellChangeType()
+	{
+		return sudokuCellChangeType;
+	}
+
 	@Override
 	public void undo()
 	{
