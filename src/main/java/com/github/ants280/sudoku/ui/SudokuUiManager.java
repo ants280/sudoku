@@ -58,6 +58,7 @@ public class SudokuUiManager implements ActionListener
 	private final CommandHistory<SudokuUndoCellCommand> commandHistory;
 	private final JMenu setValueMenu;
 	private final JMenu setPossibleValueMenu;
+	private final JMenuItem hintMenuItem;
 	private final SudokuBoard initialBoard;
 	private final Map<String, Runnable> actionCommands;
 	private final SudokuMouseListener mouseListener;
@@ -71,7 +72,8 @@ public class SudokuUiManager implements ActionListener
 			JLabel messageLabel,
 			CommandHistory<SudokuUndoCellCommand> commandHistory,
 			JMenu setValueMenu,
-			JMenu setPossibleValueMenu)
+			JMenu setPossibleValueMenu,
+			JMenuItem hintMenuItem)
 	{
 
 		this.frame = frame;
@@ -82,6 +84,7 @@ public class SudokuUiManager implements ActionListener
 		this.initialBoard = new SudokuBoard(board.toString());
 		this.setValueMenu = setValueMenu;
 		this.setPossibleValueMenu = setPossibleValueMenu;
+		this.hintMenuItem = hintMenuItem;
 		this.actionCommands = this.createActionCommands();
 		this.mouseListener = new SudokuMouseListener(
 				this::selectCell,
@@ -156,6 +159,7 @@ public class SudokuUiManager implements ActionListener
 		this.disableSelectedCellMenus();
 		sudokuDisplayComponent.removeSelectedCell();
 		commandHistory.reset();
+		hintMenuItem.setEnabled(true);
 	}
 
 	private void endGame()
@@ -164,6 +168,7 @@ public class SudokuUiManager implements ActionListener
 		this.updateMessageLabel();
 		this.disableSelectedCellMenus();
 		sudokuDisplayComponent.removeSelectedCell();
+		hintMenuItem.setEnabled(false);
 	}
 
 	@Override
@@ -522,12 +527,6 @@ public class SudokuUiManager implements ActionListener
 
 	private void getHint()
 	{
-		// TODO: disable menu item when board is solved.
-		if (board.isSolved())
-		{
-			return;
-		}
-
 		sudokuDisplayComponent.removeSelectedCell();
 		sudokuDisplayComponent.repaint();
 
