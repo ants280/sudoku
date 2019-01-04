@@ -69,8 +69,7 @@ public class SudokuFrame
 						messageLabel,
 						commandHistory,
 						setValueMenu,
-						setPossibleValueMenu,
-						hintMenuItem);//TODO: only needed here to disable via event.
+						setPossibleValueMenu);
 		board.addSolvedChangedConsumer(this::handleSolvedChangedConsumer);
 		board.addValueChangedConsumer(this::handleValueChanged);
 		board.addPossibleValueChangedConsumer(this::handlePossibleValueChanged);
