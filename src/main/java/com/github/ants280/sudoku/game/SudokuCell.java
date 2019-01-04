@@ -81,7 +81,7 @@ public class SudokuCell
 		}
 
 		SudokuEvent<SudokuCell, SudokuValue> cellValueChangedEvent
-				= new SudokuEvent<>(this, value, this.value);
+				= new SudokuEvent<>(this, this.value, value);
 
 		this.value = value;
 
