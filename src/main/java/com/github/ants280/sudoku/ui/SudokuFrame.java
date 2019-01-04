@@ -5,7 +5,7 @@ import com.github.ants280.sudoku.game.SudokuCell;
 import com.github.ants280.sudoku.game.SudokuEvent;
 import com.github.ants280.sudoku.game.SudokuValue;
 import com.github.ants280.sudoku.game.undo.CommandHistory;
-import com.github.ants280.sudoku.game.undo.SudokuUndoCellCommand;
+import com.github.ants280.sudoku.game.undo.SudokuCellUndoCommand;
 import static com.github.ants280.sudoku.ui.SudokuUiManager.*;
 import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
@@ -32,7 +32,7 @@ public class SudokuFrame
 	private final JMenu setValueMenu;
 	private final JMenu setPossibleValueMenu;
 	private final JMenuItem hintMenuItem;
-	private final CommandHistory<SudokuUndoCellCommand> commandHistory;
+	private final CommandHistory<SudokuCellUndoCommand> commandHistory;
 
 	public SudokuFrame()
 	{

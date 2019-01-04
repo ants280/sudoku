@@ -4,7 +4,7 @@ import com.github.ants280.sudoku.game.SudokuBoard;
 import com.github.ants280.sudoku.game.solver.SudokuLogicSolver;
 import com.github.ants280.sudoku.game.solver.SudokuSolver;
 import com.github.ants280.sudoku.game.undo.CommandHistory;
-import com.github.ants280.sudoku.game.undo.SudokuUndoCellCommand;
+import com.github.ants280.sudoku.game.undo.SudokuCellUndoCommand;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -34,7 +34,7 @@ import javax.swing.event.ChangeListener;
 public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 {
 	private final SudokuBoard sudokuBoard;
-	private final CommandHistory<SudokuUndoCellCommand> commandHistory;
+	private final CommandHistory<SudokuCellUndoCommand> commandHistory;
 	private final Runnable repaintCanvasCallback;
 	private final SudokuSolver sudokuSolver;
 	private final SudokuLogicSolverTable solverTable;
@@ -59,7 +59,7 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 	public SudokuLogicSolverPopup(
 			JFrame popupOwner,
 			SudokuBoard sudokuBoard,
-			CommandHistory<SudokuUndoCellCommand> commandHistory,
+			CommandHistory<SudokuCellUndoCommand> commandHistory,
 			Runnable repaintCanvasCallback)
 	{
 		this.sudokuBoard = sudokuBoard;

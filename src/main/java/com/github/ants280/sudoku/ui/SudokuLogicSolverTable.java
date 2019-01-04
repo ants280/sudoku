@@ -1,7 +1,7 @@
 package com.github.ants280.sudoku.ui;
 
 import com.github.ants280.sudoku.game.undo.CommandHistory;
-import com.github.ants280.sudoku.game.undo.SudokuUndoCellCommand;
+import com.github.ants280.sudoku.game.undo.SudokuCellUndoCommand;
 import java.awt.Component;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
@@ -16,11 +16,11 @@ import javax.swing.table.DefaultTableModel;
 public class SudokuLogicSolverTable
 {
 	private final DefaultTableModel tableModel;
-	private final CommandHistory<SudokuUndoCellCommand> commandHistory;
+	private final CommandHistory<SudokuCellUndoCommand> commandHistory;
 	private final JTable table;
 
 	public SudokuLogicSolverTable(
-			CommandHistory<SudokuUndoCellCommand> commandHistory,
+			CommandHistory<SudokuCellUndoCommand> commandHistory,
 			Runnable repaintCanvasCallback)
 	{
 		this.commandHistory = commandHistory;
@@ -81,13 +81,13 @@ public class SudokuLogicSolverTable
 	{
 		private final JTable table;
 		private final int undoIndexColumnIndex;
-		private final CommandHistory<SudokuUndoCellCommand> commandHistory;
+		private final CommandHistory<SudokuCellUndoCommand> commandHistory;
 		private final Runnable repaintCanvasCallback;
 
 		public SudokuLogicTableMouseListener(
 				JTable table,
 				int undoIndexColumnIndex,
-				CommandHistory<SudokuUndoCellCommand> commandHistory,
+				CommandHistory<SudokuCellUndoCommand> commandHistory,
 				Runnable repaintCanvasCallback)
 		{
 			this.table = table;

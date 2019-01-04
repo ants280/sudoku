@@ -9,7 +9,7 @@ import com.github.ants280.sudoku.game.solver.SudokuLogicSolver;
 import com.github.ants280.sudoku.game.solver.SudokuSolver;
 import com.github.ants280.sudoku.game.undo.CommandHistory;
 import com.github.ants280.sudoku.game.undo.SudokuCellChangeType;
-import com.github.ants280.sudoku.game.undo.SudokuUndoCellCommand;
+import com.github.ants280.sudoku.game.undo.SudokuCellUndoCommand;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
@@ -55,7 +55,7 @@ public class SudokuUiManager implements ActionListener
 	private final SudokuDisplayComponent sudokuDisplayComponent;
 	private final SudokuBoard board;
 	private final JLabel messageLabel;
-	private final CommandHistory<SudokuUndoCellCommand> commandHistory;
+	private final CommandHistory<SudokuCellUndoCommand> commandHistory;
 	private final SudokuBoard initialBoard;
 	private final Map<String, Runnable> actionCommands;
 	private final SudokuMouseListener mouseListener;
@@ -67,7 +67,7 @@ public class SudokuUiManager implements ActionListener
 			SudokuDisplayComponent sudokuDisplayComponent,
 			SudokuBoard board,
 			JLabel messageLabel,
-			CommandHistory<SudokuUndoCellCommand> commandHistory,
+			CommandHistory<SudokuCellUndoCommand> commandHistory,
 			JMenu setValueMenu,
 			JMenu setPossibleValueMenu)
 	{
@@ -503,7 +503,7 @@ public class SudokuUiManager implements ActionListener
 		sudokuDisplayComponent.removeSelectedCell();
 		sudokuDisplayComponent.repaint();
 
-		CommandHistory<SudokuUndoCellCommand> hintCommandHistory = new CommandHistory<>();
+		CommandHistory<SudokuCellUndoCommand> hintCommandHistory = new CommandHistory<>();
 		SudokuBoard hintBoard = new SudokuBoard();
 		hintBoard.resetFrom(board); // TODO: it would be nice to have a SudokuBoard(copyConstructor) that calls resetFrom().
 		Consumer<String> moveDescriptionConsumer = moveDescription ->
@@ -525,11 +525,11 @@ public class SudokuUiManager implements ActionListener
 				hintCommandHistory.undo();
 			}
 
-			SudokuUndoCellCommand firstCommand = hintCommandHistory.undo();
+			SudokuCellUndoCommand firstCommand = hintCommandHistory.undo();
 			if (firstCommand != null
 					&& firstCommand.getSudokuCellChangeType() == SudokuCellChangeType.SET_VALUE)
 			{
-				SudokuCell hintCell = firstCommand.getSudokuCell();
+				SudokuCell hintCell = firstCommand.getSource();
 				sudokuDisplayComponent.selectCell(hintCell);
 				sudokuDisplayComponent.repaint();
 			}

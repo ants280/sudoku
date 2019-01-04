@@ -5,12 +5,11 @@ import com.github.ants280.sudoku.game.SudokuEvent;
 import com.github.ants280.sudoku.game.SudokuValue;
 import java.util.Objects;
 
-// TODO: Rename class to SudokuCellUndoCommand
-public class SudokuUndoCellCommand extends SudokuEvent<SudokuCell, SudokuValue> implements Command
+public class SudokuCellUndoCommand extends SudokuEvent<SudokuCell, SudokuValue> implements Command
 {
 	private final SudokuCellChangeType sudokuCellChangeType;
 
-	public SudokuUndoCellCommand(
+	public SudokuCellUndoCommand(
 			SudokuCell sudokuCell,
 			SudokuCellChangeType sudokuCellChangeType,
 			SudokuValue initialValue,
@@ -52,7 +51,7 @@ public class SudokuUndoCellCommand extends SudokuEvent<SudokuCell, SudokuValue> 
 		return this == obj
 				|| obj != null
 				&& this.getClass() == obj.getClass()
-				&& this.sudokuCellChangeType == ((SudokuUndoCellCommand) obj).sudokuCellChangeType
+				&& this.sudokuCellChangeType == ((SudokuCellUndoCommand) obj).sudokuCellChangeType
 				&& super.equals(obj);
 	}
 }
