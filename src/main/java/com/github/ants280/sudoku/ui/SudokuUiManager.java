@@ -336,6 +336,7 @@ public class SudokuUiManager implements ActionListener
 		}
 	}
 
+	// TODO: should be able to copy/paste with mouse
 	private void load()
 	{
 		Object boardToLoad = JOptionPane.showInputDialog(
@@ -360,6 +361,7 @@ public class SudokuUiManager implements ActionListener
 			}
 			else
 			{
+				// TODO: Should leave load dialog open
 				JOptionPane.showMessageDialog(
 						frame,
 						"Error loading board.\n"
@@ -371,6 +373,8 @@ public class SudokuUiManager implements ActionListener
 		}
 	}
 
+	// TODO: Should only have OK button
+	// TODO: should be able to copy/paste with mouse
 	private void export()
 	{
 		JOptionPane.showInputDialog(
