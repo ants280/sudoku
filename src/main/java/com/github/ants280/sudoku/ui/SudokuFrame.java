@@ -184,7 +184,7 @@ public class SudokuFrame
 
 	private void handleSolvedChangedConsumer(SudokuEvent<Boolean> solvedChangedEvent)
 	{
-
+		hintMenuItem.setEnabled(!solvedChangedEvent.getNewValue());
 	}
 
 	private void handleValueChanged(SudokuEvent<SudokuValue> valueChangedEvent)

@@ -57,7 +57,6 @@ public class SudokuUiManager implements ActionListener
 	private final SudokuBoard board;
 	private final JLabel messageLabel;
 	private final CommandHistory<SudokuUndoCellCommand> commandHistory;
-	private final JMenuItem hintMenuItem;
 	private final SudokuBoard initialBoard;
 	private final Map<String, Runnable> actionCommands;
 	private final SudokuMouseListener mouseListener;
@@ -71,8 +70,7 @@ public class SudokuUiManager implements ActionListener
 			JLabel messageLabel,
 			CommandHistory<SudokuUndoCellCommand> commandHistory,
 			JMenu setValueMenu,
-			JMenu setPossibleValueMenu,
-			JMenuItem hintMenuItem)
+			JMenu setPossibleValueMenu)
 	{
 
 		this.frame = frame;
@@ -81,7 +79,6 @@ public class SudokuUiManager implements ActionListener
 		this.messageLabel = messageLabel;
 		this.commandHistory = commandHistory;
 		this.initialBoard = new SudokuBoard(board.toString());
-		this.hintMenuItem = hintMenuItem;
 		this.actionCommands = this.createActionCommands();
 		this.mouseListener = new SudokuMouseListener(
 				this::selectCell,
@@ -120,7 +117,6 @@ public class SudokuUiManager implements ActionListener
 			this.removeListeners();
 			this.updateMessageLabel();
 			sudokuDisplayComponent.removeSelectedCell();
-			hintMenuItem.setEnabled(false);
 		}
 		else
 		{
@@ -128,7 +124,6 @@ public class SudokuUiManager implements ActionListener
 			this.updateMessageLabel();
 			sudokuDisplayComponent.removeSelectedCell();
 			commandHistory.reset();
-			hintMenuItem.setEnabled(true);
 		}
 	}
 

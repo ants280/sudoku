@@ -240,7 +240,6 @@ public class SudokuDisplayComponent extends JComponent
 		this.setSelectedCellIndices(
 				(y - yOffset) / cellLength,
 				(x - xOffset) / cellLength);
-		this.repaint(); // TODO : This should be done via a selection changed consumer.
 	}
 
 	public void selectCell(SudokuCell sudokuCell)
@@ -293,8 +292,6 @@ public class SudokuDisplayComponent extends JComponent
 					throw new IllegalArgumentException(
 							"Unknown moveDirection: " + moveDirection);
 			}
-
-			this.repaint();
 		}
 	}
 
@@ -309,6 +306,7 @@ public class SudokuDisplayComponent extends JComponent
 		{
 			selectedCol = c;
 		}
+		this.repaint();
 		SudokuCell currentSelectedCell = this.getSelectedCell();
 		SudokuEvent<SudokuCell> selectedCellChangedEvent
 				= new SudokuEvent<>(previousSelectedCell, currentSelectedCell);
