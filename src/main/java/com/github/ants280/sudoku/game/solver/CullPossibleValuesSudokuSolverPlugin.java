@@ -68,7 +68,7 @@ public class CullPossibleValuesSudokuSolverPlugin extends SudokuSolverPlugin
 									possibleValues.stream()
 											.map(SudokuValue::getDisplayValue)
 											.collect(Collectors.toList()));
-							moveDescriptionConsumer.accept(moveDescription);
+							this.logMove(moveDescription);
 
 							sudokuCellsToCull.forEach(sudokuCell
 									-> sudokuCell.togglePossibleValue(possibleValue));

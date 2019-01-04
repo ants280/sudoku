@@ -115,7 +115,7 @@ public class SetPossibleValuesSudokuSolverPlugin extends SudokuSolverPlugin
 								.map(SudokuValue::getDisplayValue)
 								.collect(Collectors.toList()),
 						possibleValues.size());
-				moveDescriptionConsumer.accept(moveDescription);
+				this.logMove(moveDescription);
 
 				cellsToTrim.forEach(cellToTrimEntry -> cellToTrimEntry.getValue()
 						.forEach(possibleValue ->

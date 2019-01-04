@@ -6,7 +6,7 @@ import java.util.function.Consumer;
 public abstract class SudokuSolverPlugin
 {
 	protected final SudokuBoard sudokuBoard;
-	protected final Consumer<String> moveDescriptionConsumer;
+	private final Consumer<String> moveDescriptionConsumer;
 
 	public SudokuSolverPlugin(
 			SudokuBoard sudokuBoard,
@@ -22,4 +22,12 @@ public abstract class SudokuSolverPlugin
 	 * @return True if a single change could be made to the SudokuBoard.
 	 */
 	public abstract boolean makeMove();
+
+	protected void logMove(String moveDescription)
+	{
+		if (moveDescriptionConsumer != null)
+		{
+			moveDescriptionConsumer.accept(moveDescription);
+		}
+	}
 }

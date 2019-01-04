@@ -16,7 +16,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -508,11 +507,7 @@ public class SudokuUiManager implements ActionListener
 		CommandHistory<SudokuCellUndoCommand> hintCommandHistory = new CommandHistory<>();
 		SudokuBoard hintBoard = new SudokuBoard();
 		hintBoard.resetFrom(board); // TODO: it would be nice to have a SudokuBoard(copyConstructor) that calls resetFrom().
-		Consumer<String> moveDescriptionConsumer = moveDescription ->
-		{
-		};
-		SudokuSolver hintSolver
-				= new SudokuLogicSolver(hintBoard, moveDescriptionConsumer);
+		SudokuSolver hintSolver = new SudokuLogicSolver(hintBoard);
 
 		hintCommandHistory.setEnabled(false);
 		hintSolver.initialize();

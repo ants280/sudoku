@@ -95,7 +95,7 @@ public class RemovePossibleValueForOtherGroupsSudokuSolverPlugin
 								groupIndex,
 								groupIndex,
 								sectionType.getDisplayValue());
-						moveDescriptionConsumer.accept(moveDescription);
+						this.logMove(moveDescription);
 
 						otherCellsInSectionType
 								.forEach(sudokuCell -> sudokuCell.togglePossibleValue(possibleValue));

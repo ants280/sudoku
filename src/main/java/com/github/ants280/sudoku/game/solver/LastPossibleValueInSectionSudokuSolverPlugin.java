@@ -50,7 +50,7 @@ public class LastPossibleValueInSectionSudokuSolverPlugin extends SudokuSolverPl
 								sudokuCell.getIndex(SectionType.COLUMN) + 1,
 								possibleValue.getDisplayValue(),
 								possibleValue.getDisplayValue());
-						moveDescriptionConsumer.accept(moveDescription);
+						this.logMove(moveDescription);
 
 						sudokuCell.setValue(possibleValue);
 

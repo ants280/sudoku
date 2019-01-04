@@ -45,7 +45,7 @@ public class OnlyPossibleValueSudokuSolverPlugin extends SudokuSolverPlugin
 					sudokuCell.getIndex(SectionType.ROW) + 1,
 					sudokuCell.getIndex(SectionType.COLUMN) + 1,
 					value.getDisplayValue());
-			moveDescriptionConsumer.accept(moveDescription);
+			this.logMove(moveDescription);
 
 			sudokuCell.setValue(value);
 
