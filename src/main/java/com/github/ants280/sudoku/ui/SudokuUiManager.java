@@ -367,6 +367,8 @@ public class SudokuUiManager implements ActionListener
 						= new SudokuBoard(boardToLoad.toString());
 				board.resetFrom(loadedBoard); // Note: all valued cells locked
 				initialBoard.resetFrom(board);
+
+				sudokuDisplayComponent.repaint();
 			}
 			else
 			{
