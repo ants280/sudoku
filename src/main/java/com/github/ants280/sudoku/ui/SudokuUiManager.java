@@ -338,8 +338,6 @@ public class SudokuUiManager implements ActionListener
 			solver.solveFast();
 			commandHistory.reset();
 
-			sudokuDisplayComponent.repaint();// TODO: investigate if events also trigger repaints (they should not.)
-			this.updateMessageLabel();
 		}
 	}
 
@@ -364,8 +362,6 @@ public class SudokuUiManager implements ActionListener
 						= new SudokuBoard(boardToLoad.toString());
 				board.resetFrom(loadedBoard); // Note: all valued cells locked
 				initialBoard.resetFrom(board);
-
-				sudokuDisplayComponent.repaint(); // TODO resetFromShould trigger repaint
 			}
 			else
 			{
