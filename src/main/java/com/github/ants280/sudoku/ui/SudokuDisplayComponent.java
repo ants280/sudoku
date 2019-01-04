@@ -301,16 +301,14 @@ public class SudokuDisplayComponent extends JComponent
 
 	private void setSelectedCellIndices(int r, int c)
 	{
+		if (r < 0 || r >= 9 || c < 0 || c >= 9)
+		{
+			return;
+		}
 		SudokuCell previousSelectedCell = this.getSelectedCell();
-		if (r >= 0 && r < 9)
-		{
-			selectedRow = r;
-		}
-		if (c >= 0 && c < 9)
-		{
-			selectedCol = c;
-		}
-		this.repaint(); // TODO: only repaint if selected cell changed.  Perhaps this method should only be called if the repaint is needed.
+		selectedRow = r;
+		selectedCol = c;
+		this.repaint();
 		SudokuCell currentSelectedCell = this.getSelectedCell();
 		SudokuEvent<?, SudokuCell> selectedCellChangedEvent
 				= new SudokuEvent<>(this, previousSelectedCell, currentSelectedCell);
