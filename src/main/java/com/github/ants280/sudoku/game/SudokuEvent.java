@@ -55,5 +55,4 @@ public class SudokuEvent<T, U>
 				&& Objects.equals(this.oldValue, ((SudokuEvent) obj).oldValue)
 				&& Objects.equals(this.newValue, ((SudokuEvent) obj).newValue);
 	}
-
 }
