@@ -62,13 +62,11 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 	public SudokuLogicSolverPopup(
 			JFrame popupOwner,
 			SudokuBoard sudokuBoard,
-			CommandHistory<SudokuCellUndoCommand> commandHistory,
-			Runnable repaintCanvasCallback)
+			CommandHistory<SudokuCellUndoCommand> commandHistory)
 	{
 		this.sudokuBoard = sudokuBoard;
 		this.boardSolvedChangedConsumer = this::handleSolvedChangedConsumer;
 		this.commandHistory = commandHistory;
-		this.repaintCanvasCallback = repaintCanvasCallback;
 		this.solverTable = new SudokuLogicSolverTable(
 				commandHistory,
 				repaintCanvasCallback);

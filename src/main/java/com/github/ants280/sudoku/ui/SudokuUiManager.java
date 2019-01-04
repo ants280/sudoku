@@ -310,12 +310,7 @@ public class SudokuUiManager implements ActionListener
 				= new SudokuLogicSolverPopup(
 						frame,
 						board,
-						commandHistory,
-						() -> // TODO: Is this needed? (will events handle the repainting?)
-				{
-					sudokuDisplayComponent.repaint();
-					this.updateMessageLabel();
-				});
+						commandHistory);
 
 		sudokuSolverPopup.setVisible(true);
 	}
