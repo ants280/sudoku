@@ -67,7 +67,9 @@ public class CommandHistory<T extends Command>
 
 			T command = undoHistory.pop();
 
+			enabled = false;
 			command.undo();
+			enabled = true;
 
 			redoHistory.push(command);
 
@@ -95,7 +97,9 @@ public class CommandHistory<T extends Command>
 
 			T command = redoHistory.pop();
 
+			enabled = false;
 			command.redo();
+			enabled = true;
 
 			undoHistory.push(command);
 

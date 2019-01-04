@@ -15,6 +15,11 @@ public class SudokuEvent<T, U>
 		this.newValue = newValue;
 	}
 
+	public SudokuEvent(SudokuEvent<T, U> sourceEvent)
+	{
+		this(sourceEvent.source, sourceEvent.oldValue, sourceEvent.newValue);
+	}
+
 	public T getSource()
 	{
 		return source;

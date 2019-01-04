@@ -5,6 +5,7 @@ import com.github.ants280.sudoku.game.SudokuCell;
 import com.github.ants280.sudoku.game.SudokuEvent;
 import com.github.ants280.sudoku.game.SudokuValue;
 import com.github.ants280.sudoku.game.undo.CommandHistory;
+import com.github.ants280.sudoku.game.undo.SudokuCellChangeType;
 import com.github.ants280.sudoku.game.undo.SudokuCellUndoCommand;
 import static com.github.ants280.sudoku.ui.SudokuUiManager.*;
 import java.awt.BorderLayout;
@@ -188,6 +189,9 @@ public class SudokuFrame
 						cellValueChangedEvent.getOldValue(),
 						cellValueChangedEvent.getNewValue()));
 
+		SudokuCellUndoCommand sudokuCellUndoCommand
+				= new SudokuCellUndoCommand(cellValueChangedEvent, SudokuCellChangeType.SET_VALUE);
+		commandHistory.addCommand(sudokuCellUndoCommand);
 	}
 
 	private void handleCellPossibleValueChanged(SudokuEvent<SudokuCell, SudokuValue> cellPossibleValueChangedEvent)
@@ -196,6 +200,10 @@ public class SudokuFrame
 				Objects.equals(
 						cellPossibleValueChangedEvent.getOldValue(),
 						cellPossibleValueChangedEvent.getNewValue()));
+
+		SudokuCellUndoCommand sudokuCellUndoCommand
+				= new SudokuCellUndoCommand(cellPossibleValueChangedEvent, SudokuCellChangeType.TOGGLE_POSSIBLE_VALUE);
+		commandHistory.addCommand(sudokuCellUndoCommand);
 	}
 
 	private void handleSelectedCellChanged(SudokuEvent<?, SudokuCell> selectedCellChangedEvent)

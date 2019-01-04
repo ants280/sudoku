@@ -10,6 +10,15 @@ public class SudokuCellUndoCommand extends SudokuEvent<SudokuCell, SudokuValue> 
 	private final SudokuCellChangeType sudokuCellChangeType;
 
 	public SudokuCellUndoCommand(
+			SudokuEvent<SudokuCell, SudokuValue> cellValueChangedEvent,
+			SudokuCellChangeType sudokuCellChangeType)
+	{
+		super(cellValueChangedEvent);
+		this.sudokuCellChangeType = sudokuCellChangeType;
+	}
+
+	// Test constructor
+	SudokuCellUndoCommand(
 			SudokuCell sudokuCell,
 			SudokuCellChangeType sudokuCellChangeType,
 			SudokuValue initialValue,

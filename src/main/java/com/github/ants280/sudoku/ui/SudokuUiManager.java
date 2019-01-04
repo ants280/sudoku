@@ -335,10 +335,8 @@ public class SudokuUiManager implements ActionListener
 		{
 			SudokuSolver solver = new SudokuBruteForceSolver(board);
 
-			commandHistory.reset();
-			commandHistory.setEnabled(false);
 			solver.solveFast();
-			commandHistory.setEnabled(true);
+			commandHistory.reset();
 
 			sudokuDisplayComponent.repaint();
 			this.updateMessageLabel();
@@ -481,9 +479,7 @@ public class SudokuUiManager implements ActionListener
 
 	private void undo()
 	{
-		commandHistory.setEnabled(false);
 		commandHistory.undo();
-		commandHistory.setEnabled(true);
 
 		sudokuDisplayComponent.repaint();
 		this.updateMessageLabel();
@@ -491,9 +487,7 @@ public class SudokuUiManager implements ActionListener
 
 	private void redo()
 	{
-		commandHistory.setEnabled(false);
 		commandHistory.redo();
-		commandHistory.setEnabled(true);
 
 		sudokuDisplayComponent.repaint();
 		this.updateMessageLabel();
@@ -507,26 +501,20 @@ public class SudokuUiManager implements ActionListener
 		CommandHistory<SudokuCellUndoCommand> hintCommandHistory = new CommandHistory<>();
 		SudokuBoard hintBoard = new SudokuBoard();
 		hintBoard.resetFrom(board); // TODO: it would be nice to have a SudokuBoard(copyConstructor) that calls resetFrom().
+		hintBoard.addCellValueChangedConsumer(
+				cellValueChangedEvent -> hintCommandHistory.addCommand(
+						new SudokuCellUndoCommand(cellValueChangedEvent, SudokuCellChangeType.SET_VALUE)));
 		SudokuSolver hintSolver = new SudokuLogicSolver(hintBoard);
 
-		hintCommandHistory.setEnabled(false);
 		hintSolver.initialize();
-		hintCommandHistory.setEnabled(true);
 		boolean moveMade = hintSolver.makeMove();
 
 		if (moveMade)
 		{
-			// TODO: It should be possible to specify to the solver not to remove possible values after the move is made. (or to do so in separate moves)
-			while (hintCommandHistory.getUndoCount() > 1)
+			SudokuCellUndoCommand lastSetValueCommand = hintCommandHistory.undo();
+			if (lastSetValueCommand != null)
 			{
-				hintCommandHistory.undo();
-			}
-
-			SudokuCellUndoCommand firstCommand = hintCommandHistory.undo();
-			if (firstCommand != null
-					&& firstCommand.getSudokuCellChangeType() == SudokuCellChangeType.SET_VALUE)
-			{
-				SudokuCell hintCell = firstCommand.getSource();
+				SudokuCell hintCell = lastSetValueCommand.getSource();
 				sudokuDisplayComponent.selectCell(hintCell);
 				sudokuDisplayComponent.repaint();
 			}
