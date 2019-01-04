@@ -141,6 +141,12 @@ public class SudokuBoard
 		solvedChangedConsumers.add(boardSolvedChangedConsumer);
 	}
 
+	public boolean removeSolvedChangedConsumer(
+			Consumer<SudokuEvent<SudokuBoard, Boolean>> boardSolvedChangedConsumer)
+	{
+		return solvedChangedConsumers.remove(boardSolvedChangedConsumer);
+	}
+
 	public void addCellValueChangedConsumer(
 			Consumer<SudokuEvent<SudokuCell, SudokuValue>> cellValueChangedConsumer)
 	{

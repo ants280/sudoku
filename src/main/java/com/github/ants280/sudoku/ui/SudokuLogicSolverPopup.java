@@ -1,6 +1,7 @@
 package com.github.ants280.sudoku.ui;
 
 import com.github.ants280.sudoku.game.SudokuBoard;
+import com.github.ants280.sudoku.game.SudokuEvent;
 import com.github.ants280.sudoku.game.solver.SudokuLogicSolver;
 import com.github.ants280.sudoku.game.solver.SudokuSolver;
 import com.github.ants280.sudoku.game.undo.CommandHistory;
@@ -9,12 +10,13 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -34,6 +36,7 @@ import javax.swing.event.ChangeListener;
 public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 {
 	private final SudokuBoard sudokuBoard;
+	private final Consumer<SudokuEvent<SudokuBoard, Boolean>> boardSolvedChangedConsumer;
 	private final CommandHistory<SudokuCellUndoCommand> commandHistory;
 	private final Runnable repaintCanvasCallback;
 	private final SudokuSolver sudokuSolver;
@@ -63,6 +66,7 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 			Runnable repaintCanvasCallback)
 	{
 		this.sudokuBoard = sudokuBoard;
+		this.boardSolvedChangedConsumer = this::handleSolvedChangedConsumer;
 		this.commandHistory = commandHistory;
 		this.repaintCanvasCallback = repaintCanvasCallback;
 		this.solverTable = new SudokuLogicSolverTable(
@@ -91,6 +95,8 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 
 	private void init()
 	{
+		sudokuBoard.addSolvedChangedConsumer(boardSolvedChangedConsumer);
+
 		timerSlider.addChangeListener(this);
 		timerSlider.setMajorTickSpacing(ONE_SECOND_IN_MILLIS);
 		timerSlider.setMinorTickSpacing(ONE_SECOND_IN_MILLIS / 4);
@@ -130,7 +136,8 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 		popupDialog.add(panel);
 		popupDialog.pack();
 		popupDialog.setLocationRelativeTo(popupDialog.getParent());
-		popupDialog.addWindowListener(new StopTimerWindowListener(timer));
+		popupDialog.addComponentListener(
+				new SudokuLogicSolverPopupComponentListener());
 		popupDialog.setResizable(true);
 	}
 
@@ -186,8 +193,7 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 				if (timerSlider.getValue() == 0)
 				{
 					sudokuSolver.solveFast();
-					this.handleBoardSolved();
-					solverTable.setEnabled(true);
+					this.handleSolverFinished();
 					this.showSolverTablePopup();
 				}
 				else
@@ -203,15 +209,14 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 				timer.stop();
 				startStopButton.setText(BUTTON_START);
 				resetPossibleValuesWhenStartingCheckBox.setEnabled(true);
-				solverTable.setEnabled(true);
 				break;
 			case ACTION_TIMER:
 				boolean moveMade = sudokuSolver.makeMove();
 
-				if (!moveMade || sudokuBoard.isSolved()) // TODO: Subscribe to events
+				if (!moveMade)
 				{
 					timer.stop();
-					this.handleBoardSolved();
+					this.handleSolverFinished();
 					solverTable.setEnabled(true);
 				}
 
@@ -235,9 +240,9 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 		}
 	}
 
-	private void handleBoardSolved()
+	private void handleSolvedChangedConsumer(SudokuEvent<SudokuBoard, Boolean> solvedChangedEvent)
 	{
-		if (sudokuBoard.isSolved()) // TODO: Subscribe to events
+		if (solvedChangedEvent.getNewValue())
 		{
 			if (closePopupOnSolveCheckBox.isSelected())
 			{
@@ -248,11 +253,16 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 				solverTable.addRow(SudokuUiManager.BOARD_SOLVED_MESSAGE);
 			}
 		}
-		else
+	}
+
+	private void handleSolverFinished()
+	{
+		if (!sudokuBoard.isSolved())
 		{
 			solverTable.addRow("Solver stuck");
 		}
 
+		solverTable.setEnabled(true);
 		startStopButton.setEnabled(false);
 		startStopButton.setText(BUTTON_STOP);
 	}
@@ -268,22 +278,18 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 		return String.format("<html>%s</html>", text);
 	}
 
-	private static class StopTimerWindowListener
-			extends WindowAdapter
-			implements WindowListener
+	private class SudokuLogicSolverPopupComponentListener
+			extends ComponentAdapter
+			implements ComponentListener
 	{
-		private final Timer timer;
-
-		public StopTimerWindowListener(Timer timer)
-		{
-			this.timer = timer;
-		}
-
 		@Override
-		public void windowClosing(WindowEvent e)
+		public void componentHidden(ComponentEvent componentEvent)
 		{
-			// TODO: Remove listeners
 			timer.stop();
+
+			boolean consumerRemoved = sudokuBoard.removeSolvedChangedConsumer(
+					boardSolvedChangedConsumer);
+			assert consumerRemoved;
 		}
 	}
 }
