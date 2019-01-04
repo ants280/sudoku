@@ -299,8 +299,6 @@ public class SudokuUiManager implements ActionListener
 		if (!sudokuCell.isLocked())
 		{
 			sudokuCell.togglePossibleValue(v);
-
-			sudokuDisplayComponent.repaint();// TODO: is this needed?
 		}
 	}
 
