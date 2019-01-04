@@ -20,8 +20,7 @@ public class SudokuLogicSolverTable
 	private final JTable table;
 
 	public SudokuLogicSolverTable(
-			CommandHistory<SudokuCellUndoCommand> commandHistory,
-			Runnable repaintCanvasCallback)
+			CommandHistory<SudokuCellUndoCommand> commandHistory)
 	{
 		this.commandHistory = commandHistory;
 
@@ -47,8 +46,7 @@ public class SudokuLogicSolverTable
 		table.addMouseListener(new SudokuLogicTableMouseListener(
 				table,
 				undoIndexColumnIndex,
-				commandHistory,
-				repaintCanvasCallback));
+				commandHistory));
 	}
 
 	public void addRow(String moveDescription)
@@ -82,18 +80,15 @@ public class SudokuLogicSolverTable
 		private final JTable table;
 		private final int undoIndexColumnIndex;
 		private final CommandHistory<SudokuCellUndoCommand> commandHistory;
-		private final Runnable repaintCanvasCallback;
 
 		public SudokuLogicTableMouseListener(
 				JTable table,
 				int undoIndexColumnIndex,
-				CommandHistory<SudokuCellUndoCommand> commandHistory,
-				Runnable repaintCanvasCallback)
+				CommandHistory<SudokuCellUndoCommand> commandHistory)
 		{
 			this.table = table;
 			this.undoIndexColumnIndex = undoIndexColumnIndex;
 			this.commandHistory = commandHistory;
-			this.repaintCanvasCallback = repaintCanvasCallback;
 		}
 
 		@Override
@@ -125,8 +120,6 @@ public class SudokuLogicSolverTable
 						: commandHistory::redo;
 				IntStream.range(0, Math.abs(delta))
 						.forEach(i -> action.run());
-
-				repaintCanvasCallback.run();
 			}
 		}
 	}

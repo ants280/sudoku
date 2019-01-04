@@ -38,7 +38,6 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 	private final SudokuBoard sudokuBoard;
 	private final Consumer<SudokuEvent<SudokuBoard, Boolean>> boardSolvedChangedConsumer;
 	private final CommandHistory<SudokuCellUndoCommand> commandHistory;
-	private final Runnable repaintCanvasCallback;
 	private final SudokuSolver sudokuSolver;
 	private final SudokuLogicSolverTable solverTable;
 	private final JPanel solverTablePanel;
@@ -67,9 +66,7 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 		this.sudokuBoard = sudokuBoard;
 		this.boardSolvedChangedConsumer = this::handleSolvedChangedConsumer;
 		this.commandHistory = commandHistory;
-		this.solverTable = new SudokuLogicSolverTable(
-				commandHistory,
-				repaintCanvasCallback);
+		this.solverTable = new SudokuLogicSolverTable(commandHistory);
 		this.solverTablePanel = new JPanel();
 		this.sudokuSolver = new SudokuLogicSolver(
 				sudokuBoard,
@@ -201,7 +198,6 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 					resetPossibleValuesWhenStartingCheckBox.setEnabled(false);
 					solverTable.setEnabled(false);
 				}
-				repaintCanvasCallback.run();
 				break;
 			case BUTTON_STOP:
 				timer.stop();
@@ -211,17 +207,15 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 			case ACTION_TIMER:
 				boolean moveMade = sudokuSolver.makeMove();
 
-				if (!moveMade)
+				if (moveMade)
+				{
+					this.showSolverTablePopup();
+				}
+				else
 				{
 					timer.stop();
 					this.handleSolverFinished();
 					solverTable.setEnabled(true);
-				}
-
-				if (moveMade)
-				{
-					this.showSolverTablePopup();
-					repaintCanvasCallback.run();
 				}
 				break;
 			default:
