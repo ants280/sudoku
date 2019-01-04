@@ -5,7 +5,7 @@ import com.github.ants280.sudoku.game.SudokuValue;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class SudokuUndoCellCommandTest
+public class SudokuCellUndoCommandTest
 {
 	@Test
 	public void testUndo_notLoggedToCommandHistory()
