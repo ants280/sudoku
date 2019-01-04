@@ -103,8 +103,6 @@ public class SudokuUiManager implements ActionListener
 		this.addListeners();
 
 		board.addSolvedChangedConsumer(this::handleSolvedChanged);
-		board.addCellValueChangedConsumer(this::handleCellValueChanged);
-		board.addCellPossibleValueChangedConsumer(this::handleCellPossibleValueChanged);
 	}
 
 	private void handleSolvedChanged(SudokuEvent<SudokuBoard, Boolean> solvedChangedEvent)
@@ -124,17 +122,6 @@ public class SudokuUiManager implements ActionListener
 			sudokuDisplayComponent.removeSelectedCell();
 			commandHistory.reset();
 		}
-	}
-
-	private void handleCellValueChanged(SudokuEvent<SudokuCell, SudokuValue> cellValueChangedEvent)
-	{
-		// TODO: is this needed?
-
-	}
-
-	private void handleCellPossibleValueChanged(SudokuEvent<SudokuCell, SudokuValue> cellPossibleValueChangedEvent)
-	{
-		// TODO: is this needed?
 	}
 
 	private Map<String, Runnable> createActionCommands()
