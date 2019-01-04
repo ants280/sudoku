@@ -282,6 +282,7 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 		@Override
 		public void windowClosing(WindowEvent e)
 		{
+			// TODO: Remove listeners
 			timer.stop();
 		}
 	}
