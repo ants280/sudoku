@@ -495,7 +495,7 @@ public class SudokuUiManager implements ActionListener
 			SudokuCellUndoCommand lastSetValueCommand = hintCommandHistory.undo();
 			if (lastSetValueCommand != null)
 			{
-				SudokuCell hintCell = lastSetValueCommand.getSource();
+				SudokuCell hintCell = lastSetValueCommand.getSudokuCell();
 				sudokuDisplayComponent.selectCell(hintCell);
 			}
 		}

@@ -5,44 +5,38 @@ import com.github.ants280.sudoku.game.SudokuEvent;
 import com.github.ants280.sudoku.game.SudokuValue;
 import java.util.Objects;
 
-public class SudokuCellUndoCommand extends SudokuEvent<SudokuCell, SudokuValue> implements Command
+public class SudokuCellUndoCommand implements Command
 {
+	private final SudokuEvent<SudokuCell, SudokuValue> cellValueChangedEvent;
 	private final SudokuCellChangeType sudokuCellChangeType;
 
 	public SudokuCellUndoCommand(
 			SudokuEvent<SudokuCell, SudokuValue> cellValueChangedEvent,
 			SudokuCellChangeType sudokuCellChangeType)
 	{
-		super(cellValueChangedEvent);
+		this.cellValueChangedEvent = cellValueChangedEvent;
 		this.sudokuCellChangeType = sudokuCellChangeType;
 	}
 
-	// Test constructor
-	SudokuCellUndoCommand(
-			SudokuCell sudokuCell,
-			SudokuCellChangeType sudokuCellChangeType,
-			SudokuValue initialValue,
-			SudokuValue updatedValue)
+	public SudokuCell getSudokuCell()
 	{
-		super(sudokuCell, initialValue, updatedValue);
-		this.sudokuCellChangeType = sudokuCellChangeType;
-	}
-
-	public SudokuCellChangeType getSudokuCellChangeType()
-	{
-		return sudokuCellChangeType;
+		return cellValueChangedEvent.getSource();
 	}
 
 	@Override
 	public void undo()
 	{
-		sudokuCellChangeType.applyChange(this.getSource(), this.getOldValue());
+		sudokuCellChangeType.applyChange(
+				cellValueChangedEvent.getSource(),
+				cellValueChangedEvent.getOldValue());
 	}
 
 	@Override
 	public void redo()
 	{
-		sudokuCellChangeType.applyChange(this.getSource(), this.getNewValue());
+		sudokuCellChangeType.applyChange(
+				cellValueChangedEvent.getSource(),
+				cellValueChangedEvent.getNewValue());
 	}
 
 	@Override
@@ -50,7 +44,7 @@ public class SudokuCellUndoCommand extends SudokuEvent<SudokuCell, SudokuValue> 
 	{
 		int hash = 5;
 		hash = 71 * hash + Objects.hashCode(this.sudokuCellChangeType);
-		hash = 71 * hash + super.hashCode();
+		hash = 71 * hash + Objects.hashCode(this.cellValueChangedEvent);
 		return hash;
 	}
 
@@ -61,6 +55,6 @@ public class SudokuCellUndoCommand extends SudokuEvent<SudokuCell, SudokuValue> 
 				|| obj != null
 				&& this.getClass() == obj.getClass()
 				&& this.sudokuCellChangeType == ((SudokuCellUndoCommand) obj).sudokuCellChangeType
-				&& super.equals(obj);
+				&& Objects.equals(this.cellValueChangedEvent, ((SudokuCellUndoCommand) obj).cellValueChangedEvent);
 	}
 }
