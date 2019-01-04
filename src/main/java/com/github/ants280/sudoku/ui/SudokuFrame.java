@@ -78,7 +78,8 @@ public class SudokuFrame
 		commandHistory.addUndoEmptyChangedConsumer(this::handleUndoEmptyChangedConsumer);
 		commandHistory.addRedoEmptyChangedConsumer(this::handleRedoEmptyChangedConsumer);
 
-		// TODO: ensure undo/redo are initially set to correct state (disabled)
+		undoMenuItem.setEnabled(false);
+		redoMenuItem.setEnabled(false);
 		undoMenuItem.setAccelerator(
 				KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_DOWN_MASK));
 		redoMenuItem.setAccelerator(
