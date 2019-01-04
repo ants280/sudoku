@@ -49,7 +49,7 @@ public class SudokuBruteForceSolver extends SudokuSolver
 		SudokuCell sudokuCell = allSudokuCells.get(index);
 		if (sudokuCell.getValue() != null)
 		{
-			return canBruteForceSolve(index + 1);
+			return this.canBruteForceSolve(index + 1);
 		}
 
 		Collection<SudokuValue> possibleValues = sudokuCell.getPossibleValues();
@@ -58,7 +58,7 @@ public class SudokuBruteForceSolver extends SudokuSolver
 			sudokuCell.setValue(possibleValue);
 
 			if (hasValidSections.test(sudokuCell)
-					&& canBruteForceSolve(index + 1))
+					&& this.canBruteForceSolve(index + 1))
 			{
 				return true;
 			}
