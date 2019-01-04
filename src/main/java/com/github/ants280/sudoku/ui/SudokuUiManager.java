@@ -173,7 +173,7 @@ public class SudokuUiManager implements ActionListener
 	private void restart()
 	{
 		board.resetFrom(initialBoard);
-		sudokuDisplayComponent.repaint();
+		sudokuDisplayComponent.repaint(); // TODO have board issue a solvedChangedEvent to trigger this
 	}
 
 	private void exit()
@@ -300,7 +300,7 @@ public class SudokuUiManager implements ActionListener
 		{
 			sudokuCell.togglePossibleValue(v);
 
-			sudokuDisplayComponent.repaint();
+			sudokuDisplayComponent.repaint();// TODO: is this needed?
 		}
 	}
 
@@ -338,7 +338,7 @@ public class SudokuUiManager implements ActionListener
 			solver.solveFast();
 			commandHistory.reset();
 
-			sudokuDisplayComponent.repaint();
+			sudokuDisplayComponent.repaint();// TODO: investigate if events also trigger repaints (they should not.)
 			this.updateMessageLabel();
 		}
 	}
@@ -365,7 +365,7 @@ public class SudokuUiManager implements ActionListener
 				board.resetFrom(loadedBoard); // Note: all valued cells locked
 				initialBoard.resetFrom(board);
 
-				sudokuDisplayComponent.repaint();
+				sudokuDisplayComponent.repaint(); // TODO resetFromShould trigger repaint
 			}
 			else
 			{
@@ -421,7 +421,7 @@ public class SudokuUiManager implements ActionListener
 				.filter(sudokuCell -> !sudokuCell.isLocked())
 				.forEach(SudokuCell::clearPossibleValues);
 
-		sudokuDisplayComponent.repaint();
+		sudokuDisplayComponent.repaint(); // TODO: move this method to board and have it trigger a solved=false event (and repaint)
 	}
 
 	private void lockCells(boolean lockedState)
@@ -497,7 +497,6 @@ public class SudokuUiManager implements ActionListener
 			{
 				SudokuCell hintCell = lastSetValueCommand.getSource();
 				sudokuDisplayComponent.selectCell(hintCell);
-				sudokuDisplayComponent.repaint();
 			}
 		}
 	}

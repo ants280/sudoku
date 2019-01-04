@@ -310,7 +310,7 @@ public class SudokuDisplayComponent extends JComponent
 		{
 			selectedCol = c;
 		}
-		this.repaint();
+		this.repaint(); // TODO: only repaint if selected cell changed.  Perhaps this method should only be called if the repaint is needed.
 		SudokuCell currentSelectedCell = this.getSelectedCell();
 		SudokuEvent<?, SudokuCell> selectedCellChangedEvent
 				= new SudokuEvent<>(this, previousSelectedCell, currentSelectedCell);
