@@ -2,6 +2,7 @@ package com.github.ants280.sudoku.ui;
 
 import com.github.ants280.sudoku.game.SudokuBoard;
 import com.github.ants280.sudoku.game.SudokuCell;
+import com.github.ants280.sudoku.game.SudokuEvent;
 import com.github.ants280.sudoku.game.SudokuValue;
 import com.github.ants280.sudoku.game.solver.SudokuBruteForceSolver;
 import com.github.ants280.sudoku.game.solver.SudokuLogicSolver;
@@ -56,8 +57,6 @@ public class SudokuUiManager implements ActionListener
 	private final SudokuBoard board;
 	private final JLabel messageLabel;
 	private final CommandHistory<SudokuUndoCellCommand> commandHistory;
-	private final JMenu setValueMenu;
-	private final JMenu setPossibleValueMenu;
 	private final JMenuItem hintMenuItem;
 	private final SudokuBoard initialBoard;
 	private final Map<String, Runnable> actionCommands;
@@ -82,8 +81,6 @@ public class SudokuUiManager implements ActionListener
 		this.messageLabel = messageLabel;
 		this.commandHistory = commandHistory;
 		this.initialBoard = new SudokuBoard(board.toString());
-		this.setValueMenu = setValueMenu;
-		this.setPossibleValueMenu = setPossibleValueMenu;
 		this.hintMenuItem = hintMenuItem;
 		this.actionCommands = this.createActionCommands();
 		this.mouseListener = new SudokuMouseListener(
@@ -97,10 +94,10 @@ public class SudokuUiManager implements ActionListener
 				this.sudokuDisplayComponent::moveSelectedCell);
 		this.listenersAdded = false;
 
-		this.init();
+		this.init(setValueMenu, setPossibleValueMenu);
 	}
 
-	private void init()
+	private void init(JMenu setValueMenu, JMenu setPossibleValueMenu)
 	{
 		this.createValueMenuItems(this::setSudokuCellValue)
 				.forEach(setValueMenu::add);
@@ -108,6 +105,42 @@ public class SudokuUiManager implements ActionListener
 				.forEach(setPossibleValueMenu::add);
 
 		this.addListeners();
+
+		board.addSolvedChangedConsumer(this::handleSolvedChanged);
+		board.addValueChangedConsumer(this::handleValueChanged);
+		board.addPossibleValueChangedConsumer(this::handlePossibleValueChanged);
+	}
+
+	private void handleSolvedChanged(SudokuEvent<Boolean> solvedChangedEvent)
+	{
+		if (solvedChangedEvent.getNewValue())
+		{
+			assert board.isSolved();
+
+			this.removeListeners();
+			this.updateMessageLabel();
+			sudokuDisplayComponent.removeSelectedCell();
+			hintMenuItem.setEnabled(false);
+		}
+		else
+		{
+			this.addListeners();
+			this.updateMessageLabel();
+			sudokuDisplayComponent.removeSelectedCell();
+			commandHistory.reset();
+			hintMenuItem.setEnabled(true);
+		}
+	}
+
+	private void handleValueChanged(SudokuEvent<SudokuValue> valueChangedEvent)
+	{
+		// TODO: is this needed?
+
+	}
+
+	private void handlePossibleValueChanged(SudokuEvent<SudokuValue> possibleValueChangedEvent)
+	{
+		// TODO: is this needed?
 	}
 
 	private Map<String, Runnable> createActionCommands()
@@ -138,7 +171,6 @@ public class SudokuUiManager implements ActionListener
 			listenersAdded = true;
 			frame.addKeyListener(keyListener);
 			sudokuDisplayComponent.addMouseListener(mouseListener);
-			this.disableSelectedCellMenus();
 		}
 	}
 
@@ -152,25 +184,6 @@ public class SudokuUiManager implements ActionListener
 		}
 	}
 
-	private void startGame()
-	{
-		this.addListeners();
-		this.updateMessageLabel();
-		this.disableSelectedCellMenus();
-		sudokuDisplayComponent.removeSelectedCell();
-		commandHistory.reset();
-		hintMenuItem.setEnabled(true);
-	}
-
-	private void endGame()
-	{
-		this.removeListeners();
-		this.updateMessageLabel();
-		this.disableSelectedCellMenus();
-		sudokuDisplayComponent.removeSelectedCell();
-		hintMenuItem.setEnabled(false);
-	}
-
 	@Override
 	public void actionPerformed(ActionEvent actionEvent)
 	{
@@ -181,8 +194,6 @@ public class SudokuUiManager implements ActionListener
 	{
 		board.resetFrom(initialBoard);
 		sudokuDisplayComponent.repaint();
-
-		this.startGame();
 	}
 
 	private void exit()
@@ -219,16 +230,6 @@ public class SudokuUiManager implements ActionListener
 	private void selectCell(int x, int y)
 	{
 		sudokuDisplayComponent.selectCellFromCoordinates(x, y);
-		SudokuCell selectedCell = sudokuDisplayComponent.getSelectedCell();
-		setValueMenu.setEnabled(selectedCell != null);
-		setPossibleValueMenu.setEnabled(
-				selectedCell != null && selectedCell.getValue() == null);
-	}
-
-	private void disableSelectedCellMenus()
-	{
-		setValueMenu.setEnabled(false);
-		setPossibleValueMenu.setEnabled(false);
 	}
 
 	private void setValue(int x, int y)
@@ -308,15 +309,6 @@ public class SudokuUiManager implements ActionListener
 		{
 			SudokuValue oldValue = sudokuCell.getValue();
 			sudokuCell.setValue(value == oldValue ? null : value);
-			setPossibleValueMenu.setEnabled(value != null && value == oldValue);
-
-			sudokuDisplayComponent.repaint();
-			this.updateMessageLabel();
-
-			if (board.isSolved())
-			{
-				this.endGame();
-			}
 		}
 	}
 
@@ -393,11 +385,7 @@ public class SudokuUiManager implements ActionListener
 				SudokuBoard loadedBoard
 						= new SudokuBoard(boardToLoad.toString());
 				board.resetFrom(loadedBoard); // Note: all valued cells locked
-
 				initialBoard.resetFrom(board);
-
-				sudokuDisplayComponent.repaint();
-				this.startGame();
 			}
 			else
 			{

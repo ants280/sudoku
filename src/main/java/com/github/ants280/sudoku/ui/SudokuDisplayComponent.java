@@ -3,6 +3,7 @@ package com.github.ants280.sudoku.ui;
 import com.github.ants280.sudoku.game.SectionType;
 import com.github.ants280.sudoku.game.SudokuBoard;
 import com.github.ants280.sudoku.game.SudokuCell;
+import com.github.ants280.sudoku.game.SudokuEvent;
 import com.github.ants280.sudoku.game.SudokuValue;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -11,6 +12,9 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
 import javax.swing.JComponent;
 
 // TODO: Make not is-a relationship, like the frame.  not all of the methods are needed to be made public.
@@ -30,6 +34,7 @@ public class SudokuDisplayComponent extends JComponent
 	private int yOffset;
 	private Integer selectedRow;
 	private Integer selectedCol;
+	private final List<Consumer<SudokuEvent<SudokuCell>>> selectedCellChangedConsumers;
 
 	public SudokuDisplayComponent(SudokuBoard board)
 	{
@@ -43,6 +48,7 @@ public class SudokuDisplayComponent extends JComponent
 
 		this.selectedRow = null;
 		this.selectedCol = null;
+		this.selectedCellChangedConsumers = new ArrayList<>();
 
 		this.init();
 	}
@@ -231,23 +237,30 @@ public class SudokuDisplayComponent extends JComponent
 	//<editor-fold defaultstate="collapsed" desc="selectedCell">
 	public void selectCellFromCoordinates(int x, int y)
 	{
-		this.setSelectedRow((y - yOffset) / cellLength);
-		this.setSelectedCol((x - xOffset) / cellLength);
-		this.repaint();
+		this.setSelectedCellIndices(
+				(y - yOffset) / cellLength,
+				(x - xOffset) / cellLength);
+		this.repaint(); // TODO : This should be done via a selection changed consumer.
 	}
 
 	public void selectCell(SudokuCell sudokuCell)
 	{
 		this.removeSelectedCell(); // in case the selection fails.
 
-		this.setSelectedRow(sudokuCell.getIndex(SectionType.ROW));
-		this.setSelectedCol(sudokuCell.getIndex(SectionType.COLUMN));
+		this.setSelectedCellIndices(
+				sudokuCell.getIndex(SectionType.ROW),
+				sudokuCell.getIndex(SectionType.COLUMN));
 	}
 
 	public void removeSelectedCell()
 	{
+		SudokuCell previousSelectedCell = this.getSelectedCell();
 		selectedRow = null;
 		selectedCol = null;
+
+		SudokuEvent<SudokuCell> selectedCellChangedEvent
+				= new SudokuEvent<>(previousSelectedCell, null);
+		selectedCellChangedConsumers.forEach(consumer -> consumer.accept(selectedCellChangedEvent));
 	}
 
 	public SudokuCell getSelectedCell()
@@ -265,16 +278,16 @@ public class SudokuDisplayComponent extends JComponent
 			switch (moveDirection)
 			{
 				case UP:
-					this.setSelectedRow(selectedRow - 1);
+					this.setSelectedCellIndices(selectedRow - 1, selectedCol);
 					break;
 				case DOWN:
-					this.setSelectedRow(selectedRow + 1);
+					this.setSelectedCellIndices(selectedRow + 1, selectedCol);
 					break;
 				case LEFT:
-					this.setSelectedCol(selectedCol - 1);
+					this.setSelectedCellIndices(selectedRow, selectedCol - 1);
 					break;
 				case RIGHT:
-					this.setSelectedCol(selectedCol + 1);
+					this.setSelectedCellIndices(selectedRow, selectedCol + 1);
 					break;
 				default:
 					throw new IllegalArgumentException(
@@ -285,20 +298,28 @@ public class SudokuDisplayComponent extends JComponent
 		}
 	}
 
-	private void setSelectedRow(int i)
+	private void setSelectedCellIndices(int r, int c)
 	{
-		if (i >= 0 && i < 9)
+		SudokuCell previousSelectedCell = this.getSelectedCell();
+		if (r >= 0 && r < 9)
 		{
-			selectedRow = i;
+			selectedRow = r;
 		}
+		if (c >= 0 && c < 9)
+		{
+			selectedCol = c;
+		}
+		SudokuCell currentSelectedCell = this.getSelectedCell();
+		SudokuEvent<SudokuCell> selectedCellChangedEvent
+				= new SudokuEvent<>(previousSelectedCell, currentSelectedCell);
+		selectedCellChangedConsumers.forEach(
+				consumer -> consumer.accept(selectedCellChangedEvent));
 	}
 
-	private void setSelectedCol(int i)
+	public void addSelectedCellChangedConsumer(
+			Consumer<SudokuEvent<SudokuCell>> selectedCellChangedConsumer)
 	{
-		if (i >= 0 && i < 9)
-		{
-			selectedCol = i;
-		}
+		selectedCellChangedConsumers.add(selectedCellChangedConsumer);
 	}
 //</editor-fold>
 }

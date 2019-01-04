@@ -1,6 +1,9 @@
 package com.github.ants280.sudoku.ui;
 
 import com.github.ants280.sudoku.game.SudokuBoard;
+import com.github.ants280.sudoku.game.SudokuCell;
+import com.github.ants280.sudoku.game.SudokuEvent;
+import com.github.ants280.sudoku.game.SudokuValue;
 import com.github.ants280.sudoku.game.undo.CommandHistory;
 import com.github.ants280.sudoku.game.undo.SudokuUndoBoard;
 import com.github.ants280.sudoku.game.undo.SudokuUndoCellCommand;
@@ -9,6 +12,7 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.Arrays;
+import java.util.Objects;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -66,7 +70,12 @@ public class SudokuFrame
 						commandHistory,
 						setValueMenu,
 						setPossibleValueMenu,
-						hintMenuItem);
+						hintMenuItem);//TODO: only needed here to disable via event.
+		board.addSolvedChangedConsumer(this::handleSolvedChangedConsumer);
+		board.addValueChangedConsumer(this::handleValueChanged);
+		board.addPossibleValueChangedConsumer(this::handlePossibleValueChanged);
+		sudokuDisplayComponent.addSelectedCellChangedConsumer(
+				this::handleSelectedCellChanged);
 
 		this.undoRedoChanged(true, true);
 		undoMenuItem.setAccelerator(
@@ -171,5 +180,35 @@ public class SudokuFrame
 	{
 		undoMenuItem.setEnabled(!undoEmpty);
 		redoMenuItem.setEnabled(!redoEmpty);
+	}
+
+	private void handleSolvedChangedConsumer(SudokuEvent<Boolean> solvedChangedEvent)
+	{
+
+	}
+
+	private void handleValueChanged(SudokuEvent<SudokuValue> valueChangedEvent)
+	{
+		setValueMenu.setEnabled(
+				Objects.equals(
+						valueChangedEvent.getOldValue(),
+						valueChangedEvent.getNewValue()));
+
+	}
+
+	private void handlePossibleValueChanged(SudokuEvent<SudokuValue> possibleValueChangedEvent)
+	{
+		setPossibleValueMenu.setEnabled(
+				Objects.equals(
+						possibleValueChangedEvent.getOldValue(),
+						possibleValueChangedEvent.getNewValue()));
+	}
+
+	private void handleSelectedCellChanged(SudokuEvent<SudokuCell> selectedCellChangedEvent)
+	{
+		SudokuCell selectedCell = selectedCellChangedEvent.getNewValue();
+		setValueMenu.setEnabled(selectedCell != null);
+		setPossibleValueMenu.setEnabled(
+				selectedCell != null && selectedCell.getValue() == null);
 	}
 }
