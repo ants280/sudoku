@@ -1,6 +1,5 @@
 package com.github.ants280.sudoku.game;
 
-import com.github.ants280.sudoku.game.undo.SudokuUndoCell;
 import java.util.Collection;
 import org.junit.Assert;
 import org.junit.Before;
@@ -340,7 +339,7 @@ public class SudokuCellTest
 	public void testEquals_differentClass()
 	{
 		sudokuCell = new SudokuCell(0, 0, 0, null, false);
-		SudokuCell sudokuCell2 = new SudokuUndoCell(0, 0, 0, null, false);
+		Object sudokuCell2 = 143L;
 
 		boolean equals = sudokuCell.equals(sudokuCell2);
 

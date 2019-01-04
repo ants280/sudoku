@@ -103,11 +103,11 @@ public class SudokuUiManager implements ActionListener
 		this.addListeners();
 
 		board.addSolvedChangedConsumer(this::handleSolvedChanged);
-		board.addValueChangedConsumer(this::handleValueChanged);
-		board.addPossibleValueChangedConsumer(this::handlePossibleValueChanged);
+		board.addCellValueChangedConsumer(this::handleCellValueChanged);
+		board.addCellPossibleValueChangedConsumer(this::handleCellPossibleValueChanged);
 	}
 
-	private void handleSolvedChanged(SudokuEvent<Boolean> solvedChangedEvent)
+	private void handleSolvedChanged(SudokuEvent<SudokuBoard, Boolean> solvedChangedEvent)
 	{
 		if (solvedChangedEvent.getNewValue())
 		{
@@ -126,13 +126,13 @@ public class SudokuUiManager implements ActionListener
 		}
 	}
 
-	private void handleValueChanged(SudokuEvent<SudokuValue> valueChangedEvent)
+	private void handleCellValueChanged(SudokuEvent<SudokuCell, SudokuValue> cellValueChangedEvent)
 	{
 		// TODO: is this needed?
 
 	}
 
-	private void handlePossibleValueChanged(SudokuEvent<SudokuValue> possibleValueChangedEvent)
+	private void handleCellPossibleValueChanged(SudokuEvent<SudokuCell, SudokuValue> cellPossibleValueChangedEvent)
 	{
 		// TODO: is this needed?
 	}

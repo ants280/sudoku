@@ -34,7 +34,7 @@ public class SudokuDisplayComponent extends JComponent
 	private int yOffset;
 	private Integer selectedRow;
 	private Integer selectedCol;
-	private final List<Consumer<SudokuEvent<SudokuCell>>> selectedCellChangedConsumers;
+	private final List<Consumer<SudokuEvent<?, SudokuCell>>> selectedCellChangedConsumers;
 
 	public SudokuDisplayComponent(SudokuBoard board)
 	{
@@ -257,8 +257,8 @@ public class SudokuDisplayComponent extends JComponent
 		selectedRow = null;
 		selectedCol = null;
 
-		SudokuEvent<SudokuCell> selectedCellChangedEvent
-				= new SudokuEvent<>(previousSelectedCell, null);
+		SudokuEvent<?, SudokuCell> selectedCellChangedEvent
+				= new SudokuEvent<>(this, previousSelectedCell, null);
 		selectedCellChangedConsumers.forEach(consumer -> consumer.accept(selectedCellChangedEvent));
 	}
 
@@ -308,14 +308,14 @@ public class SudokuDisplayComponent extends JComponent
 		}
 		this.repaint();
 		SudokuCell currentSelectedCell = this.getSelectedCell();
-		SudokuEvent<SudokuCell> selectedCellChangedEvent
-				= new SudokuEvent<>(previousSelectedCell, currentSelectedCell);
+		SudokuEvent<?, SudokuCell> selectedCellChangedEvent
+				= new SudokuEvent<>(this, previousSelectedCell, currentSelectedCell);
 		selectedCellChangedConsumers.forEach(
 				consumer -> consumer.accept(selectedCellChangedEvent));
 	}
 
 	public void addSelectedCellChangedConsumer(
-			Consumer<SudokuEvent<SudokuCell>> selectedCellChangedConsumer)
+			Consumer<SudokuEvent<?, SudokuCell>> selectedCellChangedConsumer)
 	{
 		selectedCellChangedConsumers.add(selectedCellChangedConsumer);
 	}

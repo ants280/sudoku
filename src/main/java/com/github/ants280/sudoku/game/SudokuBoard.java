@@ -27,7 +27,7 @@ public class SudokuBoard
 					.filter(Objects::nonNull)
 					.collect(Collectors.toSet())
 					.equals(ALL_SUDOKU_VALUES);
-	private final List<Consumer<SudokuEvent<Boolean>>> solvedChangedConsumers;
+	private final List<Consumer<SudokuEvent<SudokuBoard, Boolean>>> solvedChangedConsumers;
 	private boolean previousSolved;
 
 	public SudokuBoard(String boardString)
@@ -54,7 +54,7 @@ public class SudokuBoard
 		sectionTypeCells.put(GROUP, allSudokuCells.stream().collect(Collectors
 				.groupingBy(sudokuCell -> sudokuCell.getIndex(GROUP))));
 
-		this.addValueChangedConsumer(this::handleCellValueChanged);
+		this.addCellValueChangedConsumer(this::handleCellValueChanged);
 	}
 
 	@Override
@@ -82,7 +82,7 @@ public class SudokuBoard
 			int rowIndex = i / 9;
 			int columnIndex = i % 9;
 			int groupIndex = (rowIndex / 3) * 3 + columnIndex / 3;
-			allSudokuCellsArray[i] = createSudokuCell(
+			allSudokuCellsArray[i] = new SudokuCell(
 					rowIndex,
 					columnIndex,
 					groupIndex,
@@ -92,29 +92,14 @@ public class SudokuBoard
 		return Arrays.asList(allSudokuCellsArray);
 	}
 
-	protected SudokuCell createSudokuCell(
-			int rowIndex,
-			int columnIndex,
-			int groupIndex,
-			SudokuValue cellValue,
-			boolean locked)
-	{
-		return new SudokuCell(
-				rowIndex,
-				columnIndex,
-				groupIndex,
-				cellValue,
-				locked);
-	}
-
 	public void resetFrom(SudokuBoard other)
 	{
 		IntStream.range(0, 81)
 				.forEach(i -> allSudokuCells.get(i)
 				.resetFrom(other.getAllSudokuCells().get(i)));
 
-		SudokuEvent<Boolean> solvedChangedEvent
-				= new SudokuEvent<>(previousSolved, false);
+		SudokuEvent<SudokuBoard, Boolean> solvedChangedEvent
+				= new SudokuEvent<>(this, previousSolved, false);
 		solvedChangedConsumers
 				.forEach(consumer -> consumer.accept(solvedChangedEvent));
 		previousSolved = false;
@@ -134,14 +119,15 @@ public class SudokuBoard
 		return sectionTypeCells.get(sectionType).get(sectionIndex);
 	}
 
-	private void handleCellValueChanged(SudokuEvent<SudokuValue> event)
+	private void handleCellValueChanged(
+			SudokuEvent<SudokuCell, SudokuValue> cellValueChangedEvent)
 	{
 		boolean currentSolved = this.isSolved();
 
 		if (currentSolved != previousSolved)
 		{
-			SudokuEvent<Boolean> solvedChangedEvent
-					= new SudokuEvent<>(previousSolved, currentSolved);
+			SudokuEvent<SudokuBoard, Boolean> solvedChangedEvent
+					= new SudokuEvent<>(this, previousSolved, currentSolved);
 			solvedChangedConsumers
 					.forEach(consumer -> consumer.accept(solvedChangedEvent));
 		}
@@ -150,23 +136,23 @@ public class SudokuBoard
 	}
 
 	public void addSolvedChangedConsumer(
-			Consumer<SudokuEvent<Boolean>> solvedChangedConsumer)
+			Consumer<SudokuEvent<SudokuBoard, Boolean>> boardSolvedChangedConsumer)
 	{
-		solvedChangedConsumers.add(solvedChangedConsumer);
+		solvedChangedConsumers.add(boardSolvedChangedConsumer);
 	}
 
-	public void addValueChangedConsumer(
-			Consumer<SudokuEvent<SudokuValue>> valueChangedConsumer)
+	public void addCellValueChangedConsumer(
+			Consumer<SudokuEvent<SudokuCell, SudokuValue>> cellValueChangedConsumer)
 	{
 		allSudokuCells.forEach(sudokuCell -> sudokuCell
-				.addValueChangedConsumer(valueChangedConsumer));
+				.addCellValueChangedConsumer(cellValueChangedConsumer));
 	}
 
-	public void addPossibleValueChangedConsumer(
-			Consumer<SudokuEvent<SudokuValue>> possibleValueChangedConsumer)
+	public void addCellPossibleValueChangedConsumer(
+			Consumer<SudokuEvent<SudokuCell, SudokuValue>> cellPossibleValueChangedConsumer)
 	{
 		allSudokuCells.forEach(sudokuCell -> sudokuCell
-				.addValueChangedConsumer(possibleValueChangedConsumer));
+				.addCellPossibleValueChangedConsumer(cellPossibleValueChangedConsumer));
 	}
 
 	// TODO: Ensure no ui places call this method.  should subscribe consumer for changed event.

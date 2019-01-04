@@ -18,8 +18,8 @@ public class SudokuCell
 	private SudokuValue value;
 	private boolean locked;
 	private final Set<SudokuValue> possibleValues;
-	private final List<Consumer<SudokuEvent<SudokuValue>>> valueChangedConsumers;
-	private final List<Consumer<SudokuEvent<SudokuValue>>> possibleValueChangedConsumers;
+	private final List<Consumer<SudokuEvent<SudokuCell, SudokuValue>>> cellValueChangedConsumers;
+	private final List<Consumer<SudokuEvent<SudokuCell, SudokuValue>>> cellPossibleValueChangedConsumers;
 
 	public SudokuCell(
 			int rowIndex,
@@ -43,8 +43,8 @@ public class SudokuCell
 		this.locked = locked;
 		this.possibleValues = EnumSet.noneOf(SudokuValue.class);
 
-		this.valueChangedConsumers = new ArrayList<>();
-		this.possibleValueChangedConsumers = new ArrayList<>();
+		this.cellValueChangedConsumers = new ArrayList<>();
+		this.cellPossibleValueChangedConsumers = new ArrayList<>();
 	}
 
 	public int getIndex(SectionType sectionType)
@@ -80,13 +80,13 @@ public class SudokuCell
 					"Cannot set value of locked SudokuCell.");
 		}
 
-		SudokuEvent<SudokuValue> valueChangedEvent
-				= new SudokuEvent<>(value, this.value);
+		SudokuEvent<SudokuCell, SudokuValue> cellValueChangedEvent
+				= new SudokuEvent<>(this, value, this.value);
 
 		this.value = value;
 
-		valueChangedConsumers
-				.forEach(consumer -> consumer.accept(valueChangedEvent));
+		cellValueChangedConsumers
+				.forEach(consumer -> consumer.accept(cellValueChangedEvent));
 	}
 
 	public void clearPossibleValues()
@@ -127,8 +127,9 @@ public class SudokuCell
 		}
 
 		boolean hadPossibleValue = this.hasPossibleValue(value);
-		SudokuEvent<SudokuValue> possibleValueChangedEvent
+		SudokuEvent<SudokuCell, SudokuValue> cellPossibleValueChangedEvent
 				= new SudokuEvent<>(
+						this,
 						hadPossibleValue ? value : null,
 						hadPossibleValue ? null : value);
 
@@ -141,8 +142,8 @@ public class SudokuCell
 			possibleValues.add(value);
 		}
 
-		possibleValueChangedConsumers
-				.forEach(consumer -> consumer.accept(possibleValueChangedEvent));
+		cellPossibleValueChangedConsumers
+				.forEach(consumer -> consumer.accept(cellPossibleValueChangedEvent));
 	}
 
 	public void setLocked(boolean locked)
@@ -168,16 +169,16 @@ public class SudokuCell
 		locked = otherSudokuCell.isLocked();
 	}
 
-	public void addValueChangedConsumer(
-			Consumer<SudokuEvent<SudokuValue>> valueChangedConsumer)
+	public void addCellValueChangedConsumer(
+			Consumer<SudokuEvent<SudokuCell, SudokuValue>> cellValueChangedConsumer)
 	{
-		valueChangedConsumers.add(valueChangedConsumer);
+		cellValueChangedConsumers.add(cellValueChangedConsumer);
 	}
 
-	public void addPossibleValueChangedConsumer(
-			Consumer<SudokuEvent<SudokuValue>> possibleValueChangedConsumer)
+	public void addCellPossibleValueChangedConsumer(
+			Consumer<SudokuEvent<SudokuCell, SudokuValue>> cellPossibleValueChangedConsumer)
 	{
-		possibleValueChangedConsumers.add(possibleValueChangedConsumer);
+		cellPossibleValueChangedConsumers.add(cellPossibleValueChangedConsumer);
 	}
 
 	@Override
@@ -203,8 +204,8 @@ public class SudokuCell
 		hash = 17 * hash + Objects.hashCode(this.value);
 		hash = 17 * hash + (this.locked ? 1 : 0);
 		hash = 17 * hash + Objects.hashCode(this.possibleValues);
-		hash = 17 * hash + Objects.hashCode(this.valueChangedConsumers);
-		hash = 17 * hash + Objects.hashCode(this.possibleValueChangedConsumers);
+		hash = 17 * hash + Objects.hashCode(this.cellValueChangedConsumers);
+		hash = 17 * hash + Objects.hashCode(this.cellPossibleValueChangedConsumers);
 		return hash;
 	}
 
@@ -224,9 +225,9 @@ public class SudokuCell
 				&& Objects.equals(
 						this.possibleValues,
 						((SudokuCell) obj).possibleValues)
-				&& Objects.equals(valueChangedConsumers,
-						((SudokuCell) obj).valueChangedConsumers)
-				&& Objects.equals(possibleValueChangedConsumers,
-						((SudokuCell) obj).possibleValueChangedConsumers);
+				&& Objects.equals(cellValueChangedConsumers,
+						((SudokuCell) obj).cellValueChangedConsumers)
+				&& Objects.equals(cellPossibleValueChangedConsumers,
+						((SudokuCell) obj).cellPossibleValueChangedConsumers);
 	}
 }

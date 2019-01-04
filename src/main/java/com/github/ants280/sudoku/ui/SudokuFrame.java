@@ -70,8 +70,8 @@ public class SudokuFrame
 						setValueMenu,
 						setPossibleValueMenu);
 		board.addSolvedChangedConsumer(this::handleSolvedChangedConsumer);
-		board.addValueChangedConsumer(this::handleValueChanged);
-		board.addPossibleValueChangedConsumer(this::handlePossibleValueChanged);
+		board.addCellValueChangedConsumer(this::handleCellValueChanged);
+		board.addCellPossibleValueChangedConsumer(this::handleCellPossibleValueChanged);
 		sudokuDisplayComponent.addSelectedCellChangedConsumer(
 				this::handleSelectedCellChanged);
 		commandHistory.addUndoEmptyChangedConsumer(this::handleUndoEmptyChangedConsumer);
@@ -176,29 +176,29 @@ public class SudokuFrame
 		}
 	}
 
-	private void handleSolvedChangedConsumer(SudokuEvent<Boolean> solvedChangedEvent)
+	private void handleSolvedChangedConsumer(SudokuEvent<SudokuBoard, Boolean> solvedChangedEvent)
 	{
 		hintMenuItem.setEnabled(!solvedChangedEvent.getNewValue());
 	}
 
-	private void handleValueChanged(SudokuEvent<SudokuValue> valueChangedEvent)
+	private void handleCellValueChanged(SudokuEvent<SudokuCell, SudokuValue> cellValueChangedEvent)
 	{
 		setValueMenu.setEnabled(
 				Objects.equals(
-						valueChangedEvent.getOldValue(),
-						valueChangedEvent.getNewValue()));
+						cellValueChangedEvent.getOldValue(),
+						cellValueChangedEvent.getNewValue()));
 
 	}
 
-	private void handlePossibleValueChanged(SudokuEvent<SudokuValue> possibleValueChangedEvent)
+	private void handleCellPossibleValueChanged(SudokuEvent<SudokuCell, SudokuValue> cellPossibleValueChangedEvent)
 	{
 		setPossibleValueMenu.setEnabled(
 				Objects.equals(
-						possibleValueChangedEvent.getOldValue(),
-						possibleValueChangedEvent.getNewValue()));
+						cellPossibleValueChangedEvent.getOldValue(),
+						cellPossibleValueChangedEvent.getNewValue()));
 	}
 
-	private void handleSelectedCellChanged(SudokuEvent<SudokuCell> selectedCellChangedEvent)
+	private void handleSelectedCellChanged(SudokuEvent<?, SudokuCell> selectedCellChangedEvent)
 	{
 		SudokuCell selectedCell = selectedCellChangedEvent.getNewValue();
 		setValueMenu.setEnabled(selectedCell != null);
@@ -206,12 +206,12 @@ public class SudokuFrame
 				selectedCell != null && selectedCell.getValue() == null);
 	}
 
-	private void handleUndoEmptyChangedConsumer(SudokuEvent<Boolean> undoEmptyChangedEvent)
+	private void handleUndoEmptyChangedConsumer(SudokuEvent<?, Boolean> undoEmptyChangedEvent)
 	{
 		undoMenuItem.setEnabled(!undoEmptyChangedEvent.getNewValue());
 	}
 
-	private void handleRedoEmptyChangedConsumer(SudokuEvent<Boolean> redoEmptyChangedEvent)
+	private void handleRedoEmptyChangedConsumer(SudokuEvent<?, Boolean> redoEmptyChangedEvent)
 	{
 		redoMenuItem.setEnabled(!redoEmptyChangedEvent.getNewValue());
 	}

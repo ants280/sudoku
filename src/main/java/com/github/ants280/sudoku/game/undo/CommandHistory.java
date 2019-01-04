@@ -11,8 +11,8 @@ public class CommandHistory<T extends Command>
 {
 	private final Deque<T> undoHistory;
 	private final Deque<T> redoHistory;
-	private final List<Consumer<SudokuEvent<Boolean>>> undoEmptyChangedConsumers;
-	private final List<Consumer<SudokuEvent<Boolean>>> redoEmptyChangedConsumers;
+	private final List<Consumer<SudokuEvent<CommandHistory<T>, Boolean>>> undoEmptyChangedConsumers;
+	private final List<Consumer<SudokuEvent<CommandHistory<T>, Boolean>>> redoEmptyChangedConsumers;
 	private boolean enabled;
 
 	public CommandHistory()
@@ -25,13 +25,13 @@ public class CommandHistory<T extends Command>
 	}
 
 	public void addUndoEmptyChangedConsumer(
-			Consumer<SudokuEvent<Boolean>> undoEmptyChangedConsumer)
+			Consumer<SudokuEvent<CommandHistory<T>, Boolean>> undoEmptyChangedConsumer)
 	{
 		undoEmptyChangedConsumers.add(undoEmptyChangedConsumer);
 	}
 
 	public void addRedoEmptyChangedConsumer(
-			Consumer<SudokuEvent<Boolean>> redoEmptyChangedConsumer)
+			Consumer<SudokuEvent<CommandHistory<T>, Boolean>> redoEmptyChangedConsumer)
 	{
 		redoEmptyChangedConsumers.add(redoEmptyChangedConsumer);
 	}
@@ -47,10 +47,10 @@ public class CommandHistory<T extends Command>
 
 			redoHistory.clear();
 
-			SudokuEvent<Boolean> undoEmptyChangedConsumer
-					= new SudokuEvent<>(previousUndoHistoryEmpty, false);
-			SudokuEvent<Boolean> redoEmptyChangedConsumer
-					= new SudokuEvent<>(previousRedoHistoryEmpty, true);
+			SudokuEvent<CommandHistory<T>, Boolean> undoEmptyChangedConsumer
+					= new SudokuEvent<>(this, previousUndoHistoryEmpty, false);
+			SudokuEvent<CommandHistory<T>, Boolean> redoEmptyChangedConsumer
+					= new SudokuEvent<>(this, previousRedoHistoryEmpty, true);
 			undoEmptyChangedConsumers
 					.forEach(consumer -> consumer.accept(undoEmptyChangedConsumer));
 			redoEmptyChangedConsumers
@@ -71,10 +71,10 @@ public class CommandHistory<T extends Command>
 
 			redoHistory.push(command);
 
-			SudokuEvent<Boolean> undoEmptyChangedConsumer
-					= new SudokuEvent<>(previousUndoHistoryEmpty, undoHistory.isEmpty());
-			SudokuEvent<Boolean> redoEmptyChangedConsumer
-					= new SudokuEvent<>(previousRedoHistoryEmpty, false);
+			SudokuEvent<CommandHistory<T>, Boolean> undoEmptyChangedConsumer
+					= new SudokuEvent<>(this, previousUndoHistoryEmpty, undoHistory.isEmpty());
+			SudokuEvent<CommandHistory<T>, Boolean> redoEmptyChangedConsumer
+					= new SudokuEvent<>(this, previousRedoHistoryEmpty, false);
 			undoEmptyChangedConsumers
 					.forEach(consumer -> consumer.accept(undoEmptyChangedConsumer));
 			redoEmptyChangedConsumers
@@ -99,10 +99,10 @@ public class CommandHistory<T extends Command>
 
 			undoHistory.push(command);
 
-			SudokuEvent<Boolean> undoEmptyChangedConsumer
-					= new SudokuEvent<>(previousUndoHistoryEmpty, false);
-			SudokuEvent<Boolean> redoEmptyChangedConsumer
-					= new SudokuEvent<>(previousRedoHistoryEmpty, redoHistory.isEmpty());
+			SudokuEvent<CommandHistory<T>, Boolean> undoEmptyChangedConsumer
+					= new SudokuEvent<>(this, previousUndoHistoryEmpty, false);
+			SudokuEvent<CommandHistory<T>, Boolean> redoEmptyChangedConsumer
+					= new SudokuEvent<>(this, previousRedoHistoryEmpty, redoHistory.isEmpty());
 			undoEmptyChangedConsumers
 					.forEach(consumer -> consumer.accept(undoEmptyChangedConsumer));
 			redoEmptyChangedConsumers
@@ -124,10 +124,10 @@ public class CommandHistory<T extends Command>
 			undoHistory.clear();
 			redoHistory.clear();
 
-			SudokuEvent<Boolean> undoEmptyChangedConsumer
-					= new SudokuEvent<>(previousUndoHistoryEmpty, true);
-			SudokuEvent<Boolean> redoEmptyChangedConsumer
-					= new SudokuEvent<>(previousRedoHistoryEmpty, true);
+			SudokuEvent<CommandHistory<T>, Boolean> undoEmptyChangedConsumer
+					= new SudokuEvent<>(this, previousUndoHistoryEmpty, true);
+			SudokuEvent<CommandHistory<T>, Boolean> redoEmptyChangedConsumer
+					= new SudokuEvent<>(this, previousRedoHistoryEmpty, true);
 			undoEmptyChangedConsumers
 					.forEach(consumer -> consumer.accept(undoEmptyChangedConsumer));
 			redoEmptyChangedConsumers
