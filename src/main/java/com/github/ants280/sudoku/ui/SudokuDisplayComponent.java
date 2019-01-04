@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import javax.swing.JComponent;
 
-// TODO: Make not is-a relationship, like the frame.  not all of the methods are needed to be made public.
+// TODO: Make not is-a relationship, like the frame.  not all of the methods are needed to be made public. (remove transient members)
 public class SudokuDisplayComponent extends JComponent
 {
 	private static final long serialVersionUID = 1L;
@@ -34,7 +34,7 @@ public class SudokuDisplayComponent extends JComponent
 	private int yOffset;
 	private Integer selectedRow;
 	private Integer selectedCol;
-	private final List<Consumer<SudokuEvent<?, SudokuCell>>> selectedCellChangedConsumers;
+	private final transient List<Consumer<SudokuEvent<?, SudokuCell>>> selectedCellChangedConsumers;
 
 	public SudokuDisplayComponent(SudokuBoard board)
 	{

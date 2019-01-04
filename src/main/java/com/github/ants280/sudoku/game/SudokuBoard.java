@@ -54,7 +54,8 @@ public class SudokuBoard
 		sectionTypeCells.put(GROUP, allSudokuCells.stream().collect(Collectors
 				.groupingBy(sudokuCell -> sudokuCell.getIndex(GROUP))));
 
-		this.addCellValueChangedConsumer(this::handleCellValueChanged);
+		this.addCellValueChangedConsumer(
+				cellValueChangedEvent -> this.handleCellValueChanged());
 	}
 
 	@Override
@@ -119,8 +120,7 @@ public class SudokuBoard
 		return sectionTypeCells.get(sectionType).get(sectionIndex);
 	}
 
-	private void handleCellValueChanged(
-			SudokuEvent<SudokuCell, SudokuValue> cellValueChangedEvent)
+	private void handleCellValueChanged()
 	{
 		boolean currentSolved = this.isSolved();
 
