@@ -155,7 +155,6 @@ public class SudokuBoard
 				.addCellPossibleValueChangedConsumer(cellPossibleValueChangedConsumer));
 	}
 
-	// TODO: Ensure no ui places call this method.  should subscribe consumer for changed event.
 	public boolean isSolved()
 	{
 		return sectionTypeCells.values()

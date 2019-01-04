@@ -208,7 +208,7 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 			case ACTION_TIMER:
 				boolean moveMade = sudokuSolver.makeMove();
 
-				if (!moveMade || sudokuBoard.isSolved())
+				if (!moveMade || sudokuBoard.isSolved()) // TODO: Subscribe to events
 				{
 					timer.stop();
 					this.handleBoardSolved();
@@ -237,7 +237,7 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 
 	private void handleBoardSolved()
 	{
-		if (sudokuBoard.isSolved())
+		if (sudokuBoard.isSolved()) // TODO: Subscribe to events
 		{
 			if (closePopupOnSolveCheckBox.isSelected())
 			{
