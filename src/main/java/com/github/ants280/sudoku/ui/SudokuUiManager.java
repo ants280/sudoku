@@ -9,7 +9,6 @@ import com.github.ants280.sudoku.game.solver.SudokuLogicSolver;
 import com.github.ants280.sudoku.game.solver.SudokuSolver;
 import com.github.ants280.sudoku.game.undo.CommandHistory;
 import com.github.ants280.sudoku.game.undo.SudokuCellChangeType;
-import com.github.ants280.sudoku.game.undo.SudokuUndoBoard;
 import com.github.ants280.sudoku.game.undo.SudokuUndoCellCommand;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -494,7 +493,9 @@ public class SudokuUiManager implements ActionListener
 
 	private void undo()
 	{
+		commandHistory.setEnabled(false);
 		commandHistory.undo();
+		commandHistory.setEnabled(true);
 
 		sudokuDisplayComponent.repaint();
 		this.updateMessageLabel();
@@ -502,7 +503,9 @@ public class SudokuUiManager implements ActionListener
 
 	private void redo()
 	{
+		commandHistory.setEnabled(false);
 		commandHistory.redo();
+		commandHistory.setEnabled(true);
 
 		sudokuDisplayComponent.repaint();
 		this.updateMessageLabel();
@@ -513,11 +516,8 @@ public class SudokuUiManager implements ActionListener
 		sudokuDisplayComponent.removeSelectedCell();
 		sudokuDisplayComponent.repaint();
 
-		BiConsumer<Boolean, Boolean> undoRedoEmptyConsumer = (undoEmpty, redoEmpty) ->
-		{
-		};
-		CommandHistory<SudokuUndoCellCommand> hintCommandHistory = new CommandHistory<>(undoRedoEmptyConsumer);
-		SudokuUndoBoard hintBoard = new SudokuUndoBoard(hintCommandHistory);
+		CommandHistory<SudokuUndoCellCommand> hintCommandHistory = new CommandHistory<>();
+		SudokuBoard hintBoard = new SudokuBoard();
 		hintBoard.resetFrom(board); // TODO: it would be nice to have a SudokuBoard(copyConstructor) that calls resetFrom().
 		Consumer<String> moveDescriptionConsumer = moveDescription ->
 		{

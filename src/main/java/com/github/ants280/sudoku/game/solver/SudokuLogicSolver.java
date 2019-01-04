@@ -11,7 +11,7 @@ public class SudokuLogicSolver extends SudokuSolver
 
 	public SudokuLogicSolver(
 			SudokuBoard sudokuBoard,
-			Consumer<String> moveDescriptionConsumer)
+			Consumer<String> moveDescriptionConsumer) // TODO: use events for this?
 	{
 		super(sudokuBoard);
 

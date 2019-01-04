@@ -1,7 +1,7 @@
 package com.github.ants280.sudoku.game.undo;
 
-import com.github.ants280.sudoku.game.SudokuValue;
-import java.util.function.BiConsumer;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,35 +9,47 @@ import org.mockito.Mockito;
 
 public class CommandHistoryTest
 {
-	private BiConsumer<Boolean, Boolean> mockUndoRedoEmptyConsumer;
 	private CommandHistory<Command> commandHistory;
 
 	@Before
 	public void setUp()
 	{
-		mockUndoRedoEmptyConsumer = Mockito.mock(BiConsumer.class);
-		commandHistory = new CommandHistory<>(mockUndoRedoEmptyConsumer);
+		commandHistory = new CommandHistory<>();
 	}
 
 	@Test
 	public void testAddCommand()
 	{
+		AtomicInteger undoConsumed = new AtomicInteger(0); // should be mutable
+		AtomicInteger redoConsumed = new AtomicInteger(0); // should be mutable
+		commandHistory.addUndoEmptyChangedConsumer(undoEmptyChangedEvent ->
+		{
+			if (undoEmptyChangedEvent.getNewValue())
+			{
+				undoConsumed.incrementAndGet();
+			}
+		});
+		commandHistory.addRedoEmptyChangedConsumer(redoEmptyChangedEvent ->
+		{
+			if (redoEmptyChangedEvent.getNewValue())
+			{
+				redoConsumed.incrementAndGet();
+			}
+		});
 		Command mockCommand1 = Mockito.mock(Command.class);
-		commandHistory.addCommand(mockCommand1);
 		Command mockCommand2 = Mockito.mock(Command.class);
 
-		commandHistory.undo();
-		commandHistory.addCommand(mockCommand2);
-		commandHistory.redo(); // expected noop
+		commandHistory.addCommand(mockCommand1); // undo = 1, redo = 0 [empty = false,true]
+		commandHistory.undo(); // undo = 0, redo = 1 [empty = true, false]
+		commandHistory.addCommand(mockCommand2);  // undo = 1, redo = 0 [empty = false,true]
+		commandHistory.redo(); // expected noop [because undo stack is empty]
 
 		Mockito.verify(
 				mockCommand1,
 				Mockito.times(0))
 				.redo();
-		Mockito.verify(
-				mockUndoRedoEmptyConsumer,
-				Mockito.times(2))
-				.accept(false, true);
+		Assert.assertEquals(1, undoConsumed.get());
+		Assert.assertEquals(2, redoConsumed.get());
 	}
 
 	@Test
@@ -168,7 +180,7 @@ public class CommandHistoryTest
 	@Test
 	public void testHashCode_same()
 	{
-		CommandHistory<Command> commandHistory1 = new CommandHistory<>(null);
+		CommandHistory<Command> commandHistory1 = new CommandHistory<>();
 		CommandHistory<Command> commandHistory2 = commandHistory1;
 
 		int hashCode1 = commandHistory1.hashCode();
@@ -180,8 +192,8 @@ public class CommandHistoryTest
 	@Test
 	public void testHashCode_equalButNotSame()
 	{
-		CommandHistory<Command> commandHistory1 = new CommandHistory<>(null);
-		CommandHistory<Command> commandHistory2 = new CommandHistory<>(null);
+		CommandHistory<Command> commandHistory1 = new CommandHistory<>();
+		CommandHistory<Command> commandHistory2 = new CommandHistory<>();
 
 		int hashCode1 = commandHistory1.hashCode();
 		int hashCode2 = commandHistory2.hashCode();
@@ -192,8 +204,8 @@ public class CommandHistoryTest
 	@Test
 	public void testHashCode_notEnabled()
 	{
-		CommandHistory<Command> commandHistory1 = new CommandHistory<>(null);
-		CommandHistory<Command> commandHistory2 = new CommandHistory<>(null);
+		CommandHistory<Command> commandHistory1 = new CommandHistory<>();
+		CommandHistory<Command> commandHistory2 = new CommandHistory<>();
 		commandHistory1.setEnabled(true);
 		commandHistory2.setEnabled(false);
 
@@ -204,27 +216,9 @@ public class CommandHistoryTest
 	}
 
 	@Test
-	public void testHashCode_withHistory_circularReference()
-	{
-		CommandHistory<SudokuUndoCellCommand> commandHistory1 = new CommandHistory<>(mockUndoRedoEmptyConsumer);
-		CommandHistory<SudokuUndoCellCommand> commandHistory2 = new CommandHistory<>(mockUndoRedoEmptyConsumer);
-
-		SudokuUndoCell sudokuUndoCell = new SudokuUndoCell(0, 0, 0, SudokuValue.VALUE_2, false);
-		sudokuUndoCell.setCommandHistory(commandHistory1);
-		SudokuUndoCellCommand sudokuUndoCellCommand
-				= new SudokuUndoCellCommand(sudokuUndoCell, SudokuCellChangeType.SET_VALUE, SudokuValue.VALUE_2, SudokuValue.VALUE_1);
-		commandHistory1.addCommand(sudokuUndoCellCommand);
-
-		int hashCode1 = commandHistory1.hashCode();
-		int hashCode2 = commandHistory2.hashCode();
-
-		Assert.assertNotEquals(hashCode1, hashCode2);
-	}
-
-	@Test
 	public void testEquals_same()
 	{
-		CommandHistory<Command> commandHistory1 = new CommandHistory<>(null);
+		CommandHistory<Command> commandHistory1 = new CommandHistory<>();
 		CommandHistory<Command> commandHistory2 = commandHistory1;
 
 		boolean equals = commandHistory1.equals(commandHistory2);
@@ -235,8 +229,8 @@ public class CommandHistoryTest
 	@Test
 	public void testEquals_equalButDifferencReferences()
 	{
-		CommandHistory<Command> commandHistory1 = new CommandHistory<>(null);
-		CommandHistory<Command> commandHistory2 = new CommandHistory<>(null);
+		CommandHistory<Command> commandHistory1 = new CommandHistory<>();
+		CommandHistory<Command> commandHistory2 = new CommandHistory<>();
 
 		boolean equals = commandHistory1.equals(commandHistory2);
 
@@ -246,7 +240,7 @@ public class CommandHistoryTest
 	@Test
 	public void testEquals_null()
 	{
-		CommandHistory<Command> commandHistory1 = new CommandHistory<>(null);
+		CommandHistory<Command> commandHistory1 = new CommandHistory<>();
 		CommandHistory<Command> commandHistory2 = null;
 
 		boolean equals = commandHistory1.equals(commandHistory2);
@@ -257,7 +251,7 @@ public class CommandHistoryTest
 	@Test
 	public void testEquals_wrongObject()
 	{
-		CommandHistory<Command> commandHistory1 = new CommandHistory<>(null);
+		CommandHistory<Command> commandHistory1 = new CommandHistory<>();
 		Object commandHistory2 = 1L;
 
 		boolean equals = commandHistory1.equals(commandHistory2);
@@ -268,8 +262,8 @@ public class CommandHistoryTest
 	@Test
 	public void testEquals_notEnabled()
 	{
-		CommandHistory<Command> commandHistory1 = new CommandHistory<>(null);
-		CommandHistory<Command> commandHistory2 = new CommandHistory<>(null);
+		CommandHistory<Command> commandHistory1 = new CommandHistory<>();
+		CommandHistory<Command> commandHistory2 = new CommandHistory<>();
 		commandHistory1.setEnabled(false);
 
 		boolean equals = commandHistory1.equals(commandHistory2);
@@ -280,8 +274,8 @@ public class CommandHistoryTest
 	@Test
 	public void testEquals_diffeentUndo()
 	{
-		CommandHistory<Command> commandHistory1 = new CommandHistory<>(mockUndoRedoEmptyConsumer);
-		CommandHistory<Command> commandHistory2 = new CommandHistory<>(mockUndoRedoEmptyConsumer);
+		CommandHistory<Command> commandHistory1 = new CommandHistory<>();
+		CommandHistory<Command> commandHistory2 = new CommandHistory<>();
 		Command mockCommand = Mockito.mock(Command.class);
 		commandHistory1.addCommand(mockCommand);
 
@@ -293,8 +287,8 @@ public class CommandHistoryTest
 	@Test
 	public void testEquals_diffeentRedo()
 	{
-		CommandHistory<Command> commandHistory1 = new CommandHistory<>(mockUndoRedoEmptyConsumer);
-		CommandHistory<Command> commandHistory2 = new CommandHistory<>(mockUndoRedoEmptyConsumer);
+		CommandHistory<Command> commandHistory1 = new CommandHistory<>();
+		CommandHistory<Command> commandHistory2 = new CommandHistory<>();
 		Command mockCommand = Mockito.mock(Command.class);
 		commandHistory1.addCommand(mockCommand);
 		commandHistory1.addCommand(mockCommand);
@@ -309,12 +303,15 @@ public class CommandHistoryTest
 	@Test
 	public void testRedo_empty_not_enabled()
 	{
+		AtomicBoolean redoConsumed = new AtomicBoolean(false); // should be mutable
+		commandHistory.addRedoEmptyChangedConsumer(redoEmptyChangedEvent ->
+		{
+			redoConsumed.set(true);
+		});
+
 		commandHistory.setEnabled(false);
 		commandHistory.redo();
 
-		Mockito.verify(
-				mockUndoRedoEmptyConsumer,
-				Mockito.times(0))
-				.accept(Mockito.anyBoolean(), Mockito.anyBoolean());
+		Assert.assertFalse(redoConsumed.get());
 	}
 }
