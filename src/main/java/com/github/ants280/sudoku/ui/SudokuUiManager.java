@@ -130,8 +130,8 @@ public class SudokuUiManager implements ActionListener
 		tempActionCommands.put(LOAD_MI, this::load);
 		tempActionCommands.put(EXPORT_MI, this::export);
 		tempActionCommands.put(EXIT_MI, this::exit);
-		tempActionCommands.put(UNDO_MI, this::undo);
-		tempActionCommands.put(REDO_MI, this::redo);
+		tempActionCommands.put(UNDO_MI, commandHistory::undo);
+		tempActionCommands.put(REDO_MI, commandHistory::redo);
 		tempActionCommands.put(HINT_MI, this::getHint);
 		tempActionCommands.put(CLEAR_POSSIBLE_VALUES_MI, this::clearPossibleValues);
 		tempActionCommands.put(CLEAR_CELLS_MI, this::clearCells);
@@ -311,7 +311,7 @@ public class SudokuUiManager implements ActionListener
 						frame,
 						board,
 						commandHistory,
-						() ->
+						() -> // TODO: Is this needed? (will events handle the repainting?)
 				{
 					sudokuDisplayComponent.repaint();
 					this.updateMessageLabel();
@@ -411,7 +411,6 @@ public class SudokuUiManager implements ActionListener
 			initialBoard.resetFrom(board);
 
 			sudokuDisplayComponent.removeSelectedCell();
-			sudokuDisplayComponent.repaint();
 		}
 	}
 
@@ -448,7 +447,6 @@ public class SudokuUiManager implements ActionListener
 			initialBoard.resetFrom(board);
 
 			sudokuDisplayComponent.removeSelectedCell();
-			sudokuDisplayComponent.repaint();
 		}
 	}
 
@@ -477,26 +475,9 @@ public class SudokuUiManager implements ActionListener
 		frame.pack(); // keep the board canvas the same size
 	}
 
-	private void undo()
-	{
-		commandHistory.undo();
-
-		sudokuDisplayComponent.repaint();
-		this.updateMessageLabel();
-	}
-
-	private void redo()
-	{
-		commandHistory.redo();
-
-		sudokuDisplayComponent.repaint();
-		this.updateMessageLabel();
-	}
-
 	private void getHint()
 	{
 		sudokuDisplayComponent.removeSelectedCell();
-		sudokuDisplayComponent.repaint();
 
 		CommandHistory<SudokuCellUndoCommand> hintCommandHistory = new CommandHistory<>();
 		SudokuBoard hintBoard = new SudokuBoard();

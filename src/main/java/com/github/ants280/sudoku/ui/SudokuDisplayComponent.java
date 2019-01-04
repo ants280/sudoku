@@ -60,6 +60,8 @@ public class SudokuDisplayComponent extends JComponent
 
 		this.addComponentListener(
 				new SudokuComponentListener(this::componentResized));
+		board.addCellValueChangedConsumer(cellValueChangedEvent -> this.repaint());
+		board.addCellPossibleValueChangedConsumer(cellPossibleValueChangedEvent -> this.repaint());
 	}
 
 	private void componentResized()
@@ -256,6 +258,8 @@ public class SudokuDisplayComponent extends JComponent
 		SudokuCell previousSelectedCell = this.getSelectedCell();
 		selectedRow = null;
 		selectedCol = null;
+
+		this.repaint();
 
 		SudokuEvent<?, SudokuCell> selectedCellChangedEvent
 				= new SudokuEvent<>(this, previousSelectedCell, null);
