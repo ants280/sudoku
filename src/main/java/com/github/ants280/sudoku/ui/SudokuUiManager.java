@@ -173,7 +173,6 @@ public class SudokuUiManager implements ActionListener
 	private void restart()
 	{
 		board.resetFrom(initialBoard);
-		sudokuDisplayComponent.repaint(); // TODO have board issue a solvedChangedEvent to trigger this
 	}
 
 	private void exit()
@@ -414,7 +413,7 @@ public class SudokuUiManager implements ActionListener
 				.filter(sudokuCell -> !sudokuCell.isLocked())
 				.forEach(SudokuCell::clearPossibleValues);
 
-		sudokuDisplayComponent.repaint(); // TODO: move this method to board and have it trigger a solved=false event (and repaint)
+//		sudokuDisplayComponent.repaint(); // TODO: move this method to board and have it trigger a solved=false event (and repaint)
 	}
 
 	private void lockCells(boolean lockedState)
