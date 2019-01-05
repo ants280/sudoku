@@ -412,8 +412,6 @@ public class SudokuUiManager implements ActionListener
 				.stream()
 				.filter(sudokuCell -> !sudokuCell.isLocked())
 				.forEach(SudokuCell::clearPossibleValues);
-
-//		sudokuDisplayComponent.repaint(); // TODO: move this method to board and have it trigger a solved=false event (and repaint)
 	}
 
 	private void lockCells(boolean lockedState)
