@@ -45,6 +45,11 @@ public class SudokuBoard
 		this("{000000000000000000000000000000000000000000000000000000000000000000000000000000000}");
 	}
 
+	public SudokuBoard(SudokuBoard other)
+	{
+		this(other.toString());
+	}
+
 	private void init()
 	{
 		sectionTypeCells.put(ROW, allSudokuCells.stream().collect(Collectors

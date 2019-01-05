@@ -470,8 +470,7 @@ public class SudokuUiManager implements ActionListener
 		sudokuDisplayComponent.removeSelectedCell();
 
 		CommandHistory<SudokuCellUndoCommand> hintCommandHistory = new CommandHistory<>();
-		SudokuBoard hintBoard = new SudokuBoard();
-		hintBoard.resetFrom(board); // TODO: it would be nice to have a SudokuBoard(copyConstructor) that calls resetFrom().
+		SudokuBoard hintBoard = new SudokuBoard(board);
 		hintBoard.addCellValueChangedConsumer(
 				cellValueChangedEvent -> hintCommandHistory.addCommand(
 						new SudokuCellUndoCommand(cellValueChangedEvent, SudokuCellChangeType.SET_VALUE)));
