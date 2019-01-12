@@ -374,14 +374,14 @@ public class SudokuUiManager implements ActionListener
 	// TODO: should be able to copy/paste with mouse
 	private void export()
 	{
-		JOptionPane.showInputDialog(
+		SudokuDialogFactory.showExportDialog(
 				frame,
-				"Copy the game state to load later.\n"
-				+ "WARNING: This does not save possible values.",
 				"Export " + frame.getTitle(),
-				JOptionPane.INFORMATION_MESSAGE,
-				null, // Icon
-				null, // selectionValues (null implies textbox)
+				new String[]
+				{
+					"Copy the game state to load later.",
+					"WARNING: This does not save possible values."
+				},
 				board.toString());
 	}
 
