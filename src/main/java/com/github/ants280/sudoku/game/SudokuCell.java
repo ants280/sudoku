@@ -126,14 +126,10 @@ public class SudokuCell
 					"Cannot toggle null possible value on SudokuCell.");
 		}
 
-		boolean hadPossibleValue = this.hasPossibleValue(value);
 		SudokuEvent<SudokuCell, SudokuValue> cellPossibleValueChangedEvent
-				= new SudokuEvent<>(
-						this,
-						hadPossibleValue ? value : null,
-						hadPossibleValue ? null : value);
+				= new SudokuEvent<>(this, value, value);
 
-		if (hadPossibleValue)
+		if (this.hasPossibleValue(value))
 		{
 			possibleValues.remove(value);
 		}
