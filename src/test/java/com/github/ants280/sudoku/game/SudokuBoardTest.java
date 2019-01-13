@@ -362,6 +362,34 @@ public class SudokuBoardTest
 		Assert.assertFalse(listenerTriggered.get());
 	}
 
+	@Test
+	public void testAddCellValueChangedConsumer()
+	{
+		SudokuBoard sudokuBoard = new SudokuBoard();
+		AtomicBoolean listenerTriggered = new AtomicBoolean(false);
+		Consumer<SudokuEvent<SudokuCell, SudokuValue>> cellValueChangedConsumer = event -> listenerTriggered.set(true);
+		sudokuBoard.addCellValueChangedConsumer(cellValueChangedConsumer);
+
+		sudokuBoard.getSudokuCells(ROW, 0).get(0)
+				.setValue(SudokuValue.VALUE_1);
+
+		Assert.assertTrue(listenerTriggered.get());
+	}
+
+	@Test
+	public void testAddCellPossibleValueChangedConsumer()
+	{
+		SudokuBoard sudokuBoard = new SudokuBoard();
+		AtomicBoolean listenerTriggered = new AtomicBoolean(false);
+		Consumer<SudokuEvent<SudokuCell, SudokuValue>> cellPossibleValueChangedConsumer = event -> listenerTriggered.set(true);
+		sudokuBoard.addCellPossibleValueChangedConsumer(cellPossibleValueChangedConsumer);
+
+		sudokuBoard.getSudokuCells(ROW, 0).get(0)
+				.togglePossibleValue(SudokuValue.VALUE_1);
+
+		Assert.assertTrue(listenerTriggered.get());
+	}
+
 	private static List<Integer> getValues(List<SudokuCell> sudokuCells)
 	{
 		return sudokuCells.stream()
