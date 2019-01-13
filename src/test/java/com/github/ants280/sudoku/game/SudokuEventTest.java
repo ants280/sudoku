@@ -117,4 +117,17 @@ public class SudokuEventTest
 
 		Assert.assertFalse(equals);
 	}
+
+	@Test
+	public void testEquals_copyConstructor()
+	{
+		SudokuEvent<Integer, String> sudokuEvent1
+				= new SudokuEvent<>(1337, "old value", "new value");
+		SudokuEvent<Integer, String> sudokuEvent2
+				= new SudokuEvent<>(sudokuEvent1);
+
+		boolean equals = sudokuEvent1.equals(sudokuEvent2);
+
+		Assert.assertTrue(equals);
+	}
 }
