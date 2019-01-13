@@ -4,6 +4,8 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.function.Function;
@@ -57,7 +59,6 @@ public class SudokuDialogFactory
 			@Override
 			public void focusGained(FocusEvent e)
 			{
-				System.out.println("focus gained " + System.currentTimeMillis());
 				textField.selectAll();
 			}
 		});
@@ -81,6 +82,13 @@ public class SudokuDialogFactory
 		pane.setPreferredSize(new Dimension(previousWidth, (int) pane.getPreferredSize().getHeight()));
 
 		JDialog dialog = pane.createDialog(title);
+		dialog.addWindowFocusListener(new WindowAdapter()
+		{
+			public void windowGainedFocus(WindowEvent e)
+			{
+				textField.requestFocusInWindow();
+			}
+		});
 		dialog.setVisible(true);
 		dialog.dispose();
 	}
