@@ -3,6 +3,8 @@ package com.github.ants280.sudoku.game;
 import static com.github.ants280.sudoku.game.SectionType.*;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import org.junit.Assert;
 import org.junit.Test;
@@ -287,6 +289,105 @@ public class SudokuBoardTest
 		boardA.resetFrom(boardB);
 
 		Assert.assertTrue(boardA.isSolved());
+	}
+
+	@Test
+	public void testCopyConstructor()
+	{
+		String boardValue
+				= "{123456789"
+				+ "456789123"
+				+ "789123456"
+				+ "234567891"
+				+ "567891234"
+				+ "891234567"
+				+ "345678912"
+				+ "678912345"
+				+ "912345670}";
+		SudokuBoard sudokuBoard1 = new SudokuBoard(boardValue);
+		SudokuBoard sudokuBoard2 = new SudokuBoard(sudokuBoard1);
+
+		sudokuBoard1.getSudokuCells(ROW, 8).get(8)
+				.setValue(SudokuValue.VALUE_8);
+
+		Assert.assertNotEquals(sudokuBoard1.isSolved(), sudokuBoard2.isSolved());
+	}
+
+	@Test
+	public void testAddSolvedChangedConsumer()
+	{
+		String boardValue
+				= "{123456789"
+				+ "456789123"
+				+ "789123456"
+				+ "234567891"
+				+ "567891234"
+				+ "891234567"
+				+ "345678912"
+				+ "678912345"
+				+ "912345670}";
+		SudokuBoard sudokuBoard = new SudokuBoard(boardValue);
+		AtomicBoolean listenerTriggered = new AtomicBoolean(false);
+		Consumer<SudokuEvent<SudokuBoard, Boolean>> boardSolvedChangedConsumer = event -> listenerTriggered.set(true);
+		sudokuBoard.addSolvedChangedConsumer(boardSolvedChangedConsumer);
+
+		sudokuBoard.getSudokuCells(ROW, 8).get(8)
+				.setValue(SudokuValue.VALUE_8);
+
+		Assert.assertTrue(listenerTriggered.get());
+	}
+
+	@Test
+	public void testRemoveSolvedChangedConsumer()
+	{
+		String boardValue
+				= "{123456789"
+				+ "456789123"
+				+ "789123456"
+				+ "234567891"
+				+ "567891234"
+				+ "891234567"
+				+ "345678912"
+				+ "678912345"
+				+ "912345670}";
+		SudokuBoard sudokuBoard = new SudokuBoard(boardValue);
+		AtomicBoolean listenerTriggered = new AtomicBoolean(false);
+		Consumer<SudokuEvent<SudokuBoard, Boolean>> boardSolvedChangedConsumer = event -> listenerTriggered.set(true);
+		sudokuBoard.addSolvedChangedConsumer(boardSolvedChangedConsumer); // See previous test
+		sudokuBoard.removeSolvedChangedConsumer(boardSolvedChangedConsumer);
+
+		sudokuBoard.getSudokuCells(ROW, 8).get(8)
+				.setValue(SudokuValue.VALUE_8);
+
+		Assert.assertFalse(listenerTriggered.get());
+	}
+
+	@Test
+	public void testAddCellValueChangedConsumer()
+	{
+		SudokuBoard sudokuBoard = new SudokuBoard();
+		AtomicBoolean listenerTriggered = new AtomicBoolean(false);
+		Consumer<SudokuEvent<SudokuCell, SudokuValue>> cellValueChangedConsumer = event -> listenerTriggered.set(true);
+		sudokuBoard.addCellValueChangedConsumer(cellValueChangedConsumer);
+
+		sudokuBoard.getSudokuCells(ROW, 0).get(0)
+				.setValue(SudokuValue.VALUE_1);
+
+		Assert.assertTrue(listenerTriggered.get());
+	}
+
+	@Test
+	public void testAddCellPossibleValueChangedConsumer()
+	{
+		SudokuBoard sudokuBoard = new SudokuBoard();
+		AtomicBoolean listenerTriggered = new AtomicBoolean(false);
+		Consumer<SudokuEvent<SudokuCell, SudokuValue>> cellPossibleValueChangedConsumer = event -> listenerTriggered.set(true);
+		sudokuBoard.addCellPossibleValueChangedConsumer(cellPossibleValueChangedConsumer);
+
+		sudokuBoard.getSudokuCells(ROW, 0).get(0)
+				.togglePossibleValue(SudokuValue.VALUE_1);
+
+		Assert.assertTrue(listenerTriggered.get());
 	}
 
 	private static List<Integer> getValues(List<SudokuCell> sudokuCells)

@@ -474,7 +474,7 @@ public class SudokuUiManager implements ActionListener
 		hintBoard.addCellValueChangedConsumer(
 				cellValueChangedEvent -> hintCommandHistory.addCommand(
 						new SudokuCellUndoCommand(cellValueChangedEvent, SudokuCellChangeType.SET_VALUE)));
-		SudokuSolver hintSolver = new SudokuLogicSolver(hintBoard);
+		SudokuSolver hintSolver = new SudokuLogicSolver(hintBoard, null);
 
 		hintSolver.initialize();
 		boolean moveMade = hintSolver.makeMove();
