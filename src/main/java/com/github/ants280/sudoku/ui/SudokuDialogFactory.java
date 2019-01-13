@@ -50,6 +50,7 @@ public class SudokuDialogFactory
 			String exportContents)
 	{
 		JTextField textField = new JTextField(exportContents);
+		textField.setEditable(false);
 		addToolkit(textField);
 		textField.addFocusListener(new FocusAdapter()
 		{
@@ -93,6 +94,7 @@ public class SudokuDialogFactory
 		ex.printStackTrace(new PrintWriter(stackTraceWriter));
 
 		JTextArea textArea = new JTextArea(stackTraceWriter.toString(), 15, 30);
+		textArea.setEditable(false);
 		addToolkit(textArea);
 
 		JPanel panel = new JPanel();
