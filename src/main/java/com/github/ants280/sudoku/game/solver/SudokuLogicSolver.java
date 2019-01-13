@@ -9,11 +9,6 @@ public class SudokuLogicSolver extends SudokuSolver
 {
 	private final List<SudokuSolverPlugin> solverPlugins;
 
-	public SudokuLogicSolver(SudokuBoard sudokuBoard)
-	{
-		this(sudokuBoard, null);
-	}
-
 	public SudokuLogicSolver(
 			SudokuBoard sudokuBoard,
 			Consumer<String> moveDescriptionConsumer)
