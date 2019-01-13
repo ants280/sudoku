@@ -316,6 +316,18 @@ public class SudokuCellTest
 	}
 
 	@Test
+	public void testHashCode_differentLocked()
+	{
+		sudokuCell = new SudokuCell(1, 2, 3, SudokuValue.VALUE_4, false);
+		SudokuCell sudokuCell2 = new SudokuCell(1, 2, 3, SudokuValue.VALUE_4, true);
+
+		int hashCode = sudokuCell.hashCode();
+		int hashCode2 = sudokuCell2.hashCode();
+
+		Assert.assertNotEquals(hashCode, hashCode2);
+	}
+
+	@Test
 	public void testEquals_same()
 	{
 		SudokuCell sudokuCell2 = sudokuCell;
