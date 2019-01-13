@@ -1,6 +1,7 @@
 package com.github.ants280.sudoku.game;
 
 import java.util.Collection;
+import java.util.function.Consumer;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -450,6 +451,77 @@ public class SudokuCellTest
 		boolean equals = sudokuCell.equals(sudokuCell2);
 
 		Assert.assertTrue(equals);
+	}
+
+	@Test
+	public void testEquals_sameListeners()
+	{
+		sudokuCell = new SudokuCell(1, 2, 3, null, false);
+		SudokuCell sudokuCell2 = new SudokuCell(1, 2, 3, null, false);
+		Consumer<SudokuEvent<SudokuCell, SudokuValue>> cellValueChangedConsumer1 = event ->
+		{
+		};
+		Consumer<SudokuEvent<SudokuCell, SudokuValue>> cellValueChangedConsumer2 = event ->
+		{
+		};
+		Consumer<SudokuEvent<SudokuCell, SudokuValue>> cellPossibleValueChangedConsumer1 = event ->
+		{
+		};
+		sudokuCell.addCellValueChangedConsumer(cellValueChangedConsumer1);
+		sudokuCell.addCellValueChangedConsumer(cellValueChangedConsumer2);
+		sudokuCell.addCellPossibleValueChangedConsumer(cellPossibleValueChangedConsumer1);
+		sudokuCell2.addCellValueChangedConsumer(cellValueChangedConsumer1);
+		sudokuCell2.addCellValueChangedConsumer(cellValueChangedConsumer2);
+		sudokuCell2.addCellPossibleValueChangedConsumer(cellPossibleValueChangedConsumer1);
+
+		boolean equals = sudokuCell.equals(sudokuCell2);
+
+		Assert.assertTrue(equals);
+	}
+
+	@Test
+	public void testEquals_differentCellValueChangeConsumers()
+	{
+		sudokuCell = new SudokuCell(1, 2, 3, null, false);
+		SudokuCell sudokuCell2 = new SudokuCell(1, 2, 3, null, false);
+		Consumer<SudokuEvent<SudokuCell, SudokuValue>> cellValueChangedConsumer1 = event ->
+		{
+		};
+		Consumer<SudokuEvent<SudokuCell, SudokuValue>> cellValueChangedConsumer2 = event ->
+		{
+		};
+		Consumer<SudokuEvent<SudokuCell, SudokuValue>> cellPossibleValueChangedConsumer1 = event ->
+		{
+		};
+		sudokuCell.addCellValueChangedConsumer(cellValueChangedConsumer1);
+		sudokuCell.addCellValueChangedConsumer(cellValueChangedConsumer2);
+		sudokuCell.addCellPossibleValueChangedConsumer(cellPossibleValueChangedConsumer1);
+		sudokuCell2.addCellValueChangedConsumer(cellValueChangedConsumer1);
+		// no cellValueChangedConsumer2 for sudokuCell2
+		sudokuCell2.addCellPossibleValueChangedConsumer(cellPossibleValueChangedConsumer1);
+
+		boolean equals = sudokuCell.equals(sudokuCell2);
+
+		Assert.assertFalse(equals);
+	}
+
+	@Test
+	public void testEquals_differentCellPossibleValueChangeConsumers()
+	{
+		sudokuCell = new SudokuCell(1, 2, 3, null, false);
+		SudokuCell sudokuCell2 = new SudokuCell(1, 2, 3, null, false);
+		Consumer<SudokuEvent<SudokuCell, SudokuValue>> cellPossibleValueChangedConsumer1 = event ->
+		{
+		};
+		Consumer<SudokuEvent<SudokuCell, SudokuValue>> cellPossibleValueChangedConsumer2 = event ->
+		{
+		};
+		sudokuCell.addCellPossibleValueChangedConsumer(cellPossibleValueChangedConsumer1);
+		sudokuCell2.addCellPossibleValueChangedConsumer(cellPossibleValueChangedConsumer2);
+
+		boolean equals = sudokuCell.equals(sudokuCell2);
+
+		Assert.assertFalse(equals);
 	}
 
 	@Test
