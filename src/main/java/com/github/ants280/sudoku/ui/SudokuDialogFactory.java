@@ -8,6 +8,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Optional;
 import java.util.function.Function;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -34,7 +35,7 @@ public class SudokuDialogFactory
 	{
 	}
 
-	public static String showLoadDialog(
+	public static Optional<String> showLoadDialog(
 			JFrame parentComponent,
 			String title,
 			String message,
@@ -42,7 +43,40 @@ public class SudokuDialogFactory
 			String invalidPopupTitle,
 			String invalidPopupMessage)
 	{
-		return null;
+		JTextField textField = new JTextField();
+
+		Object messageArray = new Object[]
+		{
+			message,
+			textField
+		};
+		JOptionPane pane = new JOptionPane(
+				messageArray,
+				JOptionPane.INFORMATION_MESSAGE,
+				JOptionPane.OK_CANCEL_OPTION,
+				null, // icon
+				null, // options
+				null); // initialValues
+
+		JDialog dialog = pane.createDialog(title);
+		// TODO: Handle ok button press [& validate]
+		initTextComponent(textField, dialog, true);
+		dialog.setVisible(true);
+		dialog.dispose();
+
+//		// ok validation:
+//		if (!validationFunction.apply(textField.getText()))
+//		{
+//			JOptionPane.showMessageDialog(
+//					parentComponent,
+//					invalidPopupMessage,
+//					invalidPopupMessage,
+//					JOptionPane.ERROR_MESSAGE);
+//			// TODO: keep open
+//		}
+
+		Object inputValue = textField.getText();
+		return Optional.ofNullable(inputValue == null ? null : inputValue.toString());
 	}
 
 	public static void showExportDialog(

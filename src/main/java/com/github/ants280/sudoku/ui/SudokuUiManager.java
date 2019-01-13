@@ -15,6 +15,7 @@ import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -333,26 +334,27 @@ public class SudokuUiManager implements ActionListener
 		}
 	}
 
-	// TODO: should be able to copy/paste with mouse
 	private void load()
 	{
-		Object boardToLoad = JOptionPane.showInputDialog(
-				frame,
-				"Enter a saved game to load.\n"
-				+ "WARNING: This cannot be undone.",
-				"Load " + frame.getTitle(),
-				JOptionPane.INFORMATION_MESSAGE,
-				null, // Icon
-				null, // selectionValues (null implies textbox)
-				null); // initialSelectionValue
+		Optional<String> optionalBoardText
+				= SudokuDialogFactory.showLoadDialog(
+						frame,
+						"Load " + frame.getTitle(),
+						"Enter a saved game to load.\n"
+						+ "WARNING: This cannot be undone.",
+						SudokuBoard::isValidSavedBoard,
+						"Invalid Board for " + frame.getTitle(),
+						"Error loading board.\n"
+						+ "It should be something like '{<81 digits>}' "
+						+ "(without quotes).");
 
-		if (boardToLoad != null)
+		if (optionalBoardText.isPresent())
 		{
-			if (SudokuBoard.isValidSavedBoard(boardToLoad.toString()))
+			if (SudokuBoard.isValidSavedBoard(optionalBoardText.get()))
 			{
 				commandHistory.reset();
 				SudokuBoard loadedBoard
-						= new SudokuBoard(boardToLoad.toString());
+						= new SudokuBoard(optionalBoardText.get());
 				board.resetFrom(loadedBoard); // Note: all valued cells locked
 				initialBoard.resetFrom(board);
 			}

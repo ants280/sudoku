@@ -177,7 +177,7 @@ public class SudokuBoard
 
 	public static boolean isValidSavedBoard(String boardString)
 	{
-		return boardString.matches("^\\{\\d{81}\\}$");
+		return boardString != null && boardString.matches("^\\{\\d{81}\\}$");
 	}
 
 	private static void validateIndices(int... indices)
