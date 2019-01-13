@@ -52,16 +52,6 @@ public class SudokuDialogFactory
 			String exportContents)
 	{
 		JTextField textField = new JTextField(exportContents);
-		textField.setEditable(false);
-		addToolkit(textField);
-		textField.addFocusListener(new FocusAdapter()
-		{
-			@Override
-			public void focusGained(FocusEvent e)
-			{
-				textField.selectAll();
-			}
-		});
 
 		JOptionPane pane = new JOptionPane(
 				message,
@@ -82,13 +72,7 @@ public class SudokuDialogFactory
 		pane.setPreferredSize(new Dimension(previousWidth, (int) pane.getPreferredSize().getHeight()));
 
 		JDialog dialog = pane.createDialog(title);
-		dialog.addWindowFocusListener(new WindowAdapter()
-		{
-			public void windowGainedFocus(WindowEvent e)
-			{
-				textField.requestFocusInWindow();
-			}
-		});
+		initTextComponent(textField, dialog, true);
 		dialog.setVisible(true);
 		dialog.dispose();
 	}
@@ -100,10 +84,7 @@ public class SudokuDialogFactory
 	{
 		StringWriter stackTraceWriter = new StringWriter();
 		ex.printStackTrace(new PrintWriter(stackTraceWriter));
-
 		JTextArea textArea = new JTextArea(stackTraceWriter.toString(), 15, 30);
-		textArea.setEditable(false);
-		addToolkit(textArea);
 
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -111,18 +92,22 @@ public class SudokuDialogFactory
 		panel.add(new JScrollPane(textArea));
 		panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-		JOptionPane.showOptionDialog(
-				parentComponent,
+		JOptionPane pane = new JOptionPane(
 				panel,
-				title,
-				JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE,
-				null,
-				null,
-				null);
+				JOptionPane.ERROR_MESSAGE,
+				JOptionPane.DEFAULT_OPTION, // OK button
+				null, // icon
+				null, // options
+				null); // initialValues
+		JDialog dialog = pane.createDialog(title);
+		initTextComponent(textArea, dialog, false);
+		dialog.setVisible(true);
+		dialog.dispose();
 	}
 
-	private static void addToolkit(JTextComponent textComponent)
+	private static void initTextComponent(JTextComponent textComponent, JDialog dialog, boolean editable)
 	{
+		// add toolkit
 		JMenuItem copyMenuItem = new JMenuItem(
 				new DefaultEditorKit.CopyAction());
 		JPopupMenu popupMenu = new JPopupMenu();
@@ -130,5 +115,26 @@ public class SudokuDialogFactory
 		textComponent.addCaretListener(caretEvent -> copyMenuItem.setEnabled(
 				caretEvent.getDot() != caretEvent.getMark()));
 		textComponent.setComponentPopupMenu(popupMenu);
+
+		// focus to textcomponent when dialog loads
+		dialog.addWindowFocusListener(new WindowAdapter()
+		{
+			@Override
+			public void windowGainedFocus(WindowEvent e)
+			{
+				textComponent.requestFocusInWindow();
+			}
+		});
+		// select all the text when focus is granted
+		textComponent.addFocusListener(new FocusAdapter()
+		{
+			@Override
+			public void focusGained(FocusEvent e)
+			{
+				textComponent.selectAll();
+			}
+		});
+
+		textComponent.setEditable(editable);
 	}
 }
