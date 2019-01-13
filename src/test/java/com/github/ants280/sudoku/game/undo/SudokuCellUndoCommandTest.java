@@ -160,4 +160,18 @@ public class SudokuCellUndoCommandTest
 
 		Assert.assertFalse(equals);
 	}
+
+	@Test
+	public void testGetSudokuCell()
+	{
+		SudokuCell expectedSudokuCell = new SudokuCell(1, 2, 3, SudokuValue.VALUE_2, false);
+		SudokuEvent<SudokuCell, SudokuValue> sudokuEvent
+				= new SudokuEvent<>(expectedSudokuCell, SudokuValue.VALUE_3, SudokuValue.VALUE_2);
+		SudokuCellUndoCommand sudokuCellUndoCommand
+				= new SudokuCellUndoCommand(sudokuEvent, SudokuCellChangeType.SET_VALUE);
+
+		SudokuCell actualSudokuCell = sudokuCellUndoCommand.getSudokuCell();
+
+		Assert.assertEquals(expectedSudokuCell, actualSudokuCell);
+	}
 }
