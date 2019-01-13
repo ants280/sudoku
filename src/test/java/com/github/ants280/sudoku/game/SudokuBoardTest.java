@@ -289,6 +289,28 @@ public class SudokuBoardTest
 		Assert.assertTrue(boardA.isSolved());
 	}
 
+	@Test
+	public void testCopyConstructor()
+	{
+		String boardValue
+				= "{123456789"
+				+ "456789123"
+				+ "789123456"
+				+ "234567891"
+				+ "567891234"
+				+ "891234567"
+				+ "345678912"
+				+ "678912345"
+				+ "912345670}";
+		SudokuBoard sudokuBoard1 = new SudokuBoard(boardValue);
+		SudokuBoard sudokuBoard2 = new SudokuBoard(sudokuBoard1);
+
+		sudokuBoard1.getSudokuCells(ROW, 8).get(8)
+				.setValue(SudokuValue.VALUE_8);
+
+		Assert.assertNotEquals(sudokuBoard1.isSolved(), sudokuBoard2.isSolved());
+	}
+
 	private static List<Integer> getValues(List<SudokuCell> sudokuCells)
 	{
 		return sudokuCells.stream()
