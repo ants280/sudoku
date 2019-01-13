@@ -121,6 +121,8 @@ public class SudokuLogicSolverTable
 				IntStream.range(0, Math.abs(delta))
 						.forEach(i -> action.run());
 			}
+			// TODO: highlight last sudokuCell (that the clicked action is for) -> unless it is the first/last
+			// --> check for off-by-one errors
 		}
 	}
 
