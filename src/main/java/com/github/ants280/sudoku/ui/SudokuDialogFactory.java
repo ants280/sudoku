@@ -44,40 +44,33 @@ public class SudokuDialogFactory
 	public static void showExportDialog(
 			JFrame parentComponent,
 			String title,
-			String[] messageLines,
+			String message,
 			String exportContents)
 	{
 		JTextField textField = new JTextField(exportContents);
 		addToolkit(textField);
 
-		Object[] message = new Object[messageLines.length + 1];
-		System.arraycopy(messageLines, 0, message, 0, messageLines.length);
-		message[message.length - 1] = textField;
-		Object[] okOptions = new Object[]
-		{
-			"OK" // TODO: Get proper text for L&F
-		};
-		JOptionPane optionPane = new JOptionPane(
+		JOptionPane pane = new JOptionPane(
 				message,
 				JOptionPane.INFORMATION_MESSAGE,
-				JOptionPane.DEFAULT_OPTION,
-				null, //icon,
-				okOptions,
-				okOptions[0]);
+				JOptionPane.DEFAULT_OPTION, // OK button
+				null, // icon
+				null, // options
+				null); // initialValues
 
-//		textField.setPreferredSize(optionPane.getPreferredSize());
-		Dimension textFieldPreferredSize = textField.getPreferredSize();
-		Dimension optionPanePreferredSize = optionPane.getPreferredSize();
-		textField.setPreferredSize(new Dimension(
-				(int) optionPanePreferredSize.getWidth(),
-				(int) textFieldPreferredSize.getHeight()));
+		// Make the width as wide of the text, not the text field:
+		Object messageArray = new Object[]
+		{
+			message,
+			textField
+		};
+		int previousWidth = (int) pane.getPreferredSize().getWidth();
+		pane.setMessage(messageArray);
+		pane.setPreferredSize(new Dimension(previousWidth, (int) pane.getPreferredSize().getHeight()));
 
-		JDialog dialog = new JDialog(parentComponent, title, true);
-		dialog.setContentPane(optionPane);
-		dialog.pack();
-		dialog.setLocationRelativeTo(dialog.getParent());
-
+		JDialog dialog = pane.createDialog(title);
 		dialog.setVisible(true);
+		dialog.dispose();
 	}
 
 	public static void showExceptionDialog(
