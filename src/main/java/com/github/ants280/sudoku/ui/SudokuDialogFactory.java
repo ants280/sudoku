@@ -2,6 +2,8 @@ package com.github.ants280.sudoku.ui;
 
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.function.Function;
@@ -49,6 +51,15 @@ public class SudokuDialogFactory
 	{
 		JTextField textField = new JTextField(exportContents);
 		addToolkit(textField);
+		textField.addFocusListener(new FocusAdapter()
+		{
+			@Override
+			public void focusGained(FocusEvent e)
+			{
+				System.out.println("focus gained " + System.currentTimeMillis());
+				textField.selectAll();
+			}
+		});
 
 		JOptionPane pane = new JOptionPane(
 				message,
