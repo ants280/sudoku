@@ -77,7 +77,7 @@ public class SudokuDialogFactory
 				JOptionPane.showMessageDialog(
 						parentComponent,
 						invalidPopupMessage,
-						invalidPopupMessage,
+						invalidPopupTitle,
 						JOptionPane.ERROR_MESSAGE);
 				dialog.setVisible(true); // keep dialog open
 			}
