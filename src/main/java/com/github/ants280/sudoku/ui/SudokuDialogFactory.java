@@ -162,6 +162,7 @@ public class SudokuDialogFactory
 		// add toolkit
 		JMenuItem copyMenuItem = new JMenuItem(
 				new DefaultEditorKit.CopyAction());
+		copyMenuItem.setEnabled(false);
 		JPopupMenu popupMenu = new JPopupMenu();
 		popupMenu.add(copyMenuItem);
 		textComponent.addCaretListener(caretEvent -> copyMenuItem.setEnabled(
@@ -170,6 +171,7 @@ public class SudokuDialogFactory
 		{
 			JMenuItem cutMenuItem = new JMenuItem(
 					new DefaultEditorKit.CutAction());
+			cutMenuItem.setEnabled(false);
 			JMenuItem pasteMenuItem = new JMenuItem(
 					new DefaultEditorKit.PasteAction());
 			popupMenu.add(cutMenuItem, 0); // add to front
