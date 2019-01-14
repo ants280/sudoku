@@ -63,7 +63,7 @@ public class SudokuDialogFactory
 		pane.addPropertyChangeListener(event ->
 		{
 			if (!JOptionPane.VALUE_PROPERTY.equals(event.getPropertyName())
-					&& !JOptionPane.INPUT_VALUE_PROPERTY.equals(event.getPropertyName()))
+					|| JOptionPane.UNINITIALIZED_VALUE.equals(event.getNewValue()))
 			{
 				return;
 			}
