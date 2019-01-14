@@ -161,7 +161,19 @@ public class SudokuDialogFactory
 		popupMenu.add(copyMenuItem);
 		textComponent.addCaretListener(caretEvent -> copyMenuItem.setEnabled(
 				caretEvent.getDot() != caretEvent.getMark()));
+		if (editable)
+		{
+			JMenuItem cutMenuItem = new JMenuItem(
+					new DefaultEditorKit.CutAction());
+			JMenuItem pasteMenuItem = new JMenuItem(
+					new DefaultEditorKit.PasteAction());
+			popupMenu.add(cutMenuItem, 0); // add to front
+			popupMenu.add(pasteMenuItem);
+			textComponent.addCaretListener(caretEvent -> cutMenuItem.setEnabled(
+					caretEvent.getDot() != caretEvent.getMark()));
+		}
 		textComponent.setComponentPopupMenu(popupMenu);
+
 
 		// focus to textcomponent when dialog loads
 		dialog.addWindowFocusListener(new WindowAdapter()
