@@ -83,6 +83,7 @@ public class SudokuDialogFactory
 				dialog.setVisible(true); // keep dialog open
 			}
 		});
+		dialog.setLocationRelativeTo(parentComponent);
 		dialog.setVisible(true);
 		dialog.dispose();
 
@@ -121,6 +122,7 @@ public class SudokuDialogFactory
 
 		JDialog dialog = pane.createDialog(title);
 		initTextComponent(textField, dialog, true);
+		dialog.setLocationRelativeTo(parentComponent);
 		dialog.setVisible(true);
 		dialog.dispose();
 	}
@@ -147,8 +149,10 @@ public class SudokuDialogFactory
 				null, // icon
 				null, // options
 				null); // initialValues
+
 		JDialog dialog = pane.createDialog(title);
 		initTextComponent(textArea, dialog, false);
+		dialog.setLocationRelativeTo(parentComponent);
 		dialog.setVisible(true);
 		dialog.dispose();
 	}
