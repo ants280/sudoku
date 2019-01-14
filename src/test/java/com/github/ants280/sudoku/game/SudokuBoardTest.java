@@ -21,6 +21,56 @@ public class SudokuBoardTest
 	}
 
 	@Test
+	public void testIsValidBoard_small()
+	{
+		String boardString = "{123456789}";
+
+		boolean validBoardString = SudokuBoard.isValidSavedBoard(boardString);
+
+		Assert.assertFalse(validBoardString);
+	}
+
+	@Test
+	public void testIsValidBoard_noBraces()
+	{
+		String boardString = "123456789456789123789123456234567891567891234891234567345678912678912345912345670";
+
+		boolean validBoardString = SudokuBoard.isValidSavedBoard(boardString);
+
+		Assert.assertFalse(validBoardString);
+	}
+
+	@Test
+	public void testIsValidBoard_wrongBraces()
+	{
+		String boardString = "[123456789456789123789123456234567891567891234891234567345678912678912345912345670]";
+
+		boolean validBoardString = SudokuBoard.isValidSavedBoard(boardString);
+
+		Assert.assertFalse(validBoardString);
+	}
+
+	@Test
+	public void testIsValidBoard_null()
+	{
+		String boardString = null;
+
+		boolean validBoardString = SudokuBoard.isValidSavedBoard(boardString);
+
+		Assert.assertFalse(validBoardString);
+	}
+
+	@Test
+	public void testIsValidBoard_ok()
+	{
+		String boardString = "{123456789456789123789123456234567891567891234891234567345678912678912345912345670}";
+
+		boolean validBoardString = SudokuBoard.isValidSavedBoard(boardString);
+
+		Assert.assertTrue(validBoardString);
+	}
+
+	@Test
 	public void testToString()
 	{
 		String boardValue
