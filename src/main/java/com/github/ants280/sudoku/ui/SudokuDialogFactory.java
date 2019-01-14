@@ -59,24 +59,37 @@ public class SudokuDialogFactory
 				null); // initialValues
 
 		JDialog dialog = pane.createDialog(title);
-		// TODO: Handle ok button press [& validate]
 		initTextComponent(textField, dialog, true);
+		pane.addPropertyChangeListener(event ->
+		{
+			if (!JOptionPane.VALUE_PROPERTY.equals(event.getPropertyName())
+					&& !JOptionPane.INPUT_VALUE_PROPERTY.equals(event.getPropertyName()))
+			{
+				return;
+			}
+
+			if (!event.getNewValue().equals(JOptionPane.OK_OPTION))
+			{
+				textField.setText(null);
+			}
+			else if (!validationFunction.apply(textField.getText()))
+			{
+				JOptionPane.showMessageDialog(
+						parentComponent,
+						invalidPopupMessage,
+						invalidPopupMessage,
+						JOptionPane.ERROR_MESSAGE);
+				dialog.setVisible(true); // keep dialog open
+			}
+		});
 		dialog.setVisible(true);
 		dialog.dispose();
 
-//		// ok validation:
-//		if (!validationFunction.apply(textField.getText()))
-//		{
-//			JOptionPane.showMessageDialog(
-//					parentComponent,
-//					invalidPopupMessage,
-//					invalidPopupMessage,
-//					JOptionPane.ERROR_MESSAGE);
-//			// TODO: keep open
-//		}
-
 		Object inputValue = textField.getText();
-		return Optional.ofNullable(inputValue == null ? null : inputValue.toString());
+		return Optional.ofNullable(
+				inputValue == null || "".equals(inputValue)
+				? null
+				: inputValue.toString());
 	}
 
 	public static void showExportDialog(

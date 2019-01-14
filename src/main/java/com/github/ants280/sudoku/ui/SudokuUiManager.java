@@ -350,25 +350,11 @@ public class SudokuUiManager implements ActionListener
 
 		if (optionalBoardText.isPresent())
 		{
-			if (SudokuBoard.isValidSavedBoard(optionalBoardText.get()))
-			{
-				commandHistory.reset();
-				SudokuBoard loadedBoard
-						= new SudokuBoard(optionalBoardText.get());
-				board.resetFrom(loadedBoard); // Note: all valued cells locked
-				initialBoard.resetFrom(board);
-			}
-			else
-			{
-				// TODO: Should leave load dialog open
-				JOptionPane.showMessageDialog(
-						frame,
-						"Error loading board.\n"
-						+ "It should be something like '{<81 digits>}' "
-						+ "(without quotes).",
-						"Invalid Board for " + frame.getTitle(),
-						JOptionPane.ERROR_MESSAGE);
-			}
+			commandHistory.reset();
+			SudokuBoard loadedBoard
+					= new SudokuBoard(optionalBoardText.get());
+			board.resetFrom(loadedBoard); // Note: all valued cells locked
+			initialBoard.resetFrom(board);
 		}
 	}
 
