@@ -9,7 +9,7 @@ import java.awt.event.WindowEvent;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Optional;
-import java.util.function.Function;
+import java.util.function.Predicate;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JDialog;
@@ -39,7 +39,7 @@ public class SudokuDialogFactory
 			JFrame parentComponent,
 			String title,
 			String message,
-			Function<String, Boolean> validationFunction,
+			Predicate<String> validationFunction,
 			String invalidPopupTitle,
 			String invalidPopupMessage)
 	{
@@ -72,7 +72,7 @@ public class SudokuDialogFactory
 			{
 				textField.setText(null);
 			}
-			else if (!validationFunction.apply(textField.getText()))
+			else if (!validationFunction.test(textField.getText()))
 			{
 				JOptionPane.showMessageDialog(
 						parentComponent,
