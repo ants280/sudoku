@@ -68,7 +68,8 @@ public class SudokuDialogFactory
 				return;
 			}
 
-			if (!event.getNewValue().equals(JOptionPane.OK_OPTION))
+			if (event.getNewValue() == null
+					|| !event.getNewValue().equals(JOptionPane.OK_OPTION))
 			{
 				textField.setText(null);
 			}
