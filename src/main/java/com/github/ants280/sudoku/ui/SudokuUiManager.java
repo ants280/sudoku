@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -304,11 +305,23 @@ public class SudokuUiManager implements ActionListener
 
 	private void solveLogic()
 	{
+		Consumer<SudokuCell> selectSudokuCellConsumer = sudokuCell ->
+		{
+			if (sudokuCell == null)
+			{
+				sudokuDisplayComponent.removeSelectedCell();
+			}
+			else
+			{
+				sudokuDisplayComponent.selectCell(sudokuCell);
+			}
+		};
 		SudokuLogicSolverPopup sudokuSolverPopup
 				= new SudokuLogicSolverPopup(
 						frame,
 						board,
-						commandHistory);
+						commandHistory,
+						selectSudokuCellConsumer);
 
 		sudokuSolverPopup.setVisible(true);
 	}

@@ -153,4 +153,9 @@ public class CommandHistory<T extends Command>
 	{
 		return undoHistory.size();
 	}
+
+	public T peekNextRedo()
+	{
+		return redoHistory.peek();
+	}
 }

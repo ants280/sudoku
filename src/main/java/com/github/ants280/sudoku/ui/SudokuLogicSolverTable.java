@@ -1,5 +1,6 @@
 package com.github.ants280.sudoku.ui;
 
+import com.github.ants280.sudoku.game.SudokuCell;
 import com.github.ants280.sudoku.game.undo.CommandHistory;
 import com.github.ants280.sudoku.game.undo.SudokuCellUndoCommand;
 import java.awt.Component;
@@ -7,6 +8,7 @@ import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.function.Consumer;
 import java.util.stream.IntStream;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -20,7 +22,8 @@ public class SudokuLogicSolverTable
 	private final JTable table;
 
 	public SudokuLogicSolverTable(
-			CommandHistory<SudokuCellUndoCommand> commandHistory)
+			CommandHistory<SudokuCellUndoCommand> commandHistory,
+			Consumer<SudokuCell> selectSudokuCellConsumer)
 	{
 		this.commandHistory = commandHistory;
 
@@ -46,15 +49,26 @@ public class SudokuLogicSolverTable
 		table.addMouseListener(new SudokuLogicTableMouseListener(
 				table,
 				undoIndexColumnIndex,
-				commandHistory));
+				commandHistory,
+				selectSudokuCellConsumer));
 	}
 
 	public void addRow(String moveDescription)
 	{
+		this.addRow(moveDescription, commandHistory.getUndoCount());
+	}
+
+	public void addFinalRow(String moveDescription)
+	{
+		this.addRow(moveDescription, commandHistory.getUndoCount() + 1);
+	}
+
+	private void addRow(String moveDescription, int undoCount)
+	{
 		Object[] rowData = new Object[]
 		{
 			moveDescription,
-			commandHistory.getUndoCount()
+			undoCount
 		};
 
 		tableModel.addRow(rowData);
@@ -80,15 +94,18 @@ public class SudokuLogicSolverTable
 		private final JTable table;
 		private final int undoIndexColumnIndex;
 		private final CommandHistory<SudokuCellUndoCommand> commandHistory;
+		private final Consumer<SudokuCell> selectSudokuCellConsumer;
 
 		public SudokuLogicTableMouseListener(
 				JTable table,
 				int undoIndexColumnIndex,
-				CommandHistory<SudokuCellUndoCommand> commandHistory)
+				CommandHistory<SudokuCellUndoCommand> commandHistory,
+				Consumer<SudokuCell> selectSudokuCellConsumer)
 		{
 			this.table = table;
 			this.undoIndexColumnIndex = undoIndexColumnIndex;
 			this.commandHistory = commandHistory;
+			this.selectSudokuCellConsumer = selectSudokuCellConsumer;
 		}
 
 		@Override
@@ -120,9 +137,11 @@ public class SudokuLogicSolverTable
 						: commandHistory::redo;
 				IntStream.range(0, Math.abs(delta))
 						.forEach(i -> action.run());
+
+				SudokuCellUndoCommand lastCommand = commandHistory.peekNextRedo();
+				selectSudokuCellConsumer.accept(
+						lastCommand == null ? null : lastCommand.getSudokuCell());
 			}
-			// TODO: highlight last sudokuCell (that the clicked action is for) -> unless it is the first/last
-			// --> check for off-by-one errors
 		}
 	}
 

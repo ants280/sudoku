@@ -1,6 +1,7 @@
 package com.github.ants280.sudoku.ui;
 
 import com.github.ants280.sudoku.game.SudokuBoard;
+import com.github.ants280.sudoku.game.SudokuCell;
 import com.github.ants280.sudoku.game.SudokuEvent;
 import com.github.ants280.sudoku.game.solver.SudokuLogicSolver;
 import com.github.ants280.sudoku.game.solver.SudokuSolver;
@@ -61,12 +62,13 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 	public SudokuLogicSolverPopup(
 			JFrame popupOwner,
 			SudokuBoard sudokuBoard,
-			CommandHistory<SudokuCellUndoCommand> commandHistory)
+			CommandHistory<SudokuCellUndoCommand> commandHistory,
+			Consumer<SudokuCell> selectSudokuCellConsumer)
 	{
 		this.sudokuBoard = sudokuBoard;
 		this.boardSolvedChangedConsumer = this::handleSolvedChangedConsumer;
 		this.commandHistory = commandHistory;
-		this.solverTable = new SudokuLogicSolverTable(commandHistory);
+		this.solverTable = new SudokuLogicSolverTable(commandHistory, selectSudokuCellConsumer);
 		this.solverTablePanel = new JPanel();
 		this.sudokuSolver = new SudokuLogicSolver(
 				sudokuBoard,
@@ -242,7 +244,7 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 			}
 			else
 			{
-				solverTable.addRow(SudokuUiManager.BOARD_SOLVED_MESSAGE);
+				solverTable.addFinalRow(SudokuUiManager.BOARD_SOLVED_MESSAGE);
 			}
 		}
 	}
@@ -251,7 +253,7 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 	{
 		if (!sudokuBoard.isSolved())
 		{
-			solverTable.addRow("Solver stuck");
+			solverTable.addFinalRow("Solver stuck");
 		}
 
 		solverTable.setEnabled(true);
