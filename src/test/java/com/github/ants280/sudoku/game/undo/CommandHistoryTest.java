@@ -314,4 +314,48 @@ public class CommandHistoryTest
 
 		Assert.assertFalse(redoConsumed.get());
 	}
+
+	@Test
+	public void testPeekNextRedo_empty1()
+	{
+		Command nextRedoCommand = commandHistory.peekNextRedo();
+
+		Assert.assertNull(nextRedoCommand);
+	}
+
+	@Test
+	public void testPeekNextRedo_empty2()
+	{
+		Command mockCommand = Mockito.mock(Command.class);
+		commandHistory.addCommand(mockCommand);
+
+		Command nextRedoCommand = commandHistory.peekNextRedo();
+
+		Assert.assertNull(nextRedoCommand);
+	}
+
+	@Test
+	public void testPeekNextRedo()
+	{
+		Command mockCommand0 = Mockito.mock(Command.class);
+		Command mockCommand1 = Mockito.mock(Command.class);
+		Command mockCommand2 = Mockito.mock(Command.class);
+		Command mockCommand3 = Mockito.mock(Command.class);
+		Command mockCommand4 = Mockito.mock(Command.class);
+		Command mockCommand5 = Mockito.mock(Command.class);
+		commandHistory.addCommand(mockCommand0);
+		commandHistory.addCommand(mockCommand1);
+		commandHistory.addCommand(mockCommand2);
+		commandHistory.addCommand(mockCommand3);
+		commandHistory.addCommand(mockCommand4);
+		commandHistory.addCommand(mockCommand5);
+		commandHistory.undo();
+		commandHistory.undo();
+		commandHistory.undo();
+
+		Command nextRedoCommand = commandHistory.peekNextRedo();
+
+		Assert.assertEquals(mockCommand3, nextRedoCommand);
+		Assert.assertNotEquals(mockCommand3, mockCommand2); // [for sanity about the test library]
+	}
 }
