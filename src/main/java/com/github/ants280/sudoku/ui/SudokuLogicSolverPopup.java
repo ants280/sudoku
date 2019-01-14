@@ -256,6 +256,7 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 			solverTable.addFinalRow("Solver stuck");
 		}
 
+		sudokuBoard.removeSolvedChangedConsumer(boardSolvedChangedConsumer);
 		solverTable.setEnabled(true);
 		startStopButton.setEnabled(false);
 		startStopButton.setText(BUTTON_STOP);
@@ -281,9 +282,7 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 		{
 			timer.stop();
 
-			boolean consumerRemoved = sudokuBoard.removeSolvedChangedConsumer(
-					boardSolvedChangedConsumer);
-			assert consumerRemoved;
+			sudokuBoard.removeSolvedChangedConsumer(boardSolvedChangedConsumer);
 		}
 	}
 }
