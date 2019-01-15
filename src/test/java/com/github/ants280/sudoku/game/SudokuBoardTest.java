@@ -469,6 +469,33 @@ public class SudokuBoardTest
 		Assert.assertTrue(listenerTriggered.get());
 	}
 
+	@Test
+	public void testSolvedChanged_listenersNotEnabled()
+	{
+		SudokuBoard sudokuBoard = new SudokuBoard(
+				"{123456789"
+				+ "456789123"
+				+ "789123456"
+				+ "234567891"
+				+ "567891234"
+				+ "891234567"
+				+ "345678912"
+				+ "678912345"
+				+ "912345670}");
+		AtomicBoolean listenerTriggered = new AtomicBoolean(false);
+		Consumer<SudokuEvent<SudokuBoard, Boolean>> boardSolvedChangedConsumer = event -> listenerTriggered.set(true);
+		sudokuBoard.addSolvedChangedConsumer(boardSolvedChangedConsumer);
+
+		sudokuBoard.setListenersEnabled(false);
+		SudokuCell lastCell = sudokuBoard.getSudokuCells(ROW, 8).get(8);
+		lastCell.setListenersEnabled(true); // because the board disables it
+		Assert.assertFalse(sudokuBoard.isSolved()); // for sanity
+		lastCell.setValue(SudokuValue.VALUE_8);
+
+		Assert.assertFalse(listenerTriggered.get());
+		Assert.assertTrue(sudokuBoard.isSolved()); // for sanity
+	}
+
 	private static List<Integer> getValues(List<SudokuCell> sudokuCells)
 	{
 		return sudokuCells.stream()
