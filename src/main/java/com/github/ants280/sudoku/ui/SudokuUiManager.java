@@ -345,7 +345,6 @@ public class SudokuUiManager implements ActionListener
 
 			solver.solveFast();
 			commandHistory.reset();
-
 		}
 	}
 
