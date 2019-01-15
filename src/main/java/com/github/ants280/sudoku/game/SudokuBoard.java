@@ -135,7 +135,6 @@ public class SudokuBoard
 	{
 		boolean currentSolved = this.isSolved();
 
-		System.out.printf("%s %s (%s, %s)%n", listenersEnabled, currentSolved != previousSolved, currentSolved, previousSolved);
 		if (listenersEnabled && currentSolved != previousSolved)
 		{
 			SudokuEvent<SudokuBoard, Boolean> solvedChangedEvent
