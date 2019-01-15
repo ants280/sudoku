@@ -342,6 +342,35 @@ public class SudokuBoardTest
 	}
 
 	@Test
+	public void testResetFrom_listenersEnabled()
+	{
+		AtomicBoolean listenerTriggered = new AtomicBoolean(false);
+		Consumer<SudokuEvent<SudokuBoard, Boolean>> boardSolvedChangedConsumer = event -> listenerTriggered.set(true);
+		SudokuBoard sudokuBoard1 = new SudokuBoard();
+		SudokuBoard sudokuBoard2 = new SudokuBoard();
+		sudokuBoard1.addSolvedChangedConsumer(boardSolvedChangedConsumer);
+
+		sudokuBoard1.resetFrom(sudokuBoard2);
+
+		Assert.assertTrue(listenerTriggered.get());
+	}
+
+	@Test
+	public void testResetFrom_listenersEnabled_FALSE()
+	{
+		AtomicBoolean listenerTriggered = new AtomicBoolean(false);
+		Consumer<SudokuEvent<SudokuBoard, Boolean>> boardSolvedChangedConsumer = event -> listenerTriggered.set(true);
+		SudokuBoard sudokuBoard1 = new SudokuBoard();
+		SudokuBoard sudokuBoard2 = new SudokuBoard();
+		sudokuBoard1.addSolvedChangedConsumer(boardSolvedChangedConsumer);
+
+		sudokuBoard1.setListenersEnabled(false);
+		sudokuBoard1.resetFrom(sudokuBoard2);
+
+		Assert.assertFalse(listenerTriggered.get());
+	}
+
+	@Test
 	public void testCopyConstructor()
 	{
 		String boardValue
