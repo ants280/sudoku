@@ -376,6 +376,20 @@ public class SudokuCellTest
 	}
 
 	@Test
+	public void testHashCode_differentListenersEnabled()
+	{
+		sudokuCell = new SudokuCell(1, 2, 3, SudokuValue.VALUE_4, false);
+		SudokuCell sudokuCell2 = new SudokuCell(1, 2, 3, SudokuValue.VALUE_4, false);
+		sudokuCell.setListenersEnabled(true);
+		sudokuCell2.setListenersEnabled(false);
+
+		int hashCode = sudokuCell.hashCode();
+		int hashCode2 = sudokuCell2.hashCode();
+
+		Assert.assertNotEquals(hashCode, hashCode2);
+	}
+
+	@Test
 	public void testEquals_same()
 	{
 		SudokuCell sudokuCell2 = sudokuCell;
@@ -422,6 +436,19 @@ public class SudokuCellTest
 	{
 		sudokuCell = new SudokuCell(1, 2, 3, SudokuValue.VALUE_4, false);
 		SudokuCell sudokuCell2 = new SudokuCell(1, 2, 3, SudokuValue.VALUE_4, true);
+
+		boolean equals = sudokuCell.equals(sudokuCell2);
+
+		Assert.assertFalse(equals);
+	}
+
+	@Test
+	public void testEquals_differentListenersEnabled()
+	{
+		sudokuCell = new SudokuCell(1, 2, 3, SudokuValue.VALUE_4, false);
+		SudokuCell sudokuCell2 = new SudokuCell(1, 2, 3, SudokuValue.VALUE_4, false);
+		sudokuCell.setListenersEnabled(true);
+		sudokuCell2.setListenersEnabled(false);
 
 		boolean equals = sudokuCell.equals(sudokuCell2);
 
