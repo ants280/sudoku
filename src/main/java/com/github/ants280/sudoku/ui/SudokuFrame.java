@@ -87,7 +87,7 @@ public class SudokuFrame
 
 		frame.setJMenuBar(createMenu(sudokuUiManager));
 		frame.add(topPanel, BorderLayout.NORTH);
-		frame.add(sudokuDisplayComponent);
+		frame.add(sudokuDisplayComponent.getComponent());
 		frame.pack();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}

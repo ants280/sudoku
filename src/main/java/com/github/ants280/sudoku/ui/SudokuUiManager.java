@@ -152,7 +152,8 @@ public class SudokuUiManager implements ActionListener
 		{
 			listenersAdded = true;
 			frame.addKeyListener(keyListener);
-			sudokuDisplayComponent.addMouseListener(mouseListener);
+			sudokuDisplayComponent.getComponent()
+					.addMouseListener(mouseListener);
 		}
 	}
 
@@ -162,7 +163,8 @@ public class SudokuUiManager implements ActionListener
 		{
 			listenersAdded = false;
 			frame.removeKeyListener(keyListener);
-			sudokuDisplayComponent.removeMouseListener(mouseListener);
+			sudokuDisplayComponent.getComponent()
+					.removeMouseListener(mouseListener);
 		}
 	}
 

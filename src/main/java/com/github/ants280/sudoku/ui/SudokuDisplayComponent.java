@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import javax.swing.JComponent;
 
-public class SudokuDisplayComponent extends JComponent
+public class SudokuDisplayComponent
 {
 	private static final long serialVersionUID = 1L;
 	private static final RenderingHints ANTIALIAS_ON_RENDERING_HINT
@@ -25,7 +25,8 @@ public class SudokuDisplayComponent extends JComponent
 					RenderingHints.KEY_ANTIALIASING,
 					RenderingHints.VALUE_ANTIALIAS_ON);
 
-	private final transient SudokuBoard board;
+	private final JComponent component;
+	private final SudokuBoard board;
 	private int cellLength;
 	private Font valueFont;
 	private Font possibleValueFont;
@@ -33,10 +34,11 @@ public class SudokuDisplayComponent extends JComponent
 	private int yOffset;
 	private Integer selectedRow;
 	private Integer selectedCol;
-	private final transient List<Consumer<SudokuEvent<?, SudokuCell>>> selectedCellChangedConsumers;
+	private final List<Consumer<SudokuEvent<?, SudokuCell>>> selectedCellChangedConsumers;
 
 	public SudokuDisplayComponent(SudokuBoard board)
 	{
+		this.component = new SudokuDisplayComponentImpl();
 		this.board = board;
 		this.cellLength = 50;
 		this.valueFont = new Font(null, Font.PLAIN, cellLength);
@@ -55,39 +57,55 @@ public class SudokuDisplayComponent extends JComponent
 	private void init()
 	{
 		int boardLength = cellLength * 9;
-		this.setPreferredSize(new Dimension(boardLength, boardLength));
-
-		this.addComponentListener(
+		component.setPreferredSize(new Dimension(boardLength, boardLength));
+		component.addComponentListener(
 				new SudokuComponentListener(this::componentResized));
-		board.addCellValueChangedConsumer(cellValueChangedEvent -> this.repaint());
-		board.addCellPossibleValueChangedConsumer(cellPossibleValueChangedEvent -> this.repaint());
+
+		this.addSelectedCellChangedConsumer(selectedCellChangedConsumer -> component.repaint());
+		board.addCellValueChangedConsumer(cellValueChangedEvent -> component.repaint());
+		board.addCellPossibleValueChangedConsumer(cellPossibleValueChangedEvent -> component.repaint());
+	}
+
+	public JComponent getComponent()
+	{
+		return component;
 	}
 
 	private void componentResized()
 	{
-		int minDimension = Math.min(this.getWidth(), this.getHeight());
+		int minDimension = Math.min(component.getWidth(), component.getHeight());
 
 		int newCellLength = minDimension / 9;
 		if (cellLength != newCellLength)
 		{
 			cellLength = newCellLength;
-			xOffset = (this.getWidth() - (cellLength * 9)) / 2;
-			yOffset = (this.getHeight() - (cellLength * 9)) / 2;
+			xOffset = (component.getWidth() - (cellLength * 9)) / 2;
+			yOffset = (component.getHeight() - (cellLength * 9)) / 2;
 
 			valueFont = valueFont.deriveFont((float) cellLength);
 			possibleValueFont = possibleValueFont
 					.deriveFont((float) (cellLength / 3d));
 
-			this.repaint();
+			component.repaint();
 		}
 	}
 
 	//<editor-fold defaultstate="collapsed" desc="painting">
-	@Override
-	protected void paintComponent(Graphics graphics)
+	private class SudokuDisplayComponentImpl extends JComponent
 	{
-		((Graphics2D) graphics).setRenderingHints(ANTIALIAS_ON_RENDERING_HINT);
+		private static final long serialVersionUID = 1L;
 
+		@Override
+		protected void paintComponent(Graphics graphics)
+		{
+			((Graphics2D) graphics).setRenderingHints(ANTIALIAS_ON_RENDERING_HINT);
+
+			SudokuDisplayComponent.this.paintComponent(graphics);
+		}
+	}
+
+	private void paintComponent(Graphics graphics)
+	{
 		this.paintSelectedCellBackground(graphics);
 		board.getAllSudokuCells()
 				.forEach(sudokuCell -> this.paintCell(sudokuCell, graphics));
@@ -258,8 +276,6 @@ public class SudokuDisplayComponent extends JComponent
 		selectedRow = null;
 		selectedCol = null;
 
-		this.repaint();
-
 		SudokuEvent<?, SudokuCell> selectedCellChangedEvent
 				= new SudokuEvent<>(this, previousSelectedCell, null);
 		selectedCellChangedConsumers.forEach(consumer -> consumer.accept(selectedCellChangedEvent));
@@ -307,7 +323,6 @@ public class SudokuDisplayComponent extends JComponent
 		SudokuCell previousSelectedCell = this.getSelectedCell();
 		selectedRow = r;
 		selectedCol = c;
-		this.repaint();
 		SudokuCell currentSelectedCell = this.getSelectedCell();
 		SudokuEvent<?, SudokuCell> selectedCellChangedEvent
 				= new SudokuEvent<>(this, previousSelectedCell, currentSelectedCell);
