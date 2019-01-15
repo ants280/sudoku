@@ -113,15 +113,18 @@ public class SudokuUiManager implements ActionListener
 			assert board.isSolved();
 
 			this.removeListeners();
-			this.updateMessageLabel();
 			sudokuDisplayComponent.removeSelectedCell();
 		}
 		else
 		{
 			this.addListeners();
-			this.updateMessageLabel();
-			sudokuDisplayComponent.removeSelectedCell();
 			commandHistory.reset();
+		}
+
+		if (!solvedChangedEvent.getOldValue()
+				.equals(solvedChangedEvent.getNewValue()))
+		{
+			this.updateMessageLabel();
 		}
 	}
 
@@ -369,6 +372,8 @@ public class SudokuUiManager implements ActionListener
 					= new SudokuBoard(optionalBoardText.get());
 			board.resetFrom(loadedBoard); // Note: all valued cells locked
 			initialBoard.resetFrom(board);
+
+			sudokuDisplayComponent.removeSelectedCell();
 		}
 	}
 
