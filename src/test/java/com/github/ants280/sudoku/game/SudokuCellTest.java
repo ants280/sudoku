@@ -1,6 +1,7 @@
 package com.github.ants280.sudoku.game;
 
 import java.util.Collection;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 import org.junit.Assert;
 import org.junit.Before;
@@ -232,6 +233,52 @@ public class SudokuCellTest
 		sudokuCell.setValue(SudokuValue.VALUE_1);
 
 		Assert.fail("expected exception");
+	}
+
+	@Test
+	public void testSetValue_valueChangedTriggersListeners()
+	{
+		AtomicBoolean listenerTriggered = new AtomicBoolean(false);
+		SudokuValue oldValue = SudokuValue.VALUE_3;
+		SudokuValue newValue = SudokuValue.VALUE_8;
+		sudokuCell = new SudokuCell(0, 0, 0, oldValue, false);
+		Consumer<SudokuEvent<SudokuCell, SudokuValue>> cellValueChangedConsumer = event -> listenerTriggered.set(true);
+		sudokuCell.addCellValueChangedConsumer(cellValueChangedConsumer);
+
+		sudokuCell.setValue(newValue);
+
+		Assert.assertTrue(listenerTriggered.get());
+	}
+
+	@Test
+	public void testSetValue_valueUnChangedDoesNotTriggerListeners()
+	{
+		SudokuValue oldValue = SudokuValue.VALUE_3;
+		SudokuValue newValue = SudokuValue.VALUE_3;
+		sudokuCell = new SudokuCell(0, 0, 0, oldValue, false);
+		AtomicBoolean listenerTriggered = new AtomicBoolean(false);
+		Consumer<SudokuEvent<SudokuCell, SudokuValue>> cellValueChangedConsumer = event -> listenerTriggered.set(true);
+		sudokuCell.addCellValueChangedConsumer(cellValueChangedConsumer);
+
+		sudokuCell.setValue(newValue);
+
+		Assert.assertFalse(listenerTriggered.get());
+	}
+
+	@Test
+	public void testSetValue_valueChangedListenersDisabledDoesNotTriggerListeners()
+	{
+		AtomicBoolean listenerTriggered = new AtomicBoolean(false);
+		SudokuValue oldValue = SudokuValue.VALUE_3;
+		SudokuValue newValue = SudokuValue.VALUE_8;
+		sudokuCell = new SudokuCell(0, 0, 0, oldValue, false);
+		Consumer<SudokuEvent<SudokuCell, SudokuValue>> cellValueChangedConsumer = event -> listenerTriggered.set(true);
+		sudokuCell.addCellValueChangedConsumer(cellValueChangedConsumer);
+
+		sudokuCell.setListenersEnabled(false);
+		sudokuCell.setValue(newValue);
+
+		Assert.assertFalse(listenerTriggered.get());
 	}
 
 	@Test

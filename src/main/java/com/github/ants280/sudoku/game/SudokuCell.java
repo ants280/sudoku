@@ -20,6 +20,7 @@ public class SudokuCell
 	private final Set<SudokuValue> possibleValues;
 	private final List<Consumer<SudokuEvent<SudokuCell, SudokuValue>>> cellValueChangedConsumers;
 	private final List<Consumer<SudokuEvent<SudokuCell, SudokuValue>>> cellPossibleValueChangedConsumers;
+	private boolean listenersEnabled;
 
 	public SudokuCell(
 			int rowIndex,
@@ -45,6 +46,7 @@ public class SudokuCell
 
 		this.cellValueChangedConsumers = new ArrayList<>();
 		this.cellPossibleValueChangedConsumers = new ArrayList<>();
+		this.listenersEnabled = true;
 	}
 
 	public int getIndex(SectionType sectionType)
@@ -80,13 +82,17 @@ public class SudokuCell
 					"Cannot set value of locked SudokuCell.");
 		}
 
-		SudokuEvent<SudokuCell, SudokuValue> cellValueChangedEvent
-				= new SudokuEvent<>(this, this.value, value);
+		SudokuValue previousValue = this.value;
 
 		this.value = value;
 
-		cellValueChangedConsumers
-				.forEach(consumer -> consumer.accept(cellValueChangedEvent));
+		if (listenersEnabled && previousValue != value)
+		{
+			SudokuEvent<SudokuCell, SudokuValue> cellValueChangedEvent
+					= new SudokuEvent<>(this, previousValue, value);
+			cellValueChangedConsumers
+					.forEach(consumer -> consumer.accept(cellValueChangedEvent));
+		}
 	}
 
 	public void clearPossibleValues()
@@ -126,9 +132,6 @@ public class SudokuCell
 					"Cannot toggle null possible value on SudokuCell.");
 		}
 
-		SudokuEvent<SudokuCell, SudokuValue> cellPossibleValueChangedEvent
-				= new SudokuEvent<>(this, value, value);
-
 		if (this.hasPossibleValue(value))
 		{
 			possibleValues.remove(value);
@@ -138,8 +141,13 @@ public class SudokuCell
 			possibleValues.add(value);
 		}
 
-		cellPossibleValueChangedConsumers
-				.forEach(consumer -> consumer.accept(cellPossibleValueChangedEvent));
+		if (listenersEnabled)
+		{
+			SudokuEvent<SudokuCell, SudokuValue> cellPossibleValueChangedEvent
+					= new SudokuEvent<>(this, value, value);
+			cellPossibleValueChangedConsumers
+					.forEach(consumer -> consumer.accept(cellPossibleValueChangedEvent));
+		}
 	}
 
 	public void setLocked(boolean locked)
@@ -177,6 +185,11 @@ public class SudokuCell
 		cellPossibleValueChangedConsumers.add(cellPossibleValueChangedConsumer);
 	}
 
+	public void setListenersEnabled(boolean enabled)
+	{
+		listenersEnabled = enabled;
+	}
+
 	@Override
 	public String toString()
 	{
@@ -199,6 +212,7 @@ public class SudokuCell
 		hash = 17 * hash + Objects.hashCode(this.sectionTypeIndices);
 		hash = 17 * hash + Objects.hashCode(this.value);
 		hash = 17 * hash + (this.locked ? 1 : 0);
+		hash = 17 * hash + (this.listenersEnabled ? 1 : 0);
 		hash = 17 * hash + Objects.hashCode(this.possibleValues);
 		hash = 17 * hash + Objects.hashCode(this.cellValueChangedConsumers);
 		hash = 17 * hash + Objects.hashCode(this.cellPossibleValueChangedConsumers);
@@ -212,6 +226,7 @@ public class SudokuCell
 				|| obj != null
 				&& this.getClass() == obj.getClass()
 				&& this.locked == ((SudokuCell) obj).locked
+				&& this.listenersEnabled == ((SudokuCell) obj).listenersEnabled
 				&& Objects.equals(
 						this.sectionTypeIndices,
 						((SudokuCell) obj).sectionTypeIndices)

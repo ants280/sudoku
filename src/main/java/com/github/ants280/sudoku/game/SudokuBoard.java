@@ -29,6 +29,7 @@ public class SudokuBoard
 					.equals(ALL_SUDOKU_VALUES);
 	private final List<Consumer<SudokuEvent<SudokuBoard, Boolean>>> solvedChangedConsumers;
 	private boolean previousSolved;
+	private boolean listenersEnabled;
 
 	public SudokuBoard(String boardString)
 	{
@@ -36,6 +37,7 @@ public class SudokuBoard
 		this.sectionTypeCells = new EnumMap<>(SectionType.class);
 		this.solvedChangedConsumers = new ArrayList<>();
 		this.previousSolved = false;
+		this.listenersEnabled = true;
 
 		this.init();
 	}
@@ -104,10 +106,14 @@ public class SudokuBoard
 				.forEach(i -> allSudokuCells.get(i)
 				.resetFrom(other.getAllSudokuCells().get(i)));
 
-		SudokuEvent<SudokuBoard, Boolean> solvedChangedEvent
-				= new SudokuEvent<>(this, previousSolved, false);
-		solvedChangedConsumers
-				.forEach(consumer -> consumer.accept(solvedChangedEvent));
+		if (listenersEnabled)
+		{
+			SudokuEvent<SudokuBoard, Boolean> solvedChangedEvent
+					= new SudokuEvent<>(this, previousSolved, false);
+			solvedChangedConsumers
+					.forEach(consumer -> consumer.accept(solvedChangedEvent));
+		}
+
 		previousSolved = false;
 	}
 
@@ -129,7 +135,7 @@ public class SudokuBoard
 	{
 		boolean currentSolved = this.isSolved();
 
-		if (currentSolved != previousSolved)
+		if (listenersEnabled && currentSolved != previousSolved)
 		{
 			SudokuEvent<SudokuBoard, Boolean> solvedChangedEvent
 					= new SudokuEvent<>(this, previousSolved, currentSolved);
@@ -192,6 +198,21 @@ public class SudokuBoard
 		{
 			throw new IllegalArgumentException(
 					"Invalid index: " + index);
+		}
+	}
+
+	public void setListenersEnabled(boolean enabled)
+	{
+		listenersEnabled = enabled;
+
+		allSudokuCells.forEach(cell -> cell.setListenersEnabled(enabled));
+
+		if (enabled)
+		{
+			SudokuEvent<SudokuBoard, Boolean> solvedChangedEvent
+					= new SudokuEvent<>(this, previousSolved, previousSolved);
+			solvedChangedConsumers
+					.forEach(consumer -> consumer.accept(solvedChangedEvent));
 		}
 	}
 }

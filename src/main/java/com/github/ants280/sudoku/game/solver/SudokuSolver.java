@@ -21,6 +21,8 @@ public abstract class SudokuSolver
 
 	public void initialize()
 	{
+		sudokuBoard.setListenersEnabled(false);
+
 		sudokuBoard.getAllSudokuCells()
 				.stream()
 				.filter(sudokuCell -> sudokuCell.getValue() == null)
@@ -31,6 +33,8 @@ public abstract class SudokuSolver
 				.filter(sudokuCell -> sudokuCell.getValue() != null)
 				.forEach(sudokuCell -> removeNearbyPossibleValuesConsumer
 				.accept(sudokuCell, sudokuCell.getValue()));
+
+		sudokuBoard.setListenersEnabled(true);
 	}
 
 	public abstract boolean makeMove();

@@ -35,7 +35,9 @@ public class SudokuBruteForceSolver extends SudokuSolver
 	{
 		super.initialize();
 
+		sudokuBoard.setListenersEnabled(false);
 		this.canBruteForceSolve(0);
+		sudokuBoard.setListenersEnabled(true);
 	}
 
 	private boolean canBruteForceSolve(int index)

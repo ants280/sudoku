@@ -68,6 +68,7 @@ public class SudokuSolverTest
 	{
 		Collection<String> moveDescriptions = new HashSet<>();
 		SudokuBoard logicBoard = new SudokuBoard(boardString);
+		logicBoard.setListenersEnabled(false);
 		SudokuSolver logicSolver = new SudokuLogicSolver(
 				logicBoard,
 				moveDescription -> Assert.assertTrue(
@@ -86,6 +87,7 @@ public class SudokuSolverTest
 	public void testSolveFast_bruteForce()
 	{
 		SudokuBoard board = new SudokuBoard(boardString);
+		board.setListenersEnabled(false);
 		SudokuSolver solver = new SudokuBruteForceSolver(board);
 		solver.solveFast();
 
