@@ -11,6 +11,7 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +20,6 @@ import javax.swing.JComponent;
 
 public class SudokuDisplayComponent
 {
-	private static final long serialVersionUID = 1L;
 	private static final RenderingHints ANTIALIAS_ON_RENDERING_HINT
 			= new RenderingHints(
 					RenderingHints.KEY_ANTIALIASING,
@@ -73,21 +73,20 @@ public class SudokuDisplayComponent
 
 	private void componentResized()
 	{
-		int minDimension = Math.min(component.getWidth(), component.getHeight());
+		Rectangle componentBounds = component.getBounds();
+		int width = (int) componentBounds.getWidth();
+		int height = (int) componentBounds.getHeight();
+		int minDimension = Math.min(width, height);
 
-		int newCellLength = minDimension / 9;
-		if (cellLength != newCellLength)
-		{
-			cellLength = newCellLength;
-			xOffset = (component.getWidth() - (cellLength * 9)) / 2;
-			yOffset = (component.getHeight() - (cellLength * 9)) / 2;
+		cellLength = minDimension / 9;
+		xOffset = (width - (cellLength * 9)) / 2;
+		yOffset = (height - (cellLength * 9)) / 2;
 
-			valueFont = valueFont.deriveFont((float) cellLength);
-			possibleValueFont = possibleValueFont
-					.deriveFont((float) (cellLength / 3d));
+		valueFont = valueFont.deriveFont((float) cellLength);
+		possibleValueFont = possibleValueFont
+				.deriveFont((float) (cellLength / 3d));
 
-			component.repaint();
-		}
+		component.repaint();
 	}
 
 	//<editor-fold defaultstate="collapsed" desc="painting">
