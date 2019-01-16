@@ -181,7 +181,6 @@ public class SudokuDialogFactory
 		}
 		textComponent.setComponentPopupMenu(popupMenu);
 
-
 		// focus to textcomponent when dialog loads
 		dialog.addWindowFocusListener(new WindowAdapter()
 		{

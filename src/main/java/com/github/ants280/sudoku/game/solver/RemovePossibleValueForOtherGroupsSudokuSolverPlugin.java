@@ -100,7 +100,6 @@ public class RemovePossibleValueForOtherGroupsSudokuSolverPlugin
 						otherCellsInSectionType
 								.forEach(sudokuCell -> sudokuCell.togglePossibleValue(possibleValue));
 
-
 						return true;
 					}
 				}

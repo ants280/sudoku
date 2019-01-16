@@ -613,6 +613,7 @@ public class SudokuCellTest
 		Assert.assertNotEquals(toString, toString2);
 		Assert.assertTrue(toString2.contains("[15]"));
 	}
+
 	@Test
 	public void testToString_lockedDifferent()
 	{
