@@ -8,7 +8,6 @@ import com.github.ants280.sudoku.game.SudokuValue;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -102,13 +101,17 @@ public class SudokuDisplayComponent
 			((Graphics2D) graphics).setRenderingHints(ANTIALIAS_ON_RENDERING_HINT);
 
 			this.paintSelectedCellBackground(graphics);
+			this.paintLines(graphics);
+
+			// sets clip in each iteration
+			// TODO: Paint values, then possible values, caching vars...
 			board.getAllSudokuCells()
 					.forEach(sudokuCell -> this.paintCell(sudokuCell, graphics));
-			this.paintLines(graphics);
 		}
 
 		private void paintSelectedCellBackground(Graphics graphics)
 		{
+			// TODO: Only change BACKGROUND COLOR when cell celection event is fired.
 			if (selectedRow != null && selectedCol != null)
 			{
 				graphics.setColor(Color.LIGHT_GRAY);
@@ -122,67 +125,48 @@ public class SudokuDisplayComponent
 
 		private void paintCell(SudokuCell sudokuCell, Graphics graphics)
 		{
+			int x = xOffset + cellLength * sudokuCell.getIndex(SectionType.COLUMN);
+			int y = yOffset + cellLength * sudokuCell.getIndex(SectionType.ROW);
+
 			if (sudokuCell.getValue() != null)
 			{
 				graphics.setColor(sudokuCell.isLocked()
 						? Color.DARK_GRAY : Color.BLACK);
 				graphics.setFont(valueFont);
-				int charWidth = graphics.getFontMetrics()
-						.stringWidth(sudokuCell.getValue().getDisplayValue());
-				int fontHeightPx = (int) (valueFont.getSize() * 0.75d);
-				int cellColumn = sudokuCell.getIndex(SectionType.COLUMN);
-				int cellRow = sudokuCell.getIndex(SectionType.ROW);
-				int colOffset = (int) (xOffset - (charWidth / 2d)
-						+ (cellLength * (cellColumn + 0.5d)));
-				int rowOffset = (int) (yOffset + (fontHeightPx / 2d)
-						+ (cellLength * (cellRow + 0.5d)));
+
+				int fontWidthPx = graphics.getFontMetrics().stringWidth(sudokuCell.getValue().getDisplayValue());
+				int fontHeightPx = (graphics.getFont().getSize() * 3) / 4;
+				int colOffset = (cellLength - fontWidthPx) / 2;
+				int rowOffset = (cellLength + fontHeightPx) / 2;
 
 				graphics.drawString(
 						sudokuCell.getValue().getDisplayValue(),
-						colOffset,
-						rowOffset);
+						x + colOffset,
+						y + rowOffset);
 			}
-			else
+			else if (!sudokuCell.getPossibleValues().isEmpty())
 			{
-				if (!sudokuCell.getPossibleValues().isEmpty())
-				{
-					graphics.setColor(Color.BLACK);
-					graphics.setFont(possibleValueFont);
-					int fontHeightPx = (int) (possibleValueFont.getSize() * 0.75d);
-					FontMetrics fontMetrics = graphics.getFontMetrics();
+				graphics.setColor(Color.BLACK);
+				graphics.setFont(possibleValueFont);
 
-					sudokuCell.getPossibleValues()
-							.forEach(possibleValue -> this.paintPossibleCellValue(
-							sudokuCell,
-							possibleValue,
-							graphics,
-							fontMetrics,
-							fontHeightPx));
+				for (SudokuValue possibleValue : sudokuCell.getPossibleValues())
+				{
+					int fontWidthPx = graphics.getFontMetrics().stringWidth(possibleValue.getDisplayValue());
+					int fontHeightPx = (graphics.getFont().getSize() * 3) / 4;
+
+					int possibleValueCol = (possibleValue.getValue() - 1) % 3;
+					int possibleValueRow = (possibleValue.getValue() - 1) / 3;
+					double colPercentage = (1 + (2 * possibleValueCol)) / 6d;
+					double rowPercentage = (1 + (2 * possibleValueRow)) / 6d;
+					int colOffset = (int) (cellLength * colPercentage - fontWidthPx / 2d);
+					int rowOffset = (int) (cellLength * rowPercentage + fontHeightPx / 2d);
+
+					graphics.drawString(
+							possibleValue.getDisplayValue(),
+							x + colOffset,
+							y + rowOffset);
 				}
 			}
-		}
-
-		private void paintPossibleCellValue(
-				SudokuCell sudokuCell,
-				SudokuValue possibleValue,
-				Graphics graphics,
-				FontMetrics fontMetrics,
-				int fontHeightPx)
-		{
-			int charWidth = fontMetrics.stringWidth(possibleValue.getDisplayValue());
-			int possibleValueCol = (possibleValue.getValue() - 1) % 3;
-			int possibleValueRow = (possibleValue.getValue() - 1) / 3;
-			double colPercentage = sudokuCell.getIndex(SectionType.COLUMN)
-					+ ((1 + (2 * possibleValueCol)) / 6d);
-			double rowPercentage = sudokuCell.getIndex(SectionType.ROW)
-					+ ((1 + (2 * possibleValueRow)) / 6d);
-			int colOffset = (int) (xOffset + cellLength * colPercentage
-					- (charWidth / 2d));
-			int rowOffset = (int) (yOffset + cellLength * rowPercentage
-					+ (fontHeightPx / 2d));
-
-			graphics.drawString(
-					possibleValue.getDisplayValue(), colOffset, rowOffset);
 		}
 
 		private void paintLines(Graphics graphics)
