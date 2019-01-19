@@ -125,8 +125,10 @@ public class SudokuDisplayComponent
 
 		private void paintCell(SudokuCell sudokuCell, Graphics graphics)
 		{
-			int cellOffsetX = xOffset + cellLength * sudokuCell.getIndex(SectionType.COLUMN);
-			int cellOffsetY = yOffset + cellLength * sudokuCell.getIndex(SectionType.ROW);
+			int cellOffsetX = xOffset
+					+ cellLength * sudokuCell.getIndex(SectionType.COLUMN);
+			int cellOffsetY = yOffset
+					+ cellLength * sudokuCell.getIndex(SectionType.ROW);
 
 			if (sudokuCell.getValue() != null)
 			{
@@ -167,8 +169,9 @@ public class SudokuDisplayComponent
 				double x,
 				double y)
 		{
-			double colOffset = graphics.getFontMetrics().stringWidth(sudokuValue.getDisplayValue()) / -2d;
-			double rowOffset = (graphics.getFont().getSize() * 3) / 8d;
+			double colOffset = graphics.getFontMetrics()
+					.stringWidth(sudokuValue.getDisplayValue()) / -2d;
+			double rowOffset = graphics.getFont().getSize() * 3 / 8d;
 
 			graphics.drawString(
 					sudokuValue.getDisplayValue(),
