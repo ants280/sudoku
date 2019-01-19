@@ -209,10 +209,14 @@ public class SudokuBoard
 
 		if (enabled)
 		{
+			boolean currentSolved = this.isSolved();
+
 			SudokuEvent<SudokuBoard, Boolean> solvedChangedEvent
-					= new SudokuEvent<>(this, previousSolved, previousSolved);
+					= new SudokuEvent<>(this, previousSolved, currentSolved);
 			solvedChangedConsumers
 					.forEach(consumer -> consumer.accept(solvedChangedEvent));
+
+			previousSolved = currentSolved;
 		}
 	}
 }
