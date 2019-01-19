@@ -94,13 +94,6 @@ public class SudokuDisplayComponent
 	{
 		private static final long serialVersionUID = 1L;
 
-		@Override
-		public void repaint()
-		{
-			System.out.println("repaint() " + System.currentTimeMillis());
-			super.repaint();
-		}
-
 		//<editor-fold defaultstate="collapsed" desc="painting">
 		@Override
 		protected void paintComponent(Graphics graphics)
