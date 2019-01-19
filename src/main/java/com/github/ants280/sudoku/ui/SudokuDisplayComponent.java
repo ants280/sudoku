@@ -94,6 +94,13 @@ public class SudokuDisplayComponent
 	{
 		private static final long serialVersionUID = 1L;
 
+		@Override
+		public void repaint()
+		{
+			System.out.println("repaint() " + System.currentTimeMillis());
+			super.repaint();
+		}
+
 		//<editor-fold defaultstate="collapsed" desc="painting">
 		@Override
 		protected void paintComponent(Graphics graphics)
@@ -317,7 +324,9 @@ public class SudokuDisplayComponent
 
 	private void setSelectedCellIndices(int r, int c)
 	{
-		if (r < 0 || r >= 9 || c < 0 || c >= 9)
+		if (r < 0 || r >= 9 || c < 0 || c >= 9
+				|| selectedRow != null && selectedRow == r
+				&& selectedCol != null && selectedCol == c)
 		{
 			return;
 		}
