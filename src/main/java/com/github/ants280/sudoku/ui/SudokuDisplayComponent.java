@@ -63,6 +63,7 @@ public class SudokuDisplayComponent
 		this.addSelectedCellChangedConsumer(selectedCellChangedConsumer -> component.repaint());
 		board.addCellValueChangedConsumer(cellValueChangedEvent -> component.repaint());
 		board.addCellPossibleValueChangedConsumer(cellPossibleValueChangedEvent -> component.repaint());
+		board.addSolvedChangedConsumer(boardSolvedChangedEvent -> component.repaint());
 	}
 
 	public JComponent getComponent()
