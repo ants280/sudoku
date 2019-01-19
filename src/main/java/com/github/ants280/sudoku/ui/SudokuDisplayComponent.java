@@ -281,6 +281,10 @@ public class SudokuDisplayComponent
 	public void removeSelectedCell()
 	{
 		SudokuCell previousSelectedCell = this.getSelectedCell();
+		if (previousSelectedCell == null)
+		{
+			return;
+		}
 		selectedRow = null;
 		selectedCol = null;
 
@@ -291,7 +295,7 @@ public class SudokuDisplayComponent
 
 	public SudokuCell getSelectedCell()
 	{
-		return selectedRow == null && selectedCol == null
+		return selectedRow == null || selectedCol == null
 				? null
 				: board.getSudokuCells(SectionType.ROW, selectedRow)
 						.get(selectedCol);
