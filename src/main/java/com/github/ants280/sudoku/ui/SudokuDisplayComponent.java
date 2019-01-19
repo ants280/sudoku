@@ -55,8 +55,6 @@ public class SudokuDisplayComponent
 
 	private void init()
 	{
-		component.setDoubleBuffered(true);
-
 		int boardLength = cellLength * 9;
 		component.setPreferredSize(new Dimension(boardLength, boardLength));
 		component.addComponentListener(
