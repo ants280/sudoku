@@ -5,11 +5,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 public class CommandHistoryTest
 {
-	private CommandHistory<Command> commandHistory;
+	private CommandHistory<MockCommand> commandHistory;
 
 	@Before
 	public void setUp()
@@ -36,18 +35,15 @@ public class CommandHistoryTest
 				redoConsumed.incrementAndGet();
 			}
 		});
-		Command mockCommand1 = Mockito.mock(Command.class);
-		Command mockCommand2 = Mockito.mock(Command.class);
+		MockCommand mockCommand1 = new MockCommand();
+		MockCommand mockCommand2 = new MockCommand();
 
 		commandHistory.addCommand(mockCommand1); // undo = 1, redo = 0 [empty = false,true]
 		commandHistory.undo(); // undo = 0, redo = 1 [empty = true, false]
 		commandHistory.addCommand(mockCommand2);  // undo = 1, redo = 0 [empty = false,true]
 		commandHistory.redo(); // expected noop [because undo stack is empty]
 
-		Mockito.verify(
-				mockCommand1,
-				Mockito.times(0))
-				.redo();
+		Assert.assertEquals(0, mockCommand1.getRedoCount());
 		Assert.assertEquals(1, undoConsumed.get());
 		Assert.assertEquals(2, redoConsumed.get());
 	}
@@ -55,7 +51,7 @@ public class CommandHistoryTest
 	@Test
 	public void testAddCommand_enabled_false()
 	{
-		Command mockCommand1 = Mockito.mock(Command.class);
+		MockCommand mockCommand1 = new MockCommand();
 		commandHistory.setEnabled(false);
 		commandHistory.addCommand(mockCommand1);
 
@@ -68,67 +64,52 @@ public class CommandHistoryTest
 	@Test
 	public void testUndo()
 	{
-		Command mockCommand1 = Mockito.mock(Command.class);
+		MockCommand mockCommand1 = new MockCommand();
 		commandHistory.addCommand(mockCommand1);
-		Command mockCommand2 = Mockito.mock(Command.class);
+		MockCommand mockCommand2 = new MockCommand();
 		commandHistory.addCommand(mockCommand2);
 
 		commandHistory.undo();
 
-		Mockito.verify(
-				mockCommand2,
-				Mockito.times(1))
-				.undo();
-		Mockito.verify(
-				mockCommand1,
-				Mockito.times(0))
-				.undo();
+		Assert.assertEquals(1, mockCommand2.getUndoCount());
+		Assert.assertEquals(0, mockCommand1.getUndoCount());
 	}
 
 	@Test
 	public void testRedo()
 	{
-		Command mockCommand1 = Mockito.mock(Command.class);
+		MockCommand mockCommand1 = new MockCommand();
 		commandHistory.addCommand(mockCommand1);
-		Command mockCommand2 = Mockito.mock(Command.class);
+		MockCommand mockCommand2 = new MockCommand();
 		commandHistory.addCommand(mockCommand2);
 
 		commandHistory.undo();
 		commandHistory.redo();
 
-		Mockito.verify(
-				mockCommand2,
-				Mockito.times(1))
-				.redo();
+		Assert.assertEquals(1, mockCommand2.getRedoCount());
 	}
 
 	@Test
 	public void testReset()
 	{
-		Command mockCommand = Mockito.mock(Command.class);
+		MockCommand mockCommand = new MockCommand();
 		commandHistory.addCommand(mockCommand);
 		commandHistory.reset();
 		commandHistory.undo();
 
-		Mockito.verify(
-				mockCommand,
-				Mockito.times(0))
-				.undo();
+		Assert.assertEquals(0, mockCommand.getUndoCount());
 	}
 
 	@Test
 	public void testReset_enabled_false()
 	{
-		Command mockCommand = Mockito.mock(Command.class);
+		MockCommand mockCommand = new MockCommand();
 		commandHistory.addCommand(mockCommand);
 		commandHistory.setEnabled(false);
 		commandHistory.reset();
 		commandHistory.undo();
 
-		Mockito.verify(
-				mockCommand,
-				Mockito.times(0))
-				.undo();
+		Assert.assertEquals(0, mockCommand.getUndoCount());
 	}
 
 	@Test
@@ -159,7 +140,7 @@ public class CommandHistoryTest
 	{
 		for (int i = 0; i < 10; i++)
 		{
-			Command mockCommand = Mockito.mock(Command.class);
+			MockCommand mockCommand = new MockCommand();
 			commandHistory.addCommand(mockCommand);
 		}
 		commandHistory.redo(); // noop = 10
@@ -276,7 +257,7 @@ public class CommandHistoryTest
 	{
 		CommandHistory<Command> commandHistory1 = new CommandHistory<>();
 		CommandHistory<Command> commandHistory2 = new CommandHistory<>();
-		Command mockCommand = Mockito.mock(Command.class);
+		Command mockCommand = new MockCommand();
 		commandHistory1.addCommand(mockCommand);
 
 		boolean equals = commandHistory1.equals(commandHistory2);
@@ -289,7 +270,7 @@ public class CommandHistoryTest
 	{
 		CommandHistory<Command> commandHistory1 = new CommandHistory<>();
 		CommandHistory<Command> commandHistory2 = new CommandHistory<>();
-		Command mockCommand = Mockito.mock(Command.class);
+		Command mockCommand = new MockCommand();
 		commandHistory1.addCommand(mockCommand);
 		commandHistory1.addCommand(mockCommand);
 		commandHistory2.addCommand(mockCommand);
@@ -326,7 +307,7 @@ public class CommandHistoryTest
 	@Test
 	public void testPeekNextRedo_empty2()
 	{
-		Command mockCommand = Mockito.mock(Command.class);
+		MockCommand mockCommand = new MockCommand();
 		commandHistory.addCommand(mockCommand);
 
 		Command nextRedoCommand = commandHistory.peekNextRedo();
@@ -337,12 +318,12 @@ public class CommandHistoryTest
 	@Test
 	public void testPeekNextRedo()
 	{
-		Command mockCommand0 = Mockito.mock(Command.class);
-		Command mockCommand1 = Mockito.mock(Command.class);
-		Command mockCommand2 = Mockito.mock(Command.class);
-		Command mockCommand3 = Mockito.mock(Command.class);
-		Command mockCommand4 = Mockito.mock(Command.class);
-		Command mockCommand5 = Mockito.mock(Command.class);
+		MockCommand mockCommand0 = new MockCommand();
+		MockCommand mockCommand1 = new MockCommand();
+		MockCommand mockCommand2 = new MockCommand();
+		MockCommand mockCommand3 = new MockCommand();
+		MockCommand mockCommand4 = new MockCommand();
+		MockCommand mockCommand5 = new MockCommand();
 		commandHistory.addCommand(mockCommand0);
 		commandHistory.addCommand(mockCommand1);
 		commandHistory.addCommand(mockCommand2);
@@ -357,5 +338,39 @@ public class CommandHistoryTest
 
 		Assert.assertEquals(mockCommand3, nextRedoCommand);
 		Assert.assertNotEquals(mockCommand3, mockCommand2); // [for sanity about the test library]
+	}
+
+	private static class MockCommand implements Command
+	{
+		private int undoCount;
+		private int redoCount;
+
+		public MockCommand()
+		{
+			this.undoCount = 0;
+			this.redoCount = 0;
+		}
+
+		public int getUndoCount()
+		{
+			return undoCount;
+		}
+
+		public int getRedoCount()
+		{
+			return redoCount;
+		}
+
+		@Override
+		public void undo()
+		{
+			undoCount++;
+		}
+
+		@Override
+		public void redo()
+		{
+			redoCount++;
+		}
 	}
 }
