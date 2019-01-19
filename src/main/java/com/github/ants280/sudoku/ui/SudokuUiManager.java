@@ -464,7 +464,6 @@ public class SudokuUiManager implements ActionListener
 	private void updateMessageLabel()
 	{
 		messageLabel.setText(board.isSolved() ? BOARD_SOLVED_MESSAGE : "");
-		frame.pack(); // keep the board canvas the same size
 	}
 
 	private void getHint()
