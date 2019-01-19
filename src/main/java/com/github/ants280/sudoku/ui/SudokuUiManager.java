@@ -124,7 +124,7 @@ public class SudokuUiManager implements ActionListener
 		if (!solvedChangedEvent.getOldValue()
 				.equals(solvedChangedEvent.getNewValue()))
 		{
-			this.updateMessageLabel();
+			messageLabel.setText(board.isSolved() ? BOARD_SOLVED_MESSAGE : null);
 		}
 	}
 
@@ -459,11 +459,6 @@ public class SudokuUiManager implements ActionListener
 		{
 			sudokuCell.clearPossibleValues();
 		}
-	}
-
-	private void updateMessageLabel()
-	{
-		messageLabel.setText(board.isSolved() ? BOARD_SOLVED_MESSAGE : "");
 	}
 
 	private void getHint()
