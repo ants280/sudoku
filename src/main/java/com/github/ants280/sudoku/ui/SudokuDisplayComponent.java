@@ -100,36 +100,47 @@ public class SudokuDisplayComponent
 		{
 			((Graphics2D) graphics).setRenderingHints(ANTIALIAS_ON_RENDERING_HINT);
 
-			this.paintSelectedCellBackground(graphics);
-			this.paintLines(graphics);
-
-			// sets clip in each iteration
-			// TODO: Paint values, then possible values, caching vars...
 			board.getAllSudokuCells()
 					.forEach(sudokuCell -> this.paintCell(sudokuCell, graphics));
+			this.paintLines(graphics);
 		}
 
-		private void paintSelectedCellBackground(Graphics graphics)
+		private void paintCell(SudokuCell sudokuCell, Graphics graphics)
 		{
-			// TODO: Only change BACKGROUND COLOR when cell celection event is fired.
-			if (selectedRow != null && selectedCol != null)
+			int cellCol = sudokuCell.getIndex(SectionType.COLUMN);
+			int cellRow = sudokuCell.getIndex(SectionType.ROW);
+			int cellOffsetX = xOffset + cellLength * cellCol;
+			int cellOffsetY = yOffset + cellLength * cellRow;
+
+			this.paintCellBackground(graphics, cellRow, cellCol, cellOffsetX, cellOffsetY);
+			this.paintCellValue(graphics, sudokuCell, cellOffsetX, cellOffsetY);
+		}
+
+		private void paintCellBackground(
+				Graphics graphics,
+				int cellRow,
+				int cellCol,
+				int cellOffsetX,
+				int cellOffsetY)
+		{
+			if (selectedRow != null && selectedRow == cellRow
+					&& selectedCol != null && selectedCol == cellCol)
 			{
 				graphics.setColor(Color.LIGHT_GRAY);
 				graphics.fillRect(
-						xOffset + (selectedCol * cellLength),
-						yOffset + (selectedRow * cellLength),
+						cellOffsetX,
+						cellOffsetY,
 						cellLength,
 						cellLength);
 			}
 		}
 
-		private void paintCell(SudokuCell sudokuCell, Graphics graphics)
+		private void paintCellValue(
+				Graphics graphics,
+				SudokuCell sudokuCell,
+				int cellOffsetX,
+				int cellOffsetY)
 		{
-			int cellOffsetX = xOffset
-					+ cellLength * sudokuCell.getIndex(SectionType.COLUMN);
-			int cellOffsetY = yOffset
-					+ cellLength * sudokuCell.getIndex(SectionType.ROW);
-
 			if (sudokuCell.getValue() != null)
 			{
 				graphics.setColor(sudokuCell.isLocked()
