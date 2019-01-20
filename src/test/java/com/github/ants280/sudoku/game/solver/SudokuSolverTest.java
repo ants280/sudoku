@@ -4,6 +4,7 @@ import com.github.ants280.sudoku.game.SudokuBoard;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.function.Consumer;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,14 +43,15 @@ public class SudokuSolverTest
 				createTestCase("{679810004410569087000070916104080090097020000050930701701040009040098170900050430}", SolvableType.LOGIC, "?, requires RemovePossibleValueForOtherGroupsSudokuSolverPlugin"),
 				createTestCase("{370095000600080090008300007000010050160000034040060000700002900020030008000950042}", SolvableType.LOGIC, "6/5 stars 20170218, requires CullPossibleValuesSudokuSolverPlugin (and RemovePossibleValueForOtherGroupsSudokuSolverPlugin)"),
 				createTestCase("{605040902001090003020015600900004800000060000008100009006430080500080200807020306}", SolvableType.LOGIC, "4/5 stars 2017-11-16, requires SetPossibleValuesSudokuSolverPlugin"),
+				// simple solve cases:
 				createTestCase("{123456789456789123789123456234567891567891234891234567345678912678912345912345660}", SolvableType.UNSOLVEABLE, "no working last value"),
 				createTestCase("{123456789456789123789123456234567891567891234891234567345678912678912345912345670}", SolvableType.LOGIC, "last value be 8"),
 				createTestCase("{123456789456789123789123456234567891567891234891234567345678912678912345912345678}", SolvableType.LOGIC, "already solved"),
-				// problem boards: (it would eventually be nice if these could be solved with logic) [other than the last, empty board]
+				createTestCase("{000000000000000000000000000000000000000000000000000000000000000000000000000000000}", SolvableType.BRUTE_FORCE, "empty board"),
+				// problem boards: (it would eventually be nice if these could be solved with logic)
 				createTestCase("{004063100000010002000074683907000000006080900000000504825640000700090000009350700}", SolvableType.BRUTE_FORCE, "6/5 stars 2017-11-18"),
 				createTestCase("{003070600000159020900000005700000010006040900040000006400000002070362000009080700}", SolvableType.BRUTE_FORCE, ":("),
-				createTestCase("{700082000000041503103005000002030098000020000390010700000700302801290000000150009}", SolvableType.BRUTE_FORCE, "6/5 stars 2018-12-22"),
-				createTestCase("{000000000000000000000000000000000000000000000000000000000000000000000000000000000}", SolvableType.BRUTE_FORCE, "empty board"));
+				createTestCase("{700082000000041503103005000002030098000020000390010700000700302801290000000150009}", SolvableType.BRUTE_FORCE, "6/5 stars 2018-12-22"));
 	}
 
 	private static Object[] createTestCase(
@@ -67,18 +69,21 @@ public class SudokuSolverTest
 	public void testSolveFast_logic()
 	{
 		Collection<String> moveDescriptions = new HashSet<>();
-		SudokuBoard logicBoard = new SudokuBoard(boardString);
-		logicBoard.setListenersEnabled(false);
+		SudokuBoard board = new SudokuBoard(boardString);
+		board.setListenersEnabled(false);
+		Consumer<String> moveDescriptionConsumer = moveDescription
+				-> Assert.assertTrue(
+						"Solver made move with duplicate description",
+						moveDescriptions.add(moveDescription));
 		SudokuSolver logicSolver = new SudokuLogicSolver(
-				logicBoard,
-				moveDescription -> Assert.assertTrue(
-						"Solver made move with publicate description",
-						moveDescriptions.add(moveDescription)));
+				board,
+				moveDescriptionConsumer);
 		logicSolver.initialize();
 		logicSolver.solveFast();
 
-		boolean actualSolved = logicBoard.isSolved();
-		boolean expectedSolved = solvableType.isExpectedSolvable(SolvableType.LOGIC);
+		boolean actualSolved = board.isSolved();
+		boolean expectedSolved
+				= solvableType.isExpectedSolvable(SolvableType.LOGIC);
 
 		Assert.assertEquals(expectedSolved, actualSolved);
 	}
@@ -92,7 +97,8 @@ public class SudokuSolverTest
 		solver.solveFast();
 
 		boolean actualSolved = board.isSolved();
-		boolean expectedSolved = solvableType.isExpectedSolvable(SolvableType.BRUTE_FORCE);
+		boolean expectedSolved
+				= solvableType.isExpectedSolvable(SolvableType.BRUTE_FORCE);
 
 		Assert.assertEquals(expectedSolved, actualSolved);
 	}
