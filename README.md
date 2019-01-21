@@ -6,5 +6,5 @@ A basic sudoku game with a logic-based solver.
 ![screenshot](screenshot.png)
 
 ## License
-Project is licensed under the [MIT license](LICENSE).
+Project is licensed under the [MIT license](LICENSE.md).
 
