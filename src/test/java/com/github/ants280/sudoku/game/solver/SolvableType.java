@@ -8,8 +8,7 @@ public enum SolvableType
 
 	public boolean isExpectedSolvable(SolvableType solvableType)
 	{
-		return this != UNSOLVEABLE
-				&& solvableType != UNSOLVEABLE
-				&& (this != BRUTE_FORCE || solvableType != LOGIC);
+		return this == SolvableType.LOGIC && solvableType != SolvableType.UNSOLVEABLE
+				|| this != SolvableType.UNSOLVEABLE && solvableType == SolvableType.BRUTE_FORCE;
 	}
 }
