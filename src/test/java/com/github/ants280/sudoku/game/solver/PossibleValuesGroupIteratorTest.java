@@ -1,6 +1,7 @@
 package com.github.ants280.sudoku.game.solver;
 
 import com.github.ants280.sudoku.game.SudokuValue;
+import static com.github.ants280.sudoku.game.SudokuValue.*;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -17,18 +18,25 @@ public class PossibleValuesGroupIteratorTest
 	public void testIterate_threePossibleValues()
 	{
 		List<SudokuValue> possibleValues = Arrays.asList(
-				SudokuValue.VALUE_1,
-				SudokuValue.VALUE_3,
-				SudokuValue.VALUE_4);
-		// NOTE : Expect IndexOutOfBoundsException to be thrown if iterator produces more possible value groups than specified below.
-		List<Collection<SudokuValue>> expectedPossibleValuesGroups = Arrays.asList(
-				Stream.of(SudokuValue.VALUE_1).collect(Collectors.toSet()),
-				Stream.of(SudokuValue.VALUE_3).collect(Collectors.toSet()),
-				Stream.of(SudokuValue.VALUE_1, SudokuValue.VALUE_3).collect(Collectors.toSet()),
-				Stream.of(SudokuValue.VALUE_4).collect(Collectors.toSet()),
-				Stream.of(SudokuValue.VALUE_1, SudokuValue.VALUE_4).collect(Collectors.toSet()),
-				Stream.of(SudokuValue.VALUE_3, SudokuValue.VALUE_4).collect(Collectors.toSet()),
-				Stream.of(SudokuValue.VALUE_1, SudokuValue.VALUE_3, SudokuValue.VALUE_4).collect(Collectors.toSet()));
+				VALUE_1,
+				VALUE_3,
+				VALUE_4);
+		List<Collection<SudokuValue>> expectedPossibleValuesGroups
+				= Arrays.asList(
+						Stream.of(VALUE_1)
+								.collect(Collectors.toSet()),
+						Stream.of(VALUE_3)
+								.collect(Collectors.toSet()),
+						Stream.of(VALUE_1, VALUE_3)
+								.collect(Collectors.toSet()),
+						Stream.of(VALUE_4)
+								.collect(Collectors.toSet()),
+						Stream.of(VALUE_1, VALUE_4)
+								.collect(Collectors.toSet()),
+						Stream.of(VALUE_3, VALUE_4)
+								.collect(Collectors.toSet()),
+						Stream.of(VALUE_1, VALUE_3, VALUE_4)
+								.collect(Collectors.toSet()));
 
 		PossibleValuesIterator possibleValuesIterator
 				= new PossibleValuesIterator(possibleValues);
@@ -36,21 +44,27 @@ public class PossibleValuesGroupIteratorTest
 		int i = 0;
 		while (possibleValuesIterator.hasNext())
 		{
-			Collection<SudokuValue> actualPossibleValuesGroup = possibleValuesIterator.next();
-			Collection<SudokuValue> expectedPossibleValuesGroup = expectedPossibleValuesGroups.get(i);
+			Collection<SudokuValue> actualPossibleValuesGroup
+					= possibleValuesIterator.next();
+			Collection<SudokuValue> expectedPossibleValuesGroup
+					= expectedPossibleValuesGroups.get(i);
 
-			Assert.assertEquals("index " + i, expectedPossibleValuesGroup, actualPossibleValuesGroup);
+			Assert.assertEquals(
+					"index " + i,
+					expectedPossibleValuesGroup,
+					actualPossibleValuesGroup);
 
 			i++;
 		}
 
 		Assert.assertEquals("possible values size", 7, i);
+		Assert.assertFalse(possibleValuesIterator.hasNext());
 	}
 
 	@Test
 	public void testIterate_allPossibleValues()
 	{
-		List<SudokuValue> possibleValues = Arrays.asList(SudokuValue.values());
+		List<SudokuValue> possibleValues = Arrays.asList(values());
 		PossibleValuesIterator possibleValuesIterator
 				= new PossibleValuesIterator(possibleValues);
 		int expectedCount = 511; // 2^9 - 1
