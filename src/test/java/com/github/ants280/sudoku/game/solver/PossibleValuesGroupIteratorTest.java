@@ -64,7 +64,7 @@ public class PossibleValuesGroupIteratorTest
 	@Test
 	public void testIterate_allPossibleValues()
 	{
-		List<SudokuValue> possibleValues = Arrays.asList(values());
+		List<SudokuValue> possibleValues = Arrays.asList(SudokuValue.values());
 		PossibleValuesIterator possibleValuesIterator
 				= new PossibleValuesIterator(possibleValues);
 		int expectedCount = 511; // 2^9 - 1
@@ -101,5 +101,19 @@ public class PossibleValuesGroupIteratorTest
 		possibleValuesIterator.next();
 
 		Assert.fail("Expected exception to be thrown.");
+	}
+
+	@Test
+	public void testIterate_onePossibleValue()
+	{
+		List<SudokuValue> possibleValues = Collections.singletonList(VALUE_7);
+		PossibleValuesIterator possibleValuesIterator
+				= new PossibleValuesIterator(possibleValues);
+
+		Collection<SudokuValue> next = possibleValuesIterator.next();
+		boolean hasNext = possibleValuesIterator.hasNext();
+
+		Assert.assertArrayEquals(possibleValues.toArray(), next.toArray());
+		Assert.assertFalse(hasNext);
 	}
 }

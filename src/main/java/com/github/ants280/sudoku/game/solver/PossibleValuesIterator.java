@@ -1,12 +1,12 @@
 package com.github.ants280.sudoku.game.solver;
 
 import com.github.ants280.sudoku.game.SudokuValue;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
@@ -16,14 +16,13 @@ import java.util.stream.IntStream;
 public class PossibleValuesIterator implements Iterator<Collection<SudokuValue>>
 {
 	private final List<SudokuValue> possibleValues;
-	private final EnumSet<SudokuValue> possibleValuesGroup;
 	private final int max;
 	private int index;
 
 	public PossibleValuesIterator(List<SudokuValue> possibleValues)
 	{
-		this.possibleValues = new ArrayList<>(possibleValues);
-		this.possibleValuesGroup = EnumSet.noneOf(SudokuValue.class);
+		this.possibleValues = possibleValues.stream()
+				.collect(Collectors.toList());
 		this.max = 1 << this.possibleValues.size();
 		this.index = 1;
 	}
@@ -42,7 +41,9 @@ public class PossibleValuesIterator implements Iterator<Collection<SudokuValue>>
 			throw new NoSuchElementException();
 		}
 
-		possibleValuesGroup.clear();
+		Collection<SudokuValue> possibleValuesGroup
+				= EnumSet.noneOf(SudokuValue.class);
+
 		IntStream.range(0, possibleValues.size())
 				.filter(i -> ((1 << i) & index) != 0)
 				.mapToObj(possibleValues::get)
@@ -50,6 +51,6 @@ public class PossibleValuesIterator implements Iterator<Collection<SudokuValue>>
 
 		index++;
 
-		return possibleValuesGroup.clone();
+		return possibleValuesGroup;
 	}
 }
