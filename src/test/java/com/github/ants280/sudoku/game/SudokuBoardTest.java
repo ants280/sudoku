@@ -135,9 +135,11 @@ public class SudokuBoardTest
 		int c = 6;
 		SudokuValue value = SudokuValue.VALUE_4;
 
-		board.getSudokuCells(ROW, r).get(c).setValue(value);
-		SudokuValue actualValue = board.getSudokuCells(ROW, r).get(c).getValue();
+		board.getSudokuCells(ROW, r).get(c)
+				.setValue(value);
 
+		SudokuValue actualValue = board.getSudokuCells(ROW, r).get(c)
+				.getValue();
 		Assert.assertEquals(value, actualValue);
 	}
 
@@ -345,7 +347,8 @@ public class SudokuBoardTest
 	public void testResetFrom_listenersEnabled()
 	{
 		AtomicBoolean listenerTriggered = new AtomicBoolean(false);
-		Consumer<SudokuEvent<SudokuBoard, Boolean>> boardSolvedChangedConsumer = event -> listenerTriggered.set(true);
+		Consumer<SudokuEvent<SudokuBoard, Boolean>> boardSolvedChangedConsumer
+				= event -> listenerTriggered.set(true);
 		SudokuBoard sudokuBoard1 = new SudokuBoard();
 		SudokuBoard sudokuBoard2 = new SudokuBoard();
 		sudokuBoard1.addSolvedChangedConsumer(boardSolvedChangedConsumer);
@@ -359,7 +362,8 @@ public class SudokuBoardTest
 	public void testResetFrom_listenersEnabled_FALSE()
 	{
 		AtomicBoolean listenerTriggered = new AtomicBoolean(false);
-		Consumer<SudokuEvent<SudokuBoard, Boolean>> boardSolvedChangedConsumer = event -> listenerTriggered.set(true);
+		Consumer<SudokuEvent<SudokuBoard, Boolean>> boardSolvedChangedConsumer
+				= event -> listenerTriggered.set(true);
 		SudokuBoard sudokuBoard1 = new SudokuBoard();
 		SudokuBoard sudokuBoard2 = new SudokuBoard();
 		sudokuBoard1.addSolvedChangedConsumer(boardSolvedChangedConsumer);
@@ -389,7 +393,9 @@ public class SudokuBoardTest
 		sudokuBoard1.getSudokuCells(ROW, 8).get(8)
 				.setValue(SudokuValue.VALUE_8);
 
-		Assert.assertNotEquals(sudokuBoard1.isSolved(), sudokuBoard2.isSolved());
+		Assert.assertNotEquals(
+				sudokuBoard1.isSolved(),
+				sudokuBoard2.isSolved());
 	}
 
 	@Test
@@ -407,7 +413,8 @@ public class SudokuBoardTest
 				+ "912345670}";
 		SudokuBoard sudokuBoard = new SudokuBoard(boardValue);
 		AtomicBoolean listenerTriggered = new AtomicBoolean(false);
-		Consumer<SudokuEvent<SudokuBoard, Boolean>> boardSolvedChangedConsumer = event -> listenerTriggered.set(true);
+		Consumer<SudokuEvent<SudokuBoard, Boolean>> boardSolvedChangedConsumer
+				= event -> listenerTriggered.set(true);
 		sudokuBoard.addSolvedChangedConsumer(boardSolvedChangedConsumer);
 
 		sudokuBoard.getSudokuCells(ROW, 8).get(8)
@@ -431,7 +438,8 @@ public class SudokuBoardTest
 				+ "912345670}";
 		SudokuBoard sudokuBoard = new SudokuBoard(boardValue);
 		AtomicBoolean listenerTriggered = new AtomicBoolean(false);
-		Consumer<SudokuEvent<SudokuBoard, Boolean>> boardSolvedChangedConsumer = event -> listenerTriggered.set(true);
+		Consumer<SudokuEvent<SudokuBoard, Boolean>> boardSolvedChangedConsumer
+				= event -> listenerTriggered.set(true);
 		sudokuBoard.addSolvedChangedConsumer(boardSolvedChangedConsumer); // See previous test
 		sudokuBoard.removeSolvedChangedConsumer(boardSolvedChangedConsumer);
 
@@ -446,7 +454,8 @@ public class SudokuBoardTest
 	{
 		SudokuBoard sudokuBoard = new SudokuBoard();
 		AtomicBoolean listenerTriggered = new AtomicBoolean(false);
-		Consumer<SudokuEvent<SudokuCell, SudokuValue>> cellValueChangedConsumer = event -> listenerTriggered.set(true);
+		Consumer<SudokuEvent<SudokuCell, SudokuValue>> cellValueChangedConsumer
+				= event -> listenerTriggered.set(true);
 		sudokuBoard.addCellValueChangedConsumer(cellValueChangedConsumer);
 
 		sudokuBoard.getSudokuCells(ROW, 0).get(0)
@@ -460,7 +469,8 @@ public class SudokuBoardTest
 	{
 		SudokuBoard sudokuBoard = new SudokuBoard();
 		AtomicBoolean listenerTriggered = new AtomicBoolean(false);
-		Consumer<SudokuEvent<SudokuCell, SudokuValue>> cellPossibleValueChangedConsumer = event -> listenerTriggered.set(true);
+		Consumer<SudokuEvent<SudokuCell, SudokuValue>> cellPossibleValueChangedConsumer
+				= event -> listenerTriggered.set(true);
 		sudokuBoard.addCellPossibleValueChangedConsumer(cellPossibleValueChangedConsumer);
 
 		sudokuBoard.getSudokuCells(ROW, 0).get(0)
@@ -483,7 +493,8 @@ public class SudokuBoardTest
 				+ "678912345"
 				+ "912345670}");
 		AtomicBoolean listenerTriggered = new AtomicBoolean(false);
-		Consumer<SudokuEvent<SudokuBoard, Boolean>> boardSolvedChangedConsumer = event -> listenerTriggered.set(true);
+		Consumer<SudokuEvent<SudokuBoard, Boolean>> boardSolvedChangedConsumer
+				= event -> listenerTriggered.set(true);
 		sudokuBoard.addSolvedChangedConsumer(boardSolvedChangedConsumer);
 
 		sudokuBoard.setListenersEnabled(false);

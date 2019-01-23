@@ -179,7 +179,10 @@ public class CommandHistoryTest
 		int hashCode1 = commandHistory1.hashCode();
 		int hashCode2 = commandHistory2.hashCode();
 
-		Assert.assertNotEquals("Object reference/address should be hashCode", hashCode1, hashCode2);
+		Assert.assertNotEquals(
+				"Object reference/address should be hashCode",
+				hashCode1,
+				hashCode2);
 	}
 
 	@Test
@@ -215,7 +218,9 @@ public class CommandHistoryTest
 
 		boolean equals = commandHistory1.equals(commandHistory2);
 
-		Assert.assertFalse("Even if both histories are empty, they use different maps, so they cannot be equal.", equals);
+		Assert.assertFalse(
+				"Even if both histories are empty, they use different maps, so they cannot be equal.",
+				equals);
 	}
 
 	@Test

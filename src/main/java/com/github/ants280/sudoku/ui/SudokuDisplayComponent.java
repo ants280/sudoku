@@ -97,10 +97,12 @@ public class SudokuDisplayComponent
 		@Override
 		protected void paintComponent(Graphics graphics)
 		{
-			((Graphics2D) graphics).setRenderingHints(ANTIALIAS_ON_RENDERING_HINT);
+			((Graphics2D) graphics)
+					.setRenderingHints(ANTIALIAS_ON_RENDERING_HINT);
 
 			board.getAllSudokuCells()
-					.forEach(sudokuCell -> this.paintCell(sudokuCell, graphics));
+					.forEach(sudokuCell
+							-> this.paintCell(sudokuCell, graphics));
 			this.paintLines(graphics);
 		}
 
@@ -111,8 +113,17 @@ public class SudokuDisplayComponent
 			int cellOffsetX = xOffset + cellLength * cellCol;
 			int cellOffsetY = yOffset + cellLength * cellRow;
 
-			this.paintCellBackground(graphics, cellRow, cellCol, cellOffsetX, cellOffsetY);
-			this.paintCellValue(graphics, sudokuCell, cellOffsetX, cellOffsetY);
+			this.paintCellBackground(
+					graphics,
+					cellRow,
+					cellCol,
+					cellOffsetX,
+					cellOffsetY);
+			this.paintCellValue(
+					graphics,
+					sudokuCell,
+					cellOffsetX,
+					cellOffsetY);
 		}
 
 		private void paintCellBackground(
@@ -282,7 +293,8 @@ public class SudokuDisplayComponent
 
 		SudokuEvent<?, SudokuCell> selectedCellChangedEvent
 				= new SudokuEvent<>(this, previousSelectedCell, null);
-		selectedCellChangedConsumers.forEach(consumer -> consumer.accept(selectedCellChangedEvent));
+		selectedCellChangedConsumers
+				.forEach(consumer -> consumer.accept(selectedCellChangedEvent));
 	}
 
 	public SudokuCell getSelectedCell()
@@ -331,7 +343,10 @@ public class SudokuDisplayComponent
 		selectedCol = c;
 		SudokuCell currentSelectedCell = this.getSelectedCell();
 		SudokuEvent<?, SudokuCell> selectedCellChangedEvent
-				= new SudokuEvent<>(this, previousSelectedCell, currentSelectedCell);
+				= new SudokuEvent<>(
+						this,
+						previousSelectedCell,
+						currentSelectedCell);
 		selectedCellChangedConsumers.forEach(
 				consumer -> consumer.accept(selectedCellChangedEvent));
 	}
@@ -341,5 +356,5 @@ public class SudokuDisplayComponent
 	{
 		selectedCellChangedConsumers.add(selectedCellChangedConsumer);
 	}
-//</editor-fold>
+	//</editor-fold>
 }

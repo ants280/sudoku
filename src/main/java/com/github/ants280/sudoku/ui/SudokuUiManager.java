@@ -106,7 +106,8 @@ public class SudokuUiManager implements ActionListener
 		board.addSolvedChangedConsumer(this::handleSolvedChanged);
 	}
 
-	private void handleSolvedChanged(SudokuEvent<SudokuBoard, Boolean> solvedChangedEvent)
+	private void handleSolvedChanged(
+			SudokuEvent<SudokuBoard, Boolean> solvedChangedEvent)
 	{
 		if (solvedChangedEvent.getNewValue())
 		{
@@ -124,7 +125,8 @@ public class SudokuUiManager implements ActionListener
 		if (!solvedChangedEvent.getOldValue()
 				.equals(solvedChangedEvent.getNewValue()))
 		{
-			messageLabel.setText(board.isSolved() ? BOARD_SOLVED_MESSAGE : null);
+			messageLabel.setText(
+					board.isSolved() ? BOARD_SOLVED_MESSAGE : null);
 		}
 	}
 
@@ -465,11 +467,14 @@ public class SudokuUiManager implements ActionListener
 	{
 		sudokuDisplayComponent.removeSelectedCell();
 
-		CommandHistory<SudokuCellUndoCommand> hintCommandHistory = new CommandHistory<>();
+		CommandHistory<SudokuCellUndoCommand> hintCommandHistory
+				= new CommandHistory<>();
 		SudokuBoard hintBoard = new SudokuBoard(board);
 		hintBoard.addCellValueChangedConsumer(
 				cellValueChangedEvent -> hintCommandHistory.addCommand(
-						new SudokuCellUndoCommand(cellValueChangedEvent, SudokuCellChangeType.SET_VALUE)));
+						new SudokuCellUndoCommand(
+								cellValueChangedEvent,
+								SudokuCellChangeType.SET_VALUE)));
 		SudokuSolver hintSolver = new SudokuLogicSolver(hintBoard, null);
 
 		hintSolver.initialize();
@@ -477,7 +482,8 @@ public class SudokuUiManager implements ActionListener
 
 		if (moveMade)
 		{
-			SudokuCellUndoCommand lastSetValueCommand = hintCommandHistory.undo();
+			SudokuCellUndoCommand lastSetValueCommand
+					= hintCommandHistory.undo();
 			if (lastSetValueCommand != null)
 			{
 				SudokuCell hintCell = lastSetValueCommand.getSudokuCell();

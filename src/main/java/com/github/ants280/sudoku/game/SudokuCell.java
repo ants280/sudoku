@@ -193,7 +193,8 @@ public class SudokuCell
 	@Override
 	public String toString()
 	{
-		return String.format("SudokuCell{r%d,c%d,g%d,v=%d,possibleValues=[%s],locked=%s}",
+		return String.format(
+				"SudokuCell{r%d,c%d,g%d,v=%d,possibleValues=[%s],locked=%s}",
 				this.getIndex(SectionType.ROW),
 				this.getIndex(SectionType.COLUMN),
 				this.getIndex(SectionType.GROUP),

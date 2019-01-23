@@ -74,9 +74,15 @@ public class CommandHistory<T extends Command>
 			redoHistory.push(command);
 
 			SudokuEvent<CommandHistory<T>, Boolean> undoEmptyChangedConsumer
-					= new SudokuEvent<>(this, previousUndoHistoryEmpty, undoHistory.isEmpty());
+					= new SudokuEvent<>(
+							this,
+							previousUndoHistoryEmpty,
+							undoHistory.isEmpty());
 			SudokuEvent<CommandHistory<T>, Boolean> redoEmptyChangedConsumer
-					= new SudokuEvent<>(this, previousRedoHistoryEmpty, false);
+					= new SudokuEvent<>(
+							this,
+							previousRedoHistoryEmpty,
+							false);
 			undoEmptyChangedConsumers
 					.forEach(consumer -> consumer.accept(undoEmptyChangedConsumer));
 			redoEmptyChangedConsumers
@@ -104,9 +110,15 @@ public class CommandHistory<T extends Command>
 			undoHistory.push(command);
 
 			SudokuEvent<CommandHistory<T>, Boolean> undoEmptyChangedConsumer
-					= new SudokuEvent<>(this, previousUndoHistoryEmpty, false);
+					= new SudokuEvent<>(
+							this,
+							previousUndoHistoryEmpty,
+							false);
 			SudokuEvent<CommandHistory<T>, Boolean> redoEmptyChangedConsumer
-					= new SudokuEvent<>(this, previousRedoHistoryEmpty, redoHistory.isEmpty());
+					= new SudokuEvent<>(
+							this,
+							previousRedoHistoryEmpty,
+							redoHistory.isEmpty());
 			undoEmptyChangedConsumers
 					.forEach(consumer -> consumer.accept(undoEmptyChangedConsumer));
 			redoEmptyChangedConsumers
@@ -129,9 +141,15 @@ public class CommandHistory<T extends Command>
 			redoHistory.clear();
 
 			SudokuEvent<CommandHistory<T>, Boolean> undoEmptyChangedConsumer
-					= new SudokuEvent<>(this, previousUndoHistoryEmpty, true);
+					= new SudokuEvent<>(
+							this,
+							previousUndoHistoryEmpty,
+							true);
 			SudokuEvent<CommandHistory<T>, Boolean> redoEmptyChangedConsumer
-					= new SudokuEvent<>(this, previousRedoHistoryEmpty, true);
+					= new SudokuEvent<>(
+							this,
+							previousRedoHistoryEmpty,
+							true);
 			undoEmptyChangedConsumers
 					.forEach(consumer -> consumer.accept(undoEmptyChangedConsumer));
 			redoEmptyChangedConsumers

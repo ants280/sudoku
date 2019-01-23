@@ -20,7 +20,12 @@ public class SudokuCellTest
 		SudokuValue value = SudokuValue.VALUE_1;
 		boolean locked = false;
 
-		this.sudokuCell = new SudokuCell(rowIndex, columnIndex, groupIndex, value, locked);
+		this.sudokuCell = new SudokuCell(
+				rowIndex,
+				columnIndex,
+				groupIndex,
+				value,
+				locked);
 	}
 
 	@Test
@@ -81,7 +86,8 @@ public class SudokuCellTest
 	@Test
 	public void testGetPossibleValues_emptyDefault()
 	{
-		Collection<SudokuValue> possibleValues = sudokuCell.getPossibleValues();
+		Collection<SudokuValue> possibleValues
+				= sudokuCell.getPossibleValues();
 
 		Assert.assertTrue(possibleValues.isEmpty());
 	}
@@ -91,7 +97,8 @@ public class SudokuCellTest
 	{
 		sudokuCell.togglePossibleValue(SudokuValue.VALUE_6);
 
-		Collection<SudokuValue> possibleValues = sudokuCell.getPossibleValues();
+		Collection<SudokuValue> possibleValues
+				= sudokuCell.getPossibleValues();
 
 		Assert.assertFalse(possibleValues.isEmpty());
 		Assert.assertEquals(1, possibleValues.size());
@@ -112,7 +119,8 @@ public class SudokuCellTest
 	@Test
 	public void testHasPossibleValue_no()
 	{
-		boolean hasPossibleValue = sudokuCell.hasPossibleValue(SudokuValue.VALUE_8);
+		boolean hasPossibleValue
+				= sudokuCell.hasPossibleValue(SudokuValue.VALUE_8);
 
 		Assert.assertFalse(hasPossibleValue);
 	}
@@ -122,7 +130,8 @@ public class SudokuCellTest
 	{
 		sudokuCell.togglePossibleValue(SudokuValue.VALUE_5);
 
-		boolean hasPossibleValue = sudokuCell.hasPossibleValue(SudokuValue.VALUE_5);
+		boolean hasPossibleValue
+				= sudokuCell.hasPossibleValue(SudokuValue.VALUE_5);
 
 		Assert.assertTrue(hasPossibleValue);
 	}
@@ -208,7 +217,8 @@ public class SudokuCellTest
 		sudokuCell.togglePossibleValue(SudokuValue.VALUE_1);
 		sudokuCell.setLocked(true);
 
-		Collection<SudokuValue> possibleValues = sudokuCell.getPossibleValues();
+		Collection<SudokuValue> possibleValues
+				= sudokuCell.getPossibleValues();
 
 		Assert.assertTrue(possibleValues.isEmpty());
 	}
@@ -217,11 +227,11 @@ public class SudokuCellTest
 	public void testSetValue()
 	{
 		sudokuCell = new SudokuCell(0, 0, 0, null, false);
-
 		SudokuValue expectedValue = SudokuValue.VALUE_1;
-		sudokuCell.setValue(expectedValue);
-		SudokuValue actualValue = sudokuCell.getValue();
 
+		sudokuCell.setValue(expectedValue);
+
+		SudokuValue actualValue = sudokuCell.getValue();
 		Assert.assertEquals(expectedValue, actualValue);
 	}
 
@@ -306,6 +316,7 @@ public class SudokuCellTest
 		sudokuCell.togglePossibleValue(SudokuValue.VALUE_8);
 		sudokuCell.togglePossibleValue(SudokuValue.VALUE_7);
 		sudokuCell.togglePossibleValue(SudokuValue.VALUE_4);
+
 		sudokuCell.restoreAllPossibleValues();
 
 		for (SudokuValue sudokuValue : SudokuValue.values())
@@ -329,6 +340,7 @@ public class SudokuCellTest
 	{
 		sudokuCell = new SudokuCell(0, 0, 0, SudokuValue.VALUE_7, false);
 		sudokuCell.setLocked(true);
+
 		sudokuCell.togglePossibleValue(SudokuValue.VALUE_1);
 
 		Assert.fail("expected exception");
@@ -337,7 +349,6 @@ public class SudokuCellTest
 	@Test(expected = IllegalArgumentException.class)
 	public void testTogglePossibleValue_null()
 	{
-		sudokuCell = new SudokuCell(0, 0, 0, SudokuValue.VALUE_7, false);
 		sudokuCell.togglePossibleValue(null);
 
 		Assert.fail("expected exception");
@@ -412,7 +423,6 @@ public class SudokuCellTest
 	@Test
 	public void testEquals_differentClass()
 	{
-		sudokuCell = new SudokuCell(0, 0, 0, null, false);
 		Object sudokuCell2 = 143L;
 
 		boolean equals = sudokuCell.equals(sudokuCell2);
@@ -492,7 +502,7 @@ public class SudokuCellTest
 	public void testEquals_differentGroup()
 	{
 		sudokuCell = new SudokuCell(1, 2, 2, SudokuValue.VALUE_9, true);
-		SudokuCell sudokuCell2 = new SudokuCell(1, 2, 3, SudokuValue.VALUE_4, true);
+		SudokuCell sudokuCell2 = new SudokuCell(1, 2, 3, SudokuValue.VALUE_9, true);
 
 		boolean equals = sudokuCell.equals(sudokuCell2);
 

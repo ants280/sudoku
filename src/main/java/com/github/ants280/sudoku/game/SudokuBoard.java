@@ -33,7 +33,7 @@ public class SudokuBoard
 
 	public SudokuBoard(String boardString)
 	{
-		this.allSudokuCells = this.getAllSudokuCells(boardString);
+		this.allSudokuCells = getAllSudokuCells(boardString);
 		this.sectionTypeCells = new EnumMap<>(SectionType.class);
 		this.solvedChangedConsumers = new ArrayList<>();
 		this.previousSolved = false;
@@ -75,11 +75,12 @@ public class SudokuBoard
 						.collect(Collectors.joining()));
 	}
 
-	private List<SudokuCell> getAllSudokuCells(String boardString)
+	private static List<SudokuCell> getAllSudokuCells(String boardString)
 	{
 		if (!isValidSavedBoard(boardString))
 		{
-			throw new IllegalArgumentException("Illegal board: " + boardString);
+			throw new IllegalArgumentException(
+					"Illegal board: " + boardString);
 		}
 
 		SudokuCell[] allSudokuCellsArray = new SudokuCell[81];

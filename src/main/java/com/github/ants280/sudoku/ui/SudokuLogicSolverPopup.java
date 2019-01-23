@@ -68,7 +68,9 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 		this.sudokuBoard = sudokuBoard;
 		this.boardSolvedChangedConsumer = this::handleSolvedChangedConsumer;
 		this.commandHistory = commandHistory;
-		this.solverTable = new SudokuLogicSolverTable(commandHistory, selectSudokuCellConsumer);
+		this.solverTable = new SudokuLogicSolverTable(
+				commandHistory,
+				selectSudokuCellConsumer);
 		this.solverTablePanel = new JPanel();
 		this.sudokuSolver = new SudokuLogicSolver(
 				sudokuBoard,
@@ -234,7 +236,8 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 		}
 	}
 
-	private void handleSolvedChangedConsumer(SudokuEvent<SudokuBoard, Boolean> solvedChangedEvent)
+	private void handleSolvedChangedConsumer(
+			SudokuEvent<SudokuBoard, Boolean> solvedChangedEvent)
 	{
 		if (solvedChangedEvent.getNewValue())
 		{

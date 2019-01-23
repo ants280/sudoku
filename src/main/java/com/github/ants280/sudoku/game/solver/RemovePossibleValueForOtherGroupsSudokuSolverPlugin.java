@@ -30,8 +30,14 @@ public class RemovePossibleValueForOtherGroupsSudokuSolverPlugin
 							SectionType.GROUP,
 							groupIndex);
 
-			if (this.tryToRemovePossibleValuesForOtherGroups(groupCells, groupIndex, SectionType.COLUMN)
-					|| this.tryToRemovePossibleValuesForOtherGroups(groupCells, groupIndex, SectionType.ROW))
+			if (this.tryToRemovePossibleValuesForOtherGroups(
+					groupCells,
+					groupIndex,
+					SectionType.COLUMN)
+					|| this.tryToRemovePossibleValuesForOtherGroups(
+							groupCells,
+							groupIndex,
+							SectionType.ROW))
 			{
 				return true;
 			}

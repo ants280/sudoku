@@ -14,14 +14,20 @@ public class SudokuSolverPluginTest
 	public void testLogMove_moveDescriptionConsumer()
 	{
 		List<String> consumedMoveDescriptions = new ArrayList<>();
-		Consumer<String> moveDescriptionConsumer = consumedMoveDescriptions::add;
-		SudokuSolverPlugin plugin = new SudokuSolverPluginImpl(null, moveDescriptionConsumer);
+		Consumer<String> moveDescriptionConsumer
+				= consumedMoveDescriptions::add;
+		SudokuSolverPlugin plugin = new SudokuSolverPluginImpl(
+				null,
+				moveDescriptionConsumer);
 		String moveDescription = "move made";
-		List<String> expectedConsumedMoveDescriptions = Collections.singletonList(moveDescription);
+		List<String> expectedConsumedMoveDescriptions
+				= Collections.singletonList(moveDescription);
 
 		plugin.logMove(moveDescription);
 
-		Assert.assertEquals(expectedConsumedMoveDescriptions, consumedMoveDescriptions);
+		Assert.assertEquals(
+				expectedConsumedMoveDescriptions,
+				consumedMoveDescriptions);
 	}
 
 	@Test

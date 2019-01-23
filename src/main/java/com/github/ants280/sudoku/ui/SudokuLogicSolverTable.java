@@ -138,9 +138,12 @@ public class SudokuLogicSolverTable
 				IntStream.range(0, Math.abs(delta))
 						.forEach(i -> action.run());
 
-				SudokuCellUndoCommand lastCommand = commandHistory.peekNextRedo();
+				SudokuCellUndoCommand lastCommand
+						= commandHistory.peekNextRedo();
 				selectSudokuCellConsumer.accept(
-						lastCommand == null ? null : lastCommand.getSudokuCell());
+						lastCommand == null
+								? null
+								: lastCommand.getSudokuCell());
 			}
 		}
 	}

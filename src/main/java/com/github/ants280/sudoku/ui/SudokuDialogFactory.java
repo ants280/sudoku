@@ -63,7 +63,8 @@ public class SudokuDialogFactory
 		pane.addPropertyChangeListener(event ->
 		{
 			if (!JOptionPane.VALUE_PROPERTY.equals(event.getPropertyName())
-					|| JOptionPane.UNINITIALIZED_VALUE.equals(event.getNewValue()))
+					|| JOptionPane.UNINITIALIZED_VALUE
+							.equals(event.getNewValue()))
 			{
 				return;
 			}
@@ -118,7 +119,10 @@ public class SudokuDialogFactory
 		};
 		int previousWidth = (int) pane.getPreferredSize().getWidth();
 		pane.setMessage(messageArray);
-		pane.setPreferredSize(new Dimension(previousWidth, (int) pane.getPreferredSize().getHeight()));
+		pane.setPreferredSize(
+				new Dimension(
+						previousWidth,
+						(int) pane.getPreferredSize().getHeight()));
 
 		JDialog dialog = pane.createDialog(title);
 		initTextComponent(textField, dialog, true);
@@ -134,7 +138,8 @@ public class SudokuDialogFactory
 	{
 		StringWriter stackTraceWriter = new StringWriter();
 		ex.printStackTrace(new PrintWriter(stackTraceWriter));
-		JTextArea textArea = new JTextArea(stackTraceWriter.toString(), 15, 30);
+		JTextArea textArea
+				= new JTextArea(stackTraceWriter.toString(), 15, 30);
 
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -157,7 +162,10 @@ public class SudokuDialogFactory
 		dialog.dispose();
 	}
 
-	private static void initTextComponent(JTextComponent textComponent, JDialog dialog, boolean editable)
+	private static void initTextComponent(
+			JTextComponent textComponent,
+			JDialog dialog,
+			boolean editable)
 	{
 		// add toolkit
 		JMenuItem copyMenuItem = new JMenuItem(

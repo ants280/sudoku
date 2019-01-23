@@ -1,21 +1,10 @@
 package com.github.ants280.sudoku.game;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 public class SudokuEventTest
 {
-
-	public SudokuEventTest()
-	{
-	}
-
-	@Before
-	public void setUp()
-	{
-	}
-
 	@Test
 	public void testGetters()
 	{

@@ -52,5 +52,4 @@ public class PossibleValuesIterator implements Iterator<Collection<SudokuValue>>
 
 		return possibleValuesGroup.clone();
 	}
-
 }

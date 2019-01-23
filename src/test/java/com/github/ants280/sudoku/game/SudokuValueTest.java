@@ -15,7 +15,10 @@ public class SudokuValueTest
 		for (char ch = '1'; ch <= '9'; ch++)
 		{
 			SudokuValue value = SudokuValue.fromChar(ch);
+
 			Assert.assertTrue("value already added : " + ch, values.add(value));
 		}
+
+		Assert.assertEquals(SudokuValue.values().length, values.size());
 	}
 }

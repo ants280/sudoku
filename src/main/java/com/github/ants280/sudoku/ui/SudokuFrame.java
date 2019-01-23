@@ -72,18 +72,25 @@ public class SudokuFrame
 						setPossibleValueMenu);
 		board.addSolvedChangedConsumer(this::handleSolvedChangedConsumer);
 		board.addCellValueChangedConsumer(this::handleCellValueChanged);
-		board.addCellPossibleValueChangedConsumer(this::handleCellPossibleValueChanged);
+		board.addCellPossibleValueChangedConsumer(
+				this::handleCellPossibleValueChanged);
 		sudokuDisplayComponent.addSelectedCellChangedConsumer(
 				this::handleSelectedCellChanged);
-		commandHistory.addUndoEmptyChangedConsumer(this::handleUndoEmptyChangedConsumer);
-		commandHistory.addRedoEmptyChangedConsumer(this::handleRedoEmptyChangedConsumer);
+		commandHistory.addUndoEmptyChangedConsumer(
+				this::handleUndoEmptyChangedConsumer);
+		commandHistory.addRedoEmptyChangedConsumer(
+				this::handleRedoEmptyChangedConsumer);
 
 		undoMenuItem.setEnabled(false);
 		redoMenuItem.setEnabled(false);
 		undoMenuItem.setAccelerator(
-				KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_DOWN_MASK));
+				KeyStroke.getKeyStroke(
+						KeyEvent.VK_Z,
+						KeyEvent.CTRL_DOWN_MASK));
 		redoMenuItem.setAccelerator(
-				KeyStroke.getKeyStroke(KeyEvent.VK_Y, KeyEvent.CTRL_DOWN_MASK));
+				KeyStroke.getKeyStroke(
+						KeyEvent.VK_Y,
+						KeyEvent.CTRL_DOWN_MASK));
 
 		frame.setJMenuBar(createMenu(sudokuUiManager));
 		frame.add(topPanel, BorderLayout.NORTH);
@@ -105,7 +112,8 @@ public class SudokuFrame
 		setValueMenu.setText(SET_VALUE_MI);
 		setPossibleValueMenu.setText(SET_POSSIBLE_VALUE_MI);
 		hintMenuItem.setText(HINT_MI);
-		JMenuItem clearPossibleValuesMenuItem = new JMenuItem(CLEAR_POSSIBLE_VALUES_MI);
+		JMenuItem clearPossibleValuesMenuItem
+				= new JMenuItem(CLEAR_POSSIBLE_VALUES_MI);
 		JMenuItem clearCellsMenuItem = new JMenuItem(CLEAR_CELLS_MI);
 		JMenuItem lockCellsMenuItem = new JMenuItem(LOCK_CELLS_MI);
 		JMenuItem unLockCellsMenuItem = new JMenuItem(UNLOCK_CELLS_MI);
@@ -178,12 +186,14 @@ public class SudokuFrame
 		}
 	}
 
-	private void handleSolvedChangedConsumer(SudokuEvent<SudokuBoard, Boolean> solvedChangedEvent)
+	private void handleSolvedChangedConsumer(
+			SudokuEvent<SudokuBoard, Boolean> solvedChangedEvent)
 	{
 		hintMenuItem.setEnabled(!solvedChangedEvent.getNewValue());
 	}
 
-	private void handleCellValueChanged(SudokuEvent<SudokuCell, SudokuValue> cellValueChangedEvent)
+	private void handleCellValueChanged(
+			SudokuEvent<SudokuCell, SudokuValue> cellValueChangedEvent)
 	{
 		setValueMenu.setEnabled(
 				Objects.equals(
@@ -191,11 +201,14 @@ public class SudokuFrame
 						cellValueChangedEvent.getNewValue()));
 
 		SudokuCellUndoCommand sudokuCellUndoCommand
-				= new SudokuCellUndoCommand(cellValueChangedEvent, SudokuCellChangeType.SET_VALUE);
+				= new SudokuCellUndoCommand(
+						cellValueChangedEvent,
+						SudokuCellChangeType.SET_VALUE);
 		commandHistory.addCommand(sudokuCellUndoCommand);
 	}
 
-	private void handleCellPossibleValueChanged(SudokuEvent<SudokuCell, SudokuValue> cellPossibleValueChangedEvent)
+	private void handleCellPossibleValueChanged(
+			SudokuEvent<SudokuCell, SudokuValue> cellPossibleValueChangedEvent)
 	{
 		setPossibleValueMenu.setEnabled(
 				Objects.equals(
@@ -203,11 +216,14 @@ public class SudokuFrame
 						cellPossibleValueChangedEvent.getNewValue()));
 
 		SudokuCellUndoCommand sudokuCellUndoCommand
-				= new SudokuCellUndoCommand(cellPossibleValueChangedEvent, SudokuCellChangeType.TOGGLE_POSSIBLE_VALUE);
+				= new SudokuCellUndoCommand(
+						cellPossibleValueChangedEvent,
+						SudokuCellChangeType.TOGGLE_POSSIBLE_VALUE);
 		commandHistory.addCommand(sudokuCellUndoCommand);
 	}
 
-	private void handleSelectedCellChanged(SudokuEvent<?, SudokuCell> selectedCellChangedEvent)
+	private void handleSelectedCellChanged(
+			SudokuEvent<?, SudokuCell> selectedCellChangedEvent)
 	{
 		SudokuCell selectedCell = selectedCellChangedEvent.getNewValue();
 		setValueMenu.setEnabled(selectedCell != null);
@@ -215,12 +231,14 @@ public class SudokuFrame
 				selectedCell != null && selectedCell.getValue() == null);
 	}
 
-	private void handleUndoEmptyChangedConsumer(SudokuEvent<?, Boolean> undoEmptyChangedEvent)
+	private void handleUndoEmptyChangedConsumer(
+			SudokuEvent<?, Boolean> undoEmptyChangedEvent)
 	{
 		undoMenuItem.setEnabled(!undoEmptyChangedEvent.getNewValue());
 	}
 
-	private void handleRedoEmptyChangedConsumer(SudokuEvent<?, Boolean> redoEmptyChangedEvent)
+	private void handleRedoEmptyChangedConsumer(
+			SudokuEvent<?, Boolean> redoEmptyChangedEvent)
 	{
 		redoMenuItem.setEnabled(!redoEmptyChangedEvent.getNewValue());
 	}
