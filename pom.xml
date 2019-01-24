@@ -142,6 +142,17 @@
 					</execution>
 				</executions>
 			</plugin>-->
+			<plugin>
+				<!-- heroku -->
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>3.1.1</version>
+				<configuration>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+					<finalName>sudoku</finalName>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 	<dependencies>
