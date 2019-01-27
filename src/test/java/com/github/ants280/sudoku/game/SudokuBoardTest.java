@@ -507,6 +507,20 @@ public class SudokuBoardTest
 		Assert.assertTrue(sudokuBoard.isSolved()); // for sanity
 	}
 
+	@Test
+	public void testSetListenersEnabled_TRUE()
+	{
+		AtomicBoolean listenerTriggered = new AtomicBoolean(false);
+		Consumer<SudokuEvent<SudokuBoard, Boolean>> boardSolvedChangedConsumer
+				= event -> listenerTriggered.set(true);
+		SudokuBoard sudokuBoard = new SudokuBoard();
+		sudokuBoard.addSolvedChangedConsumer(boardSolvedChangedConsumer);
+
+		sudokuBoard.setListenersEnabled(true);
+
+		Assert.assertTrue(listenerTriggered.get());
+	}
+
 	private static List<Integer> getValues(List<SudokuCell> sudokuCells)
 	{
 		return sudokuCells.stream()
