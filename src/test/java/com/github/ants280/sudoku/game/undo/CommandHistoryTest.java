@@ -345,6 +345,59 @@ public class CommandHistoryTest
 		Assert.assertNotEquals(mockCommand3, mockCommand2); // [for sanity about the test library]
 	}
 
+	@Test
+	public void testUndo_consumersTriggered()
+	{
+		AtomicInteger undoConsumed = new AtomicInteger();
+		AtomicInteger redoConsumed = new AtomicInteger();
+		commandHistory.addUndoEmptyChangedConsumer(
+				undoEmptyChangedEvent -> undoConsumed.incrementAndGet());
+		commandHistory.addRedoEmptyChangedConsumer(
+				redoEmptyChangedEvent -> redoConsumed.incrementAndGet());
+		MockCommand mockCommand = new MockCommand();
+
+		commandHistory.addCommand(mockCommand); // + 1
+		commandHistory.undo(); // + 1
+
+		Assert.assertEquals(2, undoConsumed.get());
+		Assert.assertEquals(2, redoConsumed.get());
+	}
+
+	@Test
+	public void testRedo_consumersTriggered()
+	{
+		AtomicInteger undoConsumed = new AtomicInteger();
+		AtomicInteger redoConsumed = new AtomicInteger();
+		commandHistory.addUndoEmptyChangedConsumer(
+				undoEmptyChangedEvent -> undoConsumed.incrementAndGet());
+		commandHistory.addRedoEmptyChangedConsumer(
+				redoEmptyChangedEvent -> redoConsumed.incrementAndGet());
+		MockCommand mockCommand = new MockCommand();
+
+		commandHistory.addCommand(mockCommand); // + 1
+		commandHistory.undo(); // + 1
+		commandHistory.redo(); // + 1
+
+		Assert.assertEquals(3, undoConsumed.get());
+		Assert.assertEquals(3, redoConsumed.get());
+	}
+
+	@Test
+	public void testReset_consumersTriggered()
+	{
+		AtomicInteger undoConsumed = new AtomicInteger();
+		AtomicInteger redoConsumed = new AtomicInteger();
+		commandHistory.addUndoEmptyChangedConsumer(
+				undoEmptyChangedEvent -> undoConsumed.incrementAndGet());
+		commandHistory.addRedoEmptyChangedConsumer(
+				redoEmptyChangedEvent -> redoConsumed.incrementAndGet());
+
+		commandHistory.reset(); // + 1
+
+		Assert.assertEquals(1, undoConsumed.get());
+		Assert.assertEquals(1, redoConsumed.get());
+	}
+
 	private static class MockCommand implements Command
 	{
 		private int undoCount;
