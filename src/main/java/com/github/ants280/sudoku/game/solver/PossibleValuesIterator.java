@@ -4,9 +4,7 @@ import com.github.ants280.sudoku.game.SudokuValue;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
@@ -15,15 +13,15 @@ import java.util.stream.IntStream;
  */
 public class PossibleValuesIterator implements Iterator<Collection<SudokuValue>>
 {
-	private final List<SudokuValue> possibleValues;
+	private final SudokuValue[] possibleValues;
 	private final int max;
 	private int index;
 
-	public PossibleValuesIterator(List<SudokuValue> possibleValues)
+	public PossibleValuesIterator(Collection<SudokuValue> possibleValues)
 	{
 		this.possibleValues = possibleValues.stream()
-				.collect(Collectors.toList());
-		this.max = 1 << this.possibleValues.size();
+				.toArray(SudokuValue[]::new);
+		this.max = 1 << this.possibleValues.length;
 		this.index = 1;
 	}
 
@@ -44,9 +42,9 @@ public class PossibleValuesIterator implements Iterator<Collection<SudokuValue>>
 		Collection<SudokuValue> possibleValuesGroup
 				= EnumSet.noneOf(SudokuValue.class);
 
-		IntStream.range(0, possibleValues.size())
+		IntStream.range(0, possibleValues.length)
 				.filter(i -> ((1 << i) & index) != 0)
-				.mapToObj(possibleValues::get)
+				.mapToObj(i -> possibleValues[i])
 				.forEach(possibleValuesGroup::add);
 
 		index++;
