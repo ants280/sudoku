@@ -116,4 +116,22 @@ public class PossibleValuesGroupIteratorTest
 		Assert.assertArrayEquals(possibleValues.toArray(), next.toArray());
 		Assert.assertFalse(hasNext);
 	}
+
+	@Test
+	public void testIterate_onePossibleValue_duplicated()
+	{
+		int numValues = 7;
+		List<SudokuValue> possibleValues = Collections.nCopies(numValues, VALUE_7);
+		PossibleValuesIterator possibleValuesIterator
+				= new PossibleValuesIterator(possibleValues);
+
+		Collection<SudokuValue> next = possibleValuesIterator.next();
+		boolean hasNext = possibleValuesIterator.hasNext();
+		Object[] expectedPossibleValues = Collections.singletonList(possibleValues.get(0)).toArray();
+
+		Assert.assertTrue(numValues > 1);
+		Assert.assertEquals(numValues, possibleValues.size());
+		Assert.assertArrayEquals(expectedPossibleValues, next.toArray());
+		Assert.assertFalse(hasNext);
+	}
 }

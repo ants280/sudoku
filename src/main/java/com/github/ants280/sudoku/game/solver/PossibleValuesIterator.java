@@ -8,8 +8,8 @@ import java.util.NoSuchElementException;
 import java.util.stream.IntStream;
 
 /**
- * Generates permutations of the specified SudokuValues. Does not include the
- * empty permutation.
+ * Generates permutations of the specified [unique] SudokuValues. Does not
+ * include the empty permutation.
  */
 public class PossibleValuesIterator implements Iterator<Collection<SudokuValue>>
 {
@@ -20,6 +20,7 @@ public class PossibleValuesIterator implements Iterator<Collection<SudokuValue>>
 	public PossibleValuesIterator(Collection<SudokuValue> possibleValues)
 	{
 		this.possibleValues = possibleValues.stream()
+				.distinct()
 				.toArray(SudokuValue[]::new);
 		this.max = 1 << this.possibleValues.length;
 		this.index = 1;
