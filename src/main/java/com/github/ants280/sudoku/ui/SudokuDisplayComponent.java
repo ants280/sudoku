@@ -109,48 +109,25 @@ public class SudokuDisplayComponent
 
 		private void paintCell(Graphics graphics, SudokuCell sudokuCell)
 		{
-			int cellCol = sudokuCell.getIndex(SectionType.COLUMN);
-			int cellRow = sudokuCell.getIndex(SectionType.ROW);
-			int cellOffsetX = cellLength * cellCol;
-			int cellOffsetY = cellLength * cellRow;
-
-			this.paintBackground(
-					graphics,
-					cellRow,
-					cellCol,
-					cellOffsetX,
-					cellOffsetY);
-			this.paintValue(
-					graphics,
-					sudokuCell,
-					cellOffsetX,
-					cellOffsetY);
+			this.paintBackground(graphics, sudokuCell);
+			this.paintValue(graphics, sudokuCell);
 		}
 
-		private void paintBackground(
-				Graphics graphics,
-				int cellRow,
-				int cellCol,
-				int cellOffsetX,
-				int cellOffsetY)
+		private void paintBackground(Graphics graphics, SudokuCell sudokuCell)
 		{
-			if (selectedRow != null && selectedRow == cellRow
-					&& selectedCol != null && selectedCol == cellCol)
+			if (selectedRow != null && selectedRow == sudokuCell.getIndex(SectionType.ROW)
+					&& selectedCol != null && selectedCol == sudokuCell.getIndex(SectionType.COLUMN))
 			{
 				graphics.setColor(Color.LIGHT_GRAY);
 				graphics.fillRect(
-						cellOffsetX,
-						cellOffsetY,
+						cellLength * sudokuCell.getIndex(SectionType.COLUMN),
+						cellLength * sudokuCell.getIndex(SectionType.ROW),
 						cellLength,
 						cellLength);
 			}
 		}
 
-		private void paintValue(
-				Graphics graphics,
-				SudokuCell sudokuCell,
-				int cellOffsetX,
-				int cellOffsetY)
+		private void paintValue(Graphics graphics, SudokuCell sudokuCell)
 		{
 			if (sudokuCell.getValue() != null)
 			{
@@ -161,8 +138,8 @@ public class SudokuDisplayComponent
 				this.paintSudokuValue(
 						graphics,
 						sudokuCell.getValue(),
-						cellOffsetX + cellLength / 2d,
-						cellOffsetY + cellLength / 2d);
+						cellLength * (0.5d + sudokuCell.getIndex(SectionType.COLUMN)),
+						cellLength * (0.5d + sudokuCell.getIndex(SectionType.ROW)));
 			}
 			else if (!sudokuCell.getPossibleValues().isEmpty())
 			{
@@ -179,8 +156,8 @@ public class SudokuDisplayComponent
 					this.paintSudokuValue(
 							graphics,
 							possibleValue,
-							cellOffsetX + cellLength * colPercentage,
-							cellOffsetY + cellLength * rowPercentage);
+							cellLength * (colPercentage + sudokuCell.getIndex(SectionType.COLUMN)),
+							cellLength * (rowPercentage + sudokuCell.getIndex(SectionType.ROW)));
 				}
 			}
 		}
