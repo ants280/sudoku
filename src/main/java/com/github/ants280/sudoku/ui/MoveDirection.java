@@ -1,10 +1,9 @@
 package com.github.ants280.sudoku.ui;
 
 import java.awt.event.KeyEvent;
-import java.util.AbstractMap.SimpleEntry;
 import java.util.Arrays;
 import java.util.Map;
-import java.util.Map.Entry;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public enum MoveDirection
@@ -16,19 +15,18 @@ public enum MoveDirection
 
 	private final int dx;
 	private final int dy;
-	private final int[] keyCodes;
+	private final int keyCode;
 	private static final Map<Integer, MoveDirection> KEY_CODES
 			= Arrays.stream(MoveDirection.values())
-					.flatMap(moveDirection -> Arrays.stream(moveDirection.keyCodes)
-					.mapToObj(keyCode -> new SimpleEntry<>(moveDirection, keyCode)))
-					// throws exception if duplicate keys (Entry::Value) exist:
-					.collect(Collectors.toMap(Entry::getValue, Entry::getKey));
+					.collect(Collectors.toMap(
+							MoveDirection::getKeyCode,
+							Function.identity()));
 
-	MoveDirection(int dx, int dy, int... keyCodes)
+	MoveDirection(int dx, int dy, int keyCode)
 	{
 		this.dx = dx;
 		this.dy = dy;
-		this.keyCodes = keyCodes;
+		this.keyCode = keyCode;
 	}
 
 	public int getDx()
@@ -39,6 +37,11 @@ public enum MoveDirection
 	public int getDy()
 	{
 		return dy;
+	}
+
+	public int getKeyCode()
+	{
+		return keyCode;
 	}
 
 	public static MoveDirection fromKeyCode(int keyCode)

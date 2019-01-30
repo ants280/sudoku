@@ -42,4 +42,18 @@ public class MoveDirectionTest
 			}
 		}
 	}
+
+	@Test
+	public void testFromKeyCode()
+	{
+		for (MoveDirection moveDirection : MoveDirection.values())
+		{
+			int keyCode = moveDirection.getKeyCode();
+
+			MoveDirection moveDirectionFromKeyCode
+					= MoveDirection.fromKeyCode(keyCode);
+
+			Assert.assertEquals(moveDirection, moveDirectionFromKeyCode);
+		}
+	}
 }
