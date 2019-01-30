@@ -127,7 +127,7 @@ public class SudokuBoard
 			SectionType sectionType,
 			int sectionIndex)
 	{
-		validateIndices(sectionIndex);
+		validateIndex(sectionIndex);
 
 		return sectionTypeCells.get(sectionType).get(sectionIndex);
 	}
@@ -185,12 +185,6 @@ public class SudokuBoard
 	public static boolean isValidSavedBoard(String boardString)
 	{
 		return boardString != null && boardString.matches("^\\{\\d{81}\\}$");
-	}
-
-	private static void validateIndices(int... indices)
-	{
-		IntStream.of(indices)
-				.forEach(SudokuBoard::validateIndex);
 	}
 
 	private static void validateIndex(int index)
