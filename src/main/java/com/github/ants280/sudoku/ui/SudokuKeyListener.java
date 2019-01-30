@@ -4,8 +4,6 @@ import com.github.ants280.sudoku.game.SudokuValue;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Consumer;
 
 public class SudokuKeyListener
@@ -14,16 +12,6 @@ public class SudokuKeyListener
 {
 	private final Consumer<SudokuValue> setSelectedCellValueConsumer;
 	private final Consumer<MoveDirection> moveSelectedCellConsumer;
-	private static final Map<Integer, MoveDirection> MOVE_DIRECTIONS
-			= new HashMap<>();
-
-	static
-	{
-		MOVE_DIRECTIONS.put(KeyEvent.VK_UP, MoveDirection.UP);
-		MOVE_DIRECTIONS.put(KeyEvent.VK_DOWN, MoveDirection.DOWN);
-		MOVE_DIRECTIONS.put(KeyEvent.VK_LEFT, MoveDirection.LEFT);
-		MOVE_DIRECTIONS.put(KeyEvent.VK_RIGHT, MoveDirection.RIGHT);
-	}
 
 	public SudokuKeyListener(
 			Consumer<SudokuValue> setSelectedCellValueConsumer,
@@ -66,7 +54,7 @@ public class SudokuKeyListener
 			case KeyEvent.VK_LEFT:
 			case KeyEvent.VK_RIGHT:
 				moveSelectedCellConsumer.accept(
-						MOVE_DIRECTIONS.get(event.getKeyCode()));
+						MoveDirection.fromKeyCode(event.getKeyCode()));
 				break;
 			default:
 				break;
