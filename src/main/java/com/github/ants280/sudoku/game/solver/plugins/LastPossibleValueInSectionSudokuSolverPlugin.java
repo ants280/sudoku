@@ -1,9 +1,10 @@
-package com.github.ants280.sudoku.game.solver;
+package com.github.ants280.sudoku.game.solver.plugins;
 
 import com.github.ants280.sudoku.game.SectionType;
 import com.github.ants280.sudoku.game.SudokuBoard;
 import com.github.ants280.sudoku.game.SudokuCell;
 import com.github.ants280.sudoku.game.SudokuValue;
+import com.github.ants280.sudoku.game.solver.SudokuSolverPlugin;
 import java.util.Arrays;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;

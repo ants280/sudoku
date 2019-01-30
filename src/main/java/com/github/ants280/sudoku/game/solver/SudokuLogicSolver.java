@@ -1,5 +1,10 @@
 package com.github.ants280.sudoku.game.solver;
 
+import com.github.ants280.sudoku.game.solver.plugins.CullPossibleValuesSudokuSolverPlugin;
+import com.github.ants280.sudoku.game.solver.plugins.SetPossibleValuesSudokuSolverPlugin;
+import com.github.ants280.sudoku.game.solver.plugins.OnlyPossibleValueSudokuSolverPlugin;
+import com.github.ants280.sudoku.game.solver.plugins.LastPossibleValueInSectionSudokuSolverPlugin;
+import com.github.ants280.sudoku.game.solver.plugins.RemovePossibleValueForOtherGroupsSudokuSolverPlugin;
 import com.github.ants280.sudoku.game.SudokuBoard;
 import java.util.Arrays;
 import java.util.List;
