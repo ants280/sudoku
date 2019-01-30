@@ -103,31 +103,31 @@ public class SudokuDisplayComponent
 			graphics.translate(xOffset, yOffset);
 			board.getAllSudokuCells()
 					.forEach(sudokuCell
-							-> this.paintCell(sudokuCell, graphics));
+							-> this.paintCell(graphics, sudokuCell));
 			this.paintLines(graphics);
 		}
 
-		private void paintCell(SudokuCell sudokuCell, Graphics graphics)
+		private void paintCell(Graphics graphics, SudokuCell sudokuCell)
 		{
 			int cellCol = sudokuCell.getIndex(SectionType.COLUMN);
 			int cellRow = sudokuCell.getIndex(SectionType.ROW);
 			int cellOffsetX = cellLength * cellCol;
 			int cellOffsetY = cellLength * cellRow;
 
-			this.paintCellBackground(
+			this.paintBackground(
 					graphics,
 					cellRow,
 					cellCol,
 					cellOffsetX,
 					cellOffsetY);
-			this.paintCellValue(
+			this.paintValue(
 					graphics,
 					sudokuCell,
 					cellOffsetX,
 					cellOffsetY);
 		}
 
-		private void paintCellBackground(
+		private void paintBackground(
 				Graphics graphics,
 				int cellRow,
 				int cellCol,
@@ -146,7 +146,7 @@ public class SudokuDisplayComponent
 			}
 		}
 
-		private void paintCellValue(
+		private void paintValue(
 				Graphics graphics,
 				SudokuCell sudokuCell,
 				int cellOffsetX,
