@@ -127,7 +127,11 @@ public class SudokuBoard
 			SectionType sectionType,
 			int sectionIndex)
 	{
-		validateIndex(sectionIndex);
+		if (sectionIndex < 0 || sectionIndex >= 9)
+		{
+			throw new IllegalArgumentException(
+					"Invalid index: " + sectionIndex);
+		}
 
 		return sectionTypeCells.get(sectionType).get(sectionIndex);
 	}
@@ -185,15 +189,6 @@ public class SudokuBoard
 	public static boolean isValidSavedBoard(String boardString)
 	{
 		return boardString != null && boardString.matches("^\\{\\d{81}\\}$");
-	}
-
-	private static void validateIndex(int index)
-	{
-		if (index < 0 || index >= 9)
-		{
-			throw new IllegalArgumentException(
-					"Invalid index: " + index);
-		}
 	}
 
 	public void setListenersEnabled(boolean enabled)
