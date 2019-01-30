@@ -309,24 +309,9 @@ public class SudokuDisplayComponent
 	{
 		if (selectedRow != null && selectedCol != null)
 		{
-			switch (moveDirection)
-			{
-				case UP:
-					this.setSelectedCellIndices(selectedRow - 1, selectedCol);
-					break;
-				case DOWN:
-					this.setSelectedCellIndices(selectedRow + 1, selectedCol);
-					break;
-				case LEFT:
-					this.setSelectedCellIndices(selectedRow, selectedCol - 1);
-					break;
-				case RIGHT:
-					this.setSelectedCellIndices(selectedRow, selectedCol + 1);
-					break;
-				default:
-					throw new IllegalArgumentException(
-							"Unknown moveDirection: " + moveDirection);
-			}
+			this.setSelectedCellIndices(
+					selectedRow + moveDirection.getDy(),
+					selectedCol + moveDirection.getDx());
 		}
 	}
 
