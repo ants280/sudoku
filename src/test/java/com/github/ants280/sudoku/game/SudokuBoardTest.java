@@ -521,42 +521,6 @@ public class SudokuBoardTest
 		Assert.assertTrue(listenerTriggered.get());
 	}
 
-	@Test
-	public void testGetIndex_valid()
-	{
-		SudokuBoard sudokuBoard = new SudokuBoard();
-
-		Assert.assertNotNull(sudokuBoard.getSudokuCells(ROW, 0));
-		Assert.assertNotNull(sudokuBoard.getSudokuCells(ROW, 1));
-		Assert.assertNotNull(sudokuBoard.getSudokuCells(ROW, 2));
-		Assert.assertNotNull(sudokuBoard.getSudokuCells(ROW, 3));
-		Assert.assertNotNull(sudokuBoard.getSudokuCells(ROW, 4));
-		Assert.assertNotNull(sudokuBoard.getSudokuCells(ROW, 5));
-		Assert.assertNotNull(sudokuBoard.getSudokuCells(ROW, 6));
-		Assert.assertNotNull(sudokuBoard.getSudokuCells(ROW, 7));
-		Assert.assertNotNull(sudokuBoard.getSudokuCells(ROW, 8));
-	}
-
-	@Test(expected = Exception.class)
-	public void testGetIndex_invalid_low()
-	{
-		SudokuBoard sudokuBoard = new SudokuBoard();
-
-		sudokuBoard.getSudokuCells(ROW, -1);
-
-		Assert.fail("expected exception");
-	}
-
-	@Test(expected = Exception.class)
-	public void testGetIndex_invalid_high()
-	{
-		SudokuBoard sudokuBoard = new SudokuBoard();
-
-		sudokuBoard.getSudokuCells(ROW, 9);
-
-		Assert.fail("expected exception");
-	}
-
 	private static List<Integer> getValues(List<SudokuCell> sudokuCells)
 	{
 		return sudokuCells.stream()
