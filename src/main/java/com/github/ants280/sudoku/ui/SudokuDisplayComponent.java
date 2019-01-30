@@ -100,6 +100,7 @@ public class SudokuDisplayComponent
 			((Graphics2D) graphics)
 					.setRenderingHints(ANTIALIAS_ON_RENDERING_HINT);
 
+			graphics.translate(xOffset, yOffset);
 			board.getAllSudokuCells()
 					.forEach(sudokuCell
 							-> this.paintCell(sudokuCell, graphics));
@@ -110,8 +111,8 @@ public class SudokuDisplayComponent
 		{
 			int cellCol = sudokuCell.getIndex(SectionType.COLUMN);
 			int cellRow = sudokuCell.getIndex(SectionType.ROW);
-			int cellOffsetX = xOffset + cellLength * cellCol;
-			int cellOffsetY = yOffset + cellLength * cellRow;
+			int cellOffsetX = cellLength * cellCol;
+			int cellOffsetY = cellLength * cellRow;
 
 			this.paintCellBackground(
 					graphics,
@@ -207,21 +208,13 @@ public class SudokuDisplayComponent
 			graphics.setColor(Color.BLACK);
 			for (int i = 0; i <= 9; i++)
 			{
-				int offset = i * cellLength;
+				int k = i * cellLength;
 
 				// row
-				graphics.drawLine(
-						xOffset + 0,
-						yOffset + offset,
-						xOffset + boardLength,
-						yOffset + offset);
+				graphics.drawLine(0, k, boardLength, k);
 
 				// col
-				graphics.drawLine(
-						xOffset + offset,
-						yOffset + 0,
-						xOffset + offset,
-						yOffset + boardLength);
+				graphics.drawLine(k, 0, k, boardLength);
 
 				// Paint thicker lines every three cells (except edges).
 				if (i % 3 == 0)
@@ -229,34 +222,18 @@ public class SudokuDisplayComponent
 					if (i != 0)
 					{
 						// row
-						graphics.drawLine(
-								xOffset + 0,
-								yOffset + offset - 1,
-								xOffset + boardLength,
-								yOffset + offset - 1);
+						graphics.drawLine(0, k - 1, boardLength, k - 1);
 
 						// col
-						graphics.drawLine(
-								xOffset + offset - 1,
-								yOffset + 0,
-								xOffset + offset - 1,
-								yOffset + boardLength);
+						graphics.drawLine(k - 1, 0, k - 1, boardLength);
 					}
 					if (i != 9)
 					{
 						// row
-						graphics.drawLine(
-								xOffset + 0,
-								yOffset + offset + 1,
-								xOffset + boardLength,
-								yOffset + offset + 1);
+						graphics.drawLine(0, k + 1, boardLength, k + 1);
 
 						// col
-						graphics.drawLine(
-								xOffset + offset + 1,
-								yOffset + 0,
-								xOffset + offset + 1,
-								yOffset + boardLength);
+						graphics.drawLine(k + 1, 0, k + 1, boardLength);
 					}
 				}
 			}
