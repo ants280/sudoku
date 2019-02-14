@@ -105,15 +105,14 @@ public class SudokuCellTest
 		Assert.assertTrue(possibleValues.contains(SudokuValue.VALUE_6));
 	}
 
-	@Test
+	@Test(expected = Exception.class)
 	public void testGetPossibleValues_immutable()
 	{
 		sudokuCell.getPossibleValues()
 				.add(SudokuValue.VALUE_6);
 
-		Assert.assertTrue(
-				"The object's collection should not be mutated even though the copy was.",
-				sudokuCell.getPossibleValues().isEmpty());
+		Assert.fail("The object's collection should not be mutated, "
+				+ " even though the copy was.");
 	}
 
 	@Test

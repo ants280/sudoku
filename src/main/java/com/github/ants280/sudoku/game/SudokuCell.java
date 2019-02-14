@@ -3,6 +3,7 @@ package com.github.ants280.sudoku.game;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.List;
@@ -18,6 +19,7 @@ public class SudokuCell
 	private SudokuValue value;
 	private boolean locked;
 	private final Set<SudokuValue> possibleValues;
+	private final Set<SudokuValue> possibleValuesView;
 	private final List<Consumer<SudokuEvent<SudokuCell, SudokuValue>>> cellValueChangedConsumers;
 	private final List<Consumer<SudokuEvent<SudokuCell, SudokuValue>>> cellPossibleValueChangedConsumers;
 	private boolean listenersEnabled;
@@ -43,6 +45,7 @@ public class SudokuCell
 		this.value = value;
 		this.locked = locked;
 		this.possibleValues = EnumSet.noneOf(SudokuValue.class);
+		this.possibleValuesView = Collections.unmodifiableSet(possibleValues);
 
 		this.cellValueChangedConsumers = new ArrayList<>();
 		this.cellPossibleValueChangedConsumers = new ArrayList<>();
@@ -61,7 +64,7 @@ public class SudokuCell
 
 	public Collection<SudokuValue> getPossibleValues()
 	{
-		return EnumSet.copyOf(possibleValues);
+		return possibleValuesView;
 	}
 
 	public boolean hasPossibleValue(SudokuValue value)

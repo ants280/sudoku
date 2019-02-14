@@ -18,6 +18,7 @@ import java.util.stream.IntStream;
 public class SudokuBoard
 {
 	private final List<SudokuCell> allSudokuCells;
+	private final List<SudokuCell> allSudokuCellsView;
 	private final Map<SectionType, Map<Integer, List<SudokuCell>>> sectionTypeCells;
 	private static final Collection<SudokuValue> ALL_SUDOKU_VALUES
 			= EnumSet.allOf(SudokuValue.class);
@@ -34,6 +35,7 @@ public class SudokuBoard
 	public SudokuBoard(String boardString)
 	{
 		this.allSudokuCells = getAllSudokuCells(boardString);
+		this.allSudokuCellsView = Collections.unmodifiableList(allSudokuCells);
 		this.sectionTypeCells = new EnumMap<>(SectionType.class);
 		this.solvedChangedConsumers = new ArrayList<>();
 		this.previousSolved = false;
@@ -120,7 +122,7 @@ public class SudokuBoard
 
 	public List<SudokuCell> getAllSudokuCells()
 	{
-		return Collections.unmodifiableList(allSudokuCells);
+		return allSudokuCellsView;
 	}
 
 	public List<SudokuCell> getSudokuCells(
