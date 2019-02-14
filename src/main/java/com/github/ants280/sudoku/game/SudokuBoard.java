@@ -120,6 +120,8 @@ public class SudokuBoard
 		previousSolved = false;
 	}
 
+	// Returning unmodifiable view of list
+	@SuppressWarnings("squid:S4275")
 	public List<SudokuCell> getAllSudokuCells()
 	{
 		return allSudokuCellsView;

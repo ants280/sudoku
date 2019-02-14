@@ -62,6 +62,8 @@ public class SudokuCell
 		return value;
 	}
 
+	// Returning unmodifiable view of list
+	@SuppressWarnings("squid:S4275")
 	public Collection<SudokuValue> getPossibleValues()
 	{
 		return possibleValuesView;
