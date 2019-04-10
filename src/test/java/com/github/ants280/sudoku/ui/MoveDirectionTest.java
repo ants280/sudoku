@@ -32,8 +32,8 @@ public class MoveDirectionTest
 						&& dy == otherMoveDirection.getDy())
 				{
 					Assert.fail(String.format(
-							"MoveDirection.%s and MoveDirection.$s "
-							+ "have the same dx and dy (%d and%d)",
+							"MoveDirection.%s and MoveDirection.%s "
+							+ "have the same dx and dy (%d and %d)",
 							moveDirection,
 							otherMoveDirection,
 							dx,
