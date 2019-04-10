@@ -62,7 +62,6 @@ public class CommandHistory<T extends Command>
 	{
 		if (enabled && !undoHistory.isEmpty())
 		{
-			boolean previousUndoHistoryEmpty = undoHistory.isEmpty();
 			boolean previousRedoHistoryEmpty = redoHistory.isEmpty();
 
 			T command = undoHistory.pop();
@@ -76,7 +75,7 @@ public class CommandHistory<T extends Command>
 			SudokuEvent<CommandHistory<T>, Boolean> undoEmptyChangedConsumer
 					= new SudokuEvent<>(
 							this,
-							previousUndoHistoryEmpty,
+							false,
 							undoHistory.isEmpty());
 			SudokuEvent<CommandHistory<T>, Boolean> redoEmptyChangedConsumer
 					= new SudokuEvent<>(
@@ -99,7 +98,6 @@ public class CommandHistory<T extends Command>
 		if (enabled && !redoHistory.isEmpty())
 		{
 			boolean previousUndoHistoryEmpty = undoHistory.isEmpty();
-			boolean previousRedoHistoryEmpty = redoHistory.isEmpty();
 
 			T command = redoHistory.pop();
 
@@ -117,7 +115,7 @@ public class CommandHistory<T extends Command>
 			SudokuEvent<CommandHistory<T>, Boolean> redoEmptyChangedConsumer
 					= new SudokuEvent<>(
 							this,
-							previousRedoHistoryEmpty,
+							false,
 							redoHistory.isEmpty());
 			undoEmptyChangedConsumers
 					.forEach(consumer -> consumer.accept(undoEmptyChangedConsumer));
