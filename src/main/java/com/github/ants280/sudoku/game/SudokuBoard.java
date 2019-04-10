@@ -155,10 +155,10 @@ public class SudokuBoard
 		previousSolved = currentSolved;
 	}
 
-	public void addSolvedChangedConsumer(
+	public boolean addSolvedChangedConsumer(
 			Consumer<SudokuEvent<SudokuBoard, Boolean>> boardSolvedChangedConsumer)
 	{
-		solvedChangedConsumers.add(boardSolvedChangedConsumer);
+		return solvedChangedConsumers.add(boardSolvedChangedConsumer);
 	}
 
 	public boolean removeSolvedChangedConsumer(
@@ -192,7 +192,7 @@ public class SudokuBoard
 
 	public static boolean isValidSavedBoard(String boardString)
 	{
-		return boardString != null && boardString.matches("^\\{\\d{81}\\}$");
+		return boardString != null && boardString.matches("^\\{\\d{81}}$");
 	}
 
 	public void setListenersEnabled(boolean enabled)
