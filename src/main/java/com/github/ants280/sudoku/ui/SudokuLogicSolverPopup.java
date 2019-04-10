@@ -154,7 +154,7 @@ public class SudokuLogicSolverPopup implements ActionListener, ChangeListener
 					i,
 					new JLabel(String.format(
 							"%.2f sec/move",
-							Double.valueOf(i) / ONE_SECOND_IN_MILLIS)));
+						(double) i / ONE_SECOND_IN_MILLIS)));
 		}
 
 		return labelTable;
