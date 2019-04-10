@@ -50,7 +50,6 @@ public class SudokuCellUndoCommandTest
 
 		int hashCode1 = command1.hashCode();
 		int hashCode2 = command2.hashCode();
-		command1.equals(command2);
 
 		Assert.assertEquals(hashCode1, hashCode2);
 	}

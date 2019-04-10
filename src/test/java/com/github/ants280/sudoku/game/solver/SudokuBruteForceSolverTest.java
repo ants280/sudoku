@@ -15,7 +15,7 @@ public class SudokuBruteForceSolverTest
 		boolean moveMade = solver.makeMove();
 
 		Assert.assertFalse(
-				"The logic solver should not be able to make indivitual moves. "
+				"The logic solver should not be able to make individual moves. "
 				+ "Use solveFast().",
 				moveMade);
 	}

@@ -12,7 +12,7 @@ public class SudokuCellTest
 	private SudokuCell sudokuCell;
 
 	@Before
-	public void setUp() throws Exception
+	public void setUp()
 	{
 		int rowIndex = 4;
 		int columnIndex = 3;

@@ -290,10 +290,7 @@ public class CommandHistoryTest
 	public void testRedo_empty_not_enabled()
 	{
 		AtomicBoolean redoConsumed = new AtomicBoolean(false); // should be mutable
-		commandHistory.addRedoEmptyChangedConsumer(redoEmptyChangedEvent ->
-		{
-			redoConsumed.set(true);
-		});
+		commandHistory.addRedoEmptyChangedConsumer(redoEmptyChangedEvent -> redoConsumed.set(true));
 
 		commandHistory.setEnabled(false);
 		commandHistory.redo();
